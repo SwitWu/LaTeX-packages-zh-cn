@@ -7,5 +7,5 @@ LaTeX常用宏包中文翻译版
 + [ ] hyperref
 + [x] clsguide
 + [ ] fntguide
-+ [x] tkz-euclid
++ [x] tkz-euclide
 + [ ] layout
