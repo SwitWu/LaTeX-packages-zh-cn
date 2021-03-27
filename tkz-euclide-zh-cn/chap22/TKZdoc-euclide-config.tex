@@ -1,0 +1,250 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Customization}
+\section{个性化设置}
+
+% \subsection{Use of \tkzcname{tkzSetUpLine}} \label{tkzsetupline}
+\subsection{\tkzcname{tkzSetUpLine}命令：设置线条样式} \label{tkzsetupline}
+% It is a macro that allows you to define the style of all the lines.
+
+% \begin{NewMacroBox}{tkzSetUpLine}{\oarg{local options}}%
+% \begin{tabular}{lll}%
+% options &  default & definition                 \\
+% \midrule
+% \TOline{color}{black}{colour of the construction lines}
+% \TOline{line width}{0.4pt}{thickness of the construction lines}
+% \TOline{style}{solid}{style of construction lines}
+% \TOline{add}{.2 and .2}{changing the length of a line segment}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzSetUpLine}{\oarg{命令选项}}%
+\begin{tabular}{lll}%
+选项 &  默认值 & 含义                 \\
+\midrule
+\TOline{color}{black}{颜色}
+\TOline{line width}{0.4pt}{线宽}
+\TOline{style}{solid}{线型}
+\TOline{add}{.2 and .2}{线段两端延伸长度}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Example 1: change line width}
+\subsubsection{改变线宽示例}
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}
+  \tkzSetUpLine[color=blue,line width=1pt]
+  \begin{scope}[rotate=-90]
+    \tkzDefPoint(10,6){C}
+    \tkzDefPoint( 0,6){A}
+    \tkzDefPoint(10,0){B}
+    \tkzDefPointBy[projection = onto B--A](C)
+    \tkzGetPoint{H}
+    \tkzDrawPolygon(A,B,C)
+    \tkzMarkRightAngle[size=.4,fill=blue!20](B,C,A)
+    \tkzMarkRightAngle[size=.4,fill=red!20](B,H,C)
+    \tkzDrawSegment[color=red](C,H)
+  \end{scope}
+  \tkzLabelSegment[below](C,B){$a$}
+  \tkzLabelSegment[right](A,C){$b$}
+  \tkzLabelSegment[left](A,B){$c$}
+  \tkzLabelSegment[color=red](C,H){$h$}
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoints[above left](H)
+  \tkzLabelPoints(B,C)
+  \tkzLabelPoints[above](A)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Example 2: change style of line}
+\subsubsection{改变线型示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.6]
+  \tkzDefPoint(1,0){A} \tkzDefPoint(4,0){B}
+  \tkzDefPoint(1,1){C} \tkzDefPoint(5,1){D}
+  \tkzDefPoint(1,2){E} \tkzDefPoint(6,2){F}
+  \tkzDefPoint(0,4){A'}\tkzDefPoint(3,4){B'}
+  \tkzCalcLength[cm](C,D)  \tkzGetLength{rCD}
+  \tkzCalcLength[cm](E,F)  \tkzGetLength{rEF}
+  \tkzInterCC[R](A',\rCD cm)(B',\rEF cm)
+  \tkzGetPoints{I}{J}
+  \tkzSetUpLine[style=dashed,color=gray]
+  \tkzDrawLine(A',B')
+  \tkzCompass(A',B')
+  \tkzDrawSegments(A,B C,D E,F)
+  \tkzDrawCircle[R](A',\rCD cm)
+  \tkzDrawCircle[R](B',\rEF cm)
+  \tkzSetUpLine[color=red]
+  \tkzDrawSegments(A',I B',I)
+  \tkzDrawPoints(A,B,C,D,E,F,A',B',I,J)
+  \tkzLabelPoints(A,B,C,D,E,F,A',B',I,J)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example 3: extend lines}
+\subsubsection{线段延伸示例}
+
+\begin{tkzexample}[latex=7cm,small]
+  \begin{tikzpicture}
+  \tkzSetUpLine[add=.5 and .5]
+  \tkzDefPoints{0/0/A,4/0/B,1/3/C}
+  \tkzDrawLines(A,B B,C A,C)
+  \end{tikzpicture}
+\end{tkzexample}
+
+
+% \subsection{Points style}
+\subsection{\tkzcname{tkzSetUpPoint}命令：设置点样式}
+
+% \begin{NewMacroBox}{tkzSetUpPoint}{\oarg{local options}}%
+% \begin{tabular}{lll}%
+% options &  default & definition                 \\
+% \midrule
+% \TOline{color}{black}{point color}
+% \TOline{size}{3pt}{point size}
+% \TOline{fill}{black!50}{inside point color}
+% \TOline{shape}{circle}{point shape circle or cross}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzSetUpPoint}{\oarg{命令选项}}%
+\begin{tabular}{lll}%
+选项 &  默认值 & 含义                 \\
+\midrule
+\TOline{color}{black}{颜色}
+\TOline{size}{3pt}{尺寸}
+\TOline{fill}{black!50}{填充色}
+\TOline{shape}{circle}{圆或十字线}
+\end{tabular}
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Use of \tkzcname{tkzSetUpPoint}}
+\subsubsection{示例1}
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}
+  \tkzSetUpPoint[shape = cross out,color=blue]
+  \tkzInit[xmax=100,xstep=20,ymax=.5]
+  \tkzDefPoint(20,1){A}
+  \tkzDefPoint(80,0){B}
+  \tkzDrawLine(A,B)
+  \tkzDrawPoints(A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Use of \tkzcname{tkzSetUpPoint} inside a group}
+\subsubsection{示例2}
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}
+  \tkzInit[ymin=-0.5,ymax=3,xmin=-0.5,xmax=7]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(02.25,04.25){B}
+  \tkzDefPoint(4,0){C}
+  \tkzDefPoint(3,2){D}
+  \tkzDrawSegments(A,B A,C A,D)
+    {\tkzSetUpPoint[shape=cross out,
+              fill= teal!50,
+              size=4,color=teal]
+      \tkzDrawPoints(A,B)}
+  \tkzSetUpPoint[fill= teal!50,size=4,
+                 color=teal]
+  \tkzDrawPoints(C,D)
+  \tkzLabelPoints(A,B,C,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Use of \tkzcname{tkzSetUpCompass}}
+\subsection{\tkzcname{tkzSetUpCompass}命令：设置尺规标记样式}
+
+% \begin{NewMacroBox}{tkzSetUpCompass}{\oarg{local options}}%
+% \begin{tabular}{lll}%
+% options &  default & definition                 \\
+% \midrule
+% \TOline{color}{black}{color of construction arcs}
+% \TOline{line width}{0.4pt}{thickness of construction arcs}
+% \TOline{style}{solid}{style of the building arcs}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzSetUpCompass}{\oarg{命令选项}}%
+\begin{tabular}{lll}%
+选项 &  默认值 & 含义                 \\
+\midrule
+\TOline{color}{black}{圆弧颜色}
+\TOline{line width}{0.4pt}{圆弧线宽}
+\TOline{style}{solid}{圆弧线型}
+\end{tabular}
+\end{NewMacroBox}
+
+\vspace*{-30pt}
+
+% \subsubsection{Use of \tkzcname{tkzSetUpCompass} with bisector}
+\subsubsection{示例1}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=0.7]
+  \tkzDefPoints{0/1/A, 8/3/B, 3/6/C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzSetUpCompass[color=red,line width=.2 pt]
+  \tkzDefLine[bisector](A,C,B) \tkzGetPoint{c}
+  \tkzDefLine[bisector](B,A,C) \tkzGetPoint{a}
+  \tkzDefLine[bisector](C,B,A) \tkzGetPoint{b}
+  \tkzShowLine[bisector,size=2,gap=3](A,C,B)
+  \tkzShowLine[bisector,size=2,gap=3](B,A,C)
+  \tkzShowLine[bisector,size=1,gap=2](C,B,A)
+  \tkzDrawLines[add=0 and 0 ](B,b)
+  \tkzDrawLines[add=0 and -.4 ](A,a  C,c)
+  \tkzLabelPoints(A,B) \tkzLabelPoints[above](C)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Another example of of\tkzcname{tkzSetUpCompass}}
+\subsubsection{示例2}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1,rotate=90]
+  \tkzDefPoints{0/1/A, 8/3/B, 3/6/C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzSetUpCompass[color=brown,
+          line width=.3 pt,style=tkzdotted]
+  \tkzDefLine[bisector](B,A,C)  \tkzGetPoint{a}
+  \tkzDefLine[bisector](C,B,A)  \tkzGetPoint{b}
+  \tkzInterLL(A,a)(B,b) \tkzGetPoint{I}
+  \tkzDefPointBy[projection= onto A--B](I)
+  \tkzGetPoint{H}
+  \tkzMarkRightAngle(I,H,A)
+  \tkzDrawCircle[radius,color=red](I,H)
+  \tkzDrawSegments[color=red](I,H)
+  \tkzDrawLines[add=0 and -.5,,color=red](A,a)
+  \tkzDrawLines[add=0 and 0,color=red](B,b)
+  \tkzShowLine[bisector,size=2,gap=3](B,A,C)
+  \tkzShowLine[bisector,size=1,gap=3](C,B,A)
+  \tkzLabelPoints(A,B)\tkzLabelPoints[left](C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Own style}
+\subsection{局部样式设置}
+
+% You can set the normal style with |tkzSetUpPoint| and your own style
+既可以使用|tkzSetUpPoint|设置全局样式，也使用\TIKZ{}选项设置局部样式。
+
+\begin{tkzexample}[latex=2cm,small]
+\tkzSetUpPoint[color=blue!50!white, fill=gray!20!red!50!white]
+\tikzset{/tikz/mystyle/.style={color=blue!20!black,fill=blue!20}}
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(0,1){A}
+  \tkzDrawPoints(O) % general style
+  \tkzDrawPoints[mystyle,size=4](A) % my style
+  \tkzLabelPoints(O,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

@@ -1,0 +1,261 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Random point definition}
+\section{定义随机点}
+%<--------------------------------------------------------------------------->
+%           points random
+%<--------------------------------------------------------------------------->
+% At the moment there are four possibilities:
+可以使用以下四种方式定义随机点
+
+% \begin{enumerate}
+% \item point in a rectangle;
+% \item on a segment;
+% \item on a straight line;
+% \item on a circle.
+% \end{enumerate}
+\begin{enumerate}
+\item 矩形内的点;
+\item 线段上的点;
+\item 直线上的点;
+\item 圆上的点.
+\end{enumerate}
+
+% \subsection{Obtaining random points}
+\subsection{\tkzcname{tkzDefRandPointOn}命令：定义随机点}
+
+% This is the new version that replaces  \tkzcname{tkzGetRandPointOn}.
+该命令取代了旧的\tkzcname{tkzGetRandPointOn}命令，用于定义随机点。
+
+% \begin{NewMacroBox}{tkzDefRandPointOn}{\oarg{local options}}%
+% {The result is a point with a random position that can be named with the macro
+% \tkzcname{tkzGetPoint}. It is possible to use \tkzname{tkzPointResult} if it is
+% not necessary to retain the results.}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                         \\
+% \midrule
+% \TOline{rectangle=pt1 and pt2}  {}{[rectangle=A and B]}
+% \TOline{segment= pt1--pt2} {}{[segment=A--B]}
+% \TOline{line=pt1--pt2}{}{[line=A--B]}
+% \TOline{circle =center pt1 radius dim}{}{[circle = center A radius 2 cm]}
+% \TOline{circle through=center pt1 through pt2}{}{[circle through= center A
+% through B]}
+% \TOline{disk through=center pt1 through pt2}{}{[disk through=center A through
+% B]}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefRandPointOn}{\oarg{命令选项}}%
+{
+可以用\tkzcname{tkzGetPoint}保存并命名定义的随机点，如仅为临时使用，则可使用
+\tkzcname{tkzPointResult}命令。}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                         \\
+\midrule
+\TOline{rectangle=pt1 and pt2}  {}{[rectangle=A and B]}
+\TOline{segment= pt1--pt2} {}{[segment=A--B]}
+\TOline{line=pt1--pt2}{}{[line=A--B]}
+\TOline{circle =center pt1 radius dim}{}{[circle = center A radius 2 cm]}
+\TOline{circle through=center pt1 through pt2}{}{[circle through= center A
+through B]}
+\TOline{disk through=center pt1 through pt2}{}{[disk through=center A through
+B]}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsection{Random point in a rectangle}
+\subsection{矩形内的随机点}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=5]
+  \tkzGrid
+  \tkzDefPoints{0/0/A,2/2/B,5/5/C}
+  \tkzDefRandPointOn[rectangle = A and B]
+  \tkzGetPoint{a}
+  \tkzDefRandPointOn[rectangle = B and C]
+  \tkzGetPoint{d}
+  \tkzDrawLine(a,d)
+  \tkzDrawPoints(A,B,C,a,d)
+  \tkzLabelPoints(A,B,C,a,d)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Random point on a segment}
+\subsection{线段上的随机点}
+
+% When using \tkzDefRandPointOn, the image is always changing and affects the layout of
+% the page. It is best to use \tkzGetPointCoord(a){a)\tkzText(a){(\ax,\ay)} and leave a still
+% image.
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=5]
+  \tkzGrid
+  \tkzDefPoints{0/0/A,2/2/B,3/3/C,5/5/D}
+  \tkzDefPoints{1.24/1.24/a,3.82/3.82/d}
+  \tkzDrawPoints(A,B,C,D,a,d)
+  \tkzLabelPoints(A,B,C,D,a,d)
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.58\textwidth}
+\begin{tkzexample}[code only,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=5]
+  \tkzGrid
+  \tkzDefPoints{0/0/A,2/2/B,3/3/C,5/5/D}
+  \tkzDefRandPointOn[segment = A--B]\tkzGetPoint{a}
+  \tkzDefRandPointOn[segment = C--D]\tkzGetPoint{d}
+  \tkzDrawPoints(A,B,C,D,a,d)
+  \tkzLabelPoints(A,B,C,D,a,d)
+\end{tikzpicture}
+\end{tkzexample}
+\end{minipage}
+
+% \subsection{Random point on a straight line}
+\subsection{直线上的随机点}
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=5]
+  \tkzGrid
+  \tkzDefPoints{0/0/A,2/2/B,3/3/C,5/5/D}
+  \tkzDefPoints{1.34/1.34/E,3.38/3.38/F}
+  \tkzDrawPoints(A,...,F)
+  \tkzLabelPoints(A,...,F)
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+\begin{tkzexample}[code only,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=5]
+  \tkzGrid
+  \tkzDefPoints{0/0/A,2/2/B,3/3/C,5/5/D}
+  \tkzDefRandPointOn[line = A--B]\tkzGetPoint{E}
+  \tkzDefRandPointOn[line = C--D]\tkzGetPoint{F}
+  \tkzDrawPoints(A,...,F)
+  \tkzLabelPoints(A,...,F)
+\end{tikzpicture}
+\end{tkzexample}
+\end{minipage}
+
+% \subsubsection{Example of random points}
+\subsubsection{随机点综合示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoints{0/0/A,2/2/B,-1/-1/C}
+  \tkzDefCircle[through=](A,C)
+  \tkzGetLength{rAC}
+  \tkzDrawCircle(A,C)
+  \tkzDrawCircle(A,B)
+  \tkzDefRandPointOn[rectangle=A and B]
+  \tkzGetPoint{a}
+  \tkzDefRandPointOn[segment=A--B]
+  \tkzGetPoint{b}
+  \tkzDefRandPointOn[circle=center A radius \rAC pt]
+    \tkzGetPoint{d}
+  \tkzDefRandPointOn[circle through= center A through B]
+    \tkzGetPoint{c}
+  \tkzDefRandPointOn[disk through=center A through B]
+    \tkzGetPoint{e}
+  \tkzLabelPoints[above right=3pt](A,B,C,a,b,...,e)
+  \tkzDrawPoints[](A,B,C,a,b,...,e)
+  \tkzDrawRectangle(A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Random point on a circle}
+\subsection{圆上的随机点}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=5]
+  \tkzGrid
+  \tkzDefPoints{3/2/A,1/1/B}
+  \tkzCalcLength[cm](A,B) \tkzGetLength{rAB}
+  \tkzDrawCircle[R](A,\rAB cm)
+  \tkzDefRandPointOn[circle = center A radius
+    \rAB cm]\tkzGetPoint{a}
+  \tkzDrawSegment(A,a)
+  \tkzDrawPoints(A,B,a)
+  \tkzLabelPoints(A,B,a)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Random example and circle of Apollonius}
+\subsubsection{Apollonius圆的随机示例}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoints{0/0/A,3/0/B}
+  \def\coeffK{2}
+  \tkzApolloniusCenter[K=\coeffK](A,B)
+  \tkzGetPoint{P}
+  \tkzDefApolloniusPoint[K=\coeffK](A,B)
+  \tkzGetPoint{M}
+  \tkzDefApolloniusRadius[K=\coeffK](A,B)
+  \tkzDrawCircle[R,color = blue!50!black, fill=blue!20,
+     opacity=.4](tkzPointResult,\tkzLengthResult pt)
+  \tkzDefRandPointOn[circle through= center P through M]
+  \tkzGetPoint{N}
+  \tkzDrawPoints(A,B,P,M,N)
+  \tkzLabelPoints(A,B,P,M,N)
+  \tkzDrawSegments[red](N,A N,B)
+  \tkzDrawPoints(A,B)
+  \tkzDrawSegments[red](A,B)
+  \tkzLabelCircle[R,draw,fill=green!10, text width=3cm,
+     text centered](P,\tkzLengthResult pt-20pt)(-120)
+    {$MA/MB=\coeffK$\\$NA/NB=\coeffK$}
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Middle of a compass segment}
+\subsubsection{线段中点}
+
+% To conclude this section, here is a more complex example. It involves
+% determining the middle of a segment, using only a compass.
+% 作为小结，这是较为复杂例子，它用罗盘来确定线段的中点。
+可以用尺规作图的方式求得线段的中点。
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzDefPoint(0,0){A}
+  \tkzDefRandPointOn[circle= center A radius 4cm]
+  \tkzGetPoint{B}
+  \tkzDrawPoints(A,B)
+  \tkzDefPointBy[rotation= center A angle 180](B)
+  \tkzGetPoint{C}
+  \tkzInterCC[R](A,4 cm)(B,4 cm)
+  \tkzGetPoints{I}{I'}
+  \tkzInterCC[R](A,4 cm)(I,4 cm)
+  \tkzGetPoints{J}{B}
+  \tkzInterCC(B,A)(C,B)
+  \tkzGetPoints{D}{E}
+  \tkzInterCC(D,B)(E,B)
+  \tkzGetPoints{M}{M'}
+  \tikzset{arc/.style={color=brown,style=dashed,delta=10}}
+  \tkzDrawArc[arc](C,D)(E)
+  \tkzDrawArc[arc](B,E)(D)
+  \tkzDrawCircle[color=brown,line width=.2pt](A,B)
+  \tkzDrawArc[arc](D,B)(M)
+  \tkzDrawArc[arc](E,M)(B)
+  \tkzCompasss[color=red,style=solid](B,I I,J J,C)
+  \tkzDrawPoints(B,C,D,E,M)
+  \tkzLabelPoints(A,B,M)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

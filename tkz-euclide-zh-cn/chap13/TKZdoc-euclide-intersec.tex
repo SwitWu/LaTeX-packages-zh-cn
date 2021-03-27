@@ -1,0 +1,492 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Intersections}
+\section{交点}
+
+% It is possible to determine the coordinates of the points of intersection
+% between two straight lines, a straight line and a circle, and two circles.
+可以求得两条直线、一条直线与一个圆及两个圆之间的交点。
+
+% The associated commands have no optional arguments and the user must determine
+% the existence of the intersection points himself.
+求交点的相关命令没有可选参数，用户必须确保交点存在。
+
+% \subsection{Intersection of two straight lines}
+\subsection{\tkzcname{tkzInterLL}命令：求两条直线的交点}
+
+% \begin{NewMacroBox}{tkzInterLL}{\parg{$A,B$}\parg{$C,D$}}%
+% Defines the intersection point \tkzname{tkzPointResult} of the two lines $(AB)$
+% and $(CD)$. The known points are given in pairs (two per line) in brackets, and
+% the resulting point can be retrieved with the macro \tkzcname{tkzDefPoint}.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzInterLL}{\parg{$A,B$}\parg{$C,D$}}%
+求直线$(AB)$和$(CD)$的交点，并保存于\tkzcname{tkzPointResult}命令中，
+两条直线分别由两个圆括号中的点对定义。
+可以通过\tkzcname{tkzDefPoint}保存并命令交点。
+\end{NewMacroBox}
+
+% \subsubsection{Example of intersection between two straight lines}
+\subsubsection{直线交点示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[rotate=-45,scale=.75]
+  \tkzDefPoint(2,1){A}
+  \tkzDefPoint(6,5){B}
+  \tkzDefPoint(3,6){C}
+  \tkzDefPoint(5,2){D}
+  \tkzDrawLines(A,B C,D)
+  \tkzInterLL(A,B)(C,D)
+  \tkzGetPoint{I}
+  \tkzDrawPoints[color=blue](A,B,C,D)
+  \tkzDrawPoint[color=red](I)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Intersection of a straight line and a circle}
+\subsection{\tkzcname{tkzInterLC}命令：定义一条直线和一个圆的交点}
+
+% As before, the line is defined by a couple of points. The circle
+% is also defined by a couple:
+直线可以由两个点定义，圆可以按如下方式进行定义：
+
+% \begin{itemize}
+% \item $(O,C)$ which is a pair of points, the first is the centre and the second
+% is any point on the circle.
+% \item $(O,r)$ The $r$ measure is the radius measure. The unit can be the
+% \emph{cm} or \emph{pt}.
+% \end{itemize}
+\begin{itemize}
+\item $(O,C)$ $O$是圆心，$C$是圆上的一个点。
+\item $(O,r)$ $O$是圆心，$r$半径，单位可以是\emph{cm}可\emph{pt}。
+\end{itemize}
+
+% \begin{NewMacroBox}{tkzInterLC}{\oarg{options}\parg{$A,B$}\parg{$O,C$} or \parg{$O,r$} or \parg{$O,C,D$}}%
+% So the arguments are two couples.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options            & default & definition                         \\
+% \midrule
+% \TOline{N}         {N}    { (O,C) determines the circle}
+% \TOline{R}         {N}    { (O, 1 cm) or (O, 120 pt)}
+% \TOline{with nodes}{N}    { (O,C,D) CD is a radius}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% The macro defines the intersection points $I$ and $J$ of the line $(AB)$ and the
+% center circle $O$ with radius $r$ if they exist; otherwise, an error will be
+% reported in the |.log| file.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzInterLC}{\oarg{命令选项}\parg{$A,B$}\parg{$O,C$} 或\parg{$O,r$} 或\parg{$O,C,D$}}%
+参数必须是一条直线和一个圆。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项           & 默认值 & 含义                         \\
+\midrule
+\TOline{N}         {N}    { (O,C)}
+\TOline{R}         {N}    { (O, 1 cm)或(O, 120 pt)}
+\TOline{with nodes}{N}    { (O,C,D)CD是半径}
+\bottomrule
+\end{tabular}
+
+\medskip
+定义直线与由圆心$O$和半径$r$定义的圆的交点$I$和$J$，
+如果出现错误，则记录在|.log|日志文件中。
+\end{NewMacroBox}
+
+% \subsubsection{Simple example of a line-circle intersection}
+\subsubsection{直线与圆的交点示例}
+
+% In the following example, the drawing of the circle uses two points and the
+% intersection of the straight line and the circle uses two pairs of points:
+在下面示例代码中，圆用两个点表示，直线与圆的有两个交点。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzInit[xmax=5,ymax=4]
+  \tkzDefPoint(1,1){O}
+  \tkzDefPoint(0,4){A}
+  \tkzDefPoint(5,0){B}
+  \tkzDefPoint(3,3){C}
+  \tkzInterLC(A,B)(O,C)  \tkzGetPoints{D}{E}
+  \tkzDrawCircle(O,C)
+  \tkzDrawPoints[color=blue](O,A,B,C)
+  \tkzDrawPoints[color=red](D,E)
+  \tkzDrawLine(A,B)
+  \tkzLabelPoints[above right](O,A,B,C,D,E)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{More complex example of a line-circle intersection}
+\subsubsection{直线与圆的交点复杂示例}
+
+可参阅\url{http://www.gogeometry.com/problem/p190_tangent_circle_diameter_perpendicular.htm}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzDefPoint(0,0){A} \tkzDefPoint(8,0){B}
+  \tkzDefMidPoint(A,B) \tkzGetPoint{O}
+  \tkzDrawCircle(O,B)
+  \tkzDefMidPoint(O,B) \tkzGetPoint{O'}
+  \tkzDrawCircle(O',B)
+  \tkzDefTangent[from=A](O',B)
+  \tkzGetSecondPoint{E}
+  \tkzInterLC(A,E)(O,B)
+  \tkzGetSecondPoint{D}
+  \tkzDefPointBy[projection=onto A--B](D)
+  \tkzGetPoint{F}
+  \tkzMarkRightAngle(D,F,B)
+  \tkzDrawSegments(A,D A,B D,F)
+  \tkzDrawSegments[color=red,line width=1pt,
+     opacity=.4](A,O F,B)
+  \tkzDrawPoints(A,B,O,O',E,D)
+  \tkzLabelPoints(A,B,O,O',E,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Circle defined by a center and a measure, and special cases}
+\subsubsection{由圆心和半径定义圆示例}
+
+% Let's look at some special cases like straight lines tangent to the circle.
+直线与圆相切的特例：
+
+\begin{tkzexample}[latex=6.35cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(0,8){A}  \tkzDefPoint(8,0){B}
+  \tkzDefPoint(8,8){C}  \tkzDefPoint(4,4){I}
+  \tkzDefPoint(2,7){E}  \tkzDefPoint(6,4){F}
+  \tkzDrawCircle[R](I,4 cm)
+  \tkzInterLC[R](A,C)(I,4 cm)  \tkzGetPoints{I1}{I2}
+  \tkzInterLC[R](B,C)(I,4 cm)  \tkzGetPoints{J1}{J2}
+  \tkzInterLC[R](A,B)(I,4 cm)  \tkzGetPoints{K1}{K2}
+  \tkzDrawPoints[color=red](I1,J1,K1,K2)
+  \tkzDrawLines(A,B B,C A,C)
+  \tkzInterLC[R](E,F)(I,4 cm)  \tkzGetPoints{I2}{J2}
+  \tkzDrawPoints[color=blue](E,F)
+  \tkzDrawPoints[color=red](I2,J2)
+  \tkzDrawLine(I2,J2)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{More complex example}
+\subsubsection{更为复杂的示例}
+
+
+% \tkzHandBomb{}Be careful with the syntax. First of all, calculations for the
+% points can be done during the passage of the arguments, but the syntax of
+% \tkzname{xfp} must be respected. You can see that I use the term \tkzname{pi}
+% because \NamePack{xfp} can work with radians. You can also work with degrees but
+% in this case, you need to use  specific commands like |sind| or |cosd|.
+% Furthermore, when calculations require the use of parentheses, they must be
+% inserted in a group\dots \TEX \{ \dots \}.
+\tkzHandBomb{}注意语法细节：
+首先，在传递参数的同时，可以计算点的坐标，但是必须嵌套\tkzname{xfp}语法。
+由于\NamePack{xfp}宏包能够使用弧度，如使用\tkzname{pi}，当然，也可以使用度，
+但需要使用类似|sind|或|cosd|命令进行计算。
+其次，当计算中需要圆括号时，需要使用分组命令：
+\dots \TEX \{ \dots \}.
+
+\begin{tkzexample}[latex=6.35cm,small]
+\begin{tikzpicture}[scale=1.2]
+  \tkzDefPoint(0,1){J}  \tkzDefPoint(0,0){O}
+  \tkzDrawArc[R,line width=1pt,color=red](J,2.5 cm)(180,0)
+  \foreach \i in {0,-5,-10,...,-85,-90}{
+    \tkzDefPoint({2.5*cosd(\i)},{1+2.5*sind(\i)}){P}
+    \tkzDrawSegment[color=orange](J,P)
+    \tkzInterLC[R](P,J)(O,1 cm)
+    \tkzGetPoints{M}{N}
+    \tkzDrawPoints[red](N)
+    }
+  \foreach \i in {-90,-95,...,-175,-180}{
+    \tkzDefPoint({2.5*cosd(\i)},{1+2.5*sind(\i)}){P}
+    \tkzDrawSegment[color=orange](J,P)
+    \tkzInterLC[R](P,J)(O,1 cm)
+    \tkzGetPoints{M}{N}
+    \tkzDrawPoints[red](M)
+    }
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Calculation of radius example 1}
+\subsection{半径计算}
+
+% With \tkzname{pgfmath} and \tkzcname{pgfmathsetmacro}
+使用\tkzname{pgfmath}模块的\tkzcname{pgfmathsetmacro}命令进行计算。
+
+% The radius measurement may be the result of a calculation that is not done
+% within the intersection macro, but before.
+% A length can be calculated in several ways. It is possible of course,
+% to use the module \tkzname{pgfmath} and the macro \tkzcname{pgfmathsetmacro}.
+% In some cases, the results obtained are not precise enough, so the following
+% calculation $0.0002 \div 0.0001$ gives $1.98$ with pgfmath while xfp will give
+% $2$.
+半径的计算是提前完成的，不是在交点计算命令中计算的。
+% The radius measurement may be the result of a calculation that is not done
+% within the intersection macro, but before.
+可以有多种方式计算长度，一种方式是使用\tkzname{pgfmath}模块
+的\tkzcname{pgfmathsetmacro}命令进行计算。
+某些情况下，其精度不足，如$0.0002 \div 0.0001$的结果是$1.98$，
+但如使用xfp宏包进行计算，则其结果为$2$。
+
+% \subsubsection{Calculation of radius example 2}
+\subsubsection{半径计算示例1}
+
+% With \tkzname{xfp} and \tkzcname{fpeval}:
+使用\tkzname{xfp}宏包的\tkzcname{fpeval}命令:
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(2,2){A}
+  \tkzDefPoint(5,4){B}
+  \tkzDefPoint(4,4){O}
+  \edef\tkzLen{\fpeval{0.0002/0.0001}}
+  \tkzDrawCircle[R](O,\tkzLen cm)
+  \tkzInterLC[R](A,B)(O, \tkzLen cm)
+  \tkzGetPoints{I}{J}
+  \tkzDrawPoints[color=blue](A,B)
+  \tkzDrawPoints[color=red](I,J)
+  \tkzDrawLine(I,J)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Calculation of radius example 3}
+\subsubsection{半径计算示例2}
+
+% With \TEX\ and \tkzcname{tkzLength}.
+使用\TEX{}的\tkzcname{tkzLength}命令计算。
+
+% This dimension was created with \tkzcname{newdimen}. 2 cm has been transformed
+% into points. It is of course possible to use \TEX\ to calculate.
+用\tkzcname{newdimen}命令定义一人尺寸。
+当然，用的是\TEX{}进行计算。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoints{2/2/A,5/4/B,4/4/0}
+  \tkzLength=2cm
+  \tkzDrawCircle[R](O,\tkzLength)
+  \tkzInterLC[R](A,B)(O,\tkzLength)
+  \tkzGetPoints{I}{J}
+  \tkzDrawPoints[color=blue](A,B)
+  \tkzDrawPoints[color=red](I,J)
+  \tkzDrawLine(I,J)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Squares in half a disc}
+\subsubsection{半圆中的矩形示例}
+
+% A Sangaku look! It is a question of proving that one can inscribe in a
+% half-disc, two squares, and to determine the length of their respective sides
+% according to the radius.
+在一个半圆内同时画两个正方形是比较困难的，需要通过圆的半径计算正方形S边长。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzDefPoints{0/0/A,8/0/B,4/0/I}
+  \tkzDefSquare(A,B) \tkzGetPoints{C}{D}
+  \tkzInterLC(I,C)(I,B)\tkzGetPoints{E'}{E}
+  \tkzInterLC(I,D)(I,B)\tkzGetPoints{F'}{F}
+  \tkzDefPointsBy[projection = onto A--B](E,F){H,G}
+  \tkzDefPointsBy[symmetry   = center H](I){J}
+  \tkzDefSquare(H,J)\tkzGetPoints{K}{L}
+  \tkzDrawSector[fill=brown!30](I,B)(A)
+  \tkzFillPolygon[color=red!40](H,E,F,G)
+  \tkzFillPolygon[color=blue!40](H,J,K,L)
+  \tkzDrawPolySeg[color=red](H,E,F,G)
+  \tkzDrawPolySeg[color=red](J,K,L)
+  \tkzDrawPoints(E,G,H,F,J,K,L)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Option \enquote{with nodes}}
+\subsubsection{\enquote{with nodes}选项示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.65]
+  \tkzDefPoints{0/0/A,4/0/B,1/1/D,2/0/E}
+  \tkzDefTriangle[equilateral](A,B)
+  \tkzGetPoint{C}
+  \tkzDrawCircle(C,A)
+  \tkzInterLC[with nodes](D,E)(C,A,B)
+  \tkzGetPoints{F}{G}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawPoints(A,...,G)
+  \tkzDrawLine(F,G)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Intersection of two circles}
+\subsection{\tkzcname{tkzInterCC}命令：求两个圆的交点}
+
+% The most frequent case is that of two circles defined by their center and a
+% point, but as before the option \tkzname{R} allows to use the radius
+% measurements.
+通常，两个圆是由圆心和另一个点确定的，但也可以用\tkzname{R}选项后，在参数中指定半径。
+
+% \begin{NewMacroBox}{tkzInterCC}{\oarg{options}\parg{$O,A$}\parg{$O',A'$} or
+% \parg{$O,r$}\parg{$O',r'$} or   \parg{$O,A,B$} \parg{$O',C,D$}}%
+% \begin{tabular}{lll}%
+% options       & default & definition                         \\
+% \midrule
+% \TOline{N}   {N}    {$OA$ and $O'A'$ are radii, $O$ and $O'$ are the centres}
+% \TOline{R}   {N}    {$r$ and $r'$ are dimensions and measure the radii}
+% \TOline{with nodes} {N}  { in (A,A,C)(C,B,F) AC and BF give the radii. }
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% This macro defines the intersection point(s) $I$ and $J$ of the two center
+% circles $O$ and $O'$. If the two circles do not have a common point then the
+% macro ends with an error that is not handled. \\
+% It is also possible to use directly \tkzcname{tkzInterCCN} and
+% \tkzcname{tkzInterCCR}.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzInterCC}{\oarg{命令选项}\parg{$O,A$}\parg{$O',A'$}或
+\parg{$O,r$}\parg{$O',r'$} 或   \parg{$O,A,B$} \parg{$O',C,D$}}%
+\begin{tabular}{lll}%
+选项       & 默认值 & 含义                         \\
+\midrule
+\TOline{N}   {N}    {$OA$ 和 $O'A'$是半径, $O$ 和$O'$是圆心}
+\TOline{R}   {N}    {$r$ 和 $r'$是半径}
+\TOline{with nodes} {N}  { 在 (A,A,C)(C,B,F)中AC和BF是半径}
+\bottomrule
+\end{tabular}
+
+\medskip
+该命令定义了$O$和$O'$两个圆的交点$I$和$J$，如果两个圆没有交点，则返回错误。
+也可以直接使用\tkzcname{tkzInterCCN}命令和\tkzcname{tkzInterCCR}命令进行计算。
+\end{NewMacroBox}
+
+% \subsubsection{Construction of an equilateral triangle}
+\subsubsection{构造等边三角形示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[trim left=-1cm,scale=0.65]
+  \tkzDefPoint(1,1){A}
+  \tkzDefPoint(5,1){B}
+  \tkzInterCC(A,B)(B,A)\tkzGetPoints{C}{D}
+  \tkzDrawPoint[color=black](C)
+  \tkzDrawCircle[dashed](A,B)
+  \tkzDrawCircle[dashed](B,A)
+  \tkzCompass[color=red](A,C)
+  \tkzCompass[color=red](B,C)
+  \tkzDrawPolygon(A,B,C)
+  \tkzMarkSegments[mark=s|](A,C B,C)
+  \tkzLabelPoints[](A,B)
+  \tkzLabelPoint[above](C){$C$}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example a mediator}
+\subsubsection{求中点示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=0.75]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2,2){B}
+  \tkzDrawCircle[color=blue](B,A)
+  \tkzDrawCircle[color=blue](A,B)
+  \tkzInterCC(B,A)(A,B)\tkzGetPoints{M}{N}
+  \tkzDrawLine(A,B)
+  \tkzDrawPoints(M,N)
+  \tkzDrawLine[color=red](M,N)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{An isosceles triangle}
+\subsubsection{求等腰三角形示例}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[rotate=120,scale=0.65]
+  \tkzDefPoint(1,2){A}
+  \tkzDefPoint(4,0){B}
+  \tkzInterCC[R](A,4cm)(B,4cm)
+  \tkzGetPoints{C}{D}
+  \tkzDrawCircle[R,dashed](A,4 cm)
+  \tkzDrawCircle[R,dashed](B,4 cm)
+  \tkzCompass[color=red](A,C)
+  \tkzCompass[color=red](B,C)
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawPoints[color=blue](A,B,C)
+  \tkzMarkSegments[mark=s|](A,C B,C)
+  \tkzLabelPoints[](A,B)
+  \tkzLabelPoint[above](C){$C$}
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Segment trisection}
+\subsubsection{三等分线段示例}
+
+% The idea here is to divide a segment with a ruler and a compass into three
+% segments of equal length.
+与尺规作图方式将线段三等分操作一致。
+
+\begin{tkzexample}[latex=9cm,small]
+\begin{tikzpicture}[scale=0.80]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(3,2){B}
+  \tkzInterCC(A,B)(B,A)
+  \tkzGetPoints{C}{D}
+  \tkzInterCC(D,B)(B,A)
+  \tkzGetPoints{A}{E}
+  \tkzInterCC(D,B)(A,B)
+  \tkzGetPoints{F}{B}
+  \tkzInterLC(E,F)(F,A)
+  \tkzGetPoints{D}{G}
+  \tkzInterLL(A,G)(B,E)
+  \tkzGetPoint{O}
+  \tkzInterLL(O,D)(A,B)
+  \tkzGetPoint{J}
+  \tkzInterLL(O,F)(A,B)
+  \tkzGetPoint{I}
+  \tkzDrawCircle(D,A)
+  \tkzDrawCircle(A,B)
+  \tkzDrawCircle(B,A)
+  \tkzDrawCircle(F,A)
+  \tkzDrawSegments[color=red](O,G
+    O,B O,D O,F)
+  \tkzDrawPoints(A,B,D,E,F,G,I,J)
+  \tkzLabelPoints(A,B,D,E,F,G,I,J)
+  \tkzDrawSegments[blue](A,B B,D A,D
+    A,F F,G E,G B,E)
+  \tkzMarkSegments[mark=s|](A,I I,J J,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{With the option \tkzimp{with nodes}}
+\subsubsection{\tkzimp{with nodes}选项示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoints{0/0/a,0/5/B,5/0/C}
+  \tkzDefPoint(54:5){F}
+  \tkzDrawCircle[color=gray](A,C)
+  \tkzInterCC[with nodes](A,A,C)(C,B,F)
+  \tkzGetPoints{a}{e}
+  \tkzInterCC(A,C)(a,e) \tkzGetFirstPoint{b}
+  \tkzInterCC(A,C)(b,a) \tkzGetFirstPoint{c}
+  \tkzInterCC(A,C)(c,b) \tkzGetFirstPoint{d}
+  \tkzDrawPoints(a,b,c,d,e)
+  \tkzDrawPolygon[color=red](a,b,c,d,e)
+  \foreach \vertex/\num in {a/36,b/108,c/180,
+                           d/252,e/324}{%
+    \tkzDrawPoint(\vertex)
+    \tkzLabelPoint[label=\num:$\vertex$](\vertex){}
+    \tkzDrawSegment[color=gray,style=dashed](A,\vertex)
+  }
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

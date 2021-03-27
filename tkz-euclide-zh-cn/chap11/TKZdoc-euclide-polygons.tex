@@ -1,0 +1,685 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Definition of polygons}
+\section{多边形定义}
+
+% \subsection{Defining the points of a square} \label{def_square}
+
+\subsection{\tkzcname{tkzDefSquare}命令：定义正方形} \label{def_square}
+
+% We have seen the definitions of some triangles. Let us look at the definitions
+% of some quadrilaterals and regular polygons.
+
+% \begin{NewMacroBox}{tkzDefSquare}{\parg{pt1,pt2}}%
+% The square is defined in the forward direction. From two points, two more points
+% are obtained such that the four taken in order form a square. The square is
+% defined in the forward direction.    The results are in
+% \tkzname{tkzFirstPointResult} and \tkzname{tkzSecondPointResult}.\\
+% We can rename them with \tkzcname{tkzGetPoints}.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% Arguments             & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{\tkzcname{tkzDefSquare}\parg{A,B}}{The square is defined
+% in the direct direction.}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefSquare}{\parg{pt1,pt2}}%
+通过两个点按逆时针方向推算另外两个点后，得到正方形。
+结果保存在\tkzcname{tkzFirstPointResult}和\tkzcname{tkzSecondPointResult}命令中。\\
+当然，可以使用\tkzcname{tkzGetPoints}保存并为这两个点重命名。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数             & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2}}{\tkzcname{tkzDefSquare}\parg{A,B}}{按指定的方向定义正方形}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Using \tkzcname{tkzDefSquare} with two points}
+\subsubsection{通过两个点定义正方形}
+
+% Note the inversion of the first two points and the result.
+需要注意点的方向问题。
+
+\begin{tkzexample}[latex=4cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(0,0){A} \tkzDefPoint(3,0){B}
+  \tkzDefSquare(A,B)
+  \tkzDrawPolygon[color=red](A,B,tkzFirstPointResult,%
+    tkzSecondPointResult)
+  \tkzDefSquare(B,A)
+  \tkzDrawPolygon[color=blue](B,A,tkzFirstPointResult,%
+    tkzSecondPointResult)
+\end{tikzpicture}
+\end{tkzexample}
+
+% We may only need one point to draw an isosceles right-angled triangle so we use
+% \tkzcname{tkzGetFirstPoint} or \tkzcname{tkzGetSecondPoint}.
+可以使用\tkzcname{tkzGetFirstPoint}或\tkzcname{tkzGetSecondPoint}命令利用其中的1个点绘制等腰直角三角形。
+
+% \subsubsection{Use of \tkzcname{tkzDefSquare} to obtain an isosceles right-angled triangle}
+\subsubsection{绘制等腰直角三角形}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(3,0){B}
+  \tkzDefSquare(A,B) \tkzGetFirstPoint{C}
+  \tkzDrawPolygon[color=blue,fill=blue!30](A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Pythagorean Theorem and \tkzcname{tkzDefSquare}}
+\subsubsection{绘制Pythagorean定理示意图}
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzInit
+  \tkzDefPoint(0,0){C}
+  \tkzDefPoint(4,0){A}
+  \tkzDefPoint(0,3){B}
+  \tkzDefSquare(B,A)\tkzGetPoints{E}{F}
+  \tkzDefSquare(A,C)\tkzGetPoints{G}{H}
+  \tkzDefSquare(C,B)\tkzGetPoints{I}{J}
+  \tkzFillPolygon[fill = red!50 ](A,C,G,H)
+  \tkzFillPolygon[fill = blue!50 ](C,B,I,J)
+  \tkzFillPolygon[fill = purple!50](B,A,E,F)
+  \tkzFillPolygon[fill = orange,opacity=.5](A,B,C)
+  \tkzDrawPolygon[line width = 1pt](A,B,C)
+  \tkzDrawPolygon[line width = 1pt](A,C,G,H)
+  \tkzDrawPolygon[line width = 1pt](C,B,I,J)
+  \tkzDrawPolygon[line width = 1pt](B,A,E,F)
+  \tkzLabelSegment[](A,C){$a$}
+  \tkzLabelSegment[](C,B){$b$}
+  \tkzLabelSegment[swap](A,B){$c$}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Definition of parallelogram}
+% \subsection{定义平行四边形}
+
+\subsection{\tkzcname{tkzDefParallelogram}命令：定义平行四边形第4个顶点}
+
+% It is a matter of completing three points in order to obtain a parallelogram.
+可以通过3个点定义一个平行四边形。
+
+% \begin{NewMacroBox}{tkzDefParallelogram}{\parg{pt1,pt2,pt3}}%
+% From three points, another point is obtained such that the four taken in order
+% form a parallelogram.  The result is in \tkzname{tkzPointResult}.\par
+% We can rename it with the name \tkzcname{tkzGetPoint}\dots
+%
+% \begin{tabular}{lll}%
+% \toprule
+% arguments &  default & definition  \\
+% \midrule
+% \TAline{\parg{pt1,pt2,pt3}}{no default}{Three points are necessary}
+% \bottomrule
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefParallelogram}{\parg{pt1,pt2,pt3}}%
+通过3个点，通过计算另一个点，构成平行四边形，
+结果保存在\tkzcname{tkzPointResult}中。\par
+可使用\tkzcname{tkzGetPoint}命令保存并命名结果\dots。
+
+\begin{tabular}{lll}%
+\toprule
+参数 &  默认值 & 含义  \\
+\midrule
+\TAline{\parg{pt1,pt2,pt3}}{无}{必须的3个顶点}
+\bottomrule
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Example of a parallelogram definition}
+\subsubsection{平行四边形定义示例}
+
+\begin{tkzexample}[latex=7 cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoints{0/0/A,3/0/B,4/2/C}
+  \tkzDefParallelogram(A,B,C)
+  \tkzGetPoint{D}
+  \tkzDrawPolygon(A,B,C,D)
+  \tkzLabelPoints(A,B)
+  \tkzLabelPoints[above right](C,D)
+  \tkzDrawPoints(A,...,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Simple example}
+% \subsubsection{简单示例}
+%
+% % Explanation of the definition of a parallelogram
+%
+%
+% \begin{tkzexample}[latex=7 cm,small]
+% \begin{tikzpicture}[scale=1]
+%   \tkzDefPoints{0/0/A,3/0/B,4/2/C}
+%   \tkzDefPointWith[colinear= at C](B,A)
+%   \tkzGetPoint{D}
+%   \tkzDrawPolygon(A,B,C,D)
+%   \tkzLabelPoints(A,B)
+%   \tkzLabelPoints[above right](C,D)
+%   \tkzDrawPoints(A,...,D)
+% \end{tikzpicture}
+% \end{tkzexample}
+
+% \subsubsection{Construction of the golden rectangle}
+\subsubsection{黄金矩形示例}
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzInit[xmax=14,ymax=10]
+  \tkzClip[space=1]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(8,0){B}
+  \tkzDefMidPoint(A,B)\tkzGetPoint{I}
+  \tkzDefSquare(A,B)\tkzGetPoints{C}{D}
+  \tkzDrawSquare(A,B)
+  \tkzInterLC(A,B)(I,C)\tkzGetPoints{G}{E}
+  \tkzDrawArc[style=dashed,color=gray](I,E)(D)
+  \tkzDefPointWith[colinear= at C](E,B)
+  \tkzGetPoint{F}
+  \tkzDrawPoints(C,D,E,F)
+  \tkzLabelPoints(A,B,C,D,E,F)
+  \tkzDrawSegments[style=dashed,color=gray]%
+(E,F C,F B,E)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Drawing a square}
+\subsection{\tkzcname{tkzDrawSquare}命令：绘制正方形}
+
+% \begin{NewMacroBox}{tkzDrawSquare}{\oarg{local options}\parg{pt1,pt2}}%
+% The macro draws a square but not the vertices. It is possible to color the
+% inside. The order of the points is that of the direct direction of the
+% trigonometric circle.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments             & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{|\tkzcname{tkzDrawSquare}|\parg{A,B}}{|\tkzcname{tkzGetPoints\{C\}\{D\}}|}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% options             & example & explication                         \\
+% \midrule
+% \TOline{Options TikZ}{|red,line width=1pt|}{}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawSquare}{\oarg{命令选项}\parg{pt1,pt2}}%
+用于绘制一个正方形，但不绘制顶点。可以对内部进行着色，点的顺序是逆时针方向。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数             & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2}}{|\tkzcname{tkzDrawSquare}|\parg{A,B}}{|\tkzcname{tkzGetPoints\{C\}\{D\}}|}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+选项             & 样例 & 说明                         \\
+\midrule
+\TOline{\TIKZ{}选项}{|red,line width=1pt|}{所有有效\TIKZ{}选项}
+\end{tabular}
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{The idea is to inscribe two squares in a semi-circle}
+\subsubsection{在半圆内绘制两个正方形示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzInit[ymax=8,xmax=8]
+  \tkzClip[space=.25]   \tkzDefPoint(0,0){A}
+  \tkzDefPoint(8,0){B}  \tkzDefPoint(4,0){I}
+  \tkzDefSquare(A,B)    \tkzGetPoints{C}{D}
+  \tkzInterLC(I,C)(I,B) \tkzGetPoints{E'}{E}
+  \tkzInterLC(I,D)(I,B) \tkzGetPoints{F'}{F}
+  \tkzDefPointsBy[projection=onto A--B](E,F){H,G}
+  \tkzDefPointsBy[symmetry  = center H](I){J}
+  \tkzDefSquare(H,J)    \tkzGetPoints{K}{L}
+  \tkzDrawSector[fill=yellow](I,B)(A)
+  \tkzFillPolygon[color=red!40](H,E,F,G)
+  \tkzFillPolygon[color=blue!40](H,J,K,L)
+  \tkzDrawPolySeg[color=red](H,E,F,G)
+  \tkzDrawPolySeg[color=red](J,K,L)
+  \tkzDrawPoints(E,G,H,F,J,K,L)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{The golden rectangle}
+\subsection{\tkzcname{tkzDefGoldRectangle}命令：定义黄金矩形}
+
+% \begin{NewMacroBox}{tkzDefGoldRectangle}{\parg{point,point}}%
+%
+% The macro determines a rectangle whose size ratio is the number $\Phi$. The
+% created points are in \tkzname{tkzFirstPointResult} and \tkzname{tkzSecondPointResult}.
+% They can be obtained with the macro \tkzcname{tkzGetPoints}. The following
+% macro is used to draw the rectangle.
+%
+% \begin{tabular}{lll}%
+% \toprule
+% arguments             & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{\parg{A,B}}{If C and D are created then $AB/BC=\Phi$.}
+%  \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefGoldRectangle}{\parg{point,point}}%
+定义长宽比为黄金分割比$\Phi$的黄金矩形。
+结果保存在\tkzcname{tkzFirstPointResult}的\tkzcname{tkzSecondPointResult}中。
+可以用\tkzcname{tkzGetPoints}保存并命令这两个点。
+
+\begin{tabular}{lll}%
+\toprule
+参数             & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2}}{\parg{A,B}}{如果用$C$和$D$表示得到的点，则$AB/BC=\Phi$.}
+ \end{tabular}
+\end{NewMacroBox}
+
+\subsection{\tkzcname{tkzDrawGoldRectangle}命令：绘制黄金矩形}
+
+% \begin{NewMacroBox}{tkzDrawGoldRectangle}{\oarg{local
+% options}\parg{point,point}}
+% \begin{tabular}{lll}%
+% arguments             & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{\parg{A,B}}{Draws the golden rectangle based on the
+% segment $[AB]$}
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% options     & example & explication     \\
+% \midrule
+% \TOline{Options TikZ}{|red,line width=1pt|}{}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawGoldRectangle}{\oarg{命令选项}\parg{point,point}}
+\begin{tabular}{lll}%
+参数             & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2}}{\parg{A,B}}{根据线段$[AB]$绘制黄金矩形}
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+选项     & 样例 & 说明     \\
+\midrule
+% \TOline{Options TikZ}{|red,line width=1pt|}{}
+\TOline{\TIKZ{}选项}{|red,line width=1pt|}{所有有效\TIKZ{}选项}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Golden Rectangles}
+\subsubsection{黄金矩形示例}
+\begin{tkzexample}[latex=6 cm,small]
+\begin{tikzpicture}[scale=.6]
+  \tkzDefPoint(0,0){A}      \tkzDefPoint(8,0){B}
+  \tkzDefGoldRectangle(A,B) \tkzGetPoints{C}{D}
+  \tkzDefGoldRectangle(B,C) \tkzGetPoints{E}{F}
+  \tkzDrawPolygon[color=red,fill=red!20](A,B,C,D)
+  \tkzDrawPolygon[color=blue,fill=blue!20](B,C,E,F)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Drawing a polygon}
+\subsection{\tkzcname{tkzDrawPolygon}命令：绘制多边形}
+
+% \begin{NewMacroBox}{tkzDrawPolygon}{\oarg{local options}\parg{points list}}%
+% Just give a list of points and the macro plots the polygon using the \TIKZ\
+% options present. You can  replace $(A,B,C,D,E)$ by $(A,\dots,E)$ and
+% $(P_1,P_2,P_3,P_4,P_5)$ by $(P_1,P\dots,P_5)$
+%
+% \begin{tabular}{lll}%
+% \toprule
+% arguments             & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2,pt3,\dots}}{|\BS
+% tkzDrawPolygon[gray,dashed](A,B,C)|}{Drawing a triangle}
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & example                         \\
+% \midrule
+% \TOline{Options TikZ}{\dots}{|\BS tkzDrawPolygon[red,line width=2pt](A,B,C)|}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawPolygon}{\oarg{命令选项}\parg{点集列表}}%
+用给定的点集，根据指定的\TIKZ{}选项绘制多边形。
+连续的点可以省略中间的点，例如，可以使用$(A,\dots,E)$表示点集$(A,B,C,D,E)$ ，
+用$(P_1,P\dots,P_5)$表示点集$(P_1,P_2,P_3,P_4,P_5)$ 。
+
+\begin{tabular}{lll}%
+\toprule
+参数             & 样例 & 说明                       \\
+\midrule
+\TAline{\parg{pt1,pt2,pt3,\dots}}{|\BS
+tkzDrawPolygon[gray,dashed](A,B,C)|}{绘制一个三角形}
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 样例                         \\
+\midrule
+\TOline{\TIKZ{}选项}{\dots}{|\BS tkzDrawPolygon[red,line width=2pt](A,B,C)|}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{\tkzcname{tkzDrawPolygon}}
+\subsubsection{\tkzcname{tkzDrawPolygon}命令示例}
+
+\begin{tkzexample}[latex=7cm, small]
+\begin{tikzpicture}[rotate=18,scale=1.5]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2.25,0.2){B}
+  \tkzDefPoint(2.5,2.75){C}
+  \tkzDefPoint(-0.75,2){D}
+  \tkzDrawPolygon[fill=black!50!blue!20!](A,B,C,D)
+  \tkzDrawSegments[style=dashed](A,C B,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Drawing a polygonal chain}
+\subsection{\tkzcname{tkzDrawPolySeg}命令：绘制多边形顶点折线}
+
+% \begin{NewMacroBox}{tkzDrawPolySeg}{\oarg{local options}\parg{points list}}%
+% Just give a list of points and the macro plots the polygonal chain using the
+% \TIKZ\ options present.
+%
+% \begin{tabular}{lll}%
+% \toprule
+% arguments             & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2,pt3,\dots}}{|\BS
+% tkzDrawPolySeg[gray,dashed](A,B,C)|}{Drawing a triangle}
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & example                         \\
+% \midrule
+% \TOline{Options TikZ}{\dots}{|\BS tkzDrawPolySeg[red,line width=2pt](A,B,C)|}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawPolySeg}{\oarg{命令选项}\parg{点集列表}}%
+绘制多边形顶点构成的折线。
+
+\begin{tabular}{lll}%
+\toprule
+参数             & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2,pt3,\dots}}{|\BS
+tkzDrawPolySeg[gray,dashed](A,B,C)|}{绘制一个三角形}
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 样例                         \\
+\midrule
+\TOline{\TIKZ{}选项}{\dots}{|\BS tkzDrawPolySeg[red,line width=2pt](A,B,C)|}
+\end{tabular}
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Polygonal chain}
+\subsubsection{多边形顶点折线示例}
+
+\begin{tkzexample}[latex=7cm, small]
+\begin{tikzpicture}
+  \tkzDefPoints{0/0/A,6/0/B,3/4/C,2/2/D}
+  \tkzDrawPolySeg(A,...,D)
+  \tkzDrawPoints(A,...,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Polygonal chain: index notation}
+\subsubsection{多边形顶点折线：循环实现}
+
+\begin{tkzexample}[latex=7cm, small]
+\begin{tikzpicture}
+  \foreach \pt in {1,2,...,8} {%
+    \tkzDefPoint(\pt*20:3){P_\pt}}
+  \tkzDrawPolySeg(P_1,P_...,P_8)
+  \tkzDrawPoints(P_1,P_...,P_8)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Clip a polygon}
+\subsection{\tkzcname{tkzClipPolygon}命令：使用多边形裁剪}
+
+% \begin{NewMacroBox}{tkzClipPolygon}{\oarg{local options}\parg{points list}}%
+% This macro makes it possible to contain the different plots in the designated
+% polygon.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments       & example & explication     \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{\parg{A,B}}{}
+% %\bottomrule
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzClipPolygon}{\oarg{命令选项}\parg{点集列表}}%
+用指定的多边形对图形进行裁剪。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数       & 样例 & 说明     \\
+\midrule
+\TAline{\parg{pt1,pt2}}{\parg{A,B}}{}
+%\bottomrule
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{\tkzcname{tkzClipPolygon}}
+\subsubsection{\tkzcname{tkzClipPolygon}命令示例}
+
+\begin{tkzexample}[latex=7 cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzInit[xmin=0,xmax=4,ymin=0,ymax=3]
+  \tkzClip[space=.5]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDefPoint(1,3){C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDefPoint(0,2){D}
+  \tkzDefPoint(2,0){E}
+  \tkzDrawPoints(D,E)
+  \tkzLabelPoints(D,E)
+  \tkzClipPolygon(A,B,C)
+  \tkzDrawLine[color=red](D,E)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Example: use of \enquote{Clip} for Sangaku in a square}
+\subsubsection{使用\enquote{裁剪}将Sangaku图形限制在正方形内}
+
+\begin{tkzexample}[latex=7cm, small]
+\begin{tikzpicture}[scale=.75]
+  \tkzDefPoint(0,0){A} \tkzDefPoint(8,0){B}
+  \tkzDefSquare(A,B) \tkzGetPoints{C}{D}
+  \tkzDrawPolygon(B,C,D,A)
+  \tkzClipPolygon(B,C,D,A)
+  \tkzDefPoint(4,8){F}
+  \tkzDefTriangle[equilateral](C,D)
+  \tkzGetPoint{I}
+  \tkzDrawPoint(I)
+  \tkzDefPointBy[projection=onto B--C](I)
+  \tkzGetPoint{J}
+  \tkzInterLL(D,B)(I,J)  \tkzGetPoint{K}
+  \tkzDefPointBy[symmetry=center K](B)
+  \tkzGetPoint{M}
+  \tkzDrawCircle(M,I)
+  \tkzCalcLength(M,I)   \tkzGetLength{dMI}
+  \tkzFillPolygon[color = orange](A,B,C,D)
+  \tkzFillCircle[R,color = yellow](M,\dMI pt)
+  \tkzFillCircle[R,color = blue!50!black](F,4 cm)%
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Color a polygon}
+\subsection{\tkzcname{tkzFillPolygon}命令：多边形着色}
+
+% \begin{NewMacroBox}{tkzFillPolygon}{\oarg{local options}\parg{points list}}%
+% You can color by drawing the polygon, but in this case you color the inside of
+% the polygon without drawing it.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments                & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2,\dots}}{\parg{A,B,\dots}}{}
+% %\bottomrule
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzFillPolygon}{\oarg{命令选项}\parg{点集列表}}%
+可以在对多边形着色，但该命令仅对内部着色，不绘制多边形。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数                & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2,\dots}}{\parg{A,B,\dots}}{}
+%\bottomrule
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{\tkzcname{tkzFillPolygon}}
+\subsubsection{\tkzcname{tkzFillPolygon}命令示例}
+
+\begin{tkzexample}[latex=7cm, small]
+\begin{tikzpicture}[scale=0.7]
+  \tkzInit[xmin=-3,xmax=6,ymin=-1,ymax=6]
+  \tkzDrawX[noticks]
+  \tkzDrawY[noticks]
+  \tkzDefPoint(0,0){O}  \tkzDefPoint(4,2){A}
+  \tkzDefPoint(-2,6){B}
+  \tkzPointShowCoord[xlabel=$x$,ylabel=$y$](A)
+  \tkzPointShowCoord[xlabel=$x'$,ylabel=$y'$,%
+                     ystyle={right=2pt}](B)
+  \tkzDrawSegments[->](O,A O,B)
+  \tkzLabelSegment[above=3pt](O,A){$\vec{u}$}
+  \tkzLabelSegment[above=3pt](O,B){$\vec{v}$}
+  \tkzMarkAngle[fill= yellow,size=1.8cm,%
+                opacity=.5](A,O,B)
+  \tkzFillPolygon[red!30,opacity=0.25](A,B,O)
+  \tkzLabelAngle[pos = 1.5](A,O,B){$\alpha$}
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Regular polygon}
+\subsection{\tkzcname{tkzDefRegPolygon}命令：定义正多边形}
+
+% \begin{NewMacroBox}{tkzDefRegPolygon}{\oarg{local options}\parg{pt1,pt2}}%
+% From the number of sides, depending on the options, this macro determines a
+% regular polygon according to its center or one side.
+%
+% \begin{tabular}{lll}%
+% \toprule
+% arguments             & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{\parg{O,A}}{with option \enquote{center}, $O$ is the center of
+% the polygon.}
+% \TAline{\parg{pt1,pt2}}{\parg{A,B}}{with option \enquote{side}, $[AB]$ is a side.}
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & example                         \\
+% \midrule
+% \TOline{name}{P}{The vertices are named $P1$, $P2$, \dots}
+% \TOline{sides}{5}{number of sides.}
+% \TOline{center}{center}{The first point is the center.}
+% \TOline{side}{center}{The two points are vertices.}
+% \TOline{Options TikZ}{\dots}{}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefRegPolygon}{\oarg{命令选项}\parg{pt1,pt2}}%
+根据选项中指定的边数，以指定的点为中心或是指定的边，定义一个正多边形。
+
+\begin{tabular}{lll}%
+\toprule
+参数             & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2}}{\parg{O,A}}{如果使用\enquote{center}选项，则$O$是多边形中心}
+\TAline{\parg{pt1,pt2}}{\parg{A,B}}{如果使用\enquote{side}选项, $[AB]$一条边}
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 样例                        \\
+\midrule
+\TOline{name}{P}{顶点命名为$P1$, $P2$, \dots}
+\TOline{sides}{5}{边数}
+\TOline{center}{center}{第1个点是正多边形中心}
+\TOline{side}{center}{指定的两个顶点构成一条边}
+\TOline{\TIKZ{}选项}{\dots}{}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Option \tkzname{center}}
+\subsubsection{\tkzname{center}选项示例}
+
+\begin{tkzexample}[latex=6cm, small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoints{0/0/P0,0/0/Q0,2/0/P1}
+  \tkzDefMidPoint(P0,P1) \tkzGetPoint{Q1}
+  \tkzDefRegPolygon[center,sides=7](P0,P1)
+  \tkzDefMidPoint(P1,P2) \tkzGetPoint{Q1}
+  \tkzDefRegPolygon[center,sides=7,name=Q](P0,Q1)
+  \tkzDrawPolygon(P1,P...,P7)
+  \tkzFillPolygon[gray!20](Q0,Q1,P2,Q2)
+  \foreach \j in {1,...,7} {
+    \tkzDrawSegment[black](P0,Q\j)}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Option \tkzname{side}}
+\subsubsection{\tkzname{side}选示例}
+
+\begin{tkzexample}[latex=6cm, small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoints{-4/0/A, -1/0/B}
+  \tkzDefRegPolygon[side,sides=5,name=P](A,B)
+  \tkzDrawPolygon[thick](P1,P...,P5)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

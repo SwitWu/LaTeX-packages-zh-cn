@@ -1,0 +1,335 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Miscellaneous tools}
+\section{杂项命令}
+
+% \subsection{Duplicate a segment}
+\subsection{\tkzcname{tkzDuplicateSegment}命令：复制线段}
+
+% This involves constructing a segment on a given half-line of the same length as
+% a given segment.
+在给定的半直线上复制与给定线段长度相同的线段。
+
+% \begin{NewMacroBox}{tkzDuplicateSegment}{\parg{pt1,pt2}\parg{pt3,pt4}\marg{pt5}}%
+% This involves creating a segment on a given half-line of the same length as a
+% given segment . It is in fact the definition of a point.
+%
+% \tkzcname{tkzDuplicateSegment} is the new name of \tkzcname{tkzDuplicateLen}.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments             & example & explication                         \\
+%
+% \midrule
+% \TAline{(pt1,pt2)(pt3,pt4)\{pt5\}}
+% {\tkzcname{tkzDuplicateSegment}(A,B)(E,F)\{C\}}{AC=EF and $C \in [AB)$} \\
+%
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+%
+% The macro \tkzcname{tkzDuplicateLength} is identical to this one.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDuplicateSegment}{\parg{pt1,pt2}\parg{pt3,pt4}}%
+该命令实际是一个点的定义命令。
+
+\tkzcname{tkzDuplicateSegment}命令是\tkzcname{tkzDuplicateLen}命令的更新版本。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数             & 样例 & 说明                         \\
+
+\midrule
+\TAline{(pt1,pt2)(pt3,pt4)}
+{\tkzcname{tkzDuplicateSegment}(A,B)(E,F)}{$AC=EF$}
+
+\bottomrule
+\end{tabular}
+
+\medskip
+
+\tkzcname{tkzDuplicateLength}命令与该命令相同。
+\end{NewMacroBox}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2,-3){B}
+  \tkzDefPoint(2,5){C}
+  \tkzDrawSegments[red](A,B A,C)
+  \tkzDuplicateSegment(A,B)(A,C)
+  \tkzGetPoint{D}
+  \tkzDrawSegment[green](A,D)
+  \tkzDrawPoints[color=red](A,B,C,D)
+  \tkzLabelPoints[above right=3pt](A,B,C,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Proportion of gold with \tkzcname{tkzDuplicateSegment}}
+\subsubsection{黄金分割示例}
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}[rotate=-90,scale=.75]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(10,0){B}
+  \tkzDefMidPoint(A,B)
+  \tkzGetPoint{I}
+  \tkzDefPointWith[orthogonal,K=-.75](B,A)
+  \tkzGetPoint{C}
+  \tkzInterLC(B,C)(B,I)  \tkzGetSecondPoint{D}
+  \tkzDuplicateSegment(B,D)(D,A) \tkzGetPoint{E}
+  \tkzInterLC(A,B)(A,E)   \tkzGetPoints{N}{M}
+  \tkzDrawArc[orange,delta=10](D,E)(B)
+  \tkzDrawArc[orange,delta=10](A,M)(E)
+  \tkzDrawLines(A,B B,C A,D)
+  \tkzDrawArc[orange,delta=10](B,D)(I)
+  \tkzDrawPoints(A,B,D,C,M,I,N)
+  \tkzLabelPoints(A,B,D,C,M,I,N)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Segment length \tkzcname{tkzCalcLength}}
+\subsection{\tkzcname{tkzCalcLength}命令：计算线段长度}
+
+% There's an option in \TIKZ\  named \tkzname{veclen}. This option
+% is used to calculate AB if A and B are two points.
+也可以用\TIKZ{}的\tkzname{veclen}计算长度，
+该选项能够计算$A$点和$B$点间的距离$|AB|$。
+
+% The only problem for me is that the version of \TIKZ\ is not accurate enough in
+% some cases. My version uses the \tkzNamePack{xfp} package and is slower, but
+% more accurate.
+但\TIKZ{}计算精度不足，因此该命令用\tkzNamePack{xfp}宏包实现计算，
+虽然其计算慢，但精度高。
+
+% \begin{NewMacroBox}{tkzCalcLength}{\oarg{local options}\parg{pt1,pt2}\marg{name of macro}}%
+% The result is stored in a macro.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments    & example & explication       \\
+% \midrule
+% \TAline{(pt1,pt2)\{name of macro\}}
+% {\tkzcname{tkzCalcLength}(A,B)\{dAB\}}{\tkzcname{dAB} gives $AB$ in pt}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% Only one option
+%
+% \begin{tabular}{lll}%
+%
+% \toprule
+%  options    & default & example       \\
+% \midrule
+% \TOline{cm}  {false}{\tkzcname{tkzCalcLength}[cm](A,B)\{dAB\} \tkzcname{dAB}
+% gives $AB$ in cm}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzCalcLength}{\oarg{命令选项}\parg{pt1,pt2}\marg{宏名称}}%
+计算结果保存有指定的宏中。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数    & 样例 & 说明       \\
+\midrule
+\TAline{(pt1,pt2)\{宏名称\}}
+{\tkzcname{tkzCalcLength}(A,B)\{dAB\}}{\tkzcname{dAB}得到$AB$的长度，单位是pt}
+\bottomrule
+\end{tabular}
+
+\medskip
+仅有1个选项。
+
+\begin{tabular}{lll}%
+
+\toprule
+ 选项    & 默认值 & 样例       \\
+\midrule
+\TOline{cm}  {false}{\tkzcname{tkzCalcLength}[cm](A,B)\{dAB\} \tkzcname{dAB}
+得到$AB$的长度，单位是cm}
+\end{tabular}
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Compass square construction}
+\subsubsection{绘制尺规标记}
+
+\begin{tkzexample}[latex=7.25cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDrawLine[add= .6 and .2](A,B)
+  \tkzCalcLength[cm](A,B)\tkzGetLength{dAB}
+  \tkzDefLine[perpendicular=through A](A,B)
+  \tkzDrawLine(A,tkzPointResult)
+  \tkzGetPoint{D}
+  \tkzShowLine[orthogonal=through A,gap=2](A,B)
+  \tkzMarkRightAngle(B,A,D)
+  \tkzVecKOrth[-1](B,A)\tkzGetPoint{C}
+  \tkzCompasss(A,D D,C)
+  \tkzDrawArc[R](B,\dAB)(80,110)
+  \tkzDrawPoints(A,B,C,D)
+  \tkzDrawSegments[color=gray,style=dashed](B,C C,D)
+  \tkzLabelPoints(A,B,C,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Transformation from pt to cm}
+\subsection{\tkzcname{tkzptocm}命令：将pt转换为cm}
+
+% Not sure if this is necessary and it is only a division by 28.45274 and a
+% multiplication by the same number. The macros are:
+不能确定该命令是否有用，仅仅用28.45274进行了乘除运算。
+
+% \begin{NewMacroBox}{tkzpttocm}{\parg{nombre}\marg{name of macro}}%
+% \begin{tabular}{lll}%
+% arguments    & example & explication     \\
+% \midrule
+% \TAline{(number){name of macro}}
+% {\tkzcname{tkzpttocm}(120)\{len\}}{\tkzcname{len} gives a number of
+% \tkzname{cm}}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% You'll have to use \tkzcname{len} along with \tkzname{cm}. The result is stored
+% in a macro.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzpttocm}{\parg{nombre}\marg{宏名称}}%
+\begin{tabular}{lll}%
+参数    & 样例 & 说明     \\
+\midrule
+\TAline{(number){宏名称}}
+{\tkzcname{tkzpttocm}(120)\{len\}}{\tkzcname{len}得到\tkzname{cm}值}
+\bottomrule
+\end{tabular}
+
+\medskip
+% 需要使用\tkzcname{len}\tkzname{cm}
+结果保存在宏中。
+\end{NewMacroBox}
+
+% \subsection{Transformation from cm to pt}
+\subsection{\tkzcname{tkzcmtopt}命令：将cm转换为pt}
+
+\begin{NewMacroBox}{tkzcmtopt}{\parg{nombre}\marg{宏名称}}%
+\begin{tabular}{lll}%
+参数             & 样例 & 说明                         \\
+\midrule
+\TAline{(nombre)\{宏名称\}}{\tkzcname{tkzcmtopt}(5)\{len\}}{\tkzcname{len}得到\tkzname{pt}值}
+\bottomrule
+\end{tabular}
+
+\medskip
+结果保存在宏中。
+% The result is stored in a macro. The result can be used with \tkzcname{len}
+\tkzname{pt}.
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Example}
+\subsubsection{示例代码}
+
+% The macro \tkzcname{tkzDefCircle[radius](A,B)} defines the radius that we
+% retrieve with \tkzcname{tkzGetLength}, but this result is in \tkzname{pt}.
+\tkzcname{tkzDefCircle[radius](A,B)}命令定义一个圆，
+可以用\tkzcname{tkzGetLength}命令得到半径，但其单位是\tkzname{pt}。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(3,-4){B}
+  \tkzDefCircle[through](A,B)
+  \tkzGetLength{rABpt}
+  \tkzpttocm(\rABpt){rABcm}
+  \tkzDrawCircle(A,B)
+  \tkzDrawPoints(A,B)
+  \tkzLabelPoints(A,B)
+  \tkzDrawSegment[dashed](A,B)
+  \tkzLabelSegment(A,B){$\pgfmathprintnumber{\rABcm}$}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Get point coordinates}
+\subsection{\tkzcname{tkzGetPointCoord}命令：提取点的坐标分量}
+%<--------------------------------------------------------------------------–>
+%                    Coordonnées d'un point
+%    result in #2x and #2y    #1 is the point and we get its coordinates
+% use either $A$ one point \tkzGetPointCoord(A){V} then \Vx = xA and \Vy = yA
+% in cm
+% tkzGetPointCoord with [#1] cm or  pt ?? todo
+%<--------------------------------------------------------------------------–>
+% \begin{NewMacroBox}{tkzGetPointCoord}{\parg{$A$}\marg{name of macro}}%
+% \begin{tabular}{lll}%
+% arguments             & example & explication                         \\
+% \midrule
+% \TAline{(point)\{name of macro\}}
+% {\tkzcname{tkzGetPointCoord}(A)\{A\}}{\tkzcname{Ax} and \tkzcname{Ay} give
+% coordinates for $A$}
+% \end{tabular}
+%
+% \medskip
+% Stores in two macros the coordinates of a point. If the name of the macro is
+% \tkzname{p}, then \tkzcname{px} and \tkzcname{py} give the coordinates of the
+% chosen point with the cm as unit.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzGetPointCoord}{\parg{$A$}\marg{宏名称}}%
+\begin{tabular}{lll}%
+参数             & 样例 & 说明                         \\
+\midrule
+\TAline{(point)\{宏名称\}}
+{\tkzcname{tkzGetPointCoord}(A)\{A\}}{\tkzcname{Ax}和\tkzcname{Ay}保存点$A$的坐标分量}
+\end{tabular}
+
+\medskip
+将点的坐标分量保存在两个宏中，如果宏名称是\tkzname{p},
+则将坐标分量保存在\tkzcname{px}和\tkzcname{py}宏中，
+单位是cm。
+\end{NewMacroBox}
+
+\vspace*{-20pt}
+
+% \subsubsection{Coordinate transfer with \tkzcname{tkzGetPointCoord}}
+\subsubsection{点定义示例}
+
+\begin{tkzexample}[width=8cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=3]
+  \tkzGrid[sub,orange]
+  \tkzAxeXY
+  \tkzDefPoint(1,0){A}
+  \tkzDefPoint(4,2){B}
+  \tkzGetPointCoord(A){a}
+  \tkzGetPointCoord(B){b}
+  \tkzDefPoint(\ax,\ay){C}
+  \tkzDefPoint(\bx,\by){D}
+  \tkzDrawPoints[color=red](C,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Sum of vectors with \tkzcname{tkzGetPointCoord}}
+\subsubsection{求向量和示例}
+\begin{tkzexample}[width=6cm,small]
+\begin{tikzpicture}[>=latex]
+  \tkzDefPoint(1,4){a} \tkzDefPoint(3,2){b}
+  \tkzDefPoint(1,1){c}
+  \tkzDrawSegment[->,red](a,b) \tkzGetPointCoord(c){c}
+  \draw[color=blue,->](a) -- ([shift=(b)]\cx,\cy) ;
+  \draw[color=purple,->](b) -- ([shift=(b)]\cx,\cy) ;
+  \tkzDrawSegment[->,blue](a,c)
+  \tkzDrawSegment[->,purple](b,c)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

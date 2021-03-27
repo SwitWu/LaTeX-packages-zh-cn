@@ -1,0 +1,98 @@
+%<---------  Couverture des documentations --------------------------------
+
+%<------------------  Make Title ------------------------------------------
+
+\renewcommand\maketitle{%
+\null
+\AddToShipoutPicture*{%
+\setlength\unitlength{1mm}
+\put(0,0){%
+   \makebox(0,0)[lb]{%
+      \color{myblue!10}\rule{\paperwidth}{\paperheight}%
+      }%
+   }%
+\put(0,0){%
+   \makebox(0,0)[lb]{%
+      \color{myblue}\rule{40mm}{\paperheight}%
+      }%
+   }%
+\put(20,270){% 270 en portrait 180
+   \rotatebox{90}{%
+      \makebox(0,0)[r]{%
+         \fontsize{30}{30}\color{myblue!50!white}%
+         \bfseries
+         \selectfont{\@title\ \tkzversionofpack}\hfill%
+         }%
+      }%
+   }%
+\put(60,60){%
+\begin{pgfpicture}
+\pgfsys@transformxyscale{.5}{.5}
+\pgfmathdeclarerandomlist{color}{{myblue}{DarkBlue}{SteelBlue}{blue}{MidnightBlue}}
+ \foreach \a in {1,...,5}{% 
+      \pgfmathrandominteger{\x}{1}{300}% 
+      \pgfmathrandominteger{\y}{1}{200}% 
+      \pgfmathrandominteger{\r}{20}{100}% 
+      \pgfmathrandominteger{\s}{5}{95}% 
+      \pgfmathrandominteger{\o}{50}{80}%
+      \pgfmathrandomitem{\c}{color}% 
+            \pgfdeclareradialshading{ballshading}{%
+            \pgfpoint{-10bp}{10bp}}% 
+      {%
+       color(0bp)=(\c!15!white); 
+       color(9bp)=(\c!75!white); 
+       color(18bp)=(\c!70!black); 
+       color(25bp)=(\c!50!black); 
+       color(50bp)=(black)%
+       }%
+      \pgfsetfillopacity{\o/100}% 
+      \pgfpathcircle{\pgfpoint{+\x pt}{+\y pt}}{+\r pt} 
+      \pgfshadepath{ballshading}{\s}% 
+      \pgfusepath{}%
+      }%
+   \end{pgfpicture}}
+% \put(80,150){
+% \begin{tikzpicture}[scale=.75,rotate=60]
+% \tkzDefPoints{00/0/A,12/0/B,6/12*sind(60)/C}
+% \foreach \density in {20,30,...,240}{%
+%         \tkzDrawPolygon[fill=teal!\density](A,B,C)
+%         \pgfnodealias{X}{A}
+%         \tkzDefPointWith[linear,K=.15](A,B) \tkzGetPoint{A}
+%         \tkzDefPointWith[linear,K=.15](B,C) \tkzGetPoint{B}
+%         \tkzDefPointWith[linear,K=.15](C,X) \tkzGetPoint{C}
+%     }
+% \end{tikzpicture}%
+% }
+\put(60,250){% 60,250 en portait  120,180
+   \makebox(0,0)[l]{%
+      \begin{tikzpicture}
+         \nodeshadowedone(2,-1.25){\fontsize{60}{60}
+         \selectfont{\tkznamecollection}}
+      \end{tikzpicture}
+      }%
+   }%
+\put(120,50){%
+   \makebox(0,0)[l]{%
+      \fontsize{17}{21}
+      \textcolor{sectioncolor}{\selectfont{著：\tkzauthorofpack}}%
+      }%
+   }% 
+\put(120,40){%
+   \makebox(0,0)[l]{%
+      \fontsize{17}{21}
+      \textcolor{sectioncolor}{\selectfont{译：\tkzauthoroftran(\tkzadressoftran)}}%
+      }%
+   }%
+\put(120,25){%
+   \makebox(0,0)[l]{%
+      \textcolor{sectioncolor}{\url{\tkzurlauthorcom}}%
+      }%
+   }%
+\put(120,30){%
+   \makebox(0,0)[l]{%
+      \textcolor{sectioncolor}{\today \ \ Documentation V.\tkzversionofdoc}}%
+      }%
+   }%
+\setcounter{footnote}{0}%
+}%
+%<----------------------- End   Couverture ---------------------------->

@@ -1,0 +1,637 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Special points relating to a triangle}
+\section{三角形特殊点}
+
+% \subsection{Triangle center: \tkzcname{tkzDefTriangleCenter}}
+\subsection{\tkzcname{tkzDefTriangleCenter}命令：定义三角形特殊点}
+
+% This macro allows you to define the center of a triangle.
+该命令用于定义与三角形相关的几个特殊点。
+
+% \begin{NewMacroBox}{tkzDefTriangleCenter}{\oarg{local options}\parg{A,B,C}}%
+% \tkzHandBomb{}Be careful, the arguments are lists of three points. This macro is
+% used in conjunction with \tkzcname{tkzGetPoint} to get the center you are
+% looking for. You can use \tkzname{tkzPointResult} if it is not necessary to keep
+% the results.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments & default & definition \\
+%
+% \midrule
+% \TAline{(pt1,pt2,pt3)}{no default}{three points}
+% \midrule
+% options             & default & definition                         \\
+% \midrule
+% \TOline{ortho}  {circum}{intersection of the altitudes of a triangle}
+% \TOline{centroid} {circum}{centre of gravity. Intersection of the medians }
+% \TOline{circum}{circum}{circle center circumscribed}
+% \TOline{in}    {circum}{center of the circle inscribed in a triangle }
+% \TOline{ex}    {circum}{center of a circle exinscribed to a triangle }
+% \TOline{euler}{circum}{center of Euler's circle }
+% \TOline{symmedian} {circum}{Lemoine's point or symmedian centre or Grebe's
+% point}
+% \TOline{spieker} {circum}{Spieker Circle Center}
+% \TOline{nagel}{circum}{Nagel Center}
+% \TOline{mittenpunkt} {circum}{also called the middlespoint}
+% \TOline{feuerbach}{circum}{Feuerbach Point}
+%
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefTriangleCenter}{\oarg{命令选项}\parg{A,B,C}}%
+\tkzHandBomb{}注意：该命令的参数必须是一个三角形的3个顶点列表，
+结合\tkzcname{tkzGetPoint}命令保存定义的点，并为其命名。
+当然，仅临时使用，则可使用\tkzcname{tkzPointResult}命令使用该点。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数 & 默认值 & 含义 \\
+
+\midrule
+\TAline{(pt1,pt2,pt3)}{无}{逗号分隔的三角形3个顶点列表}
+\midrule
+选项             & 默认值 & 含义                         \\
+\midrule
+\TOline{ortho}  {circum}{垂心，三条高的交点}
+\TOline{centroid} {circum}{重心，三条中线的交点}
+\TOline{circum}{circum}{外心，外接圆圆心}
+\TOline{in}    {circum}{内心，内切圆圆心}
+\TOline{ex}    {circum}{旁心，外切圆圆心}
+\TOline{euler}{circum}{欧拉点，欧拉圆/费尔巴哈圆/九点圆圆心}
+\TOline{symmedian} {circum}{陪位重心，Lemoine点或中间点或Grebe点}
+\TOline{spieker} {circum}{Spieker点，中点三角形内切圆圆心}
+\TOline{nagel}{circum}{Nagel点(界心)，三个旁切圆切点与对应顶点连线的交点}
+\TOline{mittenpunkt} {circum}{三个旁切圆圆心与对应边中点连线的交点}
+\TOline{feuerbach}{circum}{Feuerbach点，内切圆与九点圆的公切点}
+
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Option \tkzname{ortho} or \tkzname{orthic}}
+\subsubsection{\tkzname{ortho}或\tkzname{orthic}选项：垂心}
+
+% The intersection $H$ of the three altitudes  of a triangle is called the
+% orthocenter.
+三角形三条高的交点称为三角形的垂心。
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(5,1){B}
+  \tkzDefPoint(1,4){C}
+  \tkzClipPolygon(A,B,C)
+  \tkzDefTriangleCenter[ortho](B,C,A)
+    \tkzGetPoint{H}
+  \tkzDefSpcTriangle[orthic,name=H](A,B,C){a,b,c}
+  \tkzDrawPolygon[color=blue](A,B,C)
+  \tkzDrawPoints(A,B,C,H)
+  \tkzDrawLines[add=0 and 1](A,Ha B,Hb C,Hc)
+  \tkzLabelPoint(H){$H$}
+  \tkzAutoLabelPoints[center=H](A,B,C)
+  \tkzMarkRightAngles(A,Ha,B B,Hb,C C,Hc,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Option \tkzname{centroid}}
+\subsubsection{\tkzname{centroid}选项：重心}
+
+三角形三条中线的交点称为重心。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzDefPoints{-1/1/A,5/1/B}
+  \tkzDefEquilateral(A,B)
+  \tkzGetPoint{C}
+  \tkzDefTriangleCenter[centroid](A,B,C)
+      \tkzGetPoint{G}
+  \tkzDrawPolygon[color=brown](A,B,C)
+  \tkzDrawPoints(A,B,C,G)
+  \tkzDrawLines[add = 0 and 2/3](A,G B,G C,G)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Option \tkzname{circum}}
+\subsubsection{\tkzname{circum}选项：外心}
+
+三角形外接圆圆心称为外心，也是三个边垂直平分线的交点。
+
+\begin{tkzexample}[latex=6cm,small]
+ \begin{tikzpicture}
+  \tkzDefPoints{0/1/A,3/2/B,1/4/C}
+  \tkzDefTriangleCenter[circum](A,B,C)
+  \tkzGetPoint{G}
+  \tkzDrawPolygon[color=brown](A,B,C)
+  \tkzDrawCircle(G,A)
+  \tkzDrawPoints(A,B,C,G)
+ \end{tikzpicture}
+\end{tkzexample}
+
+\subsubsection{\tkzname{in}选项：内心}
+
+% In geometry, the incircle or inscribed circle of a triangle is the largest
+% circle contained in the triangle; it touches (is tangent to) the three sides.
+% The center of the incircle is a triangle center called the triangle's incenter.
+% The center of the incircle, called the incenter, can be found as the
+% intersection of the three internal angle bisectors. The center of an excircle is
+% the intersection of the internal bisector of one angle (at vertex $A$, for
+% example) and the external bisectors of the other two. The center of this
+% excircle is called the excenter relative to the vertex $A$, or the excenter of
+% $A$. Because the internal bisector of an angle is perpendicular to its external
+% bisector, it follows that the center of the incircle together with the three
+% excircle centers form an orthocentric
+% system.(\url{https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle})
+几何学中，三角形的内切圆是三角形中最大的圆，内切圆的圆心称为三角形的内心。
+三角形的内也是三角形三个内角角平分线的交点。
+(\url{https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle})
+
+\medskip
+
+% We get the centre of the inscribed circle of the triangle. The result is of
+% course in \tkzname{tkzPointResult}. We can retrieve it with \tkzcname{tkzGetPoint}.
+% 得到的内心存储在\tkzname{tkzPointResult}命令中，可以通过\tkzcname{tkzGetPoint}检索该点。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoints{0/1/A,3/2/B,1/4/C}
+  \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+  \tkzDefPointBy[projection=onto A--C](I)
+  \tkzGetPoint{Ib}
+  \tkzDrawPolygon[color=blue](A,B,C)
+  \tkzDrawPoints(A,B,C,I)
+  \tkzDrawLines[add = 0 and 2/3](A,I B,I C,I)
+  \tkzDrawCircle(I,Ib)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Option \tkzname{ex}}
+\subsubsection{\tkzname{ex}选项：旁心}
+
+% An excircle or escribed circle of the triangle is a circle lying outside the
+% triangle, tangent to one of its sides and tangent to the extensions of the other
+% two. Every triangle has three distinct excircles, each tangent to one of the
+% triangle's sides.
+% (\url{https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle})
+旁切圆圆心是一个顶点(例如顶点$A$)的内角角平分线与另外两个外角角平分线的交点。
+该旁切圆圆心是相对于顶点$A$的一个旁心，或叫作$A$的旁心。
+因为三角形内角角平分线与对应的外角角平分线垂直，所以，内心与3个旁心构成了一个正交系统。
+旁切圆是位于三角形外部与某条边及另外两条边的延长线相切的圆，一个三角形有3个旁切圆。
+(\url{https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle})
+
+% We get the centre of an inscribed circle of the triangle. The result is of
+% course in \tkzname{tkzPointResult}. We can retrieve it with \tkzcname{tkzGetPoint}.
+% 得到的旁心存储在\tkzname{tkzPointResult}命令中，可以通过\tkzcname{tkzGetPoint}检索该点。
+
+\begin{tkzexample}[latex=7.5cm,small]
+\begin{tikzpicture}[scale=0.70]
+  \tkzDefPoints{0/1/A,3/2/B,1/4/C}
+  \tkzDefTriangleCenter[ex](B,C,A)
+  \tkzGetPoint{J_c}
+  \tkzDefPointBy[projection=onto A--B](J_c)
+  \tkzGetPoint{Tc}
+  %or
+  % \tkzDefCircle[ex](B,C,A)
+  % \tkzGetFirstPoint{J_c}
+  % \tkzGetSecondPoint{Tc}
+  \tkzDrawPolygon[color=blue](A,B,C)
+  \tkzDrawPoints(A,B,C,J_c)
+  \tkzDrawCircle[red](J_c,Tc)
+  \tkzDrawLines[add=1.5 and 0](A,C B,C)
+  \tkzLabelPoints(J_c)
+\end{tikzpicture}
+\end{tkzexample}
+
+\vspace*{-10pt}
+
+% \subsubsection{Option \tkzname{euler}}
+\subsubsection{\tkzname{euler}选项：欧拉点}
+
+% This macro allows to obtain the center of the circle of the nine points or
+% euler's circle or Feuerbach's circle.
+% The nine-point circle, also called Euler's circle or the Feuerbach circle, is
+% the circle that passes through the perpendicular feet $H_A$, $H_B$, and $H_C$
+% dropped from the vertices of any reference triangle $ABC$ on the sides opposite
+% them. Euler showed in 1765 that it also passes through the midpoints $M_A$,
+% $M_B$, $M_C$ of the sides of $ABC$. By Feuerbach's theorem, the nine-point
+% circle also passes through the midpoints $E_A$, $E_B$, and $E_C$ of the segments
+% that join the vertices and the orthocenter $H$. These points are commonly
+% referred to as the Euler points.
+% (\url{https://mathworld.wolfram.com/Nine-PointCircle.html})
+欧拉点是欧拉圆的圆心，欧拉圆又称九点圆或费尔巴哈圆的圆心。欧拉圆是通过三角形$ABC$三个顶点
+向对边作垂线形成的三个垂脚$H_A$、$H_B$和$H_C$的圆，欧拉在1765年证明该圆同时通过三角形
+$ABC$三个边的中点$M_A$、$M_B$和$M_C$。根据费尔巴哈定理，欧拉圆也通过三角形$ABC$三个顶点
+与重心$H$连线线段的中点$E_A$、$E_B$和$E_C$。
+(\url{https://mathworld.wolfram.com/Nine-PointCircle.html})
+
+
+\begin{tkzexample}[latex=7.5cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoints{0/0/A,6/0/B,0.8/4/C}
+  \tkzDefSpcTriangle[medial,
+      name=M](A,B,C){_A,_B,_C}
+  \tkzDefTriangleCenter[euler](A,B,C)
+    \tkzGetPoint{N} % I= N nine points
+  \tkzDefTriangleCenter[ortho](A,B,C)
+    \tkzGetPoint{H}
+  \tkzDefMidPoint(A,H) \tkzGetPoint{E_A}
+  \tkzDefMidPoint(C,H) \tkzGetPoint{E_C}
+  \tkzDefMidPoint(B,H) \tkzGetPoint{E_B}
+  \tkzDefSpcTriangle[ortho,name=H](A,B,C){_A,_B,_C}
+  \tkzDrawPolygon[color=blue](A,B,C)
+  \tkzDrawCircle(N,E_A)
+  \tkzDrawSegments[blue](A,H_A B,H_B C,H_C)
+  \tkzDrawPoints(A,B,C,N,H)
+  \tkzDrawPoints[red](M_A,M_B,M_C)
+  \tkzDrawPoints[blue]( H_A,H_B,H_C)
+  \tkzDrawPoints[green](E_A,E_B,E_C)
+  \tkzAutoLabelPoints[center=N, font=\scriptsize]%
+(A,B,C,M_A,M_B,M_C,H_A,H_B,H_C,E_A,E_B,E_C)
+  \tkzLabelPoints[font=\scriptsize](H,N)
+  \tkzMarkSegments[mark=s|,size=3pt,
+     color=blue,line width=1pt](B,E_B E_B,H)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Option \tkzname{symmedian}}
+\subsubsection{\tkzname{symmedian}选项：陪位重心}
+
+设$AN$、$BM$、$CE$是三角形$ABC$的三条中线，
+$N'$、$M'$、$E'$分别是三条边$BC$、$CA$、$AB$上的点，
+若$\widehat{BAN'}=\widehat{NAC}$、
+$\widehat{CBM}=\widehat{M'BA}$、
+$\widehat{ACE}=\widehat{E'CB}$，
+则三条直线$AN'$、$BM'$、$CE'$交于一点$K$，
+该点称为陪位重心。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(5,0){B}
+  \tkzDefPoint(1,4){C}
+  \tkzDefTriangleCenter[symmedian](A,B,C) \tkzGetPoint{K}
+  \tkzDefTriangleCenter[median](A,B,C)    \tkzGetPoint{G}
+  \tkzDefTriangleCenter[in](A,B,C)        \tkzGetPoint{I}
+  \tkzDefSpcTriangle[centroid,name=M](A,B,C){a,b,c}
+  \tkzDefSpcTriangle[incentral,name=I](A,B,C){a,b,c}
+  \tkzDrawPolygon[color=blue](A,B,C)
+  \tkzDrawLines[add = 0 and 2/3,blue](A,K B,K C,K)
+  \tkzDrawSegments[red,dashed](A,Ma B,Mb C,Mc)
+  \tkzDrawSegments[orange,dashed](A,Ia B,Ib C,Ic)
+  \tkzDrawLine[add=2 and 2](G,I)
+  \tkzDrawPoints(A,B,C,K,G,I)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Option \tkzname{nagel}}
+\subsubsection{\tkzname{nagel}选项：界心(Nagel点)}
+
+% Let $Ta$ be the point at which the excircle with center $Ja$ meets the side $BC$
+% of a triangle $ABC$, and define $Tb$ and $Tc$ similarly. Then the lines $ATa$,
+% $BTb$, and $CTc$ concur in the Nagel point $Na$.
+% \href{https://mathworld.wolfram.com/NagelPoint.html}{Weisstein, Eric W. \enquote{Nagel
+% point}. From MathWorld--A Wolfram Web Resource.}
+令$Ta$、$Tb$和$Tc$分别为旁切圆与三角形三条边的切点，
+连线$ATa$、$BTb$和$CTc$，其交点称为Nagel点，俗称三角形的\enquote{界心}。
+\href{https://mathworld.wolfram.com/NagelPoint.html}{Weisstein, Eric W. \enquote{Nagel
+point}. From MathWorld--A Wolfram Web Resource.}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=0.45]
+  \tkzDefPoints{0/0/A,6/0/B,4/6/C}
+  \tkzDefSpcTriangle[ex](A,B,C){Ja,Jb,Jc}
+  \tkzDefSpcTriangle[extouch](A,B,C){Ta,Tb,Tc}
+  \tkzDrawPoints(Ja,Jb,Jc,Ta,Tb,Tc)
+  \tkzLabelPoints(Ja,Jb,Jc,Ta,Tb,Tc)
+  \tkzDrawPolygon[blue](A,B,C)
+  \tkzDefTriangleCenter[nagel](A,B,C) \tkzGetPoint{Na}
+  \tkzDrawPoints[blue](B,C,A)
+  \tkzDrawPoints[red](Na)
+  \tkzLabelPoints[blue](B,C,A)
+  \tkzLabelPoints[red](Na)
+  \tkzDrawLines[add=0 and 1](A,Ta B,Tb C,Tc)
+  \tkzShowBB\tkzClipBB
+  \tkzDrawLines[add=1 and 1,dashed](A,B B,C C,A)
+  \tkzDrawCircles[ex,gray](A,B,C C,A,B B,C,A)
+  \tkzDrawSegments[dashed](Ja,Ta Jb,Tb Jc,Tc)
+  \tkzMarkRightAngles[fill=gray!20](Ja,Ta,C
+              Jb,Tb,A Jc,Tc,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Option \tkzname{mittenpunkt}}
+\subsubsection{\tkzname{mittenpunkt}选项}
+
+三个旁切圆圆心与对应边中点连线的交点。
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoints{0/0/A,6/0/B,4/6/C}
+  \tkzDefSpcTriangle[centroid](A,B,C){Ma,Mb,Mc}
+  \tkzDefSpcTriangle[ex](A,B,C){Ja,Jb,Jc}
+  \tkzDefSpcTriangle[extouch](A,B,C){Ta,Tb,Tc}
+  \tkzDefTriangleCenter[mittenpunkt](A,B,C)
+  \tkzGetPoint{Mi}
+  \tkzDrawPoints(Ma,Mb,Mc,Ja,Jb,Jc)
+  \tkzClipBB
+  \tkzDrawPolygon[blue](A,B,C)
+  \tkzDrawLines[add=0 and 1](Ja,Ma
+               Jb,Mb Jc,Mc)
+  \tkzDrawLines[add=1 and 1](A,B A,C B,C)
+  \tkzDrawCircles[gray](Ja,Ta Jb,Tb Jc,Tc)
+  \tkzDrawPoints[blue](B,C,A)
+  \tkzDrawPoints[red](Mi)
+  \tkzLabelPoints[red](Mi)
+  \tkzLabelPoints[left](Mb)
+  \tkzLabelPoints(Ma,Mc,Jb,Jc)
+  \tkzLabelPoints[above left](Ja,Jc)
+  \tkzShowBB
+\end{tikzpicture}
+\end{tkzexample}
+%<---------------------------------------------------------------------->
+%<---------------------------------------------------------------------->
+% \section{Draw a point}
+\section{绘制点}
+
+% \subsubsection{Drawing points \tkzcname{tkzDrawPoint}} \hypertarget{tdrp}{}
+\subsection{\tkzcname{tkzDrawPoint}命令：绘制点} \hypertarget{tdrp}{}
+
+% \begin{NewMacroBox}{tkzDrawPoint}{\oarg{local options}\parg{name}}%
+% \begin{tabular}{lll}%
+% arguments &  default & definition                 \\
+% \midrule
+% \TAline{name of point} {no default}  {Only one point name is accepted}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% The argument is required. The disc takes the color of the circle, but  lighter.
+% It is possible to change everything. The point is a node and therefore it is
+% invariant if the drawing is modified by scaling.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition \\
+% \midrule
+% \TOline{shape}  {circle}{Possible \tkzname{cross} or \tkzname{cross out}}
+% \TOline{size}  {6}{$6 \times$ \tkzcname{pgflinewidth}}
+% \TOline{color}  {black}{the default color can be changed }
+% \bottomrule
+% \end{tabular}
+% \medskip
+% We can create other forms such as \tkzname{cross}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawPoint}{\oarg{命令选项}\parg{名称}}%
+\begin{tabular}{lll}%
+参数 &  默认值 & 含义                 \\
+\midrule
+\TAline{点的名称} {无}  {只能有一个点的名称}
+\bottomrule
+\end{tabular}
+
+\medskip
+必选参数，点圆盘用填充色绘制，但颜色较浅，
+可以通过选项实现更多效果。
+由于采用node的方式绘制，
+因此，缩放操作不影响点的尺寸。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义 \\
+\midrule
+\TOline{shape}  {circle}{可以使用\tkzname{cross}或\tkzname{cross out}}
+\TOline{size}  {6}{$6 \times$ \tkzcname{pgflinewidth}}
+\TOline{color}  {black}{默认颜色，可以修改}
+\bottomrule
+\end{tabular}
+\medskip
+能够创建如\tkzname{cross}的形式。
+\end{NewMacroBox}
+
+\vspace*{-30pt}
+
+% \subsubsection{Example of point drawings}
+\subsubsection{点绘制示例}
+
+% Note that \tkzname{scale} does not affect the shape of the dots. Which is
+% normal.  Most of the time, we are satisfied with a single point shape that we
+% can define from the beginning, either with a macro or by modifying a
+% configuration file.
+注意，缩放不会影响点的形状，多数情况下，
+无论采用宏还是通过修改配置文件从一开始就定义一个点的形状，
+一般都可以得到令人满意的效果。
+
+\begin{tkzexample}[latex=5cm,small]
+\begin{tikzpicture}[scale=0.75]
+  \tkzDefPoint(1,3){A}
+  \tkzDefPoint(4,1){B}
+  \tkzDefPoint(0,0){O}
+  \tkzDrawPoint[color=red](A)
+  \tkzDrawPoint[fill=blue!20,draw=blue](B)
+  \tkzDrawPoint[color=green](O)
+\end{tikzpicture}
+\end{tkzexample}
+
+\vfill
+
+\subsection{\tkzcname{tkzDrawPoints}命令：绘制多个点}
+% It is possible to draw several points at once but this macro is a little slower
+% than the previous one. Moreover, we have to make do with the same options for
+% all the points.
+可以一次绘制多个点，但该命令比绘制单点慢。
+另外，一次绘制多个点时，所有点使用相同选项。
+
+\newpage
+
+\hypertarget{tdrps}{}
+% \begin{NewMacroBox}{tkzDrawPoints}{\oarg{local options}\parg{liste}}%
+% \begin{tabular}{lll}%
+% arguments &  default  & definition \\
+% \midrule
+% \TAline{points list}{no default}{example \tkzcname{tkzDrawPoints(A,B,C)}}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% options             & default & definition \\
+% \midrule
+% \TOline{shape}  {circle}{Possible \tkzname{cross} or \tkzname{cross out}}
+% \TOline{size}  {6}{$6 \times$ \tkzcname{pgflinewidth}}
+% \TOline{color}  {black}{the default color can be changed }
+% \bottomrule
+% \end{tabular}
+% \medskip
+% \tkzHandBomb{}Beware of the final \enquote{s}, an oversight leads to cascading errors if
+% you try to draw multiple points. The options are the same as for the previous
+% macro.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawPoints}{\oarg{命令选项}\parg{点列表}}%
+\begin{tabular}{lll}%
+参数 &  默认值  & 含义 \\
+\midrule
+\TAline{点列表}{无}{例如：\tkzcname{tkzDrawPoints(A,B,C)}，各点间用逗号分隔。}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+选项             & 默认值 & 含义 \\
+\midrule
+\TOline{shape}  {circle}{可以是\tkzname{cross}或\tkzname{cross out}}
+\TOline{size}  {6}{$6 \times$ \tkzcname{pgflinewidth}}
+\TOline{color}  {black}{默认为黑色，可以被修改}
+\bottomrule
+\end{tabular}
+\medskip
+\tkzHandBomb{}命令最后有一个\enquote{s}，如果没有\enquote{s}则会发生错误。
+\end{NewMacroBox}
+
+\vspace*{-20pt}
+
+% \subsubsection{First example}
+\subsubsection{示例1}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=0.75]
+  \tkzDefPoint(1,3){A}
+  \tkzDefPoint(4,1){B}
+  \tkzDefPoint(0,0){C}
+  \tkzDrawPoints[size=6,color=red,
+                 fill=red!50](A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Second example}
+\subsubsection{示例2}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(2,3){A}  \tkzDefPoint(5,-1){B}
+  \tkzDefPoint[label=below:$\mathcal{C}$,
+               shift={(2,3)}](-30:5.5){E}
+  \begin{scope}[shift=(A)]
+    \tkzDefPoint(30:5){C}
+  \end{scope}
+  \tkzCalcLength[cm](A,B)\tkzGetLength{rAB}
+  \tkzDrawCircle[R](A,\rAB cm)
+  \tkzDrawSegment(A,B)
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoints(B,C)
+  \tkzLabelPoints[above](A)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \section{Point on line or circle}
+\section{直线或圆上的点}
+
+% \subsection{Point on a line}
+\subsection{\tkzcname{tkzDefPointOnLine}命令：定义直线上的点}
+
+% \begin{NewMacroBox}{tkzDefPointOnLine}{\oarg{local options}\parg{A,B}}%
+% \begin{tabular}{lll}%
+% arguments &  default & definition                 \\
+% \midrule
+% \TAline{pt1,pt2} {no default}  {Two points to define a line}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% options       & default & definition \\
+% \midrule
+% \TOline{pos=nb}  {}{nb is a decimal  }
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefPointOnLine}{\oarg{命令选项}\parg{A,B}}%
+\begin{tabular}{lll}%
+参数 &  默认值 & 含义                 \\
+\midrule
+\TAline{pt1,pt2} {无}  {定义直线的两个点}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+选项       & 默认值 & 含义 \\
+\midrule
+\TOline{pos=nb}  {无}{距离起点A的比例}
+\end{tabular}
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Use of option \tkzname{pos}}
+\subsubsection{\tkzname{pos}选项}
+
+\begin{tkzexample}[latex=9cm,small]
+\begin{tikzpicture}
+  \tkzDefPoints{0/0/A,4/0/B}
+  \tkzDrawLine[red](A,B)
+  \tkzDefPointOnLine[pos=1.2](A,B)
+  \tkzGetPoint{P}
+  \tkzDefPointOnLine[pos=-0.2](A,B)
+  \tkzGetPoint{R}
+  \tkzDefPointOnLine[pos=0.5](A,B)
+  \tkzGetPoint{S}
+  \tkzDrawPoints(A,B,P)
+  \tkzLabelPoints(A,B)
+  \tkzLabelPoint[above](P){pos=$1.2$}
+  \tkzLabelPoint[above](R){pos=$-.2$}
+  \tkzLabelPoint[above](S){pos=$.5$}
+  \tkzDrawPoints(A,B,P,R,S)
+  \tkzLabelPoints(A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Point on a circle}
+\subsection{\tkzcname{tkzDefPointOnCircle}命令：定义圆上的点}
+
+% \begin{NewMacroBox}{tkzDefPointOnCircle}{\oarg{local options}}%
+% \begin{tabular}{lll}%
+% options   & default & definition \\
+% \midrule
+% \TOline{angle}  {0}{angle formed with the abscissa axis}
+% \TOline{center}  {|tkzPointResult|}{circle center required}
+% \TOline{radius}  {|\BS tkzLengthResult|}{radius circle}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefPointOnCircle}{\oarg{命令选项}}%
+\begin{tabular}{lll}%
+选项   & 默认值 & 含义 \\
+\midrule
+\TOline{angle}  {0}{与横轴夹角}
+\TOline{center}  {|\BS tkzPointResult|}{圆心}
+\TOline{radius}  {|\BS tkzLengthResult|}{半径}
+\end{tabular}
+\end{NewMacroBox}
+
+\begin{tkzexample}[latex=6.5cm,small]
+\begin{tikzpicture}[scale=1.15]
+  \tkzDefPoints{0/0/A,4/0/B,0.8/3/C}
+  \tkzDefPointOnCircle[angle=90,center=B,radius=1 cm]
+  \tkzGetPoint{I}
+  \tkzDefCircle[circum](A,B,C)
+  \tkzGetPoint{G} \tkzGetLength{rG}
+  \tkzDefPointOnCircle[angle=30,center=G,radius=\rG pt]
+  \tkzGetPoint{J}
+  \tkzDrawCircle[R,teal](B,1cm)
+  \tkzDrawPoint[teal](I)
+  \tkzDrawPoints(A,B,C)
+  \tkzDrawCircle(G,J)
+  \tkzDrawPoints(G,J)
+  \tkzDrawPoint[red](J)
+  \tkzLabelPoints(G,J)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

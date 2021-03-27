@@ -1,0 +1,587 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Definition of a point}
+\section{定义点}
+
+% Points can be specified in any of the following ways:
+% \begin{itemize}
+% \item Cartesian coordinates;
+% \item Polar coordinates;
+% \item Named points;
+% \item Relative points.
+% \end{itemize}
+可以通过如下方式定义一个点:
+\begin{itemize}
+\item 笛卡尔坐标;
+\item 极坐标;
+\item 为点命名;
+\item 相对位置.
+\end{itemize}
+
+% Even if it's possible, I think it's a bad idea to work directly with
+% coordinates. Preferable is to use named points.
+% A point is defined if it has a name linked to a unique pair of decimal numbers.
+% Let $(x,y)$ or $(a:d)$  i.e. ($x$ abscissa, $y$ ordinate) or ($a$ angle: $d$
+% distance).
+虽然仅用坐标就可以定义一个点，但建议为点进行命名。
+如果一个名称唯一地与一个十进制数对应，则可作为该点的名称，
+由于正交笛卡尔坐标系定义了一个平面，其坐标轴是正交的，
+因此，可以用$(x,y)$或$(a:d)$表示该平面中的一个点，其中$x$是横坐标，$y$是纵坐标；$a$是角度，$d$是距离，
+% This is possible because the plan has been provided with an orthonormed
+% Cartesian coordinate system. The working axes are supposed to be (ortho)normed
+% with unity equal to $1$~cm or something equivalent like $0.39370$~in.
+% Now by default if you use a grid or axes, the rectangle used is defined by the
+% coordinate points: $(0,0)$ and $(10,10)$. It's the macro \tkzcname{tkzInit} of
+% the package \tkzNamePack{tkz-base} that creates this rectangle. Look at the
+% following two codes and the result of their compilation:
+其度量单位等于$1$~cm或$0.39370$~in。
+
+现在，默认情况下，如果使用网格或坐标轴，则可由$(0,0)$ 和$(10,10)$两个坐标定义一个矩形。
+
+可以用\tkzNamePack{tkz-base}宏包的\tkzcname{tkzInit}命令创建该矩形，
+请参阅以下两个代码及其绘制结果，以体会这些命令的作用。
+
+\begin{tkzexample}[latex=10.5cm,small]
+\begin{tikzpicture}
+  \tkzGrid
+  \tkzDefPoint(0,0){O}
+  \tkzDrawPoint[red](O)
+  \tkzShowBB[line width=2pt,teal]
+\end{tikzpicture}
+\end{tkzexample}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(5,5){A}
+  \tkzDrawSegment[blue](O,A)
+  \tkzDrawPoints[red](O,A)
+  \tkzShowBB[line width=2pt,teal]
+\end{tikzpicture}
+\end{tkzexample}
+
+% The Cartesian coordinate $(a,b)$ refers to the point $a$ centimeters in the
+% $x$-direction and $b$ centimeters in the $y$-direction.
+笛卡尔坐标$(a,b)$表示该点的$x$坐标是$a$~cm，$y$坐标是$b$~cm。
+
+% A point in polar coordinates requires an angle $\alpha$, in degrees, and a
+% distance  $d$ from the origin with a dimensional unit by default it's the
+% \texttt{cm}.
+极坐标中表示一个点则需要一个角度$\alpha$(度)和一个从原点度量的距离$d$(默认单位是\texttt{cm})。
+
+% Cartesian coordinates\par
+笛卡尔坐标\par
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzInit[xmax=5,ymax=5]
+  \tkzDefPoints{0/0/O,1/0/I,0/1/J}
+  \tkzDrawXY[noticks,>=latex]
+  \tkzDefPoint(3,4){A}
+  \tkzDrawPoints(O,A)
+  \tkzLabelPoint(A){$A_1 (x_1,y_1)$}
+  \tkzShowPointCoord[xlabel=$x_1$,
+                     ylabel=$y_1$](A)
+  \tkzLabelPoints(O,I)
+  \tkzLabelPoints[left](J)
+  \tkzDrawPoints[shape=cross](I,J)
+\end{tikzpicture}
+\end{tkzexample}
+
+% Polar coordinates\par
+极坐标\par
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzInit[xmax=5,ymax=5]
+  \tkzDefPoints{0/0/O,1/0/I,0/1/J}
+  \tkzDefPoint(40:4){P}
+  \tkzDrawXY[noticks,>=triangle 45]
+  \tkzDrawSegment[dim={$d$,
+                  16pt,above=6pt}](O,P)
+  \tkzDrawPoints(O,P)
+  \tkzMarkAngle[mark=none,->](I,O,P)
+  \tkzFillAngle[fill=blue!20,
+                opacity=.5](I,O,P)
+  \tkzLabelAngle[pos=1.25](I,O,P){$\alpha$}
+  \tkzLabelPoint(P){$P (\alpha : d )$}
+  \tkzDrawPoints[shape=cross](I,J)
+  \tkzLabelPoints(O,I)
+  \tkzLabelPoints[left](J)
+\end{tikzpicture}
+\end{tkzexample}
+
+% The \tkzNameMacro{tkzDefPoint} macro is used to define a point by assigning
+% coordinates to it. This macro is based on \tkzNameMacro{coordinate}, a macro of
+% \TIKZ. It can use \TIKZ-specific options such as \tkzname{shift}. If
+% calculations are required then the \tkzNamePack{xfp} package is chosen. We can
+% use Cartesian or polar coordinates.
+可以用\tkzNameMacro{tkzDefPoint}命令，通过指定坐标定义一个点。
+该命令基于\TIKZ{}的\tkzNameMacro{coordinate}命令实现，因此，可在该命令中使用类似\tkzname{shift}
+的\TIKZ{}的选项，
+该命令使用\tkzNamePack{xfp}宏包实现计算。在定义点时，既可以使用笛卡尔坐标，也可以使用极坐标。
+
+% \subsection{Defining a named point  \tkzcname{tkzDefPoint}}
+\subsection{\tkzcname{tkzDefPoint}命令：定义命名点}
+
+% \begin{NewMacroBox}{tkzDefPoint}{\oarg{local options}\parg{$x,y$}\marg{name} or \parg{$\alpha$:$d$}\marg{name}}%
+% \begin{tabular}{lll}%
+% arguments &  default & definition  \\
+% \midrule
+% \TAline{($x,y$)}{no default}{$x$ and $y$ are two dimensions, by default in cm.}
+% \TAline{($\alpha$:$d$)}{no default}{$\alpha$ is an angle in degrees, $d$ is a dimension}
+% \TAline{\{name\}}{no default}{Name assigned to the point: $A$, $T_a$ ,$P1$, \dots}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% The obligatory arguments of this macro are two dimensions expressed with
+% decimals, in the first case they are two measures of length, in the second case
+% they are a measure of length and the measure of an angle in degrees.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition  \\
+% \midrule
+% \TOline{label} {no default} {allows you to place a label at a predefined
+% distance}
+% \TOline{shift} {no default} {adds $(x,y)$ or $(\alpha:d)$ to all coordinates}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefPoint}{\oarg{命令选项}\parg{$x,y$}\marg{名称} or \parg{$\alpha$:$d$}\marg{名称}}%
+\begin{tabular}{lll}%
+参数 &  默认值 & 含义  \\
+\midrule
+\TAline{($x,y$)}{无}{$x$ 和 $y$ 分别是2维坐标，默认单位是cm.}
+\TAline{($\alpha$:$d$)}{无}{$\alpha$是角度(度), $d$是距离(cm)}
+\TAline{\{名称\}}{无}{点的名称，如：$A$, $T_a$ ,$P1$, \dots}
+\bottomrule
+\end{tabular}
+
+\medskip
+必选参数是十进制表示的2维坐标值，
+笛卡尔坐标表示两个长度，极坐标表示角度和距离。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义  \\
+\midrule
+\TOline{label} {无} {按预设的距离添加标注}
+\TOline{shift} {无} {为$(x,y)$或$(\alpha:d)$添加坐标偏移}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Cartesian coordinates }
+\subsubsection{笛卡尔坐标示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=5]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDefPoint(0,3){C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawPoints(A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Calculations with \tkzNamePack{xfp}}
+\subsubsection{使用\tkzNamePack{xfp}宏包实现计算}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzInit[xmax=4,ymax=4]
+  \tkzGrid
+  \tkzDefPoint(-1+2,sqrt(4)){O}
+  \tkzDefPoint({3*ln(exp(1))},{exp(1)}){A}
+  \tkzDefPoint({4*sin(pi/6)},{4*cos(pi/6)}){B}
+  \tkzDrawPoints[color=blue](O,B,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Polar coordinates}
+\subsubsection{极坐标示例}
+
+\begin{tkzexample}[vbox,small]
+  \begin{tikzpicture}
+  \foreach \an [count=\i] in {0,60,...,300}
+    {\tkzDefPoint(\an:3){A_\i}}
+  \tkzDrawPolygon(A_1,A_...,A_6)
+  \tkzDrawPoints(A_1,A_...,A_6)
+  \end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Calculations and coordinates}
+\subsubsection{坐标计算}
+
+% You must follow the syntax of \tkzNamePack{xfp} here. It is always possible to
+% go through \tkzNamePack{pgfmath} but in this case, the coordinates must be
+% calculated before using the macro \tkzcname{tkzDefPoint}.
+在计算坐标时，需遵循\tkzNamePack{xfp}宏包语法。
+另外，如使用\tkzNamePack{pgfmath}库计算，
+则必须在使用\tkzcname{tkzDefPoint}命令前完成计算。
+
+\begin{tkzexample}[latex=6cm,small]
+  \begin{tikzpicture}[scale=.5]
+  \foreach \an [count=\i] in {0,2,...,358}
+    {\tkzDefPoint(\an:sqrt(sqrt(\an mm))){A_\i}}
+  \tkzDrawPoints(A_1,A_...,A_180)
+  \end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Relative points}
+\subsubsection{相对位置点}
+
+% First, we can use the \tkzNameEnv{scope} environment from \TIKZ.
+% In the following example, we have a way to define an equilateral triangle.
+可以使用相对位置定义一个点，此时，需使用\TIKZ{}的\tkzNameEnv{scope}环境。
+
+下面的代码给出了一种定义等边三角形的方法：
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzSetUpLine[color=blue!60]
+  \begin{scope}[rotate=30]
+    \tkzDefPoint(2,3){A}
+    \begin{scope}[shift=(A)]
+       \tkzDefPoint(90:5){B}
+       \tkzDefPoint(30:5){C}
+    \end{scope}
+  \end{scope}
+  \tkzDrawPolygon(A,B,C)
+  \tkzLabelPoints[above](B,C)
+  \tkzLabelPoints[below](A)
+  \tkzDrawPoints(A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+%<--------------------------------------------------------------------------->
+% \subsection{Point relative to another: \tkzcname{tkzDefShiftPoint}}
+\subsection{\tkzcname{tkzDefShiftPoint}命令：定义平移点}
+% \begin{NewMacroBox}{tkzDefShiftPoint}{\oarg{Point}\parg{$x,y$}\marg{name} or \parg{$\alpha$:$d$}\marg{name}}%
+% \begin{tabular}{lll}%
+% arguments &  default & definition \\
+% \midrule
+% \TAline{($x,y$)}{no default}{$x$ and $y$ are two dimensions, by default in cm.}
+% \TAline{($\alpha$:$d$)}{no default}{$\alpha$ is an angle in degrees, $d$ is a dimension}
+%
+% \midrule
+% options &  default & definition \\
+%
+% \midrule
+% \TOline{[pt]} {no default} {\tkzcname{tkzDefShiftPoint}[A](0:4)\{B\}}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefShiftPoint}{\oarg{参考点}\parg{$x,y$}\marg{名称} 或 \parg{$\alpha$:$d$}\marg{名称}}%
+\begin{tabular}{lll}%
+参数 &  默认值 & 含义 \\
+\midrule
+\TAline{($x,y$)}{无}{$x$ 和 $y$是2维坐标，默认单位是cm.}
+\TAline{($\alpha$:$d$)}{无}{$\alpha$是角度(度)，$d$是距离}
+
+\midrule
+选项 &  默认值 & 含义 \\
+
+\midrule
+\TOline{[参考点]} {无} {例如：\tkzcname{tkzDefShiftPoint}[A](0:4)\{B\}}
+\end{tabular}
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Isosceles triangle with  \tkzcname{tkzDefShiftPoint}}
+\subsubsection{用\tkzcname{tkzDefShiftPoint}命令构造等腰三角形}
+
+% This macro allows you to place one point relative to another. This is equivalent
+% to a translation. Here is how to construct an isosceles triangle with main
+% vertex $A$ and angle at vertex of $30^{\circ}$.
+% This macro allows you to place one point relative to another. This is equivalent
+该命令允许基于一个点定义另一个点，等价于点的平移。
+下面的代码给出了一种通过点$A$和$30^{\circ}$顶角等腰三角形的构造方法。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[rotate=-30]
+  \tkzDefPoint(2,3){A}
+  \tkzDefShiftPoint[A](0:4){B}
+  \tkzDefShiftPoint[A](30:4){C}
+  \tkzDrawSegments(A,B B,C C,A)
+  \tkzMarkSegments[mark=|,color=red](A,B A,C)
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoints(B,C)
+  \tkzLabelPoints[above left](A)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Equilateral triangle}
+\subsubsection{用\tkzcname{tkzDefShiftPoint}命令构造等边三角形}
+
+% Let's see how to get an equilateral triangle (there is much simpler)
+下面的代码给出了一种极为简捷的等边三角形构造方法。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(2,3){A}
+  \tkzDefShiftPoint[A](30:3){B}
+  \tkzDefShiftPoint[A](-30:3){C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoints(B,C)
+  \tkzLabelPoints[above left](A)
+  \tkzMarkSegments[mark=|,color=red](A,B A,C B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Parallelogram}
+\subsubsection{用\tkzcname{tkzDefShiftPoint}命令构造平行四边形}
+
+% There's a simpler way
+简单的定义平行四边形的方式为：
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(30:3){B}
+  \tkzDefShiftPointCoord[B](10:2){C}
+  \tkzDefShiftPointCoord[A](10:2){D}
+  \tkzDrawPolygon(A,...,D)
+  \tkzDrawPoints(A,...,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+%<--------------------------------------------------------------------------->
+% \subsection{Definition of multiple points: \tkzcname{tkzDefPoints}}
+\subsection{\tkzcname{tkzDefPoints}命令：定义点集}
+
+% \begin{NewMacroBox}{tkzDefPoints}{\oarg{local options}\marg{$x_1/y_1/n_1,x_2/y_2/n_2$,\dots}}%
+% $x_i$ and $y_i$ are the coordinates of a referenced point $n_i$
+\begin{NewMacroBox}{tkzDefPoints}{\oarg{命令选项}\marg{$x_1/y_1/n_1,x_2/y_2/n_2$,\dots}}%
+$x_i$ 和 $y_i$ 是$n_i$点的2维坐标
+
+\begin{tabular}{lll}%
+\toprule
+参数 &  默认值  & 样例  \\
+\midrule
+\TAline{$x_i/y_i/n_i$}{无}{\tkzcname{tkzDefPoints\{0/0/O,2/2/A\}}}
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+选项             & 默认值 & 含义   \\
+\midrule
+\TOline{shift} {无} {为所有点添加$(x,y)$或$(\alpha:d)$坐标偏移}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsection{Create a triangle}
+\subsubsection{用\tkzcname{tkzDefPoints}命令构造三角形}
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoints{0/0/A,4/0/B,4/3/C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawPoints(A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Create a square}
+\subsubsection{用\tkzcname{tkzDefPoints}命令构造正方形}
+
+% Note here the syntax for drawing the polygon.
+注意该代码中绘制多边形的语法。
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoints{0/0/A,2/0/B,2/2/C,0/2/D}
+  \tkzDrawPolygon(A,...,D)
+  \tkzDrawPoints(A,B,C,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \section{Special points}
+\section{定义特殊点}
+
+% The introduction of the dots was done in \tkzname{tkz-base}, the most important
+% macro being \tkzcname{tkzDefPoint}. Here are some special points.
+以上是\tkzname{tkz-base}宏包中基本的定义一个点的命令，其中，最为重要的是\tkzcname{tkzDefPoint}
+命令。当然，该宏包也提供了方便地直接定义一些特殊点的命令。
+%<--------------------------------------------------------------------------->
+% \subsection{Middle of a segment \tkzcname{tkzDefMidPoint}}
+\subsection{\tkzcname{tkzDefMidPoint}命令：定义线段中点}
+
+% It is a question of determining the middle of a segment.
+% \begin{NewMacroBox}{tkzDefMidPoint}{\parg{pt1,pt2}}%
+% The result is in \tkzname{tkzPointResult}. We can access it with
+% \tkzcname{tkzGetPoint}.
+%
+% \medskip
+%
+% \begin{tabular}{lll}%
+% \toprule
+% arguments & default & definition \\
+% \midrule
+% \TAline{(pt1,pt2)}{no default}{pt1 and pt2 are two points}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefMidPoint}{\parg{pt1,pt2}}%
+定义的点存储于\tkzcname{tkzPointResult}命令中，
+也可以通过\tkzcname{tkzGetPoint}命令得到该点，并为其命名。
+
+\medskip
+
+\begin{tabular}{lll}%
+\toprule
+参数 & 默认值 & 含义 \\
+\midrule
+\TAline{(pt1,pt2)}{无}{pt1和pt2是线段的两个端点}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Use of \tkzcname{tkzDefMidPoint}}
+\subsubsection{\tkzcname{tkzDefMidPoint}命令示例}
+
+% Review the use of \tkzcname{tkzDefPoint} in \tkzNamePack{tkz-base}.
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(2,3){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDefMidPoint(A,B) \tkzGetPoint{C}
+  \tkzDrawSegment(A,B)
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoints[right](A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Barycentric coordinates }
+\subsection{重心坐标}
+
+% $pt_1$, $pt_2$, \dots, $pt_n$ being $n$ points, they define $n$ vectors
+% $\overrightarrow{v_1}$, $\overrightarrow{v_2}$, \dots, $\overrightarrow{v_n}$
+% with the origin of the referential as the common endpoint. $\alpha_1$,
+% $\alpha_2$,\dots $\alpha_n$ are $n$ numbers, the vector obtained by:
+设共有$pt_1$, $pt_2$, \dots, $pt_n$  $n$ 个点，则它们定义了$n$个向量
+$\overrightarrow{v_1}$, $\overrightarrow{v_2}$, \dots, $\overrightarrow{v_n}$。
+令$\alpha_1$,$\alpha_2$,\dots $\alpha_n$是$n$常数, 因此可按下式得到一个新向量：
+
+\begin{align*}
+  \frac{\alpha_1 \overrightarrow{v_1} + \alpha_2 \overrightarrow{v_2} + \cdots +
+  \alpha_n \overrightarrow{v_n}}{\alpha_1
+  + \alpha_2 + \cdots + \alpha_n}
+\end{align*}
+
+% defines a single point.
+则，该向量可用于定义一个点。
+
+% \begin{NewMacroBox}{tkzDefBarycentricPoint}{\parg{pt1=$\alpha_1$,pt2=$\alpha_2$,\dots}}%
+% \begin{tabular}{lll}%
+% arguments & default & definition \\
+% \midrule
+% \TAline{(pt1=$\alpha_1$,pt2=$\alpha_2$,\dots)}{no default}{Each point has a
+% assigned weight}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% You need at least two points.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefBarycentricPoint}{\parg{pt1=$\alpha_1$,pt2=$\alpha_2$,\dots}}%
+\begin{tabular}{lll}%
+参数 & 默认值 & 含义\\
+\midrule
+\TAline{(pt1=$\alpha_1$,pt2=$\alpha_2$,\dots)}{无}{每个点的权重}
+\bottomrule
+\end{tabular}
+
+\medskip
+注意：至少需要两个已知点，才能实现计算。
+\end{NewMacroBox}
+
+% \subsubsection{Using \tkzcname{tkzDefBarycentricPoint} with two points}
+\subsubsection{用\tkzcname{tkzDefBarycentricPoint}命令计算2个点的重心}
+
+% In the following example, we obtain the barycentre of points $A$ and $B$ with
+% coefficients $1$ and $2$, in other words:
+下面的代码中，通过系数\enquote{$1$}和\enquote{$2$}得到了点$A$和点$B$的重心：
+
+\[
+  \overrightarrow{AI}= \frac{2}{3}\overrightarrow{AB}
+\]
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(2,3){A}
+  \tkzDefShiftPointCoord[2,3](30:4){B}
+  \tkzDefBarycentricPoint(A=1,B=2)
+  \tkzGetPoint{I}
+  \tkzDrawPoints(A,B,I)
+  \tkzDrawLine(A,B)
+  \tkzLabelPoints(A,B,I)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Using \tkzcname{tkzDefBarycentricPoint} with three points}
+\subsubsection{用\tkzcname{tkzDefBarycentricPoint}命令计算3个点的重心}
+
+% This time $M$ is simply the centre of gravity of the triangle. For reasons of
+% simplification and homogeneity, there is also \tkzcname{tkzCentroid}.
+下面的代码中，$M$是三角形的重心。
+
+注意，为简化操作，该宏包还提供了另外一个用于直接计算三角形重心的\tkzcname{tkzCentroid}命令。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.8]
+  \tkzDefPoint(2,1){A}
+  \tkzDefPoint(5,3){B}
+  \tkzDefPoint(0,6){C}
+  \tkzDefBarycentricPoint(A=1,B=1,C=1)
+  \tkzGetPoint{M}
+  \tkzDefMidPoint(A,B)  \tkzGetPoint{C'}
+  \tkzDefMidPoint(A,C)  \tkzGetPoint{B'}
+  \tkzDefMidPoint(C,B)  \tkzGetPoint{A'}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawPoints(A',B',C')
+  \tkzDrawPoints(A,B,C,M)
+  \tkzDrawLines[add=0 and 1](A,M B,M C,M)
+  \tkzLabelPoint(M){$M$}
+  \tkzAutoLabelPoints[center=M](A,B,C)
+  \tkzAutoLabelPoints[center=M,above right](A',B',C')
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Internal Similitude Center}
+\subsection{相似中心}
+
+% The centres of the two homotheties in which two circles correspond are called
+% external and internal centres of similitude.
+两个圆对应外部和内部相似中心。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.75,rotate=-30]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(4,-5){A}
+  % 内部相似中心
+  \tkzDefIntSimilitudeCenter(O,3)(A,1)
+  \tkzGetPoint{I}
+  % 外部相似中心
+  \tkzExtSimilitudeCenter(O,3)(A,1)
+  \tkzGetPoint{J}
+  \tkzDefTangent[from with R = I](O,3 cm)
+  \tkzGetPoints{D}{E}
+  \tkzDefTangent[from with R = I](A,1 cm)
+  \tkzGetPoints{D'}{E'}
+  \tkzDefTangent[from with R = J](O,3 cm)
+  \tkzGetPoints{F}{G}
+  \tkzDefTangent[from with R = J](A,1 cm)
+  \tkzGetPoints{F'}{G'}
+  \tkzDrawCircle[R,fill=red!50,opacity=.3](O,3 cm)
+  \tkzDrawCircle[R,fill=blue!50,opacity=.3](A,1 cm)
+  \tkzDrawSegments[add = .5 and .5,color=red](D,D' E,E')
+  \tkzDrawSegments[add= 0 and 0.25,color=blue](J,F J,G)
+  \tkzDrawPoints(O,A,I,J,D,E,F,G,D',E',F',G')
+  \tkzLabelPoints[font=\scriptsize](O,A,I,J,D,E,F,G,D',
+                                    E',F',G')
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

@@ -1,0 +1,96 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Installation}
+\section{安装}
+
+% \tkzNamePack{tkz-euclide} and \tkzNamePack{tkz-base} are now on the server of
+% the \tkzname{CTAN}\footnote{\tkzNamePack{tkz-base} and \tkzNamePack{tkz-euclide}
+% are part of \NameDist{TeXLive} and \tkzname{tlmgr} allows you to install them.
+% These packages are also part of \NameDist{MiKTeX} under \NameSys{Windows}.}. If
+% you want to test a beta version, just put the following files in a texmf folder
+% that your system can find.
+% You will have to check several points:
+\tkzNamePack{tkz-euclide}和\tkzNamePack{tkz-base}现在已被收录于
+\tkzname{CTAN}\footnote{\tkzNamePack{tkz-base}和\tkzNamePack{tkz-euclide}
+已被\NameDist{TeXLive}发行版收录，可通过\tkzname{tlmgr}安装。
+在\NameSys{Windows}平台，\NameDist{MiKTeX}发行版也收录了这两个宏包。}。
+如果需要测试开发版，则需要按texmf的目录结构将必要的文件复制到指定目录。
+并注意以下几点：
+
+% \begin{itemize}\setlength{\itemsep}{5pt}
+% \item The \tkzNamePack{tkz-base} and \tkzNamePack{tkz-euclide} folders must be
+% located on a path recognized by \tkzname{latex}.
+% \item The \tkzNamePack{xfp}\footnote{\tkzNamePack{xfp} replaces
+% \tkzNamePack{fp}.}, \tkzNamePack{numprint} and \tkzNamePack{tikz 3.00} must be
+% installed as they are mandatory, for the proper functioning of
+% \tkzNamePack{tkz-euclide}.
+% \item This documentation and all examples were obtained with
+% \tkzname{lualatex-dev} but \tkzname{pdflatex} should be suitable.
+% \end{itemize}
+\begin{itemize}\setlength{\itemsep}{5pt}
+\item \LaTeX{}必须能够识别\tkzNamePack{tkz-base}和\tkzNamePack{tkz-euclide}目录。
+\item 必须正确安装\tkzNamePack{xfp}\footnote{\tkzNamePack{xfp}替代了
+\tkzNamePack{fp}。}、 \tkzNamePack{numprint}和\tkzNamePack{tikz 3.00}及以上版本才能够正常使用
+\tkzNamePack{tkz-euclide}.
+\item 该说明文档和所有的示例都是使用\tkzname{lualatex-dev}编译的，
+但使用\tkzname{pdflatex}和\tkzname{xelatex}也能够正常编译。
+\end{itemize}
+
+% \subsection{List of folder files \tkzname{tkzbase}  and \tkzname{tkzeuclide}}
+\subsection{\tkzname{tkzbase}和\tkzname{tkzeuclide}目录中的文件}
+
+% In the folder \tkzname{base}:
+在\tkzname{base}目录中有如下文件：
+
+\begin{itemize}
+\item \tkzname{tkz-base.cfg}
+\item \tkzname{tkz-base.sty}
+\item \tkzname{tkz-lib-marks.tex}
+\item \tkzname{tkz-obj-axes.tex}
+\item \tkzname{tkz-obj-grids.tex}
+\item \tkzname{tkz-obj-marks.tex}
+\item \tkzname{tkz-obj-points.tex}
+\item \tkzname{tkz-obj-rep.tex}
+\item \tkzname{tkz-tools-arith.tex}
+\item \tkzname{tkz-tools-base.tex}
+\item \tkzname{tkz-tools-BB.tex}
+\item \tkzname{tkz-tools-misc.tex}
+\item \tkzname{tkz-tools-modules.tex}
+\item \tkzname{tkz-tools-print.tex}
+\item \tkzname{tkz-tools-text.tex}
+\item \tkzname{tkz-tools-utilities.tex}
+\end{itemize}
+
+% In the folder \tkzname{euclide}:
+在\tkzname{euclide}目录中有如下文件：
+
+\begin{itemize}
+\item \tkzname{tkz-euclide.sty}
+\item \tkzname{tkz-obj-eu-angles.tex}
+\item \tkzname{tkz-obj-eu-arcs.tex}
+\item \tkzname{tkz-obj-eu-circles.tex}
+\item \tkzname{tkz-obj-eu-compass.tex}
+\item \tkzname{tkz-obj-eu-draw-circles.tex}
+\item \tkzname{tkz-obj-eu-draw-lines.tex}
+\item \tkzname{tkz-obj-eu-draw-polygons.tex}
+\item \tkzname{tkz-obj-eu-draw-triangles.tex}
+\item \tkzname{tkz-obj-eu-lines.tex}
+\item \tkzname{tkz-obj-eu-points-by.tex}
+\item \tkzname{tkz-obj-eu-points-rnd.tex}
+\item \tkzname{tkz-obj-eu-points-with.tex}
+\item \tkzname{tkz-obj-eu-points.tex}
+\item \tkzname{tkz-obj-eu-polygons.tex}
+\item \tkzname{tkz-obj-eu-protractor.tex}
+\item \tkzname{tkz-obj-eu-sectors.tex}
+\item \tkzname{tkz-obj-eu-show.tex}
+\item \tkzname{tkz-obj-eu-triangles.tex}
+\item \tkzname{tkz-tools-angles.tex}
+\item \tkzname{tkz-tools-intersections.tex}
+\item \tkzname{tkz-tools-math.tex}
+\end{itemize}
+
+% \tkzHandBomb{}Now \tkzname{tkz-euclide} loads all the files.
+\tkzHandBomb{}如果目录结构及文件正确，则\tkzname{tkz-euclide}能够自动载入所有需要的文件。
+
+\end{document}
+\endinput

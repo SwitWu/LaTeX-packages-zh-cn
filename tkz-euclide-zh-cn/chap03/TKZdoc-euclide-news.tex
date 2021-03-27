@@ -1,0 +1,107 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{News and compatibility}
+\section{新特性与兼容性}
+
+% Some changes have been made to make the syntax more homogeneous and especially
+% to distinguish the definition and search for coordinates from the rest, i.e.
+% drawing, marking and labelling.
+% In the future, the definition macros being isolated, it will be easier to
+% introduce a phase of coordinate calculations using \tkzimp{Lua}.
+宏包更新后，增强了语法一致性。
+尤其是将点的定义与点的计算分离后，为后续绘图、标记和标注操作带来了方便。
+在未来，将更好地分离宏定义，并引入\tkzimp{Lua}，以方便坐标计算。
+
+% An important novelty is the recent replacement of the \tkzNamePack{fp} package
+% by \tkzNamePack{xfp}.  This is to improve the calculations a little bit more and
+% to make it easier to use.
+
+一个重要的新特性是使用\tkzNamePack{xfp}宏包替换了\tkzNamePack{fp}宏包，从而进一步提升了计算性能，
+并使得用户使用更为便捷。
+
+% Here are some of the changes.
+以下是主要的更新：
+\vspace{1cm}
+\begin{itemize}\setlength{\itemsep}{10pt}
+
+% \item Improved code and bug fixes;
+\item 优化了代码并修复了部分Bug;
+
+% \item With \tkzimp{tkz-euclide} loads all objects, so there's no need to place
+% \tkzcname{usetkzobj\{all\}};\item The bounding box is now controlled in each
+% macro (hopefully) to avoid the use of \tkzcname{tkzInit} followed by
+% \tkzcname{tkzClip};\item Added macros for the bounding box: \tkzcname{tkzSaveBB}
+% \tkzcname{tkzClipBB} and so on;\item  Logically most macros accept \TIKZ\
+% options. So I removed the \enquote{duplicate} options when possible thus the \enquote{label
+% options} option is removed;
+\item 由于\tkzimp{tkz-euclide}默认载入了所有对象，因此无需再使用
+\tkzcname{usetkzobj\{all\}}进行载入操作;
+
+\item 在各个命令中单独处理包围盒，从而避免使用\tkzcname{tkzInit}命令和\tkzcname{tkzClip}命令
+
+\item 增加了\tkzcname{tkzSaveBB}、\tkzcname{tkzClipBB}等包围盒处理命令;
+\item 逻辑上，由于所有命令都可以直接使用\TIKZ{}选项，所以尽可能移除了如
+\enquote{label options}等\enquote{重复}选项;
+
+% \item Random points are now in \tkzname{\tkznameofpack} and the macro
+% \tkzcname{tkzGetRandPointOn} is replaced by the macro \tkzcname{tkzDefRandPointOn}. For
+% homogeneity reasons, the points must be retrieved with \tkzcname{tkzGetPoint};
+\item 用\tkzname{\tkznameofpack}宏包生成随机点，并且使用\tkzcname{tkzDefRandPointOn}命令代替了
+\tkzcname{tkzGetRandPointOn}命令，
+并要求必须使用\tkzcname{tkzGetPoint}引用生成的随机点;
+
+% \item The options \tkzname{end} and \tkzname{start} which allowed to give a
+% label to a straight  line are removed. You now have to use the macro
+% \tkzcname{tkzLabelLine};
+\item 新增\tkzcname{tkzLabelLine}命令，用于为直线添加标注。
+删除了原来的直线标注选项\tkzname{end}和\tkzname{start}。
+
+% \item Introduction of the libraries \NameLib{quotes} and \NameLib{angles}; it
+% allows to give a label to a point, even if I am not in favour of this practice;
+\item 新增用于为点添加标注的\NameLib{quotes}和\NameLib{angles}库。
+
+% \item The notion of vector disappears, to draw a vector just pass \enquote{->} as an
+% option to \tkzcname{tkzDrawSegment};
+\item 删除了向量操作，为\tkzcname{tkzDrawSegment}命令添加了\enquote{->}以绘制向量;
+
+% \item Many macros still exist, but are obsolete and will disappear:
+\item 仍然存在但已过时并将要删除的命令有：
+\begin{itemize}
+
+% \item |\tkzDrawMedians| trace and create midpoints on the sides of a triangle.
+% The creation and drawing separation is not respected so it is preferable to
+% first create the coordinates of these points with |\tkzSpcTriangle[median]|
+% and then draw with |\tkzDrawSegments| or |\tkzDrawLines|;
+\item 用于跟踪和创建三角形各边中点的命令|\tkzDrawMedians|，不符合计算和绘制分离的思想，
+因此，建议首先使用 |\tkzSpcTriangle[median]|命令计算中点，然后使用|\tkzDrawSegments|或|\tkzDrawLines|绘制。
+
+% \item |\tkzDrawMedians(A,B)(C)| is now spelled |\tkzDrawMedians(A,C,B)|. This
+% defines the median from $C$;
+\item 将|\tkzDrawMedians(A,B)(C)|命令改为|\tkzDrawMedians(A,C,B)|，
+以定义中点$C$;
+
+% \item Another example |\tkzDrawTriangle[equilateral]| was handy but it is better
+% to get the third point with |\tkzDefTriangle[equilateral]| and then draw with
+% |\tkzDrawPolygon|;
+\item |\tkzDrawTriangle[equilateral]|命令将被删除，
+建议先用|\tkzDefTriangle[equilateral]|命令定义点，
+然后用|\tkzDrawPolygon|绘制多边形;
+
+% \item |\tkzDefRandPointOn| is replaced by |\tkzGetRandPointOn|;\item now
+% |\tkzTangent| is replaced by |\tkzDefTangent|;
+\item 用|\tkzGetRandPointOn|命令替换了|\tkzDefRandPointOn|命令;
+\item 用|\tkzDefTangent|命令替换了|\tkzTangent|命令;
+
+% \item You can use |global path name| if you want find intersection  but it's
+% very slow like in \TIKZ.
+\item 可以使用|global path name|参数求交点，但像在\TIKZ{}中一样，其计算速度非常慢。
+
+\end{itemize}
+
+% \item Appearance of the macro \tkzcname{usetkztool} which allows to load new
+% \enquote{tools}.
+\item 引入了\tkzcname{usetkztool}命令，以加载新的\enquote{tools}库。
+\end{itemize}
+
+\end{document}
+\endinput

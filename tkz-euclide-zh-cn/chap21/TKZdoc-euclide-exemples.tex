@@ -1,0 +1,630 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Some examples}
+\section{实例分析}
+
+% \subsection{Some interesting examples}
+\subsection{一些有趣的例子}
+
+% \subsubsection{Similar isosceles triangles}
+\subsubsection{相似等腰三角形}
+
+% The following is from the excellent site \textbf{Descartes et les
+% Mathématiques}. I did not modify the text and I am only the author of the
+% programming of the figures.
+以下示例选自精彩的\textbf{Descartes et les Mathématiques}网站，在此，未对原文
+进行任何修改，仅用\tkzNamePack{tkz-euclide}宏包对其进行了绘制。
+
+\url{https://debart.pagesperso-orange.fr/seconde/triangle.html}
+
+参考文献:
+
+\begin{itemize}
+
+\item Géométrie au Bac - Tangente, special issue no. 8 - Exercise 11, page 11
+
+
+\item Elisabeth Busser and Gilles Cohen: 200 nouveaux problèmes du \enquote{Monde} -
+POLE 2007 (200 new problems of "Le Monde")
+
+
+\item Affaire de logique n° 364 - Le Monde February 17, 2004
+\end{itemize}
+
+
+% Two statements were proposed, one by the magazine \textit{Tangente} and the
+% other by \textit{Le Monde}.
+构造相似等腰三角形有两种方式，一是\textit{Tangente}杂志提供的方法，
+另一个是\textit{Le Monde}杂志提供的方法。
+
+\vspace*{2cm}
+
+% \emph{Editor of the magazine "Tangente"}: \textcolor{orange}{Two similar
+% isosceles triangles $AXB$ and $BYC$ are constructed with main vertices $X$ and
+% $Y$, such that $A$, $B$ and $C$ are aligned and that these triangles are
+% \enquote{indirect}. Let $\alpha$ be the angle at vertex $\widehat{AXB}$ =
+% $\widehat{BYC}$. We then construct a third isosceles triangle $XZY$ similar to
+% the first two, with main vertex $Z$ and "indirect".
+% We ask to demonstrate that point $Z$ belongs to the straight line $(AC)$.}
+\emph{\enquote{Tangente}杂志编辑}: \textcolor{orange}{
+两个相似等腰三角形$AXB$和$BYC$由主顶点分别是$X$和$Y$，
+其中，$A$、$B$和$C$共线。
+令$\alpha$为顶点的角度($\widehat{AXB}$ = $\widehat{BYC}$)，
+然后可以构造与前两个等腰三角形相似的第三个等腰三角形$XZY$，
+其主顶点是$Z$点，
+需要证明$Z$点属于直线$(AC)$.}
+
+\vspace*{2cm}
+
+% \emph{Editor of  \enquote{Le Monde}}: \textcolor{orange}{We construct two similar
+% isosceles triangles $AXB$ and $BYC$ with principal vertices $X$ and $Y$, such
+% that $A$, $B$ and $C$ are aligned and that these triangles are \enquote{indirect}. Let
+% $\alpha$ be the angle at vertex $\widehat{AXB}$ = $\widehat{BYC}$. The point Z
+% of the line segment $[AC]$ is equidistant from the two vertices $X$ and $Y$.\\
+% At what angle does he see these two vertices?}
+\emph{\enquote{Le Monde}杂志编辑}: \textcolor{orange}{
+两个相似等腰三角形$AXB$和$BYC$的主顶点分别是$X$和$Y$，
+其中$A$、$B$和$C$点共线。
+令$\alpha$为顶点的角度($\widehat{AXB}$ = $\widehat{BYC}$)，
+线段$[AC]$上的点$Z$与$X$和$Y$的距离相等。\\
+那么这两个顶点的角度是多少?}
+
+\vspace*{2cm}
+% The constructions and their associated codes are on the next two pages, but
+% you can search before looking. The programming respects (it seems to me \dots)
+% my reasoning in both cases.
+下面两页给出了解决这两个问题的\tkznameofpack{}代码和绘图过程，
+但在查看代码前，建议先搜索相关文献。
+这些代码展示了这两种推导过程。
+
+\newpage
+
+% \subsubsection{Revised version of \enquote{Tangente}}
+\subsubsection{\enquote{Tangente}方法}
+
+\begin{tkzexample}[small]
+\begin{tikzpicture}[scale=.8,rotate=60]
+  \tkzDefPoint(6,0){X}   \tkzDefPoint(3,3){Y}
+  \tkzDefShiftPoint[X](-110:6){A}    \tkzDefShiftPoint[X](-70:6){B}
+  \tkzDefShiftPoint[Y](-110:4.2){A'} \tkzDefShiftPoint[Y](-70:4.2){B'}
+  \tkzDefPointBy[translation= from A' to B ](Y) \tkzGetPoint{Y}
+  \tkzDefPointBy[translation= from A' to B ](B') \tkzGetPoint{C}
+  \tkzInterLL(A,B)(X,Y) \tkzGetPoint{O}
+  \tkzDefMidPoint(X,Y) \tkzGetPoint{I}
+  \tkzDefPointWith[orthogonal](I,Y)
+  \tkzInterLL(I,tkzPointResult)(A,B) \tkzGetPoint{Z}
+  \tkzDefCircle[circum](X,Y,B) \tkzGetPoint{O}
+  \tkzDrawCircle(O,X)
+  \tkzDrawLines[add = 0 and 1.5](A,C) \tkzDrawLines[add = 0 and 3](X,Y)
+  \tkzDrawSegments(A,X B,X B,Y C,Y)   \tkzDrawSegments[color=red](X,Z Y,Z)
+  \tkzDrawPoints(A,B,C,X,Y,O,Z)
+  \tkzLabelPoints(A,B,C,Z)   \tkzLabelPoints[above right](X,Y,O)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{\enquote{Le Monde} version}
+\subsubsection{\enquote{Le Monde}方法}
+
+\begin{tkzexample}[small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(3,0){B}
+  \tkzDefPoint(9,0){C}
+  \tkzDefPoint(1.5,2){X}
+  \tkzDefPoint(6,4){Y}
+  \tkzDefCircle[circum](X,Y,B)       \tkzGetPoint{O}
+  \tkzDefMidPoint(X,Y)               \tkzGetPoint{I}
+  \tkzDefPointWith[orthogonal](I,Y)  \tkzGetPoint{i}
+  \tkzDrawLines[add = 2 and 1,color=orange](I,i)
+  \tkzInterLL(I,i)(A,B)              \tkzGetPoint{Z}
+  \tkzInterLC(I,i)(O,B)              \tkzGetSecondPoint{M}
+  \tkzDefPointWith[orthogonal](B,Z)  \tkzGetPoint{b}
+  \tkzDrawCircle(O,B)
+  \tkzDrawLines[add = 0 and 2,color=orange](B,b)
+  \tkzDrawSegments(A,X B,X B,Y C,Y A,C X,Y)
+  \tkzDrawSegments[color=red](X,Z Y,Z)
+  \tkzDrawPoints(A,B,C,X,Y,Z,M,I)
+  \tkzLabelPoints(A,B,C,Z)
+  \tkzLabelPoints[above right](X,Y,M,I)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Triangle altitudes}
+\subsubsection{三角形的高}
+
+% The following is again from the excellent site \textbf{Descartes et les
+% Mathématiques} (Descartes and the Mathematics).
+以下示例选自精彩的\textbf{Descartes et les Mathématiques}网站
+(Descartes and the Mathematics)。
+
+\url{https://debart.pagesperso-orange.fr/geoplan/geometrie_triangle.html}
+
+% The three altitudes of a triangle intersect at the same H-point.
+三条高相交于$H$点。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.8]
+  \tkzDefPoint(0,0){C}
+  \tkzDefPoint(7,0){B}
+  \tkzDefPoint(5,6){A}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDefMidPoint(C,B)
+  \tkzGetPoint{I}
+  \tkzDrawArc(I,B)(C)
+  \tkzInterLC(A,C)(I,B)
+  \tkzGetSecondPoint{B'}
+  \tkzInterLC(A,B)(I,B)
+  \tkzGetFirstPoint{C'}
+  \tkzInterLL(B,B')(C,C')
+  \tkzGetPoint{H}
+  \tkzInterLL(A,H)(C,B)
+  \tkzGetPoint{A'}
+  \tkzDefCircle[circum](A,B',C')
+  \tkzGetPoint{O}
+  \tkzDrawCircle[color=red](O,A)
+  \tkzDrawSegments[color=orange](B,B' C,C' A,A')
+  \tkzMarkRightAngles(C,B',B B,C',C C,A',A)
+  \tkzDrawPoints(A,B,C,A',B',C',H)
+  \tkzLabelPoints(A,B,C,A',B',C',H)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Altitudes - other construction}
+\subsubsection{三角形的高 - 另一种构造方式}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=0.65]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(8,0){B}
+  \tkzDefPoint(3.5,10){C}
+  \tkzDefMidPoint(A,B)
+  \tkzGetPoint{O}
+  \tkzDefPointBy[projection=onto A--B](C)
+  \tkzGetPoint{P}
+  \tkzInterLC(C,A)(O,A)
+  \tkzGetSecondPoint{M}
+  \tkzInterLC(C,B)(O,A)
+  \tkzGetFirstPoint{N}
+  \tkzInterLL(B,M)(A,N)
+  \tkzGetPoint{I}
+  \tkzDrawCircle[diameter](A,B)
+  \tkzDrawSegments(C,A C,B A,B B,M A,N)
+  \tkzMarkRightAngles[fill=brown!20](A,M,B A,N,B A,P,C)
+  \tkzDrawSegment[style=dashed,color=orange](C,P)
+  \tkzLabelPoints(O,A,B,P)
+  \tkzLabelPoint[left](M){$M$}
+  \tkzLabelPoint[right](N){$N$}
+  \tkzLabelPoint[above](C){$C$}
+  \tkzLabelPoint[above right](I){$I$}
+  \tkzDrawPoints[color=red](M,N,P,I)
+  \tkzDrawPoints[color=brown](O,A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Different authors}
+\subsection{其他作者提供的实例}
+
+% \subsubsection{Square root of the integers}
+\subsubsection{整数的算术平方根}
+
+% How to get $1$, $\sqrt{2}$, $\sqrt{3}$ with a rule and a compass.
+本例演示了如何用尺规求解$1$、 $\sqrt{2}$和 $\sqrt{3}$的方法。
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1.5]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(1,0){a0}
+  \tkzDrawSegment[blue](O,a0)
+  \foreach \i [count=\j] in {0,...,10}{%
+    \tkzDefPointWith[orthogonal normed](a\i,O)
+    \tkzGetPoint{a\j}
+    \tkzDrawPolySeg[color=blue](a\i,a\j,O)}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{About right triangle}
+\subsubsection{直角三角}
+
+% We have a segment $[AB]$ and we want to determine a point $C$ such that
+% $AC=8$~cm    and $ABC$ is a right triangle in $B$.
+有一线段$[AB]$，然后确定一点$C$使$AC=8$~cm，并且$ABC$是以$B$为直角的直角三角形。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint["$A$" left](2,1){A}
+  \tkzDefPoint(6,4){B}
+  \tkzDrawSegment(A,B)
+  \tkzDrawPoint[color=red](A)
+  \tkzDrawPoint[color=red](B)
+  \tkzDefPointWith[orthogonal,K=-1](B,A)
+  \tkzDrawLine[add = .5 and .5](B,tkzPointResult)
+  \tkzInterLC[R](B,tkzPointResult)(A,8 cm)
+  \tkzGetPoints{C}{J}
+  \tkzDrawPoint[color=red](C)
+  \tkzCompass(A,C)
+  \tkzMarkRightAngle(A,B,C)
+  \tkzDrawLine[color=gray,style=dashed](A,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Archimedes}
+\subsubsection{阿基米德等分}
+
+% This is an ancient problem proved by the great Greek mathematician Archimedes.
+% The figure below shows a semicircle, with diameter $AB$. A tangent line is drawn
+% and  touches the semicircle at $B$. An other tangent line at a point, $C$, on
+% the semicircle is drawn. We project the point $C$ on the line segment $[AB]$  on
+% a point $D$. The two tangent lines intersect at the point $T$.
+这是伟大的希腊数学家阿基米德证明的一个古老问题。
+下图有一个直径为$AB$的半圆，一条直线在$B$点与半圆相切，
+在$C$点有半圆的另一条切线。把$C$点投影到线段$[AB]$上的$D$点。
+两条切线相交于$T$点。
+
+% Prove that the line $(AT)$ bisects $(CD)$
+现证明直线$(AT)$平分直线$(CD)$
+
+\newpage
+
+\begin{tkzexample}[small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){A}\tkzDefPoint(6,0){D}
+  \tkzDefPoint(8,0){B}\tkzDefPoint(4,0){I}
+  \tkzDefLine[orthogonal=through D](A,D)
+  \tkzInterLC[R](D,tkzPointResult)(I,4 cm) \tkzGetFirstPoint{C}
+  \tkzDefLine[orthogonal=through C](I,C)   \tkzGetPoint{c}
+  \tkzDefLine[orthogonal=through B](A,B)   \tkzGetPoint{b}
+  \tkzInterLL(C,c)(B,b) \tkzGetPoint{T}
+  \tkzInterLL(A,T)(C,D) \tkzGetPoint{P}
+  \tkzDrawArc(I,B)(A)
+  \tkzDrawSegments(A,B A,T C,D I,C) \tkzDrawSegment[color=orange](I,C)
+  \tkzDrawLine[add = 1 and 0](C,T)  \tkzDrawLine[add = 0 and 1](B,T)
+  \tkzMarkRightAngle(I,C,T)
+  \tkzDrawPoints(A,B,I,D,C,T)
+  \tkzLabelPoints(A,B,I,D)  \tkzLabelPoints[above right](C,T)
+  \tkzMarkSegment[pos=.25,mark=s|](C,D) \tkzMarkSegment[pos=.75,mark=s|](C,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example: Dimitris Kapeta}
+\subsubsection{示例(Dimitris Kapeta)}
+
+% You need in this example to use \tkzname{mkpos=.2} with \tkzcname{tkzMarkAngle}
+% because the measure of $ \widehat{CAM}$ is too small.
+% Another possiblity is to use \tkzcname{tkzFillAngle}.
+在本例中，由于$\widehat{CAM}$过小，因此需要在\tkzcname{tkzMarkAngle}命令中使用\tkzname{mkpos=.2}选项。
+另一种解决方案是使用\tkzcname{tkzFillAngle}命令。
+
+\begin{tkzexample}[small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(2.5,0){N}
+  \tkzDefPoint(-4.2,0.5){M}
+  \tkzDefPointBy[rotation=center O angle 30](N)
+  \tkzGetPoint{B}
+  \tkzDefPointBy[rotation=center O angle -50](N)
+  \tkzGetPoint{A}
+  \tkzInterLC(M,B)(O,N) \tkzGetFirstPoint{C}
+  \tkzInterLC(M,A)(O,N) \tkzGetSecondPoint{A'}
+  \tkzMarkAngle[mkpos=.2, size=0.5](A,C,B)
+  \tkzMarkAngle[mkpos=.2, size=0.5](A,M,C)
+  \tkzDrawSegments(A,C M,A M,B)
+  \tkzDrawCircle(O,N)
+  \tkzLabelCircle[above left](O,N)(120){$\mathcal{C}$}
+  \tkzMarkAngle[mkpos=.2, size=1.2](C,A,M)
+  \tkzDrawPoints(O, A, B, M, B, C)
+  \tkzLabelPoints[right](O,A,B)
+  \tkzLabelPoints[above left](M,C)
+  \tkzLabelPoint[below left](A'){$A'$}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example 1: John Kitzmiller}
+\subsubsection{证明示例1(John Kitzmiller)}
+
+% Prove that $\bigtriangleup LKJ$ is equilateral.
+证明$\bigtriangleup LKJ$是等边三角形。
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=2]
+  \tkzDefPoint[label=below left:A](0,0){A}
+  \tkzDefPoint[label=below right:B](6,0){B}
+  \tkzDefTriangle[equilateral](A,B) \tkzGetPoint{C}
+  \tkzMarkSegments[mark=|](A,B A,C B,C)
+  \tkzDefBarycentricPoint(A=1,B=2) \tkzGetPoint{C'}
+  \tkzDefBarycentricPoint(A=2,C=1) \tkzGetPoint{B'}
+  \tkzDefBarycentricPoint(C=2,B=1) \tkzGetPoint{A'}
+  \tkzInterLL(A,A')(C,C') \tkzGetPoint{J}
+  \tkzInterLL(C,C')(B,B') \tkzGetPoint{K}
+  \tkzInterLL(B,B')(A,A') \tkzGetPoint{L}
+  \tkzLabelPoint[above](C){C}
+  \tkzDrawPolygon(A,B,C) \tkzDrawSegments(A,J B,L C,K)
+  \tkzMarkAngles[size=1 cm](J,A,C K,C,B L,B,A)
+  \tkzMarkAngles[thick,size=1 cm](A,C,J C,B,K B,A,L)
+  \tkzMarkAngles[opacity=.5](A,C,J C,B,K B,A,L)
+  \tkzFillAngles[fill= orange,size=1 cm,opacity=.3](J,A,C K,C,B L,B,A)
+  \tkzFillAngles[fill=orange, opacity=.3,thick,size=1,](A,C,J C,B,K B,A,L)
+  \tkzFillAngles[fill=green, size=1, opacity=.5](A,C,J C,B,K B,A,L)
+  \tkzFillPolygon[color=yellow, opacity=.2](J,A,C)
+  \tkzFillPolygon[color=yellow, opacity=.2](K,B,C)
+  \tkzFillPolygon[color=yellow, opacity=.2](L,A,B)
+  \tkzDrawSegments[line width=3pt,color=cyan,opacity=0.4](A,J C,K B,L)
+  \tkzDrawSegments[line width=3pt,color=red,opacity=0.4](A,L B,K C,J)
+  \tkzMarkSegments[mark=o](J,K K,L L,J)
+  \tkzLabelPoint[right](J){J}
+  \tkzLabelPoint[below](K){K}
+  \tkzLabelPoint[above left](L){L}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example 2: John Kitzmiller}
+\subsubsection{证明示例2(John Kitzmiller)}
+
+% Prove that $\dfrac{AC}{CE}=\dfrac{BD}{DF}$.
+证明： $\dfrac{AC}{CE}=\dfrac{BD}{DF}$
+
+% Another interesting example from John, you can see how to use some extra options
+% like \tkzname{decoration} and \tkzname{postaction}  from \TIKZ\ with
+% \tkzname{tkz-euclide}.
+John的另一个有趣的例子是如何在\tkzname{tkz-euclide}宏包中使用\TIKZ{}
+的类似\tkzname{decoration} 和 \tkzname{postaction}选项。
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=1.75,decoration={markings,
+   mark=at position 3cm with {\arrow[scale=2]{>}}}]
+  \tkzDefPoints{0/0/E, 6/0/F, 0/1.8/P, 6/1.8/Q, 0/3/R, 6/3/S}
+  \tkzDrawLines[postaction={decorate}](E,F P,Q R,S)
+  \tkzDefPoints{3.5/3/A, 5/3/B}
+  \tkzDrawSegments(E,A F,B)
+  \tkzInterLL(E,A)(P,Q) \tkzGetPoint{C}
+  \tkzInterLL(B,F)(P,Q) \tkzGetPoint{D}
+  \tkzLabelPoints[above right](A,B)
+  \tkzLabelPoints[below](E,F)
+  \tkzLabelPoints[above left](C)
+  \tkzDrawSegments[style=dashed](A,F)
+  \tkzInterLL(A,F)(P,Q) \tkzGetPoint{G}
+  \tkzLabelPoints[above right](D,G)
+  \tkzDrawSegments[color=teal, line width=3pt, opacity=0.4](A,C A,G)
+  \tkzDrawSegments[color=magenta, line width=3pt, opacity=0.4](C,E G,F)
+  \tkzDrawSegments[color=teal, line width=3pt, opacity=0.4](B,D)
+  \tkzDrawSegments[color=magenta, line width=3pt, opacity=0.4](D,F)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example 3: John Kitzmiller}
+\subsubsection{证明示例3(John Kitzmiller)}
+
+% Prove that $\dfrac{BC}{CD}=\dfrac{AB}{AD} \qquad$ (Angle Bisector).
+证明： $\dfrac{BC}{CD}=\dfrac{AB}{AD} \qquad$ (角平分线).
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=2]
+  \tkzDefPoints{0/0/B, 5/0/D}   \tkzDefPoint(70:3){A}
+  \tkzDrawPolygon(B,D,A)
+  \tkzDefLine[bisector](B,A,D)  \tkzGetPoint{a}
+  \tkzInterLL(A,a)(B,D)         \tkzGetPoint{C}
+  \tkzDefLine[parallel=through B](A,C) \tkzGetPoint{b}
+  \tkzInterLL(A,D)(B,b)         \tkzGetPoint{P}
+  \begin{scope}[decoration={markings, mark=at position .5 with {\arrow[scale=2]{>}}}]
+     \tkzDrawSegments[postaction={decorate},dashed](C,A P,B)
+  \end{scope}
+  \tkzDrawSegment(A,C) \tkzDrawSegment[style=dashed](A,P)
+  \tkzLabelPoints[below](B,C,D) \tkzLabelPoints[above](A,P)
+  \tkzDrawSegments[color=magenta, line width=3pt, opacity=0.4](B,C P,A)
+  \tkzDrawSegments[color=teal,    line width=3pt, opacity=0.4](C,D A,D)
+  \tkzDrawSegments[color=magenta, line width=3pt, opacity=0.4](A,B)
+  \tkzMarkAngles[size=3mm](B,A,C C,A,D)
+  \tkzMarkAngles[size=3mm](B,A,C A,B,P)
+  \tkzMarkAngles[size=3mm](B,P,A C,A,D)
+  \tkzMarkAngles[size=3mm](B,A,C A,B,P B,P,A C,A,D)
+  \tkzFillAngles[fill=green,  opacity=0.5](B,A,C A,B,P)
+  \tkzFillAngles[fill=yellow, opacity=0.3](B,P,A C,A,D)
+  \tkzFillAngles[fill=green,  opacity=0.6](B,A,C A,B,P B,P,A C,A,D)
+  \tkzLabelAngle[pos=1](B,A,C){1}  \tkzLabelAngle[pos=1](C,A,D){2}
+  \tkzLabelAngle[pos=1](A,B,P){3}  \tkzLabelAngle[pos=1](B,P,A){4}
+  \tkzMarkSegments[mark=|](A,B A,P)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example 4: John Kitzmiller}
+\subsubsection{证明示例4(John Kitzmiller)}
+
+% Prove that $\overline{AG}\cong\overline{EF} \qquad$ (Detour).
+证明：$\overline{AG}\cong\overline{EF} \qquad$ (Detour).
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=2]
+  \tkzDefPoint(0,3){A}    \tkzDefPoint(6,3){E}  \tkzDefPoint(1.35,3){B}
+  \tkzDefPoint(4.65,3){D} \tkzDefPoint(1,1){G}  \tkzDefPoint(5,5){F}
+  \tkzDefMidPoint(A,E)    \tkzGetPoint{C}
+  \tkzFillPolygon[yellow, opacity=0.4](B,G,C)
+  \tkzFillPolygon[yellow, opacity=0.4](D,F,C)
+  \tkzFillPolygon[blue, opacity=0.3](A,B,G)
+  \tkzFillPolygon[blue, opacity=0.3](E,D,F)
+  \tkzMarkAngles[size=0.5 cm](B,G,A D,F,E)
+  \tkzMarkAngles[size=0.5 cm](B,C,G D,C,F)
+  \tkzMarkAngles[size=0.5 cm](G,B,C F,D,C)
+  \tkzMarkAngles[size=0.5 cm](A,B,G E,D,F)
+  \tkzFillAngles[size=0.5 cm,fill=green](B,G,A D,F,E)
+  \tkzFillAngles[size=0.5 cm,fill=orange](B,C,G D,C,F)
+  \tkzFillAngles[size=0.5 cm,fill=yellow](G,B,C F,D,C)
+  \tkzFillAngles[size=0.5 cm,fill=red](A,B,G E,D,F)
+  \tkzMarkSegments[mark=|](B,C D,C)  \tkzMarkSegments[mark=s||](G,C F,C)
+  \tkzMarkSegments[mark=o](A,G E,F)  \tkzMarkSegments[mark=s](B,G D,F)
+  \tkzDrawSegment[color=red](A,E)
+  \tkzDrawSegment[color=blue](F,G)
+  \tkzDrawSegments(A,G G,B E,F F,D)
+  \tkzLabelPoints[below](C,D,E,G)  \tkzLabelPoints[above](A,B,F)
+\end{tikzpicture}
+\end{tkzexample}
+
+\subsubsection{构图示例1(Indonesia)}
+% \subsubsection{Example 1: from Indonesia}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=3]
+  \tkzDefPoints{0/0/A,2/0/B}
+  \tkzDefSquare(A,B) \tkzGetPoints{C}{D}
+  \tkzDefPointBy[rotation=center D angle 45](C)\tkzGetPoint{G}
+  \tkzDefSquare(G,D)\tkzGetPoints{E}{F}
+  \tkzInterLL(B,C)(E,F)\tkzGetPoint{H}
+  \tkzFillPolygon[gray!10](D,E,H,C,D)
+  \tkzDrawPolygon(A,...,D)\tkzDrawPolygon(D,...,G)
+  \tkzDrawSegment(B,E)
+  \tkzMarkSegments[mark=|,size=3pt,color=gray](A,B B,C C,D D,A E,F F,G G,D D,E)
+  \tkzMarkSegments[mark=||,size=3pt,color=gray](B,E E,H)
+  \tkzLabelPoints[left](A,D)
+  \tkzLabelPoints[right](B,C,F,H)
+  \tkzLabelPoints[above](G)\tkzLabelPoints[below](E)
+  \tkzMarkRightAngles(D,A,B D,G,F)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example 2: from Indonesia}
+\subsubsection{构图示例2(Indonesia)}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[pol/.style={fill=brown!40,opacity=.5},
+                    seg/.style={tkzdotted,color=gray},
+                    hidden pt/.style={fill=gray!40},
+                    mra/.style={color=gray!70,tkzdotted,/tkzrightangle/size=.2},
+                    scale=3]
+  \tkzSetUpPoint[size=2]
+  \tkzDefPoints{0/0/A,2.5/0/B,1.33/0.75/D,0/2.5/E,2.5/2.5/F}
+  \tkzDefLine[parallel=through D](A,B) \tkzGetPoint{I1}
+  \tkzDefLine[parallel=through B](A,D) \tkzGetPoint{I2}
+  \tkzInterLL(D,I1)(B,I2) \tkzGetPoint{C}
+  \tkzDefLine[parallel=through E](A,D) \tkzGetPoint{I3}
+  \tkzDefLine[parallel=through D](A,E) \tkzGetPoint{I4}
+  \tkzInterLL(E,I3)(D,I4) \tkzGetPoint{H}
+  \tkzDefLine[parallel=through F](E,H) \tkzGetPoint{I5}
+  \tkzDefLine[parallel=through H](E,F) \tkzGetPoint{I6}
+  \tkzInterLL(F,I5)(H,I6) \tkzGetPoint{G}
+  \tkzDefMidPoint(G,H)   \tkzGetPoint{P}
+  \tkzDefMidPoint(G,C)   \tkzGetPoint{Q}
+  \tkzDefMidPoint(B,C)   \tkzGetPoint{R}
+  \tkzDefMidPoint(A,B)   \tkzGetPoint{S}
+  \tkzDefMidPoint(A,E)   \tkzGetPoint{T}
+  \tkzDefMidPoint(E,H)   \tkzGetPoint{U}
+  \tkzDefMidPoint(A,D)   \tkzGetPoint{M}
+  \tkzDefMidPoint(D,C)   \tkzGetPoint{N}
+  \tkzInterLL(B,D)(S,R)  \tkzGetPoint{L}
+  \tkzInterLL(H,F)(U,P)  \tkzGetPoint{K}
+  \tkzDefLine[parallel=through K](D,H) \tkzGetPoint{I7}
+  \tkzInterLL(K,I7)(B,D) \tkzGetPoint{O}
+  \tkzFillPolygon[pol](P,Q,R,S,T,U)
+  \tkzDrawSegments[seg](K,O K,L P,Q R,S T,U
+                    C,D H,D A,D M,N B,D)
+  \tkzDrawSegments(E,H B,C G,F G,H G,C Q,R S,T U,P H,F)
+  \tkzDrawPolygon(A,B,F,E)
+  \tkzDrawPoints(A,B,C,E,F,G,H,P,Q,R,S,T,U,K)
+  \tkzDrawPoints[hidden pt](M,N,O,D)
+  \tkzMarkRightAngle[mra](L,O,K)
+  \tkzMarkSegments[mark=|,size=1pt,thick,color=gray](A,S B,S B,R C,R
+                    Q,C Q,G G,P H,P
+                    E,U H,U E,T A,T)
+  \tkzLabelAngle[pos=.3](K,L,O){$\alpha$}
+  \tkzLabelPoints[below](O,A,S,B)
+  \tkzLabelPoints[above](H,P,G)
+  \tkzLabelPoints[left](T,E)
+  \tkzLabelPoints[right](C,Q)
+  \tkzLabelPoints[above left](U,D,M)
+  \tkzLabelPoints[above right](L,N)
+  \tkzLabelPoints[below right](F,R)
+  \tkzLabelPoints[below left](K)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Three circles}
+\subsubsection{三个相切圆}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=1.15]
+  \tkzDefPoints{0/0/A,8/0/B,0/4/a,8/4/b,8/8/c}
+  \tkzDefTriangle[equilateral](A,B) \tkzGetPoint{C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDefSquare(A,B) \tkzGetPoints{D}{E}
+  \tkzClipBB
+  \tkzDefMidPoint(A,B) \tkzGetPoint{M}
+  \tkzDefMidPoint(B,C) \tkzGetPoint{N}
+  \tkzDefMidPoint(A,C) \tkzGetPoint{P}
+  \tkzDrawSemiCircle[gray,dashed](M,B)
+  \tkzDrawSemiCircle[gray,dashed](A,M)
+  \tkzDrawSemiCircle[gray,dashed](A,B)
+  \tkzDrawCircle[gray,dashed](B,A)
+  \tkzInterLL(A,N)(M,a) \tkzGetPoint{Ia}
+  \tkzDefPointBy[projection = onto A--B](Ia)
+  \tkzGetPoint{ha}
+  \tkzDrawCircle[gray](Ia,ha)
+  \tkzInterLL(B,P)(M,b) \tkzGetPoint{Ib}
+  \tkzDefPointBy[projection = onto A--B](Ib)
+  \tkzGetPoint{hb}
+  \tkzDrawCircle[gray](Ib,hb)
+  \tkzInterLL(A,c)(M,C) \tkzGetPoint{Ic}
+  \tkzDefPointBy[projection = onto A--C](Ic)
+  \tkzGetPoint{hc}
+  \tkzDrawCircle[gray](Ic,hc)
+  \tkzInterLL(A,Ia)(B,Ib) \tkzGetPoint{G}
+  \tkzDrawCircle[gray,dashed](G,Ia)
+  \tkzDrawPolySeg(A,E,D,B)
+  \tkzDrawPoints(A,B,C)
+  \tkzDrawPoints(G,Ia,Ib,Ic)
+  \tkzDrawSegments[gray,dashed](C,M A,N B,P M,a M,b A,a a,b b,B A,D Ia,ha)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{The Circle of APOLLONIUS}
+\subsubsection{APOLLONIUS圆}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoints{0/0/A,6/0/B,0.8/4/C}
+  \tkzDefTriangleCenter[euler](A,B,C)        \tkzGetPoint{N}
+  \tkzDefTriangleCenter[circum](A,B,C)       \tkzGetPoint{O}
+  \tkzDefTriangleCenter[lemoine](A,B,C)      \tkzGetPoint{K}
+  \tkzDefTriangleCenter[spieker](A,B,C)      \tkzGetPoint{Sp}
+  \tkzDefExCircle(A,B,C)     \tkzGetPoint{Jb}
+  \tkzDefExCircle(C,A,B)     \tkzGetPoint{Ja}
+  \tkzDefExCircle(B,C,A)     \tkzGetPoint{Jc}
+  \tkzDefPointBy[projection=onto B--C ](Jc)   \tkzGetPoint{Xc}
+  \tkzDefPointBy[projection=onto B--C ](Jb)   \tkzGetPoint{Xb}
+  \tkzDefPointBy[projection=onto A--B ](Ja)   \tkzGetPoint{Za}
+  \tkzDefPointBy[projection=onto A--B ](Jb)   \tkzGetPoint{Zb}
+  \tkzDefLine[parallel=through Xc](A,C)       \tkzGetPoint{X'c}
+  \tkzDefLine[parallel=through Xb](A,B)       \tkzGetPoint{X'b}
+  \tkzDefLine[parallel=through Za](C,A)       \tkzGetPoint{Z'a}
+  \tkzDefLine[parallel=through Zb](C,B)       \tkzGetPoint{Z'b}
+  \tkzInterLL(Xc,X'c)(A,B)                    \tkzGetPoint{B'}
+  \tkzInterLL(Xb,X'b)(A,C)                    \tkzGetPoint{C'}
+  \tkzInterLL(Za,Z'a)(C,B)                    \tkzGetPoint{A''}
+  \tkzInterLL(Zb,Z'b)(C,A)                    \tkzGetPoint{B''}
+  \tkzDefPointBy[reflection= over Jc--Jb](B') \tkzGetPoint{Ca}
+  \tkzDefPointBy[reflection= over Jc--Jb](C') \tkzGetPoint{Ba}
+  \tkzDefPointBy[reflection= over Ja--Jb](A'')\tkzGetPoint{Bc}
+  \tkzDefPointBy[reflection= over Ja--Jb](B'')\tkzGetPoint{Ac}
+  \tkzDefCircle[circum](Ac,Ca,Ba)             \tkzGetPoint{Q}
+  \tkzDrawCircle[circum](Ac,Ca,Ba)
+  \tkzDefPointWith[linear,K=1.1](Q,Ac)        \tkzGetPoint{nAc}
+  \tkzClipCircle[through](Q,nAc)
+  \tkzDrawLines[add=1.5 and 1.5,dashed](A,B B,C A,C)
+  \tkzDrawPolygon[color=blue](A,B,C)
+  \tkzDrawPolygon[dashed,color=blue](Ja,Jb,Jc)
+  \tkzDrawCircles[ex](A,B,C B,C,A C,A,B)
+  \tkzDrawLines[add=0 and 0,dashed](Ca,Bc B,Za A,Ba B',C')
+  \tkzDrawLine[add=1 and 1,dashed](Xb,Xc)
+  \tkzDrawLine[add=7 and 3,blue](O,K)
+  \tkzDrawLine[add=8 and 15,red](N,Sp)
+  \tkzDrawLines[add=10 and 10](K,O N,Sp)
+  \tkzDrawSegments(Ba,Ca Bc,Ac)
+  \tkzDrawPoints(A,B,C,N,Ja,Jb,Jc,Xb,Xc,B',C',Za,Zb,Ba,Ca,Bc,Ac,Q,Sp,K,O)
+  \tkzLabelPoints(A,B,C,N,Ja,Jb,Jc,Xb,Xc,B',C',Za,Zb,Ba,Ca,Bc,Ac,Q,Sp)
+  \tkzLabelPoints[above](K,O)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

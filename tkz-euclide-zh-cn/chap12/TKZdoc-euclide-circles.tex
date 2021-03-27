@@ -1,0 +1,893 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{The Circles}
+\section{圆}
+
+% Among the following macros, one will allow you to draw a circle, which is not a
+% real feat. To do this, you will need to know the center of the circle and either
+% the radius of the circle or a point on the circumference. It seemed to me that
+% the most frequent use was to draw a circle with a given centre passing through a
+% given point. This will be the default method, otherwise you will have to use the
+% \tkzname{R} option. There are a large number of special circles, for example the
+% circle circumscribed by a triangle.
+通过本节的命令中，可以定义并绘制圆。为此，需要知道圆心以及半径或圆上的点。
+常用的方法是给定圆心绘制过指定的点的圆，这是默认方法，否则则需要给
+出圆的半径\tkzname{R}。
+另外，还有一些特殊的圆，例如三角形的外接圆等。
+
+% \begin{itemize}
+% \item  I have created a first macro \tkzcname{tkzDefCircle} which allows,
+% according to a particular circle, to retrieve its center and the measurement of
+% the radius in cm. This recovery is done with the macros \tkzcname{tkzGetPoint}
+% and \tkzcname{tkzGetLength};
+%
+% \item then a macro \tkzcname{tkzDrawCircle};
+%
+% \item then a macro that allows you to color in a disc, but without drawing the
+% circle \tkzcname{tkzFillCircle};
+%
+% \item sometimes, it is necessary for a drawing to be contained in a disk, this
+% is the role assigned to \tkzcname{tkzClipCircle};
+%
+% \item it finally remains to be able to give a label to designate a circle and
+% if several possibilities are offered, we will see here \tkzcname{tkzLabelCircle}.
+% \end{itemize}
+\begin{itemize}
+\item  \tkzcname{tkzDefCircle}命令根据指定的圆心和半径(单位：cm)定义一个圆，
+\tkzcname{tkzGetPoint}和\tkzcname{tkzGetLength}命令得到圆心和半径;
+
+\item \tkzcname{tkzDrawCircle}命令用于绘制圆;
+
+\item \tkzcname{tkzFillCircle}命令用于在不绘制圆的情况下对圆进行着色;
+
+\item \tkzcname{tkzClipCircle}命令用于用圆进行裁剪;
+
+\item \tkzcname{tkzLabelCircle}命令用于标注一个圆.
+\end{itemize}
+
+% \subsection{Characteristics of a circle: \tkzcname{tkzDefCircle}}
+\subsection{\tkzcname{tkzDefCircle}命令：定义圆}
+
+% This macro allows you to retrieve the characteristics (center and radius) of
+% certain circles.
+% 该命令用指定的圆心和半径定义一下圆。
+
+% \begin{NewMacroBox}{tkzDefCircle}{\oarg{local options}\parg{A,B} or \parg{A,B,C}}%
+% \tkzHandBomb{}Attention the arguments are lists of two or three points. This
+% macro is either used in partnership with \tkzcname{tkzGetPoint} and/or
+% \tkzcname{tkzGetLength} to obtain the center and the radius of the circle, or by
+% using \tkzname{tkzPointResult} and \tkzname{tkzLengthResult} if it is not
+% necessary to keep the results.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments           & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2} or \parg{pt1,pt2,pt3}}{\parg{A,B}} {$[AB]$ is radius $A$
+% is the center}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                         \\
+% \midrule
+% \TOline{through}      {through}{circle characterized by two points defining a
+% radius}
+% \TOline{diameter}     {through}{circle characterized by two points defining a
+% diameter}
+% \TOline{circum}       {through}{circle circumscribed of a triangle}
+% \TOline{in}           {through}{incircle a triangle}
+% \TOline{ex}           {through}{excircle of a  triangle}
+% \TOline{euler or nine}{through}{Euler's Circle}
+% \TOline{spieker}      {through}{Spieker Circle}
+% \TOline{apollonius}   {through}{circle of Apollonius}
+% \TOline{orthogonal}   {through}{circle of given centre orthogonal to another
+% circle}
+% \TOline{orthogonal through}{through}{circle orthogonal circle passing through 2
+% points}
+% \TOline{K} {1}{coefficient used for a circle of Apollonius}
+% \bottomrule
+% \end{tabular}
+%
+% {In the following examples, I draw the circles with a macro not yet presented,
+% but this is not necessary. In some cases you may only need the center or the
+% radius.}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefCircle}{\oarg{命令选项}\parg{A,B} or \parg{A,B,C}}%
+\tkzHandBomb{}注意，参数可以是2个或3个点。
+该命令结合\tkzcname{tkzGetPoint}命令和/或\tkzcname{tkzGetLength}命令，
+得到圆心和圆的半径，或使用\tkzcname{tkzPointResult}命令和\tkzcname{tkzLengthResult}命令
+使用这些值，但不命名。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数           & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2} or \parg{pt1,pt2,pt3}}{\parg{A,B}} {$[AB]$是半径 $A$圆心}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                         \\
+\midrule
+\TOline{through}      {through}{两点间的距离是半径}
+\TOline{diameter}     {through}{两点间的距离是直径}
+\TOline{circum}       {through}{三角形的外接圆}
+\TOline{in}           {through}{三角形的内切圆}
+\TOline{ex}           {through}{三角形的旁切圆}
+\TOline{euler or nine}{through}{三角形的欧拉圆}
+\TOline{spieker}      {through}{三角形的Spieker圆}
+\TOline{apollonius}   {through}{Apollonius圆}
+\TOline{orthogonal}   {through}{与指定圆心的另一个圆正交}
+\TOline{orthogonal through}{through}{与通过两个点的另一个圆正交}
+\TOline{K} {1}{Apollonius圆的系数}
+\bottomrule
+\end{tabular}
+
+{下面的示例中，用到了还未说明的圆的绘制命令。
+多数情况下，仅需要使用该命令得到圆心和半径。
+}
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Example with a random point and  option \tkzname{through}}
+\subsubsection{使用随机点与\tkzname{through}选项示例}
+
+\begin{tkzexample}[latex=7 cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(0,4){A}
+  \tkzDefPoint(2,2){B}
+  \tkzDefMidPoint(A,B) \tkzGetPoint{I}
+  \tkzDefRandPointOn[segment = I--B]
+  \tkzGetPoint{C}
+  \tkzDefCircle[through](A,C)
+  \tkzGetLength{rACpt}
+  \tkzpttocm(\rACpt){rACcm}
+  \tkzDrawCircle(A,C)
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoints(A,B,C)
+  \tkzLabelCircle[draw,fill=orange, text width=3cm,
+    text centered, font=\scriptsize](A,C)(-90)%
+    {半径是:  \rACpt pt i.e. \rACcm cm}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example with  option \tkzname{diameter}}
+\subsubsection{\tkzname{diameter}选项示例}
+
+% It is simpler here to search directly for the middle of $[AB]$.
+可以通过$[AB]$的中点确定圆心。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2,2){B}
+  \tkzDefCircle[diameter](A,B)
+  \tkzGetPoint{O}
+  \tkzDrawCircle[blue,fill=blue!20](O,B)
+  \tkzDrawSegment(A,B)
+  \tkzDrawPoints(A,B,O)
+  \tkzLabelPoints(A,B,O)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Circles inscribed and circumscribed for a given triangle}
+\subsubsection{三角形的内切圆和外接圆示例}
+
+% You can also obtain the center of the inscribed circle and its projection on
+% one side of the triangle with \tkzcname{tkzGetFirstPoint{I}} and
+% \tkzcname{tkzGetSecondPoint{Ib}}.
+可以使用\tkzcname{tkzGetFirstPoint\{I\}}和\tkzcname{tkzGetSecondPoint\{Ib\}}命令
+得到内切圆在对应边上的投影。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(2,2){A}
+  \tkzDefPoint(5,-2){B}
+  \tkzDefPoint(1,-2){C}
+  \tkzDefCircle[in](A,B,C)
+  \tkzGetPoint{I} \tkzGetLength{rIN}
+  \tkzDefCircle[circum](A,B,C)
+  \tkzGetPoint{K} \tkzGetLength{rCI}
+  \tkzDrawPoints(A,B,C,I,K)
+  \tkzDrawCircle[R,blue](I,\rIN pt)
+  \tkzDrawCircle[R,red](K,\rCI pt)
+  \tkzLabelPoints[below](B,C)
+  \tkzLabelPoints[above left](A,I,K)
+  \tkzDrawPolygon(A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Example with option \tkzname{ex}}
+\subsubsection{\tkzname{ex}选项示例}
+
+% We want to define an excircle of a  triangle relatively to point $C$
+与顶点$C$对应的旁切圆。
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}[scale=.65]
+  \tkzDefPoints{ 0/0/A,4/0/B,0.8/4/C}
+  \tkzDefCircle[ex](B,C,A)
+  \tkzGetPoint{J_c} \tkzGetLength{rc}
+  \tkzDefPointBy[projection=onto A--C ](J_c)
+  \tkzGetPoint{X_c}
+  \tkzDefPointBy[projection=onto A--B ](J_c)
+  \tkzGetPoint{Y_c}
+  \tkzGetPoint{I}
+  \tkzDrawPolygon[color=blue](A,B,C)
+  \tkzDrawCircle[R,color=lightgray](J_c,\rc pt)
+  % possible  \tkzDrawCircle[ex](A,B,C)
+  \tkzDrawCircle[in,color=red](A,B,C)    \tkzGetPoint{I}
+  \tkzDefPointBy[projection=onto A--C ](I)
+  \tkzGetPoint{F}
+  \tkzDefPointBy[projection=onto A--B ](I)
+  \tkzGetPoint{D}
+  \tkzDrawLines[add=0 and 2.2,dashed](C,A C,B)
+  \tkzDrawSegments[dashed](J_c,X_c I,D  I,F J_c,Y_c)
+  \tkzMarkRightAngles(A,F,I B,D,I J_c,X_c,A J_c,Y_c,B)
+  \tkzDrawPoints(B,C,A,I,D,F,X_c,J_c,Y_c)
+  \tkzLabelPoints(B,A,J_c,I,D,X_c,Y_c)
+  \tkzLabelPoints[above left](C)
+  \tkzLabelPoints[left](F)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Euler's circle for a given triangle with option \tkzname{euler}}
+\subsubsection{\tkzname{euler}选项示例}
+
+% We verify that this circle passes through the middle of each side.
+同时验证了欧拉圆会通过三角形三个边的中点。
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=.95]
+  \tkzDefPoint(5,3.5){A}
+  \tkzDefPoint(0,0){B}
+  \tkzDefPoint(7,0){C}
+  \tkzDefCircle[euler](A,B,C)
+  \tkzGetPoint{E}
+  \tkzGetLength{rEuler}
+  \tkzDefSpcTriangle[medial](A,B,C){M_a,M_b,M_c}
+  \tkzDrawPoints(A,B,C,E,M_a,M_b,M_c)
+  \tkzDrawCircle[R,blue](E,\rEuler pt)
+  \tkzDrawPolygon(A,B,C)
+  \tkzLabelPoints[below](B,C)
+  \tkzLabelPoints[left](A,E)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Apollonius circles for a given segment option \tkzname{apollonius}}
+\subsubsection{\tkzname{apollonius}选项示例}
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}[scale=0.75]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDefCircle[apollonius,K=2](A,B)
+  \tkzGetPoint{K1}
+  \tkzGetLength{rAp}
+  \tkzDrawCircle[R,color = blue!50!black,
+    fill=blue!20,opacity=.4](K1,\rAp pt)
+  \tkzDefCircle[apollonius,K=3](A,B)
+  \tkzGetPoint{K2}   \tkzGetLength{rAp}
+  \tkzDrawCircle[R,color=red!50!black,
+    fill=red!20,opacity=.4](K2,\rAp pt)
+  \tkzLabelPoints[below](A,B,K1,K2)
+  \tkzDrawPoints(A,B,K1,K2)
+  \tkzDrawLine[add=.2 and 1](A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Circles exinscribed to a given triangle option \tkzname{ex}}
+\subsubsection{\tkzname{ex}选项示例}
+
+% You can also get the center and the projection of it on one side of the
+% triangle.
+%
+% with \tkzcname{tkzGetFirstPoint\{Jb\}} and \tkzcname{tkzGetSecondPoint\{Tb\}}.
+可以使用\tkzcname{tkzGetFirstPoint\{Jb\}}和\tkzcname{tkzGetSecondPoint\{Tb\}}命令，
+得到旁切圆圆心在边上的投影。
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}[scale=.6]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(3,0){B}
+  \tkzDefPoint(1,2.5){C}
+  \tkzDefCircle[ex](A,B,C) \tkzGetPoint{I}
+    \tkzGetLength{rI}
+  \tkzDefCircle[ex](C,A,B) \tkzGetPoint{J}
+    \tkzGetLength{rJ}
+  \tkzDefCircle[ex](B,C,A) \tkzGetPoint{K}
+    \tkzGetLength{rK}
+   \tkzDefCircle[in](B,C,A) \tkzGetPoint{O}
+     \tkzGetLength{rO}
+  \tkzDrawLines[add=1.5 and 1.5](A,B A,C B,C)
+  \tkzDrawPoints(I,J,K)
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawPolygon[dashed](I,J,K)
+  \tkzDrawCircle[R,blue!50!black](O,\rO)
+  \tkzDrawSegments[dashed](A,K B,J C,I)
+  \tkzDrawPoints(A,B,C)
+  \tkzDrawCircles[R](J,{\rJ} I,{\rI} K,{\rK})
+  \tkzLabelPoints(A,B,C,I,J,K)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Spieker circle with option \tkzname{spieker}}
+\subsubsection{\tkzname{spieker}选项示例}
+
+% The incircle of the medial triangle $M_aM_bM_c$ is the Spieker circle:
+三角形三个边的中点构成的三角形$M_aM_bM_c$的内切圆是Spieker圆:
+
+\begin{tkzexample}[latex=6cm, small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoints{ 0/0/A,4/0/B,0.8/4/C}
+  \tkzDefSpcTriangle[medial](A,B,C){M_a,M_b,M_c}
+  \tkzDefTriangleCenter[spieker](A,B,C)
+  \tkzGetPoint{S_p}
+  \tkzDrawPolygon[blue](A,B,C)
+  \tkzDrawPolygon[red](M_a,M_b,M_c)
+  \tkzDrawPoints[blue](B,C,A)
+  \tkzDrawPoints[red](M_a,M_b,M_c,S_p)
+  \tkzDrawCircle[in,red](M_a,M_b,M_c)
+  \tkzAutoLabelPoints[center=S_p,dist=.3](M_a,M_b,M_c)
+  \tkzLabelPoints[blue,right](S_p)
+  \tkzAutoLabelPoints[center=S_p](A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Orthogonal circle passing through two given points, option \tkzname{orthogonal through}}
+\subsubsection{\tkzname{orthogonal through}选项示例}
+
+过指定两个点的另一个圆的正交圆。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(1,0){A}
+  \tkzDrawCircle(O,A)
+  \tkzDefPoint(-1.5,-1.5){z1}
+  \tkzDefPoint(1.5,-1.25){z2}
+  \tkzDefCircle[orthogonal through=z1 and z2](O,A)
+   \tkzGetPoint{c}
+  \tkzDrawCircle[thick,color=red](tkzPointResult,z1)
+  \tkzDrawPoints[fill=red,color=black,
+  size=4](O,A,z1,z2,c)
+  \tkzLabelPoints(O,A,z1,z2,c)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Orthogonal circle of given center}
+\subsubsection{指定圆心的另一个圆的正交圆示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzDefPoints{0/0/O,1/0/A}
+  \tkzDefPoints{1.5/1.25/B,-2/-3/C}
+  \tkzDefCircle[orthogonal from=B](O,A)
+  \tkzGetPoints{z1}{z2}
+  \tkzDefCircle[orthogonal from=C](O,A)
+  \tkzGetPoints{t1}{t2}
+  \tkzDrawCircle(O,A)
+  \tkzDrawCircle[thick,color=red](B,z1)
+  \tkzDrawCircle[thick,color=red](C,t1)
+  \tkzDrawPoints(t1,t2,C)
+  \tkzDrawPoints(z1,z2,O,A,B)
+  \tkzLabelPoints(O,A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+%<---------------------------------------------------------------------------->
+\newpage
+
+% \section{Draw, Label the Circles}
+\section{圆的绘制和标注}
+
+% \begin{itemize}
+% \item I created a first macro  \tkzcname{tkzDrawCircle},
+%
+% \item then a macro that allows you to color a disc, but without drawing the
+% circle. \tkzcname{tkzFillCircle},
+%
+% \item sometimes, it is necessary for a drawing to be contained in a disc,this
+% is the role assigned to \tkzcname{tkzClipCircle},
+%
+% \item It finally remains to be able to give a label to designate a circle and
+% if several possibilities are offered, we will see here
+% \tkzcname{tkzLabelCircle}.
+% \end{itemize}
+\begin{itemize}
+\item \tkzcname{tkzDrawCircle}命令用于绘制一个圆,
+
+\item \tkzcname{tkzFillCircle}命令用于在不绘制圆的情况下，对圆进行着色,
+
+\item \tkzcname{tkzClipCircle}命令用于设置圆形裁剪区域,
+
+\item \tkzcname{tkzLabelCircle}命令用于对圆进行标注.
+\end{itemize}
+
+% \subsection{Draw a circle}
+\subsection{\tkzcname{tkzDrawCircle}命令：绘制圆}
+
+% \begin{NewMacroBox}{tkzDrawCircle}{\oarg{local options}\parg{A,B}}%
+% \tkzHandBomb{}Attention you need only two points to define a radius or a
+% diameter.  An additional option \tkzname{R} is available  to give a measure
+% directly.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments           & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{\parg{A,B}} {two points to define a radius or a
+% diameter}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                         \\
+% \midrule
+% \TOline{through}{through}{circle with two points defining a radius}
+% \TOline{diameter}{through}{circle with two points defining a diameter}
+% \TOline{R} {through}{circle characterized by a point and the measurement of a
+% radius}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% Of course, you have to add all the styles of \TIKZ\ for the tracings\dots
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawCircle}{\oarg{命令选项}\parg{A,B}}%
+\tkzHandBomb{}注意：只能用两个点指定半径或直径，
+使用\tkzname{R}选项，则需要直接指定半径。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数           & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2}}{\parg{A,B}} {两个点定义半径或直径}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 定义                         \\
+\midrule
+\TOline{through}{through}{两个点定义半径}
+\TOline{diameter}{through}{两个点定义直径}
+\TOline{R} {through}{需要指定半径}
+\bottomrule
+\end{tabular}
+
+\medskip
+可使用所有有效\TIKZ{}样式。
+\end{NewMacroBox}
+
+% \subsubsection{Circles and styles, draw a circle and color the disc}
+\subsubsection{绘制一个圆并对其进行着色}
+
+% We'll see that it's possible to colour in a disc while tracing the circle.
+能够在绘制中对圆进行着色。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(3,0){A}
+  % 圆心是O，通过A点
+  \tkzDrawCircle[color=blue](O,A)
+  % 直径是$[OA]$
+  \tkzDrawCircle[diameter,color=red,%
+                 line width=2pt,fill=red!40,%
+                 opacity=.5](O,A)
+  % 圆心是O，半径=exp(1) cm
+  \edef\rayon{\fpeval{0.25*exp(1)}}
+  \tkzDrawCircle[R,color=orange](O,\rayon cm)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Drawing circles}
+\subsection{\tkzcname{tkzDrawCircles}命令：绘制多个圆}
+
+% \begin{NewMacroBox}{tkzDrawCircles}{\oarg{local options}\parg{A,B C,D}}%
+% \tkzHandBomb{}Attention, the arguments are lists of two points. The circles that
+% can be drawn are the same as in the previous macro. An additional option
+% \tkzname{R} is available to give  a measure directly.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments           & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2 pt3,pt4,\dots}}{\parg{A,B C,D}} {List of two points}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                         \\
+% \midrule
+% \TOline{through}{through}{circle with two points defining a radius}
+% \TOline{diameter}{through}{circle with two points defining a diameter}
+% \TOline{R} {through}{circle characterized by a point and the measurement of a
+% radius}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% Of course, you have to add all the styles of \TIKZ\ for the tracings\dots
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawCircles}{\oarg{命令选项}\parg{A,B C,D}}%
+\tkzHandBomb{}注意：参数是空格分隔的构成圆的点对列表，点对中的两个点之间用逗号分隔。
+使用\tkzname{R}选项，则需要直接指定半径。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数           & 样例& 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2 pt3,pt4,\dots}}{\parg{A,B C,D}} {点集列表}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                         \\
+\midrule
+\TOline{through}{through}{两个点定义半径}
+\TOline{diameter}{through}{两个点定义直径}
+\TOline{R} {through}{通过指定半径}
+\bottomrule
+\end{tabular}
+
+\medskip
+当然，可以使用所有的有效\TIKZ{}样式。
+\end{NewMacroBox}
+
+% \subsubsection{Circles defined by a triangle}
+\subsubsection{通过三角形定义圆示例}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=1.0]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2,0){B}
+  \tkzDefPoint(3,2){C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawCircles(A,B B,C C,A)
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoints(A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Concentric circles}
+\subsubsection{同心圆示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=0.75]
+  \tkzDefPoint(0,0){A}
+  \tkzDrawCircles[R](A,1cm A,2cm A,3cm)
+  \tkzDrawPoint(A)
+  \tkzLabelPoints(A)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Exinscribed circles}
+\subsubsection{旁切圆示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=0.65]
+  \tkzDefPoints{0/0/A,4/0/B,1/2.5/C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDefCircle[ex](B,C,A)
+  \tkzGetPoint{J_c} \tkzGetSecondPoint{T_c}
+  \tkzGetLength{rJc}
+  \tkzDrawCircle[R](J_c,{\rJc pt})
+  \tkzDrawLines[add=0 and 1](C,A C,B)
+  \tkzDrawSegment(J_c,T_c)
+  \tkzMarkRightAngle(J_c,T_c,B)
+  \tkzDrawPoints(A,B,C,J_c,T_c)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Cardioid}
+\subsubsection{心形线示例}
+
+% Based on an idea by O. Reboux made with pst-eucl (Pstricks module) by D.
+% Rodriguez.
+基于O. Reboux用D. Rodriguez开发的pst-eucl宏包绘制的图形进行绘制。
+
+% Its name comes from the Greek \textit{kardia (heart)}, in reference to its
+% shape, and was given to it by Johan Castillon (Wikipedia).
+名称来源于希腊语中的\textit{kardia (heart)}，是根据其形状命名的。
+这个名称最先是由Johan Castillon给出的(Wikipedia)。
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(2,0){A}
+  \foreach \ang in {5,10,...,360}{%
+     \tkzDefPoint(\ang:2){M}
+     \tkzDrawCircle(M,A)
+   }
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Draw a semicircle}
+\subsection{\tkzcname{tkzDrawSemiCircle}命令：绘制半圆}
+
+% \begin{NewMacroBox}{tkzDrawSemiCircle}{\oarg{local options}\parg{A,B}}%
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments           & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{\parg{O,A} or\parg{A,B}} {radius or diameter}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                         \\
+% \midrule
+% \TOline{through}  {through}{circle characterized by two points defining a
+% radius}
+% \TOline{diameter} {through}{circle characterized by two points defining a
+% diameter}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawSemiCircle}{\oarg{命令选项}\parg{A,B}}%
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数           & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2}}{\parg{O,A} or\parg{A,B}} {半径或直径}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                         \\
+\midrule
+\TOline{through}  {through}{两个点定义半径}
+\TOline{diameter} {through}{两个点定义直径}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Use of \tkzcname{tkzDrawSemiCircle}}
+\subsubsection{示例}
+
+\begin{tkzexample}[latex=6.5cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(6,0){B}
+  \tkzDefSquare(A,B) \tkzGetPoints{C}{D}
+  \tkzDrawPolygon(B,C,D,A)
+  \tkzDefPoint(3,6){F}
+  \tkzDefTriangle[equilateral](C,D) \tkzGetPoint{I}
+  \tkzDefPointBy[projection=onto B--C](I) \tkzGetPoint{J}
+  \tkzInterLL(D,B)(I,J)  \tkzGetPoint{K}
+  \tkzDefPointBy[symmetry=center K](B) \tkzGetPoint{M}
+  \tkzDrawCircle(M,I)
+  \tkzCalcLength(M,I)  \tkzGetLength{dMI}
+  \tkzFillPolygon[color = red!50](A,B,C,D)
+  \tkzFillCircle[R,color = yellow](M,\dMI pt)
+  \tkzDrawSemiCircle[fill = blue!50!black](F,D)%
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Colouring a disc}
+\subsection{\tkzcname{tkzFillCircle}命令：给圆着色}
+
+% This was possible with the previous macro, but disk tracing was mandatory, this
+% is no longer the case.
+在绘制圆时，也可以实现着色，但该命令不绘制圆，仅对圆形区域进行着色。
+
+% \begin{NewMacroBox}{tkzFillCircle}{\oarg{local options}\parg{A,B}}%
+% \begin{tabular}{lll}%
+% options             & default & definition                         \\
+% \midrule
+% \TOline{radius}  {radius}{two points define a radius}
+% \TOline{R} {radius}{a point and the measurement of a radius }
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% You don't need to put \tkzname{radius} because that's the default option. Of
+% course, you have to add all the styles of \TIKZ\ for the plots.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzFillCircle}{\oarg{命令选项}\parg{A,B}}%
+\begin{tabular}{lll}%
+选项             & 默认值& 含义                         \\
+\midrule
+\TOline{radius}  {radius}{两个点定义半径}
+\TOline{R} {radius}{需要定义半径}
+\bottomrule
+\end{tabular}
+
+\medskip
+
+可以使用所有有效\TIKZ{}样式。
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Example from a sangaku}
+\subsubsection{sangaku圆示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmin=0,xmax = 6,ymin=0,ymax=6]
+  \tkzDefPoint(0,0){B}  \tkzDefPoint(6,0){C}%
+  \tkzDefSquare(B,C)    \tkzGetPoints{D}{A}
+  \tkzClipPolygon(B,C,D,A)
+  \tkzDefMidPoint(A,D)  \tkzGetPoint{F}
+  \tkzDefMidPoint(B,C)  \tkzGetPoint{E}
+  \tkzDefMidPoint(B,D)  \tkzGetPoint{Q}
+  \tkzDefTangent[from = B](F,A) \tkzGetPoints{G}{H}
+  \tkzInterLL(F,G)(C,D) \tkzGetPoint{J}
+  \tkzInterLL(A,J)(F,E) \tkzGetPoint{K}
+  \tkzDefPointBy[projection=onto B--A](K)
+  \tkzGetPoint{M}
+  \tkzFillPolygon[color = green](A,B,C,D)
+  \tkzFillCircle[color = orange](B,A)
+  \tkzFillCircle[color = blue!50!black](M,A)
+  \tkzFillCircle[color = purple](E,B)
+  \tkzFillCircle[color = yellow](K,Q)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Clipping a disc}
+\subsection{\tkzcname{tkzClipCircle}命令：用圆裁剪}
+
+% \begin{NewMacroBox}{tkzClipCircle}{\oarg{local options}\parg{A,B} or
+% \parg{A,r}}%
+% \begin{tabular}{lll}%
+% \toprule
+% arguments           & example & explication                         \\
+% \midrule
+% \TAline{\parg{A,B} or \parg{A,r}}{\parg{A,B} or \parg{A,2cm}} {AB radius or
+% diameter }
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% options             & default & definition                         \\
+% \midrule
+% \TOline{radius} {radius}{circle characterized by two points defining a radius}
+% \TOline{R} {radius}{circle characterized by a point and the measurement of a
+% radius }
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% It is not necessary to put \tkzname{radius} because that is the default option.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzClipCircle}{\oarg{命令选项}\parg{A,B}或\parg{A,r}}%
+\begin{tabular}{lll}%
+\toprule
+参数           & 样例& 说明                         \\
+\midrule
+\TAline{\parg{A,B} or \parg{A,r}}{\parg{A,B}或\parg{A,2cm}} {AB是半径或直径}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+选项             & 默认值 & 含义                         \\
+\midrule
+\TOline{radius} {radius}{两个点确定半径}
+\TOline{R} {radius}{指定半径}
+\bottomrule
+\end{tabular}
+
+\medskip
+\end{NewMacroBox}
+
+% \subsubsection{Example}
+\subsubsection{示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=5,ymax=5]
+  \tkzGrid
+  \tkzClip
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2,2){O}
+  \tkzDefPoint(4,4){B}
+  \tkzDefPoint(6,6){C}
+  \tkzDrawPoints(O,A,B,C)
+  \tkzLabelPoints(O,A,B,C)
+  \tkzDrawCircle(O,A)
+  \tkzClipCircle(O,A)
+  \tkzDrawLine(A,C)
+  \tkzDrawCircle[fill=red!20,opacity=.5](C,O)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Giving a label to a circle}
+\subsection{\tkzcname{tkzLabelCircle}命令：为圆添加标注}
+
+% \begin{NewMacroBox}{tkzLabelCircle}{\oarg{local options}\parg{A,B}\parg{angle}\marg{label}}%
+% \begin{tabular}{lll}%
+% options             & default & definition                         \\
+% \midrule
+% \TOline{radius}  {radius}{circle characterized by two points defining a radius}
+% \TOline{R} {radius}{circle characterized by a point and the measurement of a
+% radius }
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% You don't need to put \tkzname{radius} because that's the default option. We can
+% use the styles from \TIKZ. The label is created and therefore \enquote{passed} between
+% braces.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzLabelCircle}{\oarg{命令选项}\parg{A,B}\parg{角度}\marg{标注}}%
+\begin{tabular}{lll}%
+选项            & 默认值 & 含义                         \\
+\midrule
+\TOline{radius}  {radius}{两个点确定半径}
+\TOline{R} {radius}{指定半径}
+\bottomrule
+\end{tabular}
+
+\medskip
+可以使用所有有效\TIKZ{}样式，标注内容通过\enquote{传递}给大括号中的的参数指定。
+\end{NewMacroBox}
+
+% \subsubsection{Example}
+\subsubsection{标注示例}
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(2,0){N}
+  \tkzDefPointBy[rotation=center O angle 50](N)
+    \tkzGetPoint{M}
+  \tkzDefPointBy[rotation=center O angle -20](N)
+    \tkzGetPoint{P}
+  \tkzDefPointBy[rotation=center O angle 125](N)
+    \tkzGetPoint{P'}
+  \tkzLabelCircle[above=4pt](O,N)(120){$\mathcal{C}$}
+  \tkzDrawCircle(O,M)
+  \tkzFillCircle[color=blue!20,opacity=.4](O,M)
+  \tkzLabelCircle[R,draw,fill=orange, text width=2cm,
+     text centered](O,3 cm)(-60)%
+     {The circle\\ $\mathcal{C}$}
+  \tkzDrawPoints(M,P)
+  \tkzLabelPoints[right](M,P)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

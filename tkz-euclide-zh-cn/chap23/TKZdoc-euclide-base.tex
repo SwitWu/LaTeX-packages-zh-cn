@@ -1,0 +1,106 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Summary of tkz-base}
+\section{tkz-base小结}
+
+% \subsection{Utility of \tkzname{tkz-base}}
+\subsection{\tkzname{tkz-base}宏包工具}
+
+% First of all, you don't have to deal with \TIKZ\ the size of the bounding box.
+% Early versions of \tkzNamePack{tkz-euclide} did not control the size of the
+% bounding box, now the size of the bounding box is limited.
+首先，无需处理\TIKZ{}包围盒尺寸，早期的\tkzNamePack{tkz-euclide}宏包未对包围
+盒进行控制，现在提供了包围盒设置命令。
+
+% However, it is sometimes necessary to control the size of what will be
+% displayed.
+然而，有时也需要控制显示尺寸。
+% To do this, you need to have prepared the bounding box you are going to work
+% in, this is the role of \tkzNamePack{tkz-base} and its main macro
+% \tkzNameMacro{tkzInit}. It is recommended to leave the graphic unit equal to 1
+% cm. For some drawings, it is interesting to fix the extreme values
+% (xmin,xmax,ymin and ymax) and to "clip" the definition rectangle in order to
+% control the size of the figure as well as possible.
+为此，需要设置工作区域包围盒，这由\tkzNamePack{tkz-base}宏包实现，
+该宏包提供的主要命令是\tkzNameMacro{tkzInit}，并建议使用1cm为绘图单位。
+某些情况下，则需要指定画布大小(xmin、xmax、ymin和ymax)，
+并使用\enquote{裁剪}矩形尽可能控制图形尺寸。
+
+% The two macros in \tkzNamePack{tkz-base} that are useful for \tkzNamePack{tkz-euclide} are:
+\tkzNamePack{tkz-euclide}宏包使用的\tkzNamePack{tkz-base}宏包提供的两个命令是：
+
+\begin{itemize}
+   \item \tkzcname{tkzInit}
+   \item \tkzcname{tkzClip}
+\end{itemize}
+\vspace{20pt}
+
+% To this, I added macros directly linked to the bounding box. You can now view
+% it, backup it, restore it (see the documentation of \tkzNamePack{tkz-base}
+% section Bounding Box).
+为实现该功能，\tkzname{tkz-base}宏包提供了一个命令用于操作包围盒，
+以查看、备份、恢复包围盒(参见\tkzNamePack{tzk-base}宏包的Bounding Box小节)。
+
+% \subsection{\tkzcname{tkzInit} and \tkzcname{tkzShowBB}}
+\subsection{\tkzcname{tkzInit}命令和\tkzcname{tkzShowBB}命令}
+
+% The rectangle around the figure shows you the bounding box.
+用图形四周的矩形表示包围盒。
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmin=-1,xmax=3,ymin=-1, ymax=3]
+  \tkzGrid
+  \tkzShowBB[red,line width=2pt]
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{\tkzcname{tkzClip}}
+\subsection{\tkzcname{tkzClip}命令}
+
+% The role of this macro is to \enquote{clip} the initial rectangle so that only the paths
+% contained in this rectangle are drawn.
+通过对初始绘图矩形的\enquote{裁剪}，仅显示指定矩形范围的内容。
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=4, ymax=3]
+  \tkzAxeXY
+  \tkzGrid
+  \tkzClip
+  \draw[red] (-1,-1)--(5,2);
+\end{tikzpicture}
+\end{tkzexample}
+
+% It is possible to add a bit of space
+可以通过命令选项在裁剪区域四周添加指定的空间。
+
+\vspace*{-10pt}
+
+\begin{tkzltxexample}[]
+  \tkzClip[space=1]
+\end{tkzltxexample}
+
+% \subsection{\tkzcname{tkzClip} and the option \tkzname{space}}
+\subsubsection{\tkzcname{tkzClip}命令和\tkzname{space}选项示例}
+
+% This option allows you to add some space around the \enquote{clipped} rectangle.
+该选项可以裁剪区域四周添加指定的空间。
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmax=4, ymax=3]
+  \tkzAxeXY
+  \tkzGrid
+  \tkzClip[space=1]
+  \draw[red] (-1,-1)--(5,2);
+\end{tikzpicture}
+\end{tkzexample}
+
+% The dimensions of the \enquote{clipped} rectangle are \tkzname{xmin-1},
+% \tkzname{ymin-1}, \tkzname{xmax+1} and \tkzname{ymax+1}.
+使用\tkzname{space}选项后，\enquote{裁剪}矩形区域大小为：
+\tkzname{xmin-1}、\tkzname{ymin-1}、\tkzname{xmax+1}和\tkzname{ymax+1}。
+
+\end{document}
+\endinput

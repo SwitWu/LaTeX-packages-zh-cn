@@ -1,0 +1,981 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{The straight lines}
+\section{直线}
+
+% It is of course essential to draw straight lines, but before this can be done,
+% it is necessary to be able to define certain particular lines such as mediators,
+% bisectors, parallels or even perpendiculars. The principle is to determine two
+% points on the straight line.
+在绘制直线之前，需要确定直线上的两个点，
+也可以通过垂直中分线、角平分线、平行线或垂线等方式确定特定直线。
+
+% \subsection{Definition of straight lines}
+\subsection{\tkzcname{tkzDefLine}命令：定义直线}
+
+% \begin{NewMacroBox}{tkzDefLine}{\oarg{local options}\parg{pt1,pt2} or \parg{pt1,pt2,pt3}}%
+% The argument is a list of two or three points. Depending on the case, the macro
+% defines one or two points necessary to obtain the line sought. Either the macro
+% \tkzcname{tkzGetPoint} or the macro \tkzcname{tkzGetPoints} must be used.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments           & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2}}{\parg{A,B}} {[mediator](A,B)}
+% \TAline{\parg{pt1,pt2,pt3}}{\parg{A,B,C}} {[bisector](B,A,C)}
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                         \\
+% \TOline{mediator}{}{two points are defined}
+% \TOline{perpendicular=through\dots}{mediator}{perpendicular to a straight line
+% passing through a point}
+% \TOline{orthogonal=through\dots}{mediator}{see above }
+% \TOline{parallel=through\dots}{mediator}{parallel to a straight line passing
+% through a point}
+% \TOline{bisector}{mediator}{bisector of an angle defined by three points}
+% \TOline{bisector out}{mediator}{Exterior Angle Bisector}
+% \TOline{K}{1}{coefficient for the perpendicular line}
+% \TOline{normed}{false}{normalizes the created segment}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefLine}{\oarg{命令选项}\parg{pt1,pt2} or \parg{pt1,pt2,pt3}}%
+参数是2个或3个点的列表，根据具体问题，该命令得到1个或2个点，
+可以使用\tkzcname{tkzGetPoint}或\tkzcname{tkzGetPoints}命令保存并命名定义的点。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数           & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2}}{\parg{A,B}} {[mediator](A,B)}
+\TAline{\parg{pt1,pt2,pt3}}{\parg{A,B,C}} {[bisector](B,A,C)}
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                         \\
+\TOline{mediator}{}{定义2个点连线的中垂线}
+\TOline{perpendicular=through\dots}{mediator}{通过指定点的垂线}
+\TOline{orthogonal=through\dots}{mediator}{同上}
+\TOline{parallel=through\dots}{mediator}{通过指定点的平行线}
+\TOline{bisector}{mediator}{内角角平分线}
+\TOline{bisector out}{mediator}{外角角平分线}
+\TOline{K}{1}{垂线的比例系数}
+\TOline{normed}{false}{线段归一化}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Example with \tkzname{mediator}}
+\subsubsection{\tkzname{mediator}选项示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[rotate=25]
+  \tkzDefPoints{-2/0/A,1/2/B}
+  \tkzDefLine[mediator](A,B)          \tkzGetPoints{C}{D}
+  \tkzDefPointWith[linear,K=.75](C,D) \tkzGetPoint{D}
+  \tkzDefMidPoint(A,B)                \tkzGetPoint{I}
+  \tkzFillPolygon[color=orange!30](A,C,B,D)
+  \tkzDrawSegments(A,B C,D)
+  \tkzMarkRightAngle(B,I,C)
+  \tkzDrawSegments(D,B D,A)
+  \tkzDrawSegments(C,B C,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Example with \tkzname{bisector} and \tkzname{normed}}
+\subsubsection{\tkzname{bisector}和\tkzname{normed}选项示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[rotate=25,scale=.65]
+  \tkzDefPoints{0/0/C, 2/-3/A, 4/0/B}
+  \tkzDefLine[bisector,normed](B,A,C)
+  \tkzGetPoint{a}
+  \tkzDrawLines[add= 0 and .5](A,B A,C)
+  \tkzShowLine[bisector,gap=4,size=2,color=red](B,A,C)
+  \tkzDrawLines[blue!50,dashed,add= 0 and 3](A,a)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example with \tkzname{orthogonal} and \tkzname{parallel}}
+\subsubsection{\tkzname{orthogonal}和\tkzname{parallel}选项示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tkzDefPoints{-1.5/-0.25/A,1/-0.75/B,-0.7/1/C}
+  \tkzDrawLine(A,B)
+  \tkzLabelLine[pos=1.25,below left](A,B){$(d_1)$}
+  \tkzDrawPoints(A,B,C)
+  \tkzDefLine[orthogonal=through C](B,A) \tkzGetPoint{c}
+  \tkzDrawLine(C,c)
+  \tkzLabelLine[pos=1.25,left](C,c){$(\delta)$}
+  \tkzInterLL(A,B)(C,c) \tkzGetPoint{I}
+  \tkzMarkRightAngle(C,I,B)
+  \tkzDefLine[parallel=through C](A,B) \tkzGetPoint{c'}
+  \tkzDrawLine(C,c')
+  \tkzLabelLine[pos=1.25,below left](C,c'){$(d_2)$}
+  \tkzMarkRightAngle(I,C,c')
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{An envelope}
+\subsubsection{循环画图}
+
+% Based on a figure from O. Reboux with pst-eucl by D Rodriguez.
+基于D Rodriguez用pst-eucl宏包绘制的O. Reboux设计的图形绘制。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzInit[xmin=-6,ymin=-4,xmax=6,ymax=6] % necessary
+  \tkzClip
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(132:4){A}
+  \tkzDefPoint(5,0){B}
+  \foreach \ang in {5,10,...,360}{%
+    \tkzDefPoint(\ang:5){M}
+    \tkzDefLine[mediator](A,M)
+    \tkzDrawLine[color=magenta,add= 3 and
+      3](tkzFirstPointResult,tkzSecondPointResult)}
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{A parabola}
+\subsubsection{抛物线}
+
+% Based on a figure from O. Reboux with pst-eucl by D Rodriguez.
+% It is not necessary to name the two points that define the mediator.
+基于D Rodriguez用pst-eucl宏包绘制的O. Reboux设计的图形绘制。
+
+本例中，对定义的垂直平分线的两个端点进行命名是有必要的。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzInit[xmin=-6,ymin=-4,xmax=6,ymax=6]
+  \tkzClip
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(132:5){A}
+  \tkzDefPoint(4,0){B}
+  \foreach \ang in {5,10,...,360}{%
+    \tkzDefPoint(\ang:4){M}
+    \tkzDefLine[mediator](A,M)
+    \tkzDrawLine[color=magenta,add= 3 and
+      3](tkzFirstPointResult,tkzSecondPointResult)}
+\end{tikzpicture}
+\end{tkzexample}
+
+%<---------------------------------------------------------------------------->
+% \subsection{Specific lines: Tangent to a circle}
+\subsection{\tkzcname{tkzDefTangent}命令：定义圆的切线}
+
+% Two constructions are proposed. The first one is the construction of a tangent
+% to a circle at a given point of this circle and the second one is the
+% construction of a tangent to a circle passing through a given point outside a
+% disc.
+圆的切线可以有两种，一是在圆上某点处的切线，另一种是过圆外某点的圆的切线。
+
+% \begin{NewMacroBox}{tkzDefTangent}{\oarg{local options}\parg{pt1,pt2} or \parg{pt1,dim}}%
+% The parameter in brackets is the center of the circle or the center of the
+% circle and a point on the circle or the center and the radius. This macro
+% replaces the old one: \tkzcname{tkzTangent}.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% arguments           & example & explication                         \\
+% \midrule
+% \TAline{\parg{pt1,pt2 or \parg{pt1,dim}} }{\parg{A,B} or \parg{A,2cm}} {$[AB]$
+% is radius $A$ is the center}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% options             & default & definition                         \\
+% \midrule
+% \TOline{at=pt}{at}{tangent to a point on the circle}
+% \TOline{from=pt} {at}{tangent to a circle passing through a point}
+% \TOline{from with R=pt} {at}{idem, but the circle is defined by center = radius}
+% \bottomrule
+% \end{tabular}
+%
+% The tangent is not drawn. A second point of the tangent is given by
+% \tkzname{tkzPointResult}.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefTangent}{\oarg{命令选项}\parg{pt1,pt2} or \parg{pt1,dim}}%
+圆括号中的参数是圆心和圆上的一个点或是圆心和半径，该命令取代了旧的\tkzcname{tkzTangent}命令。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+参数           & 样例 & 说明                         \\
+\midrule
+\TAline{\parg{pt1,pt2 or \parg{pt1,dim}} }{\parg{A,B} or \parg{A,2cm}} {$[AB]$
+是半径，$A$是圆心}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+选项             & 默认值 & 含义                         \\
+\midrule
+\TOline{at=pt}{at}{圆上指定点的切线}
+\TOline{from=pt} {at}{过圆外指定点的圆的切线}
+\TOline{from with R=pt} {at}{同上，但圆需要通过圆心和半径参数指定}
+\bottomrule
+\end{tabular}
+
+该命令仅定义切线，并不绘制切线。切线的第2个点可通过
+\tkzcname{tkzPointResult}命令得到。
+\end{NewMacroBox}
+
+% \subsubsection{Example of a tangent passing through a point on the circle }
+\subsubsection{圆上指定点的切线示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.55]
+  \tkzDefPoint(0,0){O} \tkzDefPoint(6,6){E}
+  \tkzDefRandPointOn[circle=center O radius 3cm]
+  \tkzGetPoint{A} \tkzDrawSegment(O,A)
+  \tkzDrawCircle(O,A)
+  % 重置包围盒(删除圆外的空白)
+  \pgfresetboundingbox
+  \tkzDefTangent[at=A](O)
+  \tkzGetPoint{h}
+  \tkzDrawLine[add = 4 and 3](A,h)
+  \tkzMarkRightAngle[fill=red!30](O,A,h)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Example of tangents passing through an external point}
+\subsubsection{过圆外指定点的切线示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.8]
+  \tkzDefPoint(3,3){c}
+  \tkzDefPoint(6,3){a0}
+  \tkzRadius=1 cm
+  \tkzDrawCircle[R](c,\tkzRadius)
+  \foreach \an in {0,10,...,350}{
+     \tkzDefPointBy[rotation=center c angle \an](a0)
+     \tkzGetPoint{a}
+     \tkzDefTangent[from with R = a](c,\tkzRadius)
+     \tkzGetPoints{e}{f}
+     \tkzDrawLines[color=magenta](a,f a,e)
+      \tkzDrawSegments(c,e c,f)
+      }%
+\end{tikzpicture}
+\end{tkzexample}
+
+\subsubsection{Andrew Mertz示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=0.5]
+  \tkzDefPoint(100:8){A}
+  \tkzDefPoint(50:8){B}
+  \tkzDefPoint(0,0){C}
+  \tkzDefPoint(0,4){R}
+  \tkzDrawCircle(C,R)
+  \tkzDefTangent[from = A](C,R)
+  \tkzGetPoints{D}{E}
+  \tkzDefTangent[from = B](C,R)
+  \tkzGetPoints{F}{G}
+  \tkzDrawSector[fill=blue!80!black,opacity=0.5](A,D)(E)
+  \tkzFillSector[color=red!80!black,opacity=0.5](B,F)(G)
+  \tkzInterCC(A,D)(B,F) \tkzGetSecondPoint{I}
+  \tkzDrawPoint[color=black](I)
+\end{tikzpicture}
+\end{tkzexample}
+\url{http://www.texample.net/tikz/examples/}
+
+% \subsubsection{Drawing a tangent option \tkzimp{from with R} and \tkzimp{at}}
+\subsubsection{\tkzimp{from with R}和\tkzimp{at}选项示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(0,0){O}
+  \tkzDefRandPointOn[circle=center O radius 4cm]
+  \tkzGetPoint{A}
+  \tkzDefTangent[at=A](O)
+  \tkzGetPoint{h}
+  \tkzDrawSegments(O,A)
+  \tkzDrawCircle(O,A)
+  \tkzDrawLine[add = 1 and 1](A,h)
+  \tkzMarkRightAngle[fill=red!30](O,A,h)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Drawing a tangent option \tkzimp{from}}
+\subsubsection{\tkzimp{from}选项示例}
+
+\begin{tkzexample}[latex=6.5cm,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzDefPoint(0,0){B}
+  \tkzDefPoint(0,8){A}
+  \tkzDefSquare(A,B)
+  \tkzGetPoints{C}{D}
+  \tkzDrawSquare(A,B)
+  \tkzClipPolygon(A,B,C,D)
+  \tkzDefPoint(4,8){F}
+  \tkzDefPoint(4,0){E}
+  \tkzDefPoint(4,4){Q}
+  \tkzFillPolygon[color = green](A,B,C,D)
+  \tkzDrawCircle[fill = orange](B,A)
+  \tkzDrawCircle[fill = purple](E,B)
+  \tkzDefTangent[from=B](F,A)
+  \tkzInterLL(F,tkzFirstPointResult)(C,D)
+  \tkzInterLL(A,tkzPointResult)(F,E)
+  \tkzDrawCircle[fill = yellow](tkzPointResult,Q)
+  \tkzDefPointBy[projection= onto B--A](tkzPointResult)
+  \tkzDrawCircle[fill = blue!50!black](tkzPointResult,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+
+% \section{Drawing, naming the lines}
+\section{直线绘制和命名}
+
+% The following macros are simply used to draw, name lines.
+下列命令用于绘制和命名直线
+
+% \subsection{Draw a straight line}
+\subsection{\tkzcname{tkzDrawLine}命令：绘制直线}
+
+% To draw a normal straight line, just give a couple of points. You can  use the
+% \tkzname{add} option to extend the line (This option is due to \tkzimp{Mark
+% Wibrow}, see the code below).
+只需要给出一条直线上的一对点，就可以绘制一条直线。
+在绘制直线时，可以使用\tkzname{add}参数设置端点处向外扩展的距离
+(该选项由\tkzimp{Mark Wibrow}设计，具体代码如下)。
+
+\begin{tkzltxexample}[small]
+  \tikzset{%
+    add/.style args={#1 and #2}{
+        to path={%
+ ($(\tikztostart)!-#1!(\tikztotarget)$)--($(\tikztotarget)!-#2!(\tikztostart)$)%
+  \tikztonodes}}}
+\end{tkzltxexample}
+
+% In the special case of lines defined in a triangle, the number of arguments is a
+% list of three points (the vertices of the triangle). The second point is where
+% the line will come from. The first and last points determine the target segment.
+% The old method has therefore been slightly modified. So for
+% \tkzcname{tkzDrawMedian}, instead of $(A,B)(C)$ you have to write $(B,C,A)$
+% where $C$ is the point that will be linked to the middle of the segment $[A,B]$.
+如果直线由三角形定义，则参数是3个点的列表(三角形的3个顶点)。其中，第2个点是直线的起点，
+第1个和第2个点是直线终点。因此，旧命令\tkzcname{tkzDrawMedian}中的$(A,B)(C)$应该改为$(B,C,A)$。
+
+% \begin{NewMacroBox}{tkzDrawLine}{\oarg{local options}\parg{pt1,pt2} or \parg{pt1,pt2,pt3}}%
+% The arguments are a list of two points or three points.
+%
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                         \\
+% \midrule
+% \TOline{median}{none}{[median](A,B,C) median from $B$}
+% \TOline{altitude}{none}{[altitude](C,A,B) altitude from $A$}
+% \TOline{bisector}{none}{[bisector](B,C,A) bisector from $C$}
+% \TOline{none}{none}{draw the straight line $(AB)$}
+% \TOline{add= nb1 and nb2}{.2 and .2}{extends the segment}
+%  \bottomrule
+% \end{tabular}
+%
+% \tkzname{add} defines the length of the line passing through the points pt1 and
+% pt2. Both numbers are percentages. The styles of \TIKZ\ are accessible for
+% plots.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawLine}{\oarg{命令选项}\parg{pt1,pt2} or \parg{pt1,pt2,pt3}}%
+参数是2个或3个点。
+
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                         \\
+\midrule
+\TOline{median}{无}{[median](A,B,C) 基点$B$处的中线}
+\TOline{altitude}{无}{[altitude](C,A,B)顶点$A$的高}
+\TOline{bisector}{无}{[bisector](B,C,A)顶点$C$的角平分线}
+\TOline{none}{无}{绘制直线$(AB)$}
+\TOline{add= nb1 and nb2}{.2 and .2}{延伸线段}
+ \bottomrule
+\end{tabular}
+
+\tkzname{add}定义了通过点pt1和pt2的延伸长度，两个数字均为百分比，
+也可在绘图中使用所有有效\TIKZ{}样式。
+\end{NewMacroBox}
+
+% \subsubsection{Examples  with \tkzname{add}}
+\subsubsection{\tkzname{add}选项示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmin=-2,xmax=3,ymin=-2.25,ymax=2.25]
+  \tkzClip[space=.25]
+  \tkzDefPoint(0,0){A}  \tkzDefPoint(2,0.5){B}
+  \tkzDefPoint(0,-1){C} \tkzDefPoint(2,-0.5){D}
+  \tkzDefPoint(0,1){E}  \tkzDefPoint(2,1.5){F}
+  \tkzDefPoint(0,-2){G} \tkzDefPoint(2,-1.5){H}
+  \tkzDrawLine(A,B)
+  \tkzDrawLine[add = 0 and .5](C,D)
+  \tkzDrawLine[add = 1 and 0](E,F)
+  \tkzDrawLine[add = 0 and 0](G,H)
+  \tkzDrawPoints(A,B,C,D,E,F,G,H)
+  \tkzLabelPoints(A,B,C,D,E,F,G,H)
+\end{tikzpicture}
+\end{tkzexample}
+
+% It is possible to draw several lines, but with the same options.
+也可以使用相同的选项绘制多条线。
+% \begin{NewMacroBox}{tkzDrawLines}{\oarg{local options}\parg{pt1,pt2 pt3,pt4,\dots}}%
+% Arguments are a list of pairs of  points separated by spaces.  The styles of
+% \TIKZ\ are available for the draws.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawLines}{\oarg{命令选项}\parg{pt1,pt2 pt3,pt4,\dots}}%
+参数是用空格分隔的直线点对，点对之间用逗号分隔。
+也可在绘制中使用所有有效\TIKZ{}样式。
+\end{NewMacroBox}
+
+% \subsubsection{Example with \tkzcname{tkzDrawLines}}
+\subsubsection{\tkzcname{tkzDrawLines}命令示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2,0){B}
+  \tkzDefPoint(1,2){C}
+  \tkzDefPoint(3,2){D}
+  \tkzDrawLines(A,B C,D A,C B,D)
+  \tkzLabelPoints(A,B,C,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example with the option \tkzname{add}}
+\subsubsection{\tkzname{add}选项示例}
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(3,1){I}
+  \tkzDefPoint(1,4){J}
+  \tkzDefLine[bisector](I,O,J)
+    \tkzGetPoint{i}
+  \tkzDefLine[bisector out](I,O,J)
+    \tkzGetPoint{j}
+  \tkzDrawLines[add = 1 and .5,color=red](O,I O,J)
+  \tkzDrawLines[add = 1 and .5,color=blue](O,i O,j)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Medians in a triangle}
+\subsubsection{三角形的中线示例}
+
+\begin{tkzexample}[latex=7 cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDefPoint(1,3){C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzSetUpLine[color=blue]
+  \tkzDrawLine[median](B,C,A)
+  \tkzDrawLine[median](C,A,B)
+  \tkzDrawLine[median](A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Altitudes in a triangle}
+\subsubsection{三角形的高示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDefPoint(1,3){C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzSetUpLine[color=magenta]
+  \tkzDrawLine[altitude](B,C,A)
+  \tkzDrawLine[altitude](C,A,B)
+  \tkzDrawLine[altitude](A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Bisectors in a triangle}
+\subsubsection{三角形的角平分线示例}
+
+% You have to give the angles in a straight line.
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDefPoint(1,3){C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzSetUpLine[color=purple]
+  \tkzDrawLine[bisector](B,C,A)
+  \tkzDrawLine[bisector](C,A,B)
+  \tkzDrawLine[bisector](A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Add labels on a straight line \tkzcname{tkzLabelLine}}%
+\subsection{\tkzcname{tkzLabelLine}命令：添加直线标注}%
+
+% \begin{NewMacroBox}{tkzLabelLine}{\oarg{local options}\parg{pt1,pt2}\marg{label}}
+% \begin{tabular}{lll}%
+% arguments &  default & definition   \\
+% \midrule
+% \TAline{label}{}{\tkzcname{tkzLabelLine(A,B)}\{\$\tkzcname{Delta}\$\}}
+% \bottomrule
+% \end{tabular}
+%
+% \begin{tabular}{lll}%
+% options             & default & definition   \\
+% \midrule
+% \TOline{pos}{.5}{\tkzname{pos} is an option for \TIKZ, but essential in this
+% case\dots}
+% \end{tabular}
+%
+% As an option, and in addition to the \tkzname{pos}, you can use all styles of
+% \TIKZ, especially the placement with \tkzname{above}, \tkzname{right}, \dots
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzLabelLine}{\oarg{命令选项}\parg{pt1,pt2}\marg{label}}
+\begin{tabular}{lll}%
+参数 &  默认值 & 含义   \\
+\midrule
+\TAline{label}{}{\tkzcname{tkzLabelLine(A,B)}\{\$\tkzcname{Delta}\$\}}
+\bottomrule
+\end{tabular}
+
+\begin{tabular}{lll}%
+选项             & 默认值 & 含义   \\
+\midrule
+\TOline{pos}{.5}{\tkzname{pos}是\TIKZ{}的一个选项}
+\end{tabular}
+
+可以使用\tkzname{pos}外，
+所有有效\TIKZ{}样式，
+特别是用于设置标注位置的\tkzname{above}、\tkzname{right}、\dots{}等样式选项。
+\end{NewMacroBox}
+
+% \subsubsection{Example with \tkzcname{tkzLabelLine}}
+\subsubsection{\tkzcname{tkzLabelLine}命令示例}
+
+% An important option is \tkzname{pos}, it's the one that allows you to place the
+% label along the right. The value of \tkzname{pos} can be greater than 1 or
+% negative.
+\tkzname{pos}是一个重要的选项，该选项的取值可以是大于1，也可以是负值。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tkzDefPoints{0/0/A,3/0/B,1/1/C}
+  \tkzDefLine[perpendicular=through C,K=-1](A,B)
+  \tkzGetPoint{c}
+  \tkzDrawLines(A,B C,c)
+  \tkzLabelLine[pos=1.25,blue,right](C,c){$(\delta)$}
+  \tkzLabelLine[pos=-0.25,red,left](C,c){again $(\delta)$}
+\end{tikzpicture}
+\end{tkzexample}
+
+% \section{Draw, Mark segments}
+\section{绘制和标记线段}
+
+% There is, of course, a macro to simply draw a segment (it would be possible, as
+% for a half line, to create a style with \tkzcname{add}).
+
+% \subsection{Draw a segment \tkzcname{tkzDrawSegment}}
+\subsection{\tkzcname{tkzDrawSegment}命令：绘制线段}
+% \begin{NewMacroBox}{tkzDrawSegment}{\oarg{local options}\parg{pt1,pt2}}%
+% The arguments are a list of two points. The styles of \TIKZ\ are available for
+% the drawings.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% argument    & example & definition    \\
+% \midrule
+% \TAline{(pt1,pt2)}{(A,B)}{draw the segment $[A,B]$}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% options    & example & definition    \\
+% \midrule
+% \TOline{\TIKZ\ options}{}{all \TIKZ\ options are valid.}
+% \TOline{add}{0 and 0}{add = $kl$ and $kr$, \dots}
+% \TOline{\dots}{\dots}{allows the segment to be extended to the left and right. }
+% \TOline{dim}{no default}{dim = \{label,dim,option\}, \dots}
+% \TOline{\dots}{\dots}{allows you to add dimensions to a figure.}
+% \bottomrule
+% \end{tabular}
+%
+% This is of course equivalent to \tkzcname{draw (A)--(B);}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawSegment}{\oarg{命令选项}\parg{pt1,pt2}}%
+参数是用逗号分隔的线段端点列表，可以使用所有有效\TIKZ{}样式。
+
+\medskip
+\begin{tabular}{lll}%
+参数    & 样例 & 含义    \\
+\midrule
+\TAline{(pt1,pt2)}{(A,B)}{绘制线段$[A,B]$}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+选项    & 样例 & 含义    \\
+\midrule
+\TOline{\TIKZ{}选项}{}{所有有效\TIKZ{}选项}
+\TOline{add}{0 and 0}{add = $kl$ and $kr$, \dots}
+\TOline{\dots}{\dots}{允许线段向左右扩展}
+\TOline{dim}{无}{dim = \{label,dim,option\}, \dots}
+\TOline{\dots}{\dots}{允许为图形添加尺寸}
+\bottomrule
+\end{tabular}
+
+该命令等效于\tkzcname{draw (A)--(B);命令}
+\end{NewMacroBox}
+
+% \subsubsection{Example with point references}
+\subsubsection{简单示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=1.5]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2,1){B}
+  \tkzDrawSegment[color=red,thin](A,B)
+  \tkzDrawPoints(A,B)
+  \tkzLabelPoints(A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+\subsubsection{使用\tkzname{add}选项延伸线段}
+
+\begin{tkzexample}[latex=7cm,small]
+  \begin{tikzpicture}
+  \tkzDefPoints{0/0/A,6/0/B,0.8/4/C}
+  \tkzDefTriangleCenter[euler](A,B,C)
+  \tkzGetPoint{E}
+  \tkzDrawCircle[euler,red](A,B,C)
+  \tkzDrawLines[add=.5 and .5](A,B A,C B,C)
+  \tkzDrawPoints(A,B,C,E)
+  \tkzLabelPoints(A,B,C,E)
+  \end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example of adding dimensions with option \tkzname{dim}}
+\subsubsection{使用\tkzname{dim}选项标注尺寸}
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=4]
+  \pgfkeys{/pgf/number format/.cd,fixed,precision=2}
+  % 定义已知点
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(3,0){B}
+  \tkzDefPoint(1,1){C}
+  % 绘制三角形和点
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawPoints(A,B,C)
+  % 计算长度
+  \tkzCalcLength[cm](A,B)\tkzGetLength{ABl}
+  \tkzCalcLength[cm](B,C)\tkzGetLength{BCl}
+  \tkzCalcLength[cm](A,C)\tkzGetLength{ACl}
+  % 添加尺寸标注
+  \tkzDrawSegment[dim={\pgfmathprintnumber\BCl,6pt,transform shape}](C,B)
+  \tkzDrawSegment[dim={\pgfmathprintnumber\ACl,6pt,transform shape}](A,C)
+  \tkzDrawSegment[dim={\pgfmathprintnumber\ABl,-6pt,transform shape}](A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+
+% \subsection{Drawing segments \tkzcname{tkzDrawSegments}}
+\subsection{\tkzcname{tkzDrawSegments}命令：绘制多条线段}
+
+% If the options are the same we can plot several segments with the same macro.
+该命令用于绘制选项相同的多条线段
+
+% \begin{NewMacroBox}{tkzDrawSegments}{\oarg{local options}\parg{pt1,pt2 pt3,pt4,\dots}}%
+% The arguments are a two-point couple list. The styles of \TIKZ\ are available
+% for the plots.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDrawSegments}{\oarg{命令选项}\parg{pt1,pt2 pt3,pt4,\dots}}%
+参数是一组用空格分隔的线段的端点列表，两个端点之间用逗号分隔。
+在绘制中可以使用所有有效\TIKZ{}样式。
+\end{NewMacroBox}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tkzInit[xmin=-1,xmax=3,ymin=-1,ymax=2]
+  \tkzClip[space=1]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(2,1){B}
+  \tkzDefPoint(3,0){C}
+  \tkzDrawSegments(A,B B,C)
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoints(A,C)
+  \tkzLabelPoints[above](B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Place an arrow on segment}
+\subsubsection{为线段添加箭头}
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tikzset{
+    arr/.style={postaction=decorate,
+    decoration={markings,
+    mark=at position .5 with {\arrow[thick]{#1}}
+      }}}
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4,-4){B}
+  \tkzDrawSegments[arr=stealth](A,B)
+  \tkzDrawPoints(A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Mark a segment \tkzcname{tkzMarkSegment}}
+\subsection{\tkzcname{tkzMarkSegment}命令：标记线段}
+\hypertarget{tms}{}
+
+%  \begin{NewMacroBox}{tkzMarkSegment}{\oarg{local options}\parg{pt1,pt2}}%
+% The macro allows you to place a mark on a segment.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition   \\
+% \midrule
+% \TOline{pos}{.5}{position of the mark}
+% \TOline{color}{black}{color of the mark}
+% \TOline{mark}{none}{choice of the mark}
+% \TOline{size}{4pt}{size of the mark}
+% \bottomrule
+% \end{tabular}
+%
+% Possible marks are those provided by \TIKZ, but other marks have been created
+% based on an idea by Yves Combe.
+% \end{NewMacroBox}
+ \begin{NewMacroBox}{tkzMarkSegment}{\oarg{命令选项}\parg{pt1,pt2}}%
+该命令用于为线段添加标记。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义   \\
+\midrule
+\TOline{pos}{.5}{标记位置}
+\TOline{color}{black}{标记颜色}
+\TOline{mark}{none}{标记类型}
+\TOline{size}{4pt}{标记尺寸}
+\bottomrule
+\end{tabular}
+
+标记样式由\TIKZ{}提供，但也可使用基于Yves Combe方法的自定义标记样式。
+\end{NewMacroBox}
+
+% \subsubsection{Several marks }
+\subsubsection{几种标记示例}
+\begin{tkzexample}[latex=5cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(2,1){A}
+  \tkzDefPoint(6,4){B}
+  \tkzDrawSegment(A,B)
+  \tkzMarkSegment[color=brown,size=2pt,pos=0.4, mark=z](A,B)
+  \tkzMarkSegment[color=blue,pos=0.2, mark=oo](A,B)
+  \tkzMarkSegment[pos=0.8,mark=s,color=red](A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Use of \tkzname{mark}}
+\subsubsection{\tkzname{mark}选项示例}
+
+\begin{tkzexample}[latex=5cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(2,1){A}
+  \tkzDefPoint(6,4){B}
+  \tkzDrawSegment(A,B)
+  \tkzMarkSegment[color=gray,pos=0.2,mark=s|](A,B)
+  \tkzMarkSegment[color=gray,pos=0.4,mark=s||](A,B)
+  \tkzMarkSegment[color=brown,pos=0.6,mark=||](A,B)
+  \tkzMarkSegment[color=red,pos=0.8,mark=|||](A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+
+% \subsection{Marking segments \tkzcname{tkzMarkSegments}}
+\subsection{\tkzcname{tkzMarkSegments}命令：标记多条线段}
+\hypertarget{tmss}{}
+
+% \begin{NewMacroBox}{tkzMarkSegments}{\oarg{local options}\parg{pt1,pt2 pt3,pt4,\dots}}%
+% Arguments are a list of pairs of points separated by spaces. The styles of
+% \TIKZ\ are available for plots.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzMarkSegments}{\oarg{命令选项}\parg{pt1,pt2 pt3,pt4,\dots}}%
+参数是用空格分隔的线段端点列表，每对端点用逗号分隔。可以使用所有有效\TIKZ{}样式。
+\end{NewMacroBox}
+
+% \subsubsection{Marks for an isosceles triangle}
+\subsubsection{标记等腰三角形示例}
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoints{0/0/O,2/2/A,4/0/B,6/2/C}
+  \tkzDrawSegments(O,A A,B)
+  \tkzDrawPoints(O,A,B)
+  \tkzDrawLine(O,B)
+  \tkzMarkSegments[mark=||,size=6pt](O,A A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsection{Another marking}
+\subsubsection{其它标记示例}
+
+\begin{tkzexample}[latex=5cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(0,0){A}\tkzDefPoint(3,2){B}
+  \tkzDefPoint(4,0){C}\tkzDefPoint(2.5,1){P}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDefEquilateral(A,P) \tkzGetPoint{P'}
+  \tkzDefPointsBy[rotation=center A angle 60](P,B){P',C'}
+  \tkzDrawPolygon(A,P,P')
+  \tkzDrawPolySeg(P',C',A,P,B)
+  \tkzDrawSegment(C,P)
+  \tkzDrawPoints(A,B,C,C',P,P')
+  \tkzMarkSegments[mark=s|,size=6pt,
+   color=blue](A,P P,P' P',A)
+  \tkzMarkSegments[mark=||,color=orange](B,P P',C')
+  \tkzLabelPoints(A,C) \tkzLabelPoints[below](P)
+  \tkzLabelPoints[above right](P',C',B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Another marking}
+\subsection{\tkzcname{tkzLabelSegment}命令：标注线段}
+
+\hypertarget{tls}{}
+% \begin{NewMacroBox}{tkzLabelSegment}{\oarg{local
+% options}\parg{pt1,pt2}\marg{label}}
+% This macro allows you to place a label along a segment or a line. The options
+% are those of \TIKZ\ for example \tkzname{pos}.
+%
+% \medskip
+% \begin{tabular}{lll}%%
+% argument    & example & definition    \\
+% \midrule
+% \TAline{label}{\tkzcname{tkzLabelSegment(A,B)\{$5$\}}}{label text}
+% \TAline{(pt1,pt2)}{(A,B)}{label along $[AB]$}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+%
+% \begin{tabular}{lll}%
+% options  & default & definition    \\
+% \midrule
+% \TOline{pos}{.5}{label's position}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzLabelSegment}{\oarg{命令选项}\parg{pt1,pt2}\marg{label}}
+用于标注一个线段或直线，可使用类似\tkzname{pos}的所有有效\TIKZ{}样式。
+
+\medskip
+\begin{tabular}{lll}%%
+参数   & 样例 & 含义    \\
+\midrule
+\TAline{label}{\tkzcname{tkzLabelSegment(A,B)\{$5$\}}}{标注文本}
+\TAline{(pt1,pt2)}{(A,B)}{被标注线段$[AB]$}
+\bottomrule
+\end{tabular}
+
+\medskip
+
+\begin{tabular}{lll}%
+选项  & 默认值 & 含义    \\
+\midrule
+\TOline{pos}{.5}{标注的位置}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Multiple labels}
+\subsubsection{多个标注示例}
+\begin{tkzexample}[latex=7 cm,small]
+\begin{tikzpicture}
+  \tkzInit
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(6,0){B}
+  \tkzDrawSegment(A,B)
+  \tkzLabelSegment[above,pos=.8](A,B){$a$}
+  \tkzLabelSegment[below,pos=.2](A,B){$4$}
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Labels and right-angled triangle}
+\subsubsection{直角三角形的标注和标记示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[rotate=-60]
+  \tikzset{label seg style/.append style = {%
+            color      = red,
+            }}
+  \tkzDefPoint(0,1){A}
+  \tkzDefPoint(2,4){C}
+  \tkzDefPointWith[orthogonal normed,K=7](C,A)
+  \tkzGetPoint{B}
+  \tkzDrawPolygon[green!60!black](A,B,C)
+  \tkzDrawLine[altitude,dashed,color=magenta](B,C,A)
+  \tkzGetPoint{P}
+  \tkzLabelPoint[left](A){$A$}
+  \tkzLabelPoint[right](B){$B$}
+  \tkzLabelPoint[above](C){$C$}
+  \tkzLabelPoint[below](P){$P$}
+  \tkzLabelSegment[](B,A){$c$}
+  \tkzLabelSegment[swap](B,C){$a$}
+  \tkzLabelSegment[swap](C,A){$b$}
+  \tkzMarkAngles[size=1cm,
+     color=cyan,mark=|](C,B,A A,C,P)
+  \tkzMarkAngle[size=0.75cm,
+     color=orange,mark=||](P,C,B)
+  \tkzMarkAngle[size=0.75cm,
+      color=orange,mark=||](B,A,C)
+  \tkzMarkRightAngles[german](A,C,B B,P,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+\subsection{\tkzcname{tkzLabelSegments}命令：标注多条线段}
+\hypertarget{tlss}{}
+% \begin{NewMacroBox}{tkzLabelSegments}{\oarg{local options}\parg{pt1,pt2 pt3,pt4,\dots}}%
+% The arguments are a two-point couple list. The styles of \TIKZ\ are available
+% for plotting.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzLabelSegments}{\oarg{命令选项}\parg{pt1,pt2 pt3,pt4,\dots}}%
+如果多条线段的标注样式相同，则可以使用该命令一次性进行标注。
+\end{NewMacroBox}
+
+% \subsubsection{Labels for an isosceles triangle}
+\subsubsection{等腰三角形的标注示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoints{0/0/O,2/2/A,4/0/B,6/2/C}
+  \tkzDrawSegments(O,A A,B)
+  \tkzDrawPoints(O,A,B)
+  \tkzDrawLine(O,B)
+  \tkzLabelSegments[color=red,above=4pt](O,A A,B){$a$}
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

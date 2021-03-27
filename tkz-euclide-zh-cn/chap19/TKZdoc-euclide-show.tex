@@ -1,0 +1,312 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{The Show}
+% \subsection{显示尺规标记}
+
+% \subsection{Show the constructions of some lines \tkzcname{tkzShowLine}}
+\subsection{\tkzcname{tkzShowLine}命令：显示直线尺规标记}
+
+% \begin{NewMacroBox}{tkzShowLine}{\oarg{local options}\parg{pt1,pt2} or \parg{pt1,pt2,pt3}}%
+% These constructions concern mediatrices, perpendicular or parallel lines passing
+% through a given point and bisectors. The arguments are therefore lists of two or
+% three points. Several options allow the adjustment of the constructions. The
+% idea of this macro comes from \tkzimp{Yves Combe}.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options      & default & definition    \\
+% \midrule
+% \TOline{mediator}{mediator}{displays the constructions of a mediator}
+% \TOline{perpendicular}{mediator}{constructions for a perpendicular}
+% \TOline{orthogonal}{mediator}{idem}
+% \TOline{bisector}{mediator}{constructions for a bisector}
+% \TOline{K}{1}{circle within a triangle }
+% \TOline{length}{1}{in cm, length of a arc}
+% \TOline{ratio} {.5}{arc length ratio}
+% \TOline{gap}{2}{placing the point of construction}
+% \TOline{size}{1}{radius of an arc (see bisector)}
+% \bottomrule
+% \end{tabular}
+%
+% You have to add, of course, all the styles of \TIKZ\ for tracings\dots
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzShowLine}{\oarg{命令选项}\parg{pt1,pt2} 或 \parg{pt1,pt2,pt3}}%
+这个命令的原型来自\tkzimp{Yves Combe}，它用于显示中垂线、过指定点的
+平行线或垂线、角平分线的尺规作图标记。其参数是两个或三个点，
+可以通过命令选项对结果进行调整。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项      & 默认值 & 含义    \\
+\midrule
+\TOline{mediator}{mediator}{中垂线}
+\TOline{perpendicular}{mediator}{垂线}
+\TOline{orthogonal}{mediator}{同上}
+\TOline{bisector}{mediator}{角平分线}
+\TOline{K}{1}{三角形内圆}
+\TOline{length}{1}{圆弧长度，单位是cm}
+\TOline{ratio} {.5}{圆弧长度比例}
+\TOline{gap}{2}{符号间隙}
+\TOline{size}{1}{圆弧半径(参见bisector)}
+\bottomrule
+\end{tabular}
+可以使用所有有效\TIKZ{}样式。
+\end{NewMacroBox}
+
+% \subsubsection{Example of \tkzcname{tkzShowLine} and \tkzname{parallel}}
+\subsubsection{\tkzname{parallel}选项示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tkzDefPoints{-1.5/-0.25/A,1/-0.75/B,-1.5/2/C}
+  \tkzDrawLine(A,B)
+  \tkzDefLine[parallel=through C](A,B) \tkzGetPoint{c}
+  \tkzShowLine[parallel=through C](A,B)
+  \tkzDrawLine(C,c) \tkzDrawPoints(A,B,C,c)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example of \tkzcname{tkzShowLine} and \tkzname{perpendicular}}
+\subsubsection{\tkzname{perpendicular}选项示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}
+  \tkzDefPoints{0/0/A, 3/2/B, 2/2/C}
+  \tkzDefLine[perpendicular=through C,K=-.5](A,B)
+  \tkzGetPoint{c}
+  \tkzShowLine[perpendicular=through C,K=-.5,gap=3](A,B)
+  \tkzDefPointBy[projection=onto A--B](c)
+  \tkzGetPoint{h}
+  \tkzMarkRightAngle[fill=lightgray](A,h,C)
+  \tkzDrawLines[add=.5 and .5](A,B C,c)
+  \tkzDrawPoints(A,B,C,h,c)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Example of \tkzcname{tkzShowLine} and \tkzname{bisector}}
+\subsubsection{\tkzname{bisector}选项示例}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoints{0/0/A, 4/2/B, 1/4/C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzSetUpCompass[color=brown,line width=.1 pt]
+  \tkzDefLine[bisector](B,A,C)  \tkzGetPoint{a}
+  \tkzDefLine[bisector](C,B,A)  \tkzGetPoint{b}
+  \tkzInterLL(A,a)(B,b) \tkzGetPoint{I}
+  \tkzDefPointBy[projection = onto A--B](I)
+  \tkzGetPoint{H}
+  \tkzShowLine[bisector,size=2,gap=3,blue](B,A,C)
+  \tkzShowLine[bisector,size=2,gap=3,blue](C,B,A)
+  \tkzDrawCircle[radius,color=blue,line width=.2pt](I,H)
+  \tkzDrawSegments[color=red!50](I,tkzPointResult)
+  \tkzDrawLines[add=0 and -0.3,color=red!50](A,a B,b)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example of \tkzcname{tkzShowLine} and \tkzname{mediator}}
+\subsubsection{\tkzname{mediator}选项示例}
+
+\begin{tkzexample}[latex=7 cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(2,2){A}
+  \tkzDefPoint(5,4){B}
+  \tkzDrawPoints(A,B)
+  \tkzShowLine[mediator,color=orange,length=1](A,B)
+  \tkzGetPoints{i}{j}
+  \tkzDrawLines[add=-0.1 and -0.1](i,j)
+  \tkzDrawLines(A,B)
+  \tkzLabelPoints[below =3pt](A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Constructions of certain transformations \addbs{tkzShowTransformation}}
+\subsection{\tkzcname{tkzShowTransformation}命令：显示部分变换过程尺规标记}
+
+% \begin{NewMacroBox}{tkzShowTransformation}{\oarg{local options}\parg{pt1,pt2} or \parg{pt1,pt2,pt3}}%
+% These constructions concern orthogonal symmetries, central symmetries,
+% orthogonal projections and translations. Several options allow the adjustment of
+% the constructions. The idea of this macro comes from \tkzimp{Yves Combe}.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                        \\
+% \midrule
+% \TOline{reflection= over pt1--pt2}{reflection}{constructions of orthogonal
+% symmetry}
+% \TOline{symmetry=center pt}{reflection}{constructions of central symmetry}
+% \TOline{projection=onto pt1--pt2}{reflection}{constructions of a projection}
+% \TOline{translation=from pt1 to pt2}{reflection}{constructions of a translation}
+% \TOline{K}{1}{circle within a triangle }
+% \TOline{length}{1}{arc length}
+% \TOline{ratio} {.5}{arc length ratio}
+% \TOline{gap}{2}{placing the point of construction}
+% \TOline{size}{1}{radius of an arc (see bisector)}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzShowTransformation}{\oarg{命令选项}\parg{pt1,pt2} 或 \parg{pt1,pt2,pt3}}%
+这个命令的原型来源的\tkzimp{Yves Combe}，
+用于显示正交对称、中心对称、正交投影和平移的尺规作图标记。
+可以通过命令选项对结果进行调整。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                        \\
+\midrule
+\TOline{reflection= over pt1--pt2}{reflection}{正交对称}
+\TOline{symmetry=center pt}{reflection}{中心对称}
+\TOline{projection=onto pt1--pt2}{reflection}{投影}
+\TOline{translation=from pt1 to pt2}{reflection}{平移}
+\TOline{K}{1}{三角形内的圆}
+\TOline{length}{1}{圆弧长度}
+\TOline{ratio} {.5}{圆弧长度比例}
+\TOline{gap}{2}{标记间隙}
+\TOline{size}{1}{圆弧半径(参见bisector)}
+\end{tabular}
+\end{NewMacroBox}
+
+\newpage
+
+% \subsubsection{Example of the use of \tkzcname{tkzShowTransformation}}
+\subsubsection{示例1}
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.6]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(2,-2){A}
+  \tkzDefPoint(70:4){B}
+  \tkzDrawPoints(A,O,B)
+  \tkzLabelPoints(A,O,B)
+  \tkzDrawLine[add= 2 and 2](O,A)
+  \tkzDefPointBy[translation=from O to A](B)
+  \tkzGetPoint{C}
+  \tkzDrawPoint[color=orange](C)  \tkzLabelPoints(C)
+  \tkzShowTransformation[translation=from O to A,%
+                         length=2](B)
+  \tkzDrawSegments[->,color=orange](O,A B,C)
+  \tkzDefPointBy[reflection=over O--A](B) \tkzGetPoint{E}
+  \tkzDrawSegment[blue](B,E)
+  \tkzDrawPoint[color=blue](E)\tkzLabelPoints(E)
+  \tkzShowTransformation[reflection=over O--A,size=2](B)
+  \tkzDefPointBy[symmetry=center O](B) \tkzGetPoint{F}
+  \tkzDrawSegment[color=green](B,F)
+  \tkzDrawPoint[color=green](F)\tkzLabelPoints(F)
+  \tkzShowTransformation[symmetry=center O,%
+                         length=2](B)
+  \tkzDefPointBy[projection=onto O--A](C)
+  \tkzGetPoint{H}
+  \tkzDrawSegments[color=magenta](C,H)
+  \tkzDrawPoint[color=magenta](H)\tkzLabelPoints(H)
+  \tkzShowTransformation[projection=onto O--A,%
+                         color=red,size=3,gap=-2](C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Another example of the use of \tkzcname{tkzShowTransformation}}
+\subsubsection{示例2}
+
+% You'll find this figure again, but without the construction features.
+后续会再次使用这个示例，但不绘制尺规标记。
+
+\begin{tkzexample}[latex=6cm,small]
+\begin{tikzpicture}[scale=.6]
+  \tkzDefPoints{0/0/A,8/0/B,3.5/10/I}
+  \tkzDefMidPoint(A,B) \tkzGetPoint{O}
+  \tkzDefPointBy[projection=onto A--B](I)
+  \tkzGetPoint{J}
+  \tkzInterLC(I,A)(O,A)  \tkzGetPoints{M'}{M}
+  \tkzInterLC(I,B)(O,A)  \tkzGetPoints{N}{N'}
+  \tkzDrawSemiCircle[diameter](A,B)
+  \tkzDrawSegments(I,A I,B A,B B,M A,N)
+  \tkzMarkRightAngles(A,M,B A,N,B)
+  \tkzDrawSegment[style=dashed,color=blue](I,J)
+  \tkzShowTransformation[projection=onto A--B,
+                  color=red,size=3,gap=-3](I)
+  \tkzDrawPoints[color=red](M,N)
+  \tkzDrawPoints[color=blue](O,A,B,I)
+  \tkzLabelPoints(O)
+  \tkzLabelPoints[above right](N,I)
+  \tkzLabelPoints[below left](M,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+%<---------------------------------------------------------------------->
+% \section{Different points}
+\section{差分点}
+%<---------------------------------------------------------------------->
+
+% \subsection{\tkzcname{tkzDefEquiPoints}}
+\subsection{\tkzcname{tkzDefEquiPoints}命令：定义一条直线上与给定点距离相等的两个点}
+% This macro makes it possible to obtain two points on a straight line equidistant
+% from a given point.
+% 该命令用于定义一条直线与给定的点等距的两个点。
+
+% \begin{NewMacroBox}{tkzDefEquiPoints}{\oarg{local options}\parg{pt1,pt2}}%
+% \begin{tabular}{lll}%
+% arguments &  default & definition \\
+% \midrule
+% \TAline{(pt1,pt2)}{no default}{unordered list of two items}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule  \\
+% options             & default & definition  \\
+% \midrule
+% \TOline{dist} {2 cm} {half the distance between the two points}
+% \TOline{from=pt} {no default} {reference point}
+% \TOline{show} {false} {if true displays compass traces}
+% \TOline{/compass/delta} {0} {compass trace size }
+%
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefEquiPoints}{\oarg{命令选项}\parg{pt1,pt2}}%
+\begin{tabular}{lll}%
+参数 &  默认值 & 含义 \\
+\midrule
+\TAline{(pt1,pt2)}{无}{顺序任意的两个点}
+\bottomrule
+\end{tabular}
+
+\medskip
+\begin{tabular}{lll}%
+\toprule  \\
+选项             & 默认值 & 含义  \\
+\midrule
+\TOline{dist} {2 cm} {直线上两点间距离的一半}
+\TOline{from=pt} {无} {参考点}
+\TOline{show} {false} {如为true，则显示尺规标记}
+\TOline{/compass/delta} {0} {尺规标记尺寸}
+
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Using \tkzcname{tkzDefEquiPoints} with options}
+\subsubsection{示例}
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzSetUpCompass[color=purple,line width=1pt]
+  \tkzDefPoint(0,1){A}
+  \tkzDefPoint(5,2){B}
+  \tkzDefPoint(3,4){C}
+  \tkzDefEquiPoints[from=C,dist=1,show,
+                    /tkzcompass/delta=20](A,B)
+  \tkzGetPoints{E}{H}
+  \tkzDrawLines[color=blue](C,E C,H A,B)
+  \tkzDrawPoints[color=blue](A,B,C)
+  \tkzDrawPoints[color=red](E,H)
+  \tkzLabelPoints(E,H)
+  \tkzLabelPoints[color=blue](A,B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

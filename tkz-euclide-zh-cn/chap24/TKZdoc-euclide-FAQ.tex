@@ -1,0 +1,96 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{FAQ}
+
+% \subsection{Most common errors}
+\subsection{常见错误}
+
+% For the moment, I'm basing myself on my own, because having changed syntax
+% several times, I've made a number of mistakes. This section is going to be
+% expanded.
+目前，根据需要，已对语法进行了多次改进，这可能会带来很多错误，主要改进有：
+
+\begin{itemize}\setlength{\itemsep}{10pt}
+% \item \tkzcname{tkzDrawPoint(A,B)} when you need  \tkzcname{tkzDrawPoints}.
+\item 绘制多个点时，\tkzcname{tkzDrawPoint(A,B)}命令中需要使用\tkzcname{tkzDrawPoints}命令。
+
+% \item \tkzcname{tkzGetPoint(A)} When defining an object, use braces and not
+% brackets, so write: \tkzcname{tkzGetPoint\{A\}}.
+\item 使用\tkzcname{tkzGetPoint(A)}得到并命名一个点时，需要使用大括号而不是小括号，
+因此，应该写成: \tkzcname{tkzGetPoint\{A\}}.
+
+% \item \tkzcname{tkzGetPoint\{A\}} in place of \tkzcname{tkzGetFirstPoint\{A\}}.
+% When a macro gives two points as results, either we retrieve these points using
+% \tkzcname{tkzGetPoints\{A\}\{B\}}, or we retrieve only one of the two points,
+% using \tkzcname{tkzGetFirstPoint\{A\}} or
+% \tkzcname{tkzGetSecondPoint\{A\}}. These two points can be used with the
+% reference \tkzname{tkzFirstPointResult} or
+% \tkzname{tkzSecondPointResult}. It is possible that a third point is given as
+% \tkzname{tkzPointResult}.
+\item 可以用\tkzcname{tkzGetPoint\{A\}}命令代替\tkzcname{tkzGetFirstPoint\{A\}}命令。
+当返回两个点时，可以使用\tkzcname{tkzGetPoints\{A\}\{B\}}命令一次得到两个点，
+也可以使用\tkzcname{tkzGetFirstPoint\{A\}}命令或\tkzcname{tkzGetSecondPoint\{A\}}命令
+分别得到两个点。
+也可以通过\tkzcname{tkzFirstPointResult}命令或\tkzcname{tkzSecondPointResult}命令
+引用这两个点中的一个点。
+第3个点可以用\tkzcname{tkzPointResult}命令得到。
+
+% \item \tkzcname{tkzDrawSegment(A,B A,C)} when you need
+% \tkzcname{tkzDrawSegments}. It is possible to use only the versions with an "s"
+% but it is less efficient!
+\item 需要绘制多条线段时，应该使用\tkzcname{tkzDrawSegments}带\enquote{s}的命令，
+而不能使用\tkzcname{tkzDrawSegment(A,B A,C)}命令，但注意该命令效率不高。
+
+% \item Mixing options and arguments; all macros that use a circle need to know
+% the radius of the circle. If the radius is given by a measure then the option
+% includes a \tkzname{R}.
+\item 命令选项与参数需要配合使用，所有圆相关的命令都需要知道圆的半径，
+如果半径需要通过计算得到，则需要使用\tkzname{R}命令选项。
+
+% \item \tkzcname{tkzDrawSegments[color = gray,style=dashed]\{B,B' C,C'\}} is a
+% mistake. Only macros that define an object use braces.
+\item \tkzcname{tkzDrawSegments[color = gray,style=dashed]\{B,B' C,C'\}}是错误语法，
+只有对象定义命令才使用大括号。
+
+% \item The angles are given in degrees, more rarely in radians.
+\item 角度的度量单位常用度，极少使用弧度.
+% \item If an error occurs in a calculation when passing parameters, then it is
+% better to make these calculations before calling the macro.
+\item 如果传入参数时需要计算，并发生了错误，那么建议在使用该命令前完成计算。
+
+% \item Do not mix the syntax of \tkzNamePack{pgfmath} and \tkzNamePack{xfp}. I've
+% often chosen \tkzNamePack{xfp} but if you prefer pgfmath then do your
+% calculations before passing parameters.
+\item 不要混合使用\tkzNamePack{pgfmath}和\tkzNamePack{xfp}的语法，
+本宏包主要使用\tkzNamePack{xfp}语法，但如果更喜欢pgfmath库的语法，
+则建议在传入参数前完成计算。
+
+% \item Use of \tkzcname{tkzClip}: In order to get accurate results, I avoided
+% using normalized vectors. The advantage of normalization is to control the
+% dimension of the manipulated objects, the disadvantage is that with TeX, this
+% implies inaccuracies. These inaccuracies are often small, in the order of a
+% thousandth, but they lead to disasters if the drawing is enlarged. Not
+% normalizing implies that some points are far away from the working area and
+% \tkzcname{tkzClip} allows you to reduce the size of the drawing.
+\item 有关\tkzcname{tkzClip}的用法: 为了得到更为精确的结果，
+该宏包尽量避免向量归一化计算。向量归一化的优点是能够更好的控制对象尺寸，但其缺点
+是在使用\TeX{}计算时，会带来精度损失。这些误差通常很小，约为千分之一，
+但是当图幅较大时，其累积误差可能会导致灾难。
+不归一化，意味着某些点可能会远离工作区域，可以使用\tkzcname{tkzClip}命令进行图形裁剪。
+
+% \item An error occurs if you use the macro \tkzcname{tkzDrawAngle}
+%  with too small an angle. The error is produced by the \NameLib{decoration}
+% library when you want to place a mark on an arc. Even if the mark is absent, the
+% error is still present. It is possible to get around this difficulty with the
+% option \tkzname{mkpos=.2} for example, which will place the mark before the arc.
+% Another possibility is to use the macro \tkzcname{tkzFillAngle}.
+\item 如果角度太小时，使用\tkzcname{tkzDrawAngle}命令，则会发生错误。
+该错误是使用在圆弧上放置标记的\NameLib{decoration}装饰库而产生的，
+即使没有标记，该错误仍然存在。
+可以使用mkpos=.2选项避免该错误，该选项能够在绘制圆弧之前布置标记。
+另一种方法是使用\tkzcname{tkzFillAngle}命令避免该错误发生。
+
+\end{itemize}
+
+\end{document}
+\endinput

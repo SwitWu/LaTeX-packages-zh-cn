@@ -1,0 +1,69 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Protractor}
+\section{量角器}
+
+% Based on an idea by Yves Combe, the following macro allows you to draw a
+% protractor.
+% The operating principle is even simpler. Just name a half-line (a ray). The
+% protractor will be placed on the origin $O$, the direction of the half-line is
+% given by $A$. The angle is measured in the direct direction of the trigonometric
+% circle.
+基于\tkzimp{Yves Combe}的方法，
+其工作原理更为简单，仅半条直线(射线)，
+量角器原点位于点$O$，射线方向由$A$确定。
+角度方向由指定的测量圆方向决定。
+\subsection{\tkzcname{tkzProtractor}命令：绘制量角器}
+% \begin{NewMacroBox}{tkzProtractor}{\oarg{local options}\parg{$O,A$}}%
+% \begin{tabular}{lll}%
+% options    & default & definition     \\
+% \midrule
+% \TOline{lw}  {0.4 pt} {line thickness}
+% \TOline{scale}  {1} {ratio: adjusts the size of the protractor}
+% \TOline{return} {false} {trigonometric circle indirect}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzProtractor}{\oarg{命令选项}\parg{$O,A$}}%
+\begin{tabular}{lll}%
+选项    & 默认值 & 含义     \\
+\midrule
+\TOline{lw}  {0.4 pt} {线宽}
+\TOline{scale}  {1} {比例: 用于调整量角器尺寸}
+\TOline{return} {false} {反向测量圆}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsection{The circular protractor}
+\subsection{正向圆量角器}
+
+% Measuring in the forward direction
+正向测量圆方向
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(2,0){A}\tkzDefPoint(0,0){O}
+  \tkzDefShiftPoint[A](31:5){B}
+  \tkzDefShiftPoint[A](158:5){C}
+  \tkzDrawPoints(A,B,C)
+  \tkzDrawSegments[color = red,
+    line width = 1pt](A,B A,C)
+  \tkzProtractor[scale = 1](A,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{The circular protractor, transparent and returned}
+\subsection{反向圆量角器}
+逆向测量圆方向
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=.5]
+  \tkzDefPoint(2,3){A}
+  \tkzDefShiftPoint[A](31:5){B}
+  \tkzDefShiftPoint[A](158:5){C}
+  \tkzDrawSegments[color=red,line width=1pt](A,B A,C)
+  \tkzProtractor[return](A,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

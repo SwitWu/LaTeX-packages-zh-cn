@@ -1,0 +1,404 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Definition of points by transformation; \tkzcname{tkzDefPointBy} }
+\section{利用坐标变换定义点}
+
+% These transformations are:
+这些变换主要有：
+
+\begin{itemize}
+\item 平移;
+\item 缩放;
+\item 轴对称;
+\item 中心对称;
+\item 正交投影;
+\item 旋转(度或弧度);
+\item 相对于圆的反转.
+\end{itemize}
+
+% The choice of transformations is made through the options. There are two macros,
+% one for the transformation of a single point \tkzcname{tkzDefPointBy} and the
+% other for the transformation of a list of points \tkzcname{tkzDefPointsBy}. By
+% default the image of $A$ is $A'$. For example, we'll write:
+可以使用\tkzcname{tkzDefPointBy}命令实现单点变换，也可以通过\tkzcname{tkzDefPointsBy}实现多点变换，
+变换方式用选项。默认用$A'$表示点$A$的变换结果，例如：
+
+\begin{tkzltxexample}[small]
+\tkzDefPointBy[translation= from A to A'](B)
+\end{tkzltxexample}
+
+% The result is in \tkzname{tkzPointResult}
+结果保存于\tkzname{tkzPointResult}命令中。
+\medskip
+
+\subsection{\tkzcname{tkzDefPointBy}：通过变换定义一个点}
+
+% \begin{NewMacroBox}{tkzDefPointBy}{\oarg{local options}\parg{pt}}%
+% The argument is a simple existing point and its image is stored in
+% \tkzname{tkzPointResult}. If you want to keep this point then the macro
+% \tkzcname{tkzGetPoint\{M\}} allows you to assign the name \tkzname{M} to the
+% point.
+%
+% \begin{tabular}{lll}%
+% \toprule
+% arguments &  definition & examples   \\
+% \midrule
+% \TAline{pt}   {existing point name}   {$(A)$}
+% \bottomrule
+% \end{tabular}
+%
+% \begin{tabular}{lll}%
+% options     &     & examples         \\
+% \midrule
+% \TOline{translation}{= from \#1 to \#2}{[translation=from A to B](E)}
+% \TOline{homothety}  {= center \#1 ratio \#2}{[homothety=center A ratio .5](E)}
+% \TOline{reflection} {= over \#1--\#2}{[reflection=over A--B](E)}
+% \TOline{symmetry }  {= center \#1}{[symmetry=center A](E)}
+% \TOline{projection }{= onto \#1--\#2}{[projection=onto A--B](E)}
+% \TOline{rotation }  {= center \#1 angle \#2}{[rotation=center O angle 30](E)}
+% \TOline{rotation in rad}{= center \#1 angle \#2}{[rotation in rad=center O angle
+% pi/3](E)}
+% \TOline{inversion}{= center \#1 through \#2}{[inversion =center O through A](E)}
+% \bottomrule
+% \end{tabular}
+%
+% The image is only defined and not drawn.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefPointBy}{\oarg{命令选项}\parg{pt}}%
+参数是一个已知点，结果存储于\tkzcname{tkzPointResult}命令，
+可用\tkzcname{tkzGetPoint\{M\}}命令保存该点，并为点命名。
+
+\begin{tabular}{lll}%
+\toprule
+参数 &  含义 & 样例   \\
+\midrule
+\TAline{pt}   {已存在的一个点的名称}   {$(A)$}
+\bottomrule
+\end{tabular}
+
+\begin{tabular}{lll}%
+选项     &   & 样例         \\
+\midrule
+\TOline{translation}{= from \#1 to \#2}{[translation=from A to B](E)}
+\TOline{homothety}  {= center \#1 ratio \#2}{[homothety=center A ratio .5](E)}
+\TOline{reflection} {= over \#1--\#2}{[reflection=over A--B](E)}
+\TOline{symmetry }  {= center \#1}{[symmetry=center A](E)}
+\TOline{projection }{= onto \#1--\#2}{[projection=onto A--B](E)}
+\TOline{rotation }  {= center \#1 angle \#2}{[rotation=center O angle 30](E)}
+\TOline{rotation in rad}{= center \#1 angle \#2}{[rotation in rad=center O angle
+pi/3](E)}
+\TOline{inversion}{= center \#1 through \#2}{[inversion =center O through A](E)}
+\bottomrule
+\end{tabular}
+
+该命令仅定义一个点，并不绘制该点。
+\end{NewMacroBox}
+
+\newpage
+
+% \subsection{Examples of transformations}
+\subsection{变换示例}
+
+% \subsubsection{Example of translation}
+\subsubsection{平移示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[>=latex]
+ \tkzDefPoint(0,0){A}
+ \tkzDefPoint(3,1){B}
+ \tkzDefPoint(3,0){C}
+ \tkzDefPointBy[translation= from B to A](C)
+ \tkzGetPoint{D}
+ \tkzDrawPoints[teal](A,B,C,D)
+ \tkzLabelPoints[color=teal](A,B,C,D)
+ \tkzDrawSegments[orange,->](A,B D,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example of reflection (orthogonal symmetry)}
+\subsubsection{轴对称示例}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=1]
+ \tkzDefPoints{1.5/-1.5/C,-4.5/2/D}
+ \tkzDefPoint(-4,-2){O}
+ \tkzDefPoint(-2,-2){A}
+ \foreach \i in {0,1,...,4}{%
+   \pgfmathparse{0+\i * 72}
+   \tkzDefPointBy[rotation=%
+      center O angle \pgfmathresult](A)
+   \tkzGetPoint{A\i}
+   \tkzDefPointBy[reflection = over C--D](A\i)
+   \tkzGetPoint{A\i'}}
+ \tkzDrawPolygon(A0, A2, A4, A1, A3)
+ \tkzDrawPolygon(A0', A2', A4', A1', A3')
+ \tkzDrawLine[add= .5 and .5](C,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Example of \tkzname{homothety} and \tkzname{projection}}
+\subsubsection{\tkzname{homothety}和\tkzname{projection}示例}
+
+\begin{tkzexample}[vbox,small]
+\begin{tikzpicture}[scale=1.2]
+  \tkzDefPoint(0,1){A}   \tkzDefPoint(5,3){B}    \tkzDefPoint(3,4){C}
+  \tkzDefLine[bisector](B,A,C)                   \tkzGetPoint{a}
+  \tkzDrawLine[add=0 and 0,color=magenta!50 ](A,a)
+  \tkzDefPointBy[homothety=center A ratio .5](a) \tkzGetPoint{a'}
+  \tkzDefPointBy[projection = onto A--B](a')     \tkzGetPoint{k'}
+  \tkzDefPointBy[projection = onto A--B](a)      \tkzGetPoint{k}
+  \tkzDrawLines[add= 0 and .3](A,k A,C)
+  \tkzDrawSegments[blue](a',k' a,k)
+  \tkzDrawPoints(a,a',k,k',A)
+  \tkzDrawCircles(a',k' a,k)
+  \tkzLabelPoints(a,a',k,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example of projection}
+\subsubsection{投影示例}
+
+\begin{tkzexample}[latex=7.5cm,small]
+\begin{tikzpicture}[scale=1.5]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(0,4){B}
+  \tkzDefTriangle[pythagore](B,A) \tkzGetPoint{C}
+  \tkzDefLine[bisector](B,C,A)    \tkzGetPoint{c}
+  \tkzInterLL(C,c)(A,B)           \tkzGetPoint{D}
+  \tkzDefPointBy[projection=onto B--C](D)
+  \tkzGetPoint{G}
+  \tkzInterLC(C,D)(D,A) \tkzGetPoints{E}{F}
+  \tkzDrawPolygon[teal](A,B,C)
+  \tkzDrawSegment(C,D) \tkzDrawCircle(D,A)
+  \tkzDrawSegment[orange](D,G)
+  \tkzMarkRightAngle[fill=orange!20](D,G,B)
+  \tkzDrawPoints(A,C,F) \tkzLabelPoints(A,C,F)
+  \tkzDrawPoints(B,D,E,G)
+  \tkzLabelPoints[above right](B,D,E,G)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Example of symmetry}
+\subsubsection{中心对称示例}
+
+\begin{tkzexample}[latex=6.5cm,small]
+\begin{tikzpicture}[scale=1]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(2,-1){A}
+  \tkzDefPoint(2,2){B}
+  \tkzDefPointsBy[symmetry=center O](B,A){}
+  \tkzDrawLine(A,A')
+  \tkzDrawLine(B,B')
+  \tkzMarkAngle[mark=s,arc=lll,
+     size=2 cm,mkcolor=red](A,O,B)
+  \tkzLabelAngle[pos=1,circle,draw,
+     fill=blue!10](A,O,B){$60^{\circ}$}
+  \tkzDrawPoints(A,B,O,A',B')
+  \tkzLabelPoints(A,B,O,A',B')
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example of rotation}
+\subsubsection{旋转示例(度)}
+\begin{tkzexample}[latex=6.5cm,small]
+\begin{tikzpicture}[scale=0.5]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(5,0){B}
+  \tkzDrawSegment(A,B)
+  \tkzDefPointBy[rotation=center A angle 60](B)
+  \tkzGetPoint{C}
+  \tkzDefPointBy[symmetry=center C](A)
+  \tkzGetPoint{D}
+  \tkzDrawSegment(A,tkzPointResult)
+  \tkzDrawLine(B,D)
+  \tkzDrawArc[orange,delta=10](A,B)(C)
+  \tkzDrawArc[orange,delta=10](B,C)(A)
+  \tkzDrawArc[orange,delta=10](C,D)(D)
+  \tkzMarkRightAngle(D,B,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Example of rotation in radian}
+\subsubsection{旋转示例(弧度)}
+
+\begin{tkzexample}[latex=6.5cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint["$A$" left](1,5){A}
+  \tkzDefPoint["$B$" right](5,2){B}
+  \tkzDefPointBy[rotation in rad=center A angle pi/3](B)
+  \tkzGetPoint{C}
+  \tkzDrawSegment(A,B)
+  \tkzDrawPoints(A,B,C)
+  \tkzCompass[color=red](A,C)
+  \tkzCompass[color=red](B,C)
+  \tkzLabelPoints(C)
+\end{tikzpicture}
+\end{tkzexample}
+
+\newpage
+
+% \subsubsection{Inversion of points}
+\subsubsection{反转示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1.25]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(1,0){A}
+  \tkzDefPoint(-1.5,-1.5){z1}
+  \tkzDefPoint(0.35,0){z2}
+  \tkzDefPointBy[inversion = center O through A](z1)
+  \tkzGetPoint{Z1}
+  \tkzDefPointBy[inversion = center O through A](z2)
+  \tkzGetPoint{Z2}
+  \tkzDrawCircle(O,A)
+  \tkzDrawPoints[color=black,fill=red,size=4](Z1,Z2)
+  \tkzDrawSegments(z1,Z1 z2,Z2)
+  \tkzDrawPoints[color=black,fill=red,size=4](O,z1,z2)
+  \tkzLabelPoints(O,A,z1,z2,Z1,Z2)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Point Inversion: Orthogonal Circles}
+\subsubsection{点的反转：正交圆}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[scale=1.15]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(1,0){A}
+  \tkzDrawCircle(O,A)
+  \tkzDefPoint(0.5,-0.25){z1}
+  \tkzDefPoint(-0.5,-0.5){z2}
+  \tkzDefPointBy[inversion = center O through A](z1)
+  \tkzGetPoint{Z1}
+  \tkzCircumCenter(z1,z2,Z1)
+  \tkzGetPoint{c}
+  \tkzDrawCircle(c,Z1)
+  \tkzDrawPoints[color=black,fill=red,size=4]%
+(O,z1,z2,Z1,O,A)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Transformation of multiple points; \tkzcname{tkzDefPointsBy}}
+\subsection{\tkzcname{tkzDefPointsBy}命令：通过变换定义多个点}
+
+% Variant of the previous macro for defining multiple images.
+% You must give the names of the images as arguments, or indicate that the names
+% of the images are formed from the names of the antecedents, leaving the argument
+% empty.
+该命令是单点变换命令的变体，用于定义多点变换。
+必须在圆括号中，通过参数指定变换点名称，
+也可以在大括号中给出变换后点的名称。
+
+\begin{tkzltxexample}[small]
+\tkzDefPointsBy[translation= from A to A'](B,C){}
+\end{tkzltxexample}
+
+% The images are $B'$ and $C'$.
+变换后的点是$B'$和$C'$.
+
+\begin{tkzltxexample}[small]
+\tkzDefPointsBy[translation= from A to A'](B,C){D,E}
+\end{tkzltxexample}
+
+% The images are $D$ and $E$.
+变换后的点是$D$和$E$.
+
+\begin{tkzltxexample}[small]
+\tkzDefPointsBy[translation= from A to A'](B)
+\end{tkzltxexample}
+
+% The image is $B'$.
+变换后的点是$B'$
+
+\newpage
+
+% \begin{NewMacroBox}{tkzDefPointsBy}{\oarg{local options}\parg{list of points}\marg{list of points}}%
+% \begin{tabular}{lll}%
+% arguments &  examples  &                  \\
+% \midrule
+% \TAline{\parg{list of pts}\marg{list of pts}}{(A,B)\{E,F\}}{$E$ is the image
+% of $A$, $F$ is the image of $B$.}   \\
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% If the list of images is empty then the name of the image is the name of the
+% antecedent to which \enquote{'} is added.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options     &     & examples                         \\
+% \midrule
+% \TOline{translation = from \#1 to \#2}{}{[translation=from A to B](E)\{\}}
+% \TOline{homothety = center \#1 ratio \#2}{}{[homothety=center A ratio
+% .5](E)\{F\}}
+% \TOline{reflection = over \#1--\#2}{}{[reflection=over A--B](E)\{F\}}
+% \TOline{symmetry = center \#1}{}{[symmetry=center A](E)\{F\}}
+% \TOline{projection = onto \#1--\#2}{}{[projection=onto A--B](E)\{F\}}
+% \TOline{rotation = center \#1 angle \#2}{}{[rotation=center  angle 30](E)\{F\}}
+% \TOline{rotation in rad = center \#1 angle \#2}{}{for instance angle pi/3}
+% \bottomrule
+% \end{tabular}
+%
+% \medskip
+% The points are only defined and not drawn.
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzDefPointsBy}{\oarg{命令选项}\parg{变换点列表}\marg{变换结果点名称列表}}%
+\begin{tabular}{lll}%
+参数 & 示例  &                  \\
+\midrule
+\TAline{\parg{变换点列表}\marg{变换结果点名称列表}}{(A,B)\{E,F\}}{$E$是$A$的变换，$F$是$B$的变换。}   \\
+\bottomrule
+\end{tabular}
+
+\medskip
+如果变换结果点名称列表为空，变换结果点的名称是在原名称后添加\enquote{$'$}号。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项     &   & 示例                         \\
+\midrule
+\TOline{translation = from \#1 to \#2}{}{[translation=from A to B](E)\{\}}
+\TOline{homothety = center \#1 ratio \#2}{}{[homothety=center A ratio
+.5](E)\{F\}}
+\TOline{reflection = over \#1--\#2}{}{[reflection=over A--B](E)\{F\}}
+\TOline{symmetry = center \#1}{}{[symmetry=center A](E)\{F\}}
+\TOline{projection = onto \#1--\#2}{}{[projection=onto A--B](E)\{F\}}
+\TOline{rotation = center \#1 angle \#2}{}{[rotation=center  angle 30](E)\{F\}}
+\TOline{rotation in rad = center \#1 angle \#2}{}{for instance angle pi/3}
+\bottomrule
+\end{tabular}
+
+\medskip
+该命令仅定义变换结果点，并不绘制这些点。
+\end{NewMacroBox}
+
+% \subsubsection{Example of translation}
+\subsubsection{变换示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[>=latex]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(3,1){A'}
+  \tkzDefPoint(3,0){B}
+  \tkzDefPoint(1,2){C}
+  \tkzDefPointsBy[translation= from A to A'](B,C){}
+  \tkzDrawPolygon[color=blue](A,B,C)
+  \tkzDrawPolygon[color=red](A',B',C')
+  \tkzDrawPoints[color=blue](A,B,C)
+  \tkzDrawPoints[color=red](A',B',C')
+  \tkzLabelPoints(A,B,A',B')
+  \tkzLabelPoints[above](C,C')
+  \tkzDrawSegments[color = gray,->,%
+     style=dashed](A,A' B,B' C,C')
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput

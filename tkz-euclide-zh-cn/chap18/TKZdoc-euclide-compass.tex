@@ -1,0 +1,176 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+% \section{Using the compass}
+\section{尺规标记}
+
+% \subsection{Main macro \tkzcname{tkzCompass}}
+\subsection{\tkzcname{tkzCompass}命令：绘制尺规标记}
+
+% \begin{NewMacroBox}{tkzCompass}{\oarg{local options}\parg{A,B}}%
+% This macro allows you to leave a compass trace, i.e. an arc at a designated
+% point. The center must be indicated. Several specific options will modify the
+% appearance of the arc as well as TikZ options such as style, color, line
+% thickness etc.
+%
+% You can define the length of the arc with the option |length| or the option
+% |delta|.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                        \\
+% \midrule
+% \TOline{delta} {0 (deg)}{Modifies the angle of the arc by increasing it
+% symmetrically (in degrees)}
+% \TOline{length}{1 (cm)}{Changes the length (in cm)}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzCompass}{\oarg{命令选项}\parg{A,B}}%
+该命令绘制尺规标记，即一小段圆弧。
+使用该命令时，须指定圆心。
+可以使用\TIKZ{}的style、color、line thickness等样式
+设置标记外观。
+
+可以使用|length|或|delta|选项指定标记长度。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                        \\
+\midrule
+\TOline{delta} {0 (deg)}{延伸长度(度)}
+\TOline{length}{1 (cm)}{圆弧长度(cm)}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Option \tkzname{length}}
+\subsubsection{\tkzname{length}选项示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(1,1){A}
+  \tkzDefPoint(6,1){B}
+  \tkzInterCC[R](A,4cm)(B,3cm)
+  \tkzGetPoints{C}{D}
+  \tkzDrawPoint(C)
+  \tkzCompass[color=red,length=1.5](A,C)
+  \tkzCompass[color=red](B,C)
+  \tkzDrawSegments(A,B A,C B,C)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsubsection{Option \tkzname{delta}}
+\subsubsection{\tkzname{delta}选项示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(5,0){B}
+  \tkzInterCC[R](A,4cm)(B,3cm)
+  \tkzGetPoints{C}{D}
+  \tkzDrawPoints(A,B,C)
+  \tkzCompass[color=red,delta=20](A,C)
+  \tkzCompass[color=red,delta=20](B,C)
+  \tkzDrawPolygon(A,B,C)
+  \tkzMarkAngle(A,C,B)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Multiple constructions \tkzcname{tkzCompasss}}
+\subsection{\tkzcname{tkzCompasss}命令：绘制多个尺规标记}
+
+% \begin{NewMacroBox}{tkzCompasss}{\oarg{local options}\parg{pt1,pt2, pt3,pt4,\dots}}%
+% \tkzHandBomb{}Attention the arguments are lists of two points. This saves a few
+% lines of code.
+%
+% \medskip
+% \begin{tabular}{lll}%
+% \toprule
+% options             & default & definition                        \\
+% \midrule
+% \TOline{delta} {0}{Modifies the angle of the arc by increasing it symmetrically}
+% \TOline{length}{1}{Changes the length}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzCompasss}{\oarg{命令选项}\parg{pt1,pt2, pt3,pt4,\dots}}%
+\tkzHandBomb{}注意：参数是点对列表。
+
+\medskip
+\begin{tabular}{lll}%
+\toprule
+选项             & 默认值 & 含义                        \\
+\midrule
+\TOline{delta} {0}{延伸角度}
+\TOline{length}{1}{圆弧长度}
+\end{tabular}
+\end{NewMacroBox}
+
+\begin{tkzexample}[latex=8cm,small]
+\begin{tikzpicture}[scale=.75]
+  \tkzDefPoint(2,2){A}
+  \tkzDefPoint(5,-2){B}
+  \tkzDefPoint(3,4){C}
+  \tkzDrawPoints(A,B)
+  \tkzDrawPoint[color=red,shape=cross out](C)
+  \tkzCompasss[color=orange](A,B A,C B,C C,B)
+  \tkzShowLine[mediator,color=red,
+                      dashed,length = 2](A,B)
+  \tkzShowLine[parallel = through C,
+                    color=blue,length=2](A,B)
+  \tkzDefLine[mediator](A,B)
+  \tkzGetPoints{i}{j}
+  \tkzDefLine[parallel=through C](A,B)
+  \tkzGetPoint{D}
+  \tkzDrawLines[add=.6 and .6](C,D A,C B,D)
+  \tkzDrawLines(i,j) \tkzDrawPoints(A,B,C,i,j,D)
+  \tkzLabelPoints(A,B,C,i,j,D)
+\end{tikzpicture}
+\end{tkzexample}
+
+% \subsection{Configuration macro \tkzcname{tkzSetUpCompass}}
+\subsection{\tkzcname{tkzSetUpCompass}命令：设置尺规标记样式}
+
+% \begin{NewMacroBox}{tkzSetUpCompass}{\oarg{local options}}%
+% \begin{tabular}{lll}%
+% options             & default & definition                        \\
+% \midrule
+% \TOline{line width}  {0.4pt}{line thickness}
+% \TOline{color}  {black!50}{line colour}
+% \TOline{style}  {solid}{solid line style, dashed,dotted, \dots}
+% \end{tabular}
+% \end{NewMacroBox}
+\begin{NewMacroBox}{tkzSetUpCompass}{\oarg{命令选项}}%
+\begin{tabular}{lll}%
+选项            & 默认值 & 含义                        \\
+\midrule
+\TOline{line width}  {0.4pt}{线宽}
+\TOline{color}  {black!50}{颜色}
+\TOline{style}  {solid}{线型：solid、dashed、dotted、\dots}
+\end{tabular}
+\end{NewMacroBox}
+
+% \subsubsection{Use of \tkzcname{tkzSetUpCompass}}
+\subsubsection{示例}
+
+\begin{tkzexample}[latex=7cm,small]
+\begin{tikzpicture}[showbi/.style={bisector,
+                    size=2,gap=3}, scale=.75]
+  \tkzSetUpCompass[color=blue,line width=.3 pt]
+  \tkzDefPoints{0/1/A, 8/3/B, 3/6/C}
+  \tkzDrawPolygon(A,B,C)
+  \tkzDefLine[bisector](B,A,C) \tkzGetPoint{a}
+  \tkzDefLine[bisector](C,B,A) \tkzGetPoint{b}
+  \tkzShowLine[showbi](B,A,C)
+  \tkzShowLine[showbi](C,B,A)
+  \tkzInterLL(A,a)(B,b) \tkzGetPoint{I}
+  \tkzDefPointBy[projection= onto A--B](I)
+  \tkzGetPoint{H}
+  \tkzDrawCircle[radius,color=gray](I,H)
+  \tkzDrawSegments[color=gray!50](I,H)
+  \tkzDrawLines[add=0 and -.2,color=blue!50](A,a B,b)
+  \tkzShowBB
+\end{tikzpicture}
+\end{tkzexample}
+
+\end{document}
+\endinput
