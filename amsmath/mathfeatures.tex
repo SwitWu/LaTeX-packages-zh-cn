@@ -1,0 +1,208 @@
+% !Mode:: "TeX:Hard:UTF-8"
+\VerbatimFootnotes
+\chapter{各种各样的数学特性}
+\section{矩阵}
+除了\LaTeX 的标准的 \verb|array| 环境外，  \pkg{amsmath}提供了一些其他的矩阵环境。\verb|pmatrix|、\verb|bmatrix|、\verb|Bmatrix|、\verb|vmatrix| 和 \verb|Vmatrix| 分别带有定界符$()$、$[]$、$\{\}$、$||$和$\|\|$。 为了命名的连贯性，还有一个 \verb|matrix| 环境不带定界符。这在 \verb|array| 环境中并不是完全多余的；\verb|matrix| 环境比 \verb|array| 环境使用了更加节俭的水平空格；而且与 \verb|array| 环境不同的是，您不需要给出矩阵环境的列规范。默认情形下，至多可以有10个居中的列\footnote{确切地说，矩阵的最大列数由计数器{\ttfamily MaxMatrixCols}(默认值为10)控制，如果有必要的话，可以用\LaTeX 的 \verb|\setcounter| 或 \verb|\addtocounter| 命令进行更改。}。（如果您的列有左对齐或右对齐或者其他格式需求，  您可以使用 \verb|array| 或者\pkg{mathtools}宏包，后者提供了这些环境的 \verb|*| 变体环境，带有可选参数来指定左对齐或右对齐。 ）
+
+要生成一个适合文本的小矩阵，我们有 \verb|smallmatrix| 环境（例如$\bigl(\begin{smallmatrix}
+a&b\\ c&d
+\end{smallmatrix}\bigr)$），其比普通矩阵更适合于单行文本，这里的定界符一定要指明。\pkg{mathtools}宏包提供了 \verb|smallmatrix| 的 \verb|p|、\verb|b|、\verb|B|、\verb|v|、\verb|V| 版本，以及上面讨论过的 \verb|*| 变体。上述例子的生成代码为：
+\begin{verbatim}
+$\bigl(\begin{smallmatrix}
+a&b \\ c&d
+\end{smallmatrix}\bigr)$
+\end{verbatim}
+
+\verb|\hdotsfor{<number>}|在矩阵的给定列数中生成一行点，例如
+\begin{listing}
+$\begin{matrix}
+    a&b&c&d\\
+    e&\hdotsfor{3}
+\end{matrix}$
+\end{listing}
+
+点之间的距离可以通过方括号选项修改，例如，  \verb|\hdotsfor[1.5]{3}|。 方括号里面的数字会被作为一个倍数（例如默认的倍数是1.0）
+\begin{listing}
+\begin{equation}
+\begin{pmatrix}
+D_1t&-a_{12}t_2&\dots&-a_{n}t_n\\
+-a_{21}t_1&D_2t&\dots&-a_{2n}t_n\\
+\hdotsfor[2]{4}\\
+-a_{n1}t_1&-a_{n2}t_2&\dots&D_nt
+\end{pmatrix}
+\end{equation}
+\end{listing}
+
+\section{数学空格命令}
+\pkg{amsmath}宏包稍微扩展了数学间距命令集合，如下所示。 这些命令的全称和缩写形式都是健壮的，它们也可以在数学之外使用。
+\begin{center}
+\begin{tabular}{p{0.08\textwidth}p{0.2\textwidth}p{0.14\textwidth}|p{0.08\textwidth}
+p{0.2\textwidth}p{0.14\textwidth}}
+缩写                &全称                 &例子             &缩写              &全称               &例子\\
+\hline
+          &无空格              &$\Rightarrow\Leftarrow$ &  &无空格&$\Rightarrow\Leftarrow$ \\
+\verb|\,| &\verb|\thinspace|&$\Rightarrow\,\Leftarrow$ &\verb|\!|&\verb|\negthinspace|&$\Rightarrow\!\Leftarrow$\\
+\verb|\:|&\verb|\medspace|&$\Rightarrow\:\Leftarrow$&  &\verb|\negmedspace|&$\Rightarrow\negmedspace\Leftarrow$\\
+\verb|\;|&\verb|\thickspace|&$\Rightarrow\;\Leftarrow$&  &\verb|\negthickspace|&$\Rightarrow\negthickspace\Leftarrow$\\
+&\verb|\quad|&$\Rightarrow\quad\Leftarrow$&&&\\
+&\verb|\qquad|&$\Rightarrow\qquad\Leftarrow$&&&
+\end{tabular}
+\end{center}
+
+为了最大限度地控制数学间距，  请使用 \verb|\mspace| 和数学单位。 一个数学单位，  或者说是 \verb|mu|，  等于1/18 em。 因此，  要得到一个负的 \verb|\quad|，  您可以输入 \verb|\mspace{-18.0mu}|。
+\section{Dots}
+对于各种上下文中省略号点（抬升的或者与基线持平的）的首选位置，  没有普遍的共识，  因此这可以看做是个人的喜好问题。 使用下面的语义导向的命令
+\begin{itemize}
+  \item \verb|\dotsc| 意味着``dots with commas"，  逗号分隔
+  \item \verb|\dotsb| 意味着``dots with binary operators/relations"，  二元算符与关系
+  \item \verb|\dotsm| 意味着``multiplication dots"，  连乘
+  \item \verb|\dotsi| 意味着``dots with integrals"，  多重积分
+  \item \verb|\dotso| 意味着``other dots"（除上面之外的）
+\end{itemize}
+
+而不用 \verb|\ldots| 或 \verb|\cdots|，  您可以让您的文档随时随地适应不同的惯例，  例如，  万一您必须把它交给一个在这方面坚持遵循家庭传统的出版商，  各种类型的默认处理遵循美国数学社会惯例：
+
+\begin{tcblisting}{}
+Then we have the series $A_1,A_2,\dotsc$,
+the regional sum $A_1+A_2+\dotsb$, the
+orthogonal product $A_1 A_2\dotsm$, and
+the infinite integral
+\[\int_{A_1}\int_{A_2}\dotsi\].
+\end{tcblisting}
+
+在大多数情况下。 可以使用未区分的 \verb|\dots|，  \pkg{amsmath}将根据即时上下文输出最合适的形式：如果不适当的形式出现了，  则可以在检查输出后更正。
+\section{不间断的破折号}
+\verb|\nobreakdash| 命令用来抑制在连字符或破折号后换行的可能性。 例如您把 \verb|page1-9| 写为 \verb|page 1\nobreakdash--9|，  那么在破折号与  \verb|9| 之间绝不会出现换行。 您还可以使用  \verb|\nobreakdash| 来防止不想要的连字符，  比如\verb|$p$-adic|。 如果频繁使用的话，  您可以使用缩写：
+\begin{verbatim}
+\newcommand{\p}{$p$\nobreakdash}% for ``\p-adic"
+\newcommand{\Ndash}{\nobreakdash--}% for ``pages 1\Ndash 9"
+%   for ``\n dimensional"(``n-dimensional"):
+\newcommand{\n}[1]{$n$\nobreakdash-\hspace{0pt}}
+\end{verbatim}
+
+最后一个例子展示了如何在下面的单词中禁止连字符后换行。 （在连字符后添加零宽度的空格即可）。
+
+\section{数学重音}
+在一般的\LaTeX 中，在数学中添加二重重音是很差的效果，但是在\pkg{amsmath}包里，您可以改良二重重音: $\hat{\hat{A}}$（\verb|\hat{\hat{A}}|）。
+
+除了\LaTeX{} 已有的 \verb|\dot| 和 \verb|\ddot| 命令之外，\pkg{amsmath}还提供了 \verb|\dddot| 和 \verb|\ddddot| 命令分别用来生成三点重音和四点重音。
+
+要想得到上标的 \verb|hat| 或者 \verb|tilde| 符号，  加载\pkg{amsxtra}包，  使用 \verb|\sphat| 或者 \verb|\sptilde|。 使用方法为 \verb|A\sphat|（$A\sphat$）。
+
+要在数学音符的位置放置任意一个符号，  或者要得到下音符，  可以参考Javier Bezos制作的\pkg{accents}包。 （\pkg{amsmath}包一定要在\pkg{accents}包之前加载。）
+\section{根号}
+在一般的\LaTeX 中，  根号指标的放置有时候并不好：$\sqrt[\beta]{k}$（\verb|\sqrt[\beta]{k}|）。 在\pkg{amsmath}包中，  \verb|\leftroot| 和 \verb|\uproot| 可以让您调整根号的位置：
+\begin{verbatim}
+    \sqrt[\leftroot{-2}\uproot{2}\beta]{k}
+\end{verbatim}
+将$\beta$向上和向右平移：$\sqrt[\leftroot{-2}\uproot{2}\beta]{k}$。 在 \verb|\leftroot| 中的负的参数使得$\beta$向右移。 这里的距离单位是非常小的数，  适用于这里的调整。
+
+\section{带盒子的公式}
+\verb|\boxed|命令给它的参数放置一个盒子，  类似于\verb|\fbox|，  但不同的是这里的内容必需是在数学模式中：
+\begin{tcblisting}{}
+\begin{equation}
+\boxed{\eta\le C(\delta(\eta))+\Lambda_M(0,\delta)}
+\end{equation}
+\end{tcblisting}
+
+\section{上下箭头}
+基本的\LaTeX{} 提供了 \verb|\overrightarrow| 和 \verb|\overleftarrow| 命令。 而\pkg{amsmath}提供了一些其他的扩展的上下箭头：
+\begin{verbatim}
+\overleftarrow \underleftarrow  \overrightarrow
+\underrightarrow \overleftrightarrow \underleftrightarrow
+\end{verbatim}
+\section{扩展的箭头}
+\verb|\xleftarrow| 和 \verb|\xrightarrow| 产生的箭头可以自适应于它的上标或下标。这两个命令带一个可选参数（下标）和一个必选参数（上标，可以为空）：
+\begin{tcblisting}{}
+\begin{equation}
+A\xleftarrow{n+\mu-1}B\xrightarrow[T]{n\pm i-1}C
+\end{equation}
+\end{tcblisting}
+
+\section{将一个符号附加给另一个符号}
+\LaTeX 提供了 \verb|\stackrel| 命令可以在一个二元算符上放置一个上标，而在\pkg{amsmath}中有更多的命令，  \verb|\overset| 和 \verb|\underset| 可以把一个符号放在另一个符号（关系符或者其他符号）的上方或下方。 输入 \verb|\overset{*}{X}| 会在$X$上方放置一个上标*，  即$\overset{*}{X}$； \verb|\underset| 则是类似地放置一个下标。
+
+也参见\S\ref{sec:sideset}中关于 \verb|\sideset| 的描述。
+\section{分式及相关结构}
+\cprotect\subsection{\verb|\|\verb|frac|、\verb|\|\verb|dfrac| 和 \verb|\|\verb|tfrac| 命令}
+\verb|\frac| 命令是\LaTeX{} 的一个基本命令，带有两个参数——分子和分母——然后用普通的分式打出来。\pkg{amsmath}还提供了 \verb|\dfrac| 和 \verb|\tfrac| 命令分别作为 \verb|{\displaystyle\frac...}| 和 \verb|{\textstyle\frac...}| 的便捷缩写。
+\begin{tcblisting}{}
+\begin{equation}
+\frac{1}{k}\log_2 c(f)\;\tfrac{1}{k}\log_2 c(f)\;
+\sqrt{\frac{1}{k}\log_2 c(f)}\;\sqrt{\dfrac{1}{k}\log_2 c(f)}
+\end{equation}
+\end{tcblisting}
+
+\cprotect\subsection{\verb|\binom|、\verb|\dbinom| 和 \verb|\tbinom| 命令}
+对于类似于 $\binom nk$ 的二项式表达式，\pkg{amsmath}提供了 \verb|\binom|，\verb|\dbinom| 和  \verb|\tbinom| 命令:
+\begin{tcblisting}{}
+\begin{equation}
+2^k-\binom{k}{1}2^{k-1}+\dbinom{k}{2}2^{k-2}+\tbinom{k}{3}2^{k-3}
+\end{equation}
+\end{tcblisting}
+
+\cprotect\subsection{\verb|\genfrac| 命令}
+\verb|\frac|、\verb|\binom| 以及他们的变体的功能都是由 \verb|\genfrac| 命令来生成的，\verb|\genfrac| 带有六个参数，最后两个参数对应于 \verb|\frac| 的分子与分母，前两个参数是可选的定界符（比如在 \verb|\binom| 中看到的）第三个参数是一条有厚度的线（\verb|\binom| 把线的厚度设置为0，也就是不可见）；第四个参数是数学格式：整数值0--3分布对应于 \verb|\displaystyle|，\verb|\textstyle|， \verb|\scriptstyle| 和 \verb|\scriptscriptstyle|，  如果第三个参数置空，则线条的厚度默认为“正常”。
+\begin{verbatim}
+\genfrac{左定界符}{右定界符}{厚度}{数学格式}{分子}{分母}
+\end{verbatim}
+这里说明一下 \verb|\frac|、\verb|\tfrac| 和 \verb|\binom| 是如何定义的：
+\begin{verbatim}
+\newcommand{\frac}[2]{\genfrac{}{}{}{}{#1}{#2}}
+\newcommand{\tfrac}[2]{\genfrac{}{}{}{1}{#1}{#2}}
+\newcommand{\binom}[2]{\genfrac{(}{)}{0pt}{}{#1}{#2}}
+\end{verbatim}
+如果您发现自己要在一篇文档中重复地用 \verb|\genfrac| 定义一个特殊的记号，为了您自己以及出版社的方便，您可以用类似于 \verb|\frac|、\verb|\binom| 的形式定义一个名字有意义的简写记号。
+
+最原始的生成分数的命令 \verb|\over|、\verb|\overwithdelims|、\verb|\atop|、\verb|\atopwithdelims|、\verb|\above|、\verb|\abovewithdelims| 和 \pkg{amsmath} 一起使用的时候会发出警告信息，这个原因在 \verb|technote.tex| 中讨论了。
+\section{连分数}
+\begin{listing}
+\begin{equation}
+\cfrac{1}{\sqrt{2}+
+ \cfrac{1}{\sqrt{2}+
+  \cfrac{1}{\sqrt{2}+\dotsb
+ }}}
+\end{equation}
+\end{listing}
+
+这样比直接用 \verb|\frac| 产生的结果更好看。要把其中任何一个分式的分子放在左边或右边是靠 \verb|\cfrac[l]| 或 \verb|\cfrac[r]| 来实现的，而不是 \verb|\cfrac|。
+\section{Smash选项}
+\verb|\smash| 命令用来输出一个高度和深度为0的子公式，  有时候在调整子公式与旁边符号的位置是很有用的。 在\pkg{amsmath}中，  \verb|\smash| 命令带有一个可选参数 \verb|[t]| 或 \verb|[b]|，  因为有时候在保留自然深度和高度时，  \verb|smash| 只用于top或buttom会更好。 例如，  当旁边的根号因为内容的高度和深度的差异在位置或大小不均匀时，  \verb|\smash| 命令可以使其更加一致。 试比较$\sqrt x+\sqrt y+\sqrt z$和$\sqrt {x}+\sqrt{\smash[b]{y}}+\sqrt{z}$的区别，  其中后者是由 \verb|\sqrt{x}+\sqrt{\smash[b]{y}}+| \verb|\sqrt{z}| 生成的。
+\section{定界符}
+\subsection{定界符的大小}
+由 \verb|\left| 和 \verb|\right| 自适应的定界符大小有两点限制：首先它是机械式地产生足够大的定界符能够包围定界符中间的最大内容，  其二就是大小的范围甚至不是近似连续的，  但有相当大的量级跳跃。 这意味着，  对于给定的分隔符大小而言，  太大的数学片段无穷大，  将得到更大的下一个大小，  在正常大小的文本中，  将跳转3pt左右。 有两种或三种情况通常会调整定界符大小。 使用一组名字中包含`big'的命令。
+
+\begin{tabular}{l|llllll}
+定界符 &文本&\verb|\left|&\verb|\bigl|&\verb|\Bigl|&\verb|\biggl|&\verb|\Biggl|\\
+大小&大小     &\verb|\right|&\verb|\bigr|&\verb|\Bigr|&\verb|\biggr|&\verb|\Biggr|\\
+\hline
+结果&$(b)(\frac cd)$&$\left(b\right)\left(\frac cd\right)$&$\bigl(b\bigr)\bigl(\frac cd\bigr)$&$\Bigl(b\Bigr)\Bigl(\frac cd\Bigr)$&$\biggl(b\biggr)\biggl(\frac cd\biggr)$
+&$\Biggl(b\Biggr)\Biggl(\frac cd\Biggr)$
+\end{tabular}
+
+第一种情形是求和算符中带有上下标的，  用 \verb|\left| 和 \verb|\right| 产生的定界符一般比需要的大，  因此用 \verb|Big| 或 \verb|bigg| 类的大小能得到更好的结果：
+\begin{tcblisting}{}
+\[\left[\sum_i a_i\left\lvert\sum_j x_{ij}\right\rvert^p\right]^{1/p}\qquad\biggl[\sum_i a_i\Bigl\lvert\sum_j x_{ij}\Bigr\rvert^p\biggr]^{1/p}\]
+\end{tcblisting}
+
+第二种情形是有多个定界符的时候，\verb|\left| 和 \verb|\right| 会使得所有定界符大小相同（因为这已经足以覆盖其中最大的内容了），但事实上您可能希望使得外面的定界符稍微大于内嵌的定界符：
+\begin{tcblisting}{}
+\[\left((a_1 b_1)-(a_2 b_2)\right)
+\left((a_2 b_1)+(a_1 b_2)\right)
+\quad\text{versus}\quad
+\bigl((a_1 b_1)-(a_2 b_2)\bigr)
+\bigl((a_2 b_1)+(a_1 b_2)\bigr)\]
+\end{tcblisting}
+
+第三种情况是在运行文本时有一种稍微过大的对象，例如$\left|\frac{b'}{d'}\right|$，这里由 \verb|\left| 和 \verb|\right| 产生的定界符会导致过多的行伸展。在这种情况下，可以使用 \verb|\bigl| 和 \verb|\bigr| 生成比基本大小稍大但仍能适应正常行距的定界符：$\bigl|\frac{b'}{d'}\bigr|$。
+
+在一般的\LaTeX 中，\verb|\big|、\verb|\bigg|、\verb|\Big| 和 \verb|\Bigg| 定界符无法随\LaTeX{} 字号的全局改变而进行适当地伸展，但是加载了 \pkg{amsmath} 包以后就可以做到这一点。
+\subsection{竖线符号}
+\pkg{amsmath}包提供了\verb|\lvert|、\verb|\rvert|、\verb|\lVert|、\verb|\rVert| 命令（相比于 \verb|\langle|、\verb|\rangle|）以解决垂直字符 \verb+|+ 的过载问题。 这个符号用于\LaTeX{} 文档中以表示非常广泛的数学对象：比如数论中的整除关系：$p|q$，或者绝对值符号$|z|$，或者集合符号中的“使得”的条件，或者“取值于”符号$f_\zeta(t)\big|_{t=0}$。
+
+使用的多样性本身并不是那么糟糕：然而，  糟糕的是，  并非所有的使用都采用相同的排版方式，  而且知识渊博的读者的完全辨别能力在数学文档的计算机处理中是无法复制的。 因此，  建议在任何给定的文档中，  \verb|vert| 或者 \verb+|+ 与一个选定的数学记号之间应该一一对应，这对双竖线命令 \verb+\|+ 也是一样的。 这将立即排除使用定界符\verb+|+ 和 \verb+\|+ 的可能性。 因为 \verb|\left| 和 \verb|\right| 定界符在相邻符号中不相关，因此，在文档前言中定义适当的命令，以便任意成对的竖条定界符的使用。
+\begin{verbatim}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\end{verbatim}
+文档就可用 \verb|\abs{z}| 生成 $|z|$ ，用 \verb|\norm{v}| 生成 $\|v\|$。\pkg{mathtools}包提供了 \verb|\DeclarePairedDelimiter| 命令用来定义类似于 \verb|\abs| 的命令，但是定界符大小是可变的。

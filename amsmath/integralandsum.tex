@@ -1,0 +1,57 @@
+% !Mode:: "TeX:Hard:UTF-8"
+
+
+\chapter{积分与求和}
+\section{多行上下标}
+\verb|\substack|命令可以用于生成多行下标或上标，例如
+
+\begin{listing}
+\[\sum_{\substack{0\leq i\leq m\\0<j<n}}
+P(i,j)\]
+\end{listing}
+
+更一般的形式是 \verb|subarray| 环境，其可以指定多行公式居中(c)或者左对齐(l)，例如
+\begin{listing}
+\[\sum_{\begin{subarray}{l}
+        i\in\Lambda\\ 0<j<n
+       \end{subarray}}
+P(i,j)\]
+\end{listing}
+
+\cprotect\section{\verb|\sideset| 命令}\label{sec:sideset}
+\verb|\sideset| 命令是为了一个特殊用途：将符号放在一个巨算符的上标或下标角落上，比如$\sum$或$\prod$。\emph{注意这个命令不能用于其他非求和符号类的符号}。 典型的例子是如果您想在一个求和符号上输入一撇（\verb|\prime|），如果没有求和上下限，您可以使用 \verb|\nolimits|，比如在行间模式中输入 \verb|\sum\nolimits' E_n|：
+\begin{equation}
+\sum\nolimits' E_n
+\end{equation}
+
+然而，如果您想要的不仅是一撇，还想要在求和符号的上方或下方再输入一些其他的东西，这就不容易了——事实上，要是没有 \verb|\sideset| 的话，这是非常困难的。但是利用 \verb|\sideset|，您可以输入
+\begin{listing}
+\[\sideset{}{'}
+  \sum_{n<k,\;\text{$n$为奇数}} nE_n\]
+\end{listing}
+
+额外的一对空大括号可以通过这样一个事实来解释：\verb|\sideset| 具有在一个巨算符的每个角都放置一个或多个符号的能力。例如：
+\begin{listing}
+\[
+\sideset{_{a}^{b}}%
+        {_{c}^{d}}\prod
+\]
+\end{listing}
+
+\section{上下标的放置与limits选项\label{sec7.3}}
+默认的上下标位置取决于主算符。求和类符号默认为displaylimits放置：当求和类符号出现在行间公式时，上标或下标出现在求和类符号的正上方或正下方，但是在行内公式中，上下标被放置在旁边，来避免周围的文本行不悦目及浪费地伸展。而积分类符号则默认将上下标放在旁边，即使在行间公式中也是一样。 （参看第二章中的 \verb|intlimits| 选项）。
+
+诸如$\sin$或$\lim$之类的算符名，可能既有displaylimits，又有limits放置模式，这取决于它们的定义。标准的算符名是根据其数学用途来定义的。
+
+\verb|\limits| 和 \verb|\nolimits| 命令可以用来修改主算符的正常上下标位置：
+\[\sum\nolimits_X,\qquad\iint\limits_X,\qquad\varliminf\nolimits_{n\to\infty}\]
+
+要定义一个命令使得其上标与 \verb|\sum| 的displaylimits行为一致，在其定义的末尾加入 \verb|\displaylimits|。 当多种 \verb|\limits|，  \verb|\nolimits| 或 \verb|\displaylimits| 选项连续出现时，  最后一个选项优先。
+\section{多重积分符号}
+\verb|\iint|、\verb|\iiint|、\verb|\iiiint| 输出多重积分符号，且给出自适应的间距，在文本和行间模式都是一样。 \verb|\idotsint| 是这种积分号的扩展，只给出两个积分号，但在中间用点来填充。
+\begin{equation}
+\iint\limits_Af(x,y)\,\text dx\text dy\qquad\iiint\limits_Af(x,y,z)\,\text dx\text dy\text d z
+\end{equation}
+\begin{equation}
+\iiiint\limits_Af(w,x,y,z)\,\text dw\text dx\text dy\text dz\qquad\idotsint\limits_Af(x_1,\cdots,x_k)
+\end{equation}

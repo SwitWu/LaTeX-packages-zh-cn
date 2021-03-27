@@ -1,0 +1,41 @@
+% !Mode:: "TeX:Hard:UTF-8"
+
+
+\chapter{简介}
+
+\pkg{amsmath}包是一个\LaTeX 软件包，它为改进包含数学公式的文档的信息结构和打印输出提供了各种增强功能。 不熟悉\LaTeX 的读者可以参阅 \cite{3} 。如果您安装了最新版本的\LaTeX，\pkg{amsmath}包已经提供好了。当新版本的\pkg{amsmath}包发布的时候，可以通过 \url{http://mirror.ctan.org/macros/latex/required/amsmath.zip} 进行更新。
+
+本文档描述了\pkg{amsmath}包的特性，并讨论了他们的用途。\pkg{amsmath} 宏包还包含了一些辅助的包：
+\begin{center}
+\ttfamily amsbsy \quad amsopn\quad amsxtra\quad amscd\quad amstext
+\end{center}
+这些都和数学公式的内容有一定关系。 想要获取更多关于数学符号与数学字体的信息，  参考\cite{8}和 \url{https://www.ams.org/tex/amsfonts.html}。
+
+如果您是一个长期的\LaTeX 用户，并且在您所写的内容中有大量的数学知识，那么您可以在这个\pkg{amsmath}特性列表中识别一些常见问题的解决方案：
+
+\begin{itemize}
+\item 类似于 \verb|\sin| 和 \verb|\lim| 的一种简单方法来定义一个新的运算符，包括合适的边间距和自动选择正确的字体样式和大小（即使在下标或上标的使用中也一样）。
+\item \texttt{eqnarray} 环境的多个替代项，  使各种类型的公式排列更易于编写。
+\item 公式编号自动向上或向下调整以避免在公式内容上套印（与 \texttt{eqnarray} 不同）。
+\item 等号周围的间距与等号环境中的正常间距相匹配（与 \texttt{eqnarray} 不同）。
+\item 生成多行下标的方法，  正如常用于求和或求积符号一样。
+\item 用可变的公式编号代替手动编号的一种简单方法。
+\item 一种对选定的公式生成类似于形式 (1.3a) (1.3b) (1.3c) 的子公式编号。
+\end{itemize}
+
+\pkg{amsmath}主包提供了各种行间公式和其他数学结构。
+
+\pkg{amstext}提供了在公式中输入文本的 \verb|\text| 命令。
+
+\pkg{amsopn}提供了定义类似 \verb|\sin|， \verb|\lim| 运算符的 \verb|\DeclareMathOperator| 命令。
+
+\pkg{amsbsy}为了向后兼容性，  这个包仍然保留着，  但是更推荐使用\LaTeX 附带的\pkg{bm}包。
+
+\pkg{amscd}提供了画简单交换图的的 \verb|CD| 环境（不支持对角线的箭头）。
+
+\pkg{amsxtra}提供了一些零碎的东西，  比如 \verb|\fracwithdelims| 和 \verb|\accentedsymbol|，  以便与使用版本1.1创作的文档兼容。
+
+\pkg{amsmath}宏包包含了\pkg{amstext}、\pkg{amsopn}和\pkg{amsbsy}，而\pkg{amscd}和\pkg{amsxtra}的特性只有分别加载了这些包才能使用。
+
+
+独立的\pkg{mathtools}包\cite{10}提供了对\pkg{amsmath}的一些增强：\pkg{mathtools}会自动加载\pkg{amsmath}，  因此如果使用\pkg{mathtools}，  则无需再加载\pkg{amsmath}。 一些\pkg{mathtools}的设置会在以下适当位置标注。

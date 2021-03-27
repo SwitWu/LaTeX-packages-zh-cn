@@ -1,0 +1,15 @@
+% !Mode:: "TeX:Hard:UTF-8"
+
+\chapter{交换图}
+一些交换图，比如 \hologo{AmSTeX} 中的，是可以用\pkg{amscd}画的。 对于更复杂的交换图，  作者应该用更综合性的宏包，比如\TikZ（特别地，{\ttfamily tikz-cd}）或者 XY-pic，但是对于简单的不含对角线箭头的交换图，\pkg{amscd}宏包的命令应该就足够了。这里是一个例子：
+\begin{tcblisting}{}
+\[
+\begin{CD}
+S^{\mathcal{W}_\Lambda}\otimes T @>j>>  T\\
+@VVV                                    @VV{\text{End} P}V\\
+{S\otimes T}/I                  @=      (Z\otimes T)/J
+\end{CD}
+\]
+\end{tcblisting}
+
+在 \verb|CD| 环境中，\verb|@>>>|、\verb|@<<<|、\verb|@VVV| 和 \verb|@AAA| 分别给出向右、向左、向下和向上的箭头。对于水平箭头，  在第一个与第二个\verb|>|（或\verb|<|）之间的内容将会以上标的形式输出。而第二个与第三个 \verb|>|（或\verb|<|）之间的内容会以下标形式输出。类似地，在前两个或后两个 \verb|A| 或 \verb|V| 之间的内容分别以左标或右标输出。\verb|@=| 和 \verb|@|| 分别给出水平和垂直的双竖线。空箭头命令 \verb|@.| 可以用来在需要的地方填充一个不可见的箭头。

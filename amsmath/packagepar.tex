@@ -1,0 +1,53 @@
+% !Mode:: "TeX:Hard:UTF-8"
+
+\chapter{\pkg{amsmath}宏包的可选项}
+
+\pkg{amsmath}宏包包含如下可选项：
+
+\verb|centertags|（默认）对于包含 \verb|split| 环境的公式，  将公式编号垂直放置在公式总高度的中间。
+
+\verb|tbtags| 顶部或底部标签：对于包含 \verb|split| 环境的公式，  如果编号在右边（或左边），  则将公式编号与最后一个（或第一行）放在同一水平。
+
+\verb|sumlimits|（默认）将行间公式的求和符号的上标和下标分别放在上方和下方。 这个选项也影响了其他同种类型的符号——$\displaystyle{\prod,\coprod,\bigotimes,\bigoplus}$等，但是不包含积分符号（见下）。
+
+\verb|nosumlimits| 总是将求和符号的上标和下标放在求和符号的旁边，  包括行间公式。
+
+\verb|intlimits| 类似于 \verb|sumlimits|，  但是针对积分符号的。
+
+\verb|nointlimits|（默认）是 \verb|intlimits| 的反义。
+
+\verb|namelimits|（默认）类似于 \verb|sumlimits|，  但是对某些运算符例如$\det,\inf,\max,\min$等出现在行间公式中时，  通常在下面放置下标。
+
+\verb|nonamelimits| 是 \verb|namelimits| 的反义。
+
+\verb|alignedleftspaceyes|
+
+\verb|alignedleftspaceno|
+
+\verb|alignedleftspaceyesifneg|
+
+要使用这些宏包选项，将选项名称放在 \verb|\usepackage| 的可选参数中——例如
+
+\verb|\usepackage[intlimits]{amsmath}|
+
+对于 \hologo{AmS} 文档类和任何其它预加载\pkg{amsmath}宏包的文档类，想要的选项都必须通过 \verb|\documentclass| 来指定——例如
+
+\verb|\documentclass[intlimits,tbtags,reqno]{amsart}|。
+
+\pkg{amsmath}包还识别通常通过 \verb|\documentclass| 命令选择（隐式或显式）的以下选项，  因此不需要在 \verb|\usepackage{amsmath}| 的选项列表中重复声明。
+
+\verb|leqno| 将公式编号放在左边。
+
+\verb|reqno| 将公式编号放在右边。
+
+\verb|fleqn| 将公式放在距离左边缘固定缩进的位置而不是放在中间。
+
+有三个选项被添加来控制 \verb|aligned| 和 \verb|gathered| 环境左侧的空格。 在2017发布之前，  这些结构的左侧而不是右侧添加了一个较小的空格。 这似乎是操作的一个意外特征，  一般是通过在环境前面加前缀 \verb|\!| 来修正。
+
+新的缺省行为旨在确保在大多数情况下，  环境中没有添加很小的空格，  并且使用 \verb|\!\begin{aligned}| 的现有文档继续像以前一样有效。
+
+\verb|alignedleftspaceyes| 通常在 \verb|aligned| 和 \verb|gathered| 的左侧添加 \verb|\,|。
+
+\verb|alignedleftspaceno| 通常在 \verb|aligned| 和 \verb|gathered| 的左侧不加 \verb|\,|。
+
+\verb|alignedleftspaceyesifneg| 只在环境前面添加了负距离以后才添加 \verb|\,| （新的缺省行为）。

@@ -1,0 +1,19 @@
+% !Mode:: "TeX:Hard:UTF-8"
+
+\cprotect\chapter{\verb|\text| 命令}
+\verb|\text| 命令的主要作用是用于一些行间公式的文字。 它和\LaTeX{} 的 \verb|\mbox| 命令的作用很像，  但是有更多优点。 如果您希望一段文字出现在下标，  可输入 \verb|..._{\textrm{word| \verb|or phrase}}|，  这要比 \verb|\mbox| 等价形式简单：
+\verb|...{\mbox{\rmfamily\scriptsize word or|   \verb|phrase}}|。 注意标准的 \verb|\textrm| 命令会使用\pkg{amsmath}的 \verb|\text| 命令的定义，但保证 \verb|\rmfamily| 字体被使用。
+\begin{tcblisting}{}
+\begin{equation}
+f_{[x_{i-1},x_i]} \text{ is monotonic,}\quad i=1,\dots,c+1
+\end{equation}
+\end{tcblisting}
+
+\verb|\text| 的字体会和周围的环境字体保持一致，例如在定理环境中，\verb|\text| 的内容会变成斜体字体。
+
+如果在 \verb|\text| 命令中包含数学表达式，一定要用 \verb|$...$| 指明。
+\begin{tcblisting}{}
+\[\partial_s f(x) = \frac{\partial}{\partial x_0} f(x) \quad \text{for $x=x_0+Ix_1$.}\]
+\end{tcblisting}
+
+函数名不应该用 \verb|\text| 输入，而应该用 \verb|\mathrm| 或 \verb|\DeclareMathOperator| 比较合适。这些是固定实体，不应根据外部内容进行更改（例如出现在用斜体设置的定理中），并且在声明的运算符的情况下，自动应用适当的间距。
