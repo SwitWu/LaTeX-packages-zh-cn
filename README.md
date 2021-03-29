@@ -16,3 +16,5 @@ LaTeX常用宏包中文翻译版集锦
 + [ ] TikZ&PGF
 + [ ] beamer
 + [ ] mathtools
++ [ ] caption
++ [ ] xcolor
