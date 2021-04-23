@@ -14,7 +14,7 @@ LaTeX常用宏包中文翻译版集锦
 + [ ] listings
 + [x] [nicematrix](https://gitee.com/zhangsming818/nicematrixmanualzh/)
 + [ ] TikZ&PGF
-+ [ ] beamer
++ [x] beamer
 + [ ] mathtools
 + [ ] caption
 + [ ] xcolor
