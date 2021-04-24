@@ -1,0 +1,20 @@
+% !TeX root = ../tlmgr-intro-zh-cn.tex
+\section{全局选项 (GLOBAL OPTIONS)}
+\begin{description}
+    \item \op{-help}, \op{-h}, \op{-?}\par
+    这些选项可以显示任何一个操作的参考文档. 
+    \item \op{-version}\par
+    显示 \tl 发行版以及 \tlmgr 本身的版本信息, 如果同时指定了 \op{-v} 选项, \tl{} Perl 模块的版本号也会被显示. 
+    \item \op{-q}\par
+    抑致输出信息的生成. 
+    \item \op{-v}\par
+    显示调试信息, 重复使用 \op{-v} 来显示更多的调试信息. 
+    \item \op{-command-logfile} \marg{file}\par
+    \tlmgr 把所有程序 (\texttt{mktexlr}, \texttt{mtxrun}, \texttt{fmtutil}, \texttt{updmap}) 的输出都记录在了一个 log 文件中, 这个文件默认在 \texttt{TEXMFSYSVAR/web2c/tlmgr-commands.log}. 这个选项允许用户把日志存放在 \marg{file} 中. 
+    \item \op{-package-logfile} \marg{file}\par
+    \tlmgr 把所有对软件包的操作 (\ac{install}, \ac{remove}, \ac{update}, failed updates, failed restores) 记录在一个 log 文件中, 这个文件默认在 \texttt{TEXMFSYSVAR/web2c/tlmgr.log}. 这个选项允许用户把日志存放在 \marg{file} 中. 
+    \item \op{-pause}\par
+    这个选项让 \tlmgr 在退出之前等待用户输入. 可以有效地防止 Windows 10 中命令行窗口在运行后直接消失. 
+    \item \op{-repository} \marg{url\textup{|}path}\par
+    用来临时修改当前命令的仓库位置, 可以选择远端位置 \marg{url} 或者本地位置 \marg{path}, 如果想更改默认仓库位置, 可以使用 \tlmgr{} \ac{option} \key{repository}, 见 \nameref{subsec:option}. 
+\end{description}

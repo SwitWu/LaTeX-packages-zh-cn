@@ -1,0 +1,67 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tlmgr-intro-zh-cn}[2021/04/20 Package for tlmgr-intro-zh-cn]
+
+% 版式设计
+\RequirePackage[margin=2.4cm]{geometry}
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\RequirePackage{tocloft}
+\renewcommand{\cftsecleader}{\bfseries\cftdotfill{\cftdotsep}}
+\RequirePackage{FiraMono}
+
+% 超链接与颜色
+\RequirePackage[colorlinks]{hyperref}
+\RequirePackage[dvipsnames]{xcolor}
+\hypersetup{linkcolor = Purple}
+
+\RequirePackage{listings}
+\RequirePackage[shortlabels]{enumitem}
+
+% 浮动体
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+\RequirePackage{graphicx}
+\RequirePackage{caption}
+\graphicspath{{./fig/}}
+
+\lstset{
+    basicstyle      = {\ttfamily},
+    keywordstyle  = \color{blue}\bfseries,
+    commentstyle    = \color{gray}, 
+    stringstyle     = \color{brown}, 
+    breaklines      = true,
+    gobble          = 2,
+    escapechar      = +,
+}
+
+\ctexset{
+    section         = {
+        % afterskip    = {}, 
+        format       = \Large\bfseries\raggedright,
+        number       = \arabic{section},
+        name         = {},
+    },
+    subsection       = {
+        afterskip    = {1.5ex plus .2ex},
+        format       = \large\bfseries\raggedright,
+    }  
+}
+            
+\newcommand{\tlmgr}{\texttt{tlmgr}}
+\newcommand{\tl}{\TeX\,Live}
+
+\newcommand{\marg}[2][\textit]{\texttt{<#1{#2}>}}
+\newcommand{\oarg}[2][\textit]{\texttt{[#1{#2}]}}
+\newcommand{\op}[1]{\texttt{#1}}
+\newcommand{\ac}[1]{\texttt{#1}}
+\newcommand{\key}[1]{\texttt{#1}}
+\newcommand{\val}[1]{\texttt{#1}}
+
+% textlabel from https://tex.stackexchange.com/questions/54854/reference-plain-text
+% \makeatletter
+% \newcommand*{\textlabel}[2]{%
+%   \edef\@currentlabel{#1}% Set target label
+%   \phantomsection% Correct hyper reference link
+%   #1\label{#2}% Print and store label
+% }
+% \makeatother

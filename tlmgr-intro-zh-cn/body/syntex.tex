@@ -1,0 +1,25 @@
+% !TeX root = ../tlmgr-intro-zh-cn.tex
+
+\section{基本格式与说明}
+
+\subsection{{\mdseries\tlmgr} 命令的基本格式:}
+
+
+% \begin{lstlisting}
+%         +\tlmgr+ [+\textit{global option}+] <+\textit{action}+> [+\textit{action-specific option}+] [+\textit{operand}+]
+% \end{lstlisting}
+
+\begin{quote}
+    \tlmgr{} \texttt{[}\op{\textit{global options}}\texttt{]} \texttt{<}\ac{\textit{action}}\texttt{>} \texttt{[}\op{\textit{action-specific options}}\texttt{]} \oarg{operand}
+\end{quote}
+
+\subsection{文档记号说明}
+
+\begin{enumerate}[(1)]
+    \item \tlmgr 的\textbf{选项} (option) 分为全局选项与特定命令的选项, 它们一般以 \texttt{-} 或 \texttt{-{}-} 开头. 但是所有的选项可以在一条命令的任意位置, 按任意顺序调用. 一条命令中第一个不是选项的参数会称为这条命令的主要\textbf{操作} (action). 
+    \item 在所有的情况中, \texttt{-option} 与 \texttt{-{}-option} 等价. 
+    \item 文档中被中括号 \texttt{[arg]} 框起来的为可选参数, 如 \texttt{install [\textit{option}]},
+    \item 文档中被尖括号 \texttt{<arg>} 框起来的为必选参数, 如 \texttt{info <\textit{pkg}>},
+    \item 文档中被竖线 \texttt{|} 分隔的参数为 $ n $ 选 $ 1 $, 如 \op{-repository} \marg{url\textup{|}path} 表示选项 \op{-repository} 后面可以选择远端地址 \texttt{\textit{url}} 或本地位置 \texttt{\textit{path}},
+    \item 文档中用斜体标出的参数 \texttt{\textit{arg}} 表示参数的类型, 用直立体标出的参数 \texttt{arg} 表示参数需要直接填 \texttt{arg}, 比如 \ac{backup} \marg{pkgs\textup{|-all}} 表示 \ac{backup} 操作后可以跟参数 \texttt{-all} 或软件包类型的参数. 
+\end{enumerate}

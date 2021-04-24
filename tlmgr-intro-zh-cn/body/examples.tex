@@ -1,0 +1,22 @@
+% !TeX root = ../tlmgr-intro-zh-cn.tex
+
+\section{例子}\label{sec:examples}
+
+在成功安装 \tl 后, 可以使用一些 \tlmgr 上的常用配置. 
+
+\begin{description}
+    \item \tlmgr{} \ac{option} \key{repository} \val{ctan}\par
+    告诉 \tlmgr 它可以从一个附近的 CTAN 镜像去获取最近的更新. 
+    \item \tlmgr{} \ac{update} \op{-list}\par
+    列出所有可以被更新的内容. 
+    \item \tlmgr{} \ac{update} \op{-all}\par
+    更新全部的安装包. 
+    \item \tlmgr{} \ac{update} \op{-self}\par
+    升级 \tlmgr 本身. 
+    \item \tlmgr{} \ac{info} \marg{pkgs}\par
+    列出 \marg{pkgs} 的详细信息, 比如它们的安装状态, 版本号, 介绍等等. 
+    \item \tlmgr{} \ac{update} \op{--reinstall-forcibly-removed} \op{--all}\par
+    当使用 \tlmgr{} 升级宏包到一半时因为意外终止, 运行该命令来继续没有完成的升级, 详见 \nameref{subsec:update} 的 \hyperlink{op:-reinstall-forcibly-removed}{\op{-reinstall-forcibly-removed}} 选项.
+\end{description}
+
+
