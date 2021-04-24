@@ -20,3 +20,4 @@ LaTeX常用宏包中文翻译版集锦
 + [ ] xcolor
 + [ ] siunitx
 + [x] [tlmgr](https://github.com/syvshc/tlmgr-intro-zh-cn)
++ [ ] fontspec
