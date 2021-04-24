@@ -19,3 +19,4 @@ LaTeX常用宏包中文翻译版集锦
 + [ ] caption
 + [ ] xcolor
 + [ ] siunitx
++ [x] [tlmgr](https://github.com/syvshc/tlmgr-intro-zh-cn)
