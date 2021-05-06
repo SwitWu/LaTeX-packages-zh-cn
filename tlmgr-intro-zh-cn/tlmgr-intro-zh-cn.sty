@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{tlmgr-intro-zh-cn}[2021/04/20 Package for tlmgr-intro-zh-cn]
+\ProvidesPackage{tlmgr-intro-zh-cn}[2021/05/05 Package for tlmgr-intro-zh-cn]
 
 % 版式设计
 \RequirePackage[margin=2.4cm]{geometry}
@@ -17,6 +17,8 @@
 \RequirePackage{listings}
 \RequirePackage[shortlabels]{enumitem}
 
+\RequirePackage{tocbibind}
+
 % 浮动体
 \RequirePackage{tabularx}
 \RequirePackage{booktabs}
@@ -25,13 +27,14 @@
 \graphicspath{{./fig/}}
 
 \lstset{
-    basicstyle      = {\ttfamily},
+    basicstyle      = {\small\ttfamily},
     keywordstyle  = \color{blue}\bfseries,
     commentstyle    = \color{gray}, 
     stringstyle     = \color{brown}, 
     breaklines      = true,
     gobble          = 2,
-    escapechar      = +,
+    % escapechar      = +,
+    frame           = single
 }
 
 \ctexset{

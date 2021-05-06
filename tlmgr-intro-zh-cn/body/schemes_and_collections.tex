@@ -1,0 +1,71 @@
+% !TeX root = ../tlmgr-intro-zh-cn.tex
+\section[安装方案与集合]{安装方案 (Schemes) 与集合 (Collections)}
+
+在 \tlmgr{} \ac{install} (\op{-reinstall}) 的时候对于某些宏包我们可以知道它的名字, 如果要(重新)安装某些安装方案或集合, 在操作 \nameref{subsec:info} 中提到可以使用 
+\begin{quote}
+    \tlmgr{} \ac{info} \texttt{collections}
+\end{quote}
+来获得所有集合的名称和信息, 用
+\begin{quote}
+    \tlmgr{} \ac{info} \texttt{schemes}
+\end{quote}
+来获得所有安装方案的名称和信息, 前面带 \texttt{i} 的为已经安装过的安装方案和集合. 下面给出输出结果以便查阅
+
+\begin{lstlisting}
+    $ tlmgr info collections
+
+    i collection-basic: Essential programs and files
+    i collection-bibtexextra: BibTeX additional styles
+    i collection-binextra: TeX auxiliary programs
+    i collection-context: ConTeXt and packages
+    i collection-fontsextra: Additional fonts
+    i collection-fontsrecommended: Recommended fonts
+    i collection-fontutils: Graphics and font utilities
+    i collection-formatsextra: Additional formats
+    i collection-games: Games typesetting
+    i collection-humanities: Humanities packages
+    i collection-langarabic: Arabic
+    i collection-langchinese: Chinese
+    i collection-langcjk: Chinese/Japanese/Korean (base)
+    i collection-langcyrillic: Cyrillic
+    i collection-langczechslovak: Czech/Slovak
+    i collection-langenglish: US and UK English
+    i collection-langeuropean: Other European languages
+    i collection-langfrench: French
+    i collection-langgerman: German
+    i collection-langgreek: Greek
+    i collection-langitalian: Italian
+    i collection-langjapanese: Japanese
+    i collection-langkorean: Korean
+    i collection-langother: Other languages
+    i collection-langpolish: Polish
+    i collection-langportuguese: Portuguese
+    i collection-langspanish: Spanish
+    i collection-latex: LaTeX fundamental packages
+    i collection-latexextra: LaTeX additional packages
+    i collection-latexrecommended: LaTeX recommended packages
+    i collection-luatex: LuaTeX packages
+    i collection-mathscience: Mathematics, natural sciences, computer science packages
+    i collection-metapost: MetaPost and Metafont packages
+    i collection-music: Music packages
+    i collection-pictures: Graphics, pictures, diagrams
+    i collection-plaingeneric: Plain (La)TeX packages
+    i collection-pstricks: PSTricks
+    i collection-publishers: Publisher styles, theses, etc.
+    i collection-texworks: TeXworks editor; TL includes only the Windows binary
+    i collection-wintools: Windows-only support programs
+    i collection-xetex: XeTeX and packages
+\end{lstlisting}
+\begin{lstlisting}
+    $ tlmgr info schemes
+
+    i scheme-basic: basic scheme (plain and latex)
+    i scheme-context: ConTeXt scheme
+    i scheme-full: full scheme (everything)
+    i scheme-gust: GUST TeX Live scheme
+    i scheme-infraonly: infrastructure-only scheme (no TeX at all)
+    i scheme-medium: medium scheme (small + more packages and languages)
+    i scheme-minimal: minimal scheme (plain only)
+    i scheme-small: small scheme (basic + xetex, metapost, a few languages)
+    i scheme-tetex: teTeX scheme (more than medium, but nowhere near full)
+\end{lstlisting}
