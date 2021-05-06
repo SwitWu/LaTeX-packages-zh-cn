@@ -1,0 +1,48 @@
+%\documentclass{standalone}
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{nicematrix}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,fit,positioning,quotes,calc,patterns}
+\begin{document}
+
+\newcommand{\myCellSpaceTopLimit}{1cm}
+\newcommand{\myCellSpaceBottomLimit}{.8cm}
+\setlength{\arraycolsep}{1.5cm}
+\pagestyle{empty}
+%\begin{figure}[htbp]
+%  \centering
+  \[
+  \begin{NiceMatrix}[name=CellSpace,cell-space-top-limit = \myCellSpaceTopLimit,cell-space-bottom-limit = \myCellSpaceBottomLimit,create-medium-nodes,create-large-nodes,hvlines,rules/color=gray,baseline=c,
+    code-after = {\begin{tikzpicture}
+				\node [blend mode = multiply,fill = red!15,inner sep = 0 pt, fit = (1-1)] {} ;
+\node [blend mode = multiply,fill = red!15,inner sep = 0 pt,fit = (1-2)] {} ;
+\node [blend mode = multiply,fill = red!15,inner sep = 0 pt,fit = (2-1)] {} ;
+\node [blend mode = multiply,fill = red!15,inner sep = 0 pt,fit = (2-2)] {} ;
+%	蓝色行底线（第1行）
+\draw[blue,dashed] ($(2-|1)+(0,\myCellSpaceBottomLimit)$) -- ($(2-|3)+(0,\myCellSpaceBottomLimit)$);
+%	蓝色行底线（第2行）
+\draw[blue,dashed] ($(3-|1)+(0,\myCellSpaceBottomLimit)$) -- ($(3-|3)+(0,\myCellSpaceBottomLimit)$);
+%	红色行顶线（第1行）
+\draw[red,dashed] ($(1-|1)+(0,-\myCellSpaceTopLimit)$) -- ($(1-|3)+(0,-\myCellSpaceTopLimit)$);
+%	红色行顶线（第2行）
+\draw[red,dashed] ($(2-|1)+(0,-\myCellSpaceTopLimit)$) -- ($(2-|3)+(0,-\myCellSpaceTopLimit)$);
+%	红色箭头+标注（第1行），单元格顶部空白
+\draw ($(1-|3)$) edge["单元格顶部空白" right,xshift=-.1cm,red,Latex-Latex]  ($(1-|3)+(0,-\myCellSpaceTopLimit)$);
+%	红色箭头+标注（第2行），单元格顶部空白
+\draw ($(2-|3)$) edge["单元格顶部空白" right,xshift=-.1cm,red,Latex-Latex]  ($(2-|3)+(0,-\myCellSpaceTopLimit)$);
+%	蓝色箭头+标注（第1行），单元格底部空白
+\draw ($(2-|3)$) edge["单元格底部空白" right,xshift=-.1cm,blue,Latex-Latex]  ($(2-|3)+(0,\myCellSpaceBottomLimit)$);
+%	蓝色箭头+标注（第2行），单元格底部空白
+\draw ($(3-|3)$) edge["单元格底部空白" right,xshift=-.1cm,blue,Latex-Latex]  ($(3-|3)+(0,\myCellSpaceBottomLimit)$);
+    \end{tikzpicture}}
+    ]
+    A & a + b \\
+    a & B
+  \end{NiceMatrix}
+  \]
+%  \caption{阵列水平（列间）空白示意图}
+%  \label{fig:阵列水平（列间）空白示意图}
+%\end{figure}
+
+\end{document}
