@@ -1,12 +1,11 @@
 % Introduction.tex
 
 %\section{Introduction}
-%\label{int}
 
 \section{引言}
 \label{int}
 
-%This document is a systematic reference manual for the \biblatex package. Look at the sample documents which ship with \biblatex to get a first impression.\fnurl{\biblatexctan doc/examples}
+%This document is a systematic reference manual for the \biblatex package. Look at the sample documents which come with \biblatex to get a first impression.\fnurl{\biblatexctan doc/examples}
 %For a quick start guide, browse \secref{int:abt, bib:typ, bib:fld, bib:use, use:opt, use:xbx, use:bib, use:cit, use:use}.
 
 这份文档是系统介绍 \biblatex 宏包的参考手册。
@@ -17,42 +16,32 @@
 %scrartcl.cls，ltxdockit.cls，ltxdockit.cfg，ltxdockit.def，btxdockit.sty，ltxdockit.sty。需要修改一些默认设置和命令可在这些文件中查找。
 %还要注意，文档没有参考文献，使用texstudio自动编译时设置驱动是bibtex或bibtex8可一遍过？
 
-
+%\subsection[About]{About \biblatex}
 \subsection{关于 \biblatex}
 \label{int:abt}
 
-%This package provides advanced bibliographic facilities for use with \latex.
-%The package is a complete reimplementation of the bibliographic facilities provided by \latex.
-%The \biblatex\ package works with the \enquote{backend} (program) \biber, which is used to process \bibtex\ format data files and them performs all sorting, label generation (and a great deal more).
-%Formatting of the bibliography is entirely controlled by \tex\ macros.
-%Good working knowledge in \latex should be sufficient to design new bibliography and citation styles.
+
+%This package provides advanced bibliographic facilities for use with \latex. The package is a complete reimplementation of the bibliographic facilities provided by \latex. The \biblatex\ package works with the \enquote{backend} (program) \biber, which is used to process \bibtex\ format data files and them performs all sorting, label generation (and a great deal more).Formatting of the bibliography is entirely controlled by \tex\ macros.Good working knowledge in \latex should be sufficient to design new bibliography and citation styles. This package also supports subdivided bibliographies, multiple bibliographies within one document, and separate lists of bibliographic information such as abbreviations of various fields. Bibliographies may be subdivided into parts and\slash or segmented by topics. Just like the bibliography styles, all citation commands may be freely defined. Features such as full Unicode support for bibliography data, customisable sorting, multiple bibliographies with different sorting, customisable labels and dynamic data modification are available. Please refer to \secref{int:pre:bibercompat} for information on \biber/\biblatex version compatibility. The package is completely localised and can interface with the \sty{babel} and \sty{polyglossia} packages. Please refer to \tabref{bib:fld:tab1} for a list of languages currently supported by this package.
+
 \biblatex 包提供了一套与 \LaTeX\ 配合使用的高级参考文献工具。
 它重新实现了 \LaTeX 提供的参考文献功能。
 该包使用后端程序 \biber 来处理\BibTeX\ 格式的数据文件，并完成排序、标签生成(及更多其它功能)。
 参考文献的格式化完全由 \TeX\ 宏指令控制。
 具备良好的 \LaTeX 知识就足以设计新的参考文献著录样式和标注样式。
-
-%This package also supports subdivided bibliographies, multiple bibliographies within one document, and separate lists of bibliographic information such as abbreviations of various fields.
-%Bibliographies may be subdivided into parts and\slash or segmented by topics.
-%Just like the bibliography styles, all citation commands may be freely defined.
 \biblatex 也支持参考文献表细分、在一个文档内包含多个参考文献表、以及域缩写等参考文献信息表。
 参考文献表可以根据主题进行分块或者分段。
 与参考文献著录样式类似，所有的标注(引用)命令也可以自由定义。
-
-%Features such as full Unicode support for bibliography data, customisable sorting, multiple bibliographies with different sorting, customisable labels and dynamic data modification are available.
-%Please refer to \secref{int:pre:bibercompat} for information on \biber/\biblatex version compatibility.
-%The package is completely localised and can interface with the \sty{babel} and \sty{polyglossia} packages.
-%Please refer to \tabref{bib:fld:tab1} for a list of languages currently supported by this package.
 提供的功能还包括：文献数据的Unicode支持、自定义排序、不同排序方式的多参考文献表、自定义标签和动态数据修改等。
 \biber/\biblatex 的版本兼容性见 \secref{int:pre:bibercompat} 节。
 该包可完全实现本地化，可与 \sty{babel} 和 \sty{polyglossia} 宏包配合使用。
 该包支持的语言详见\tabref{bib:fld:tab1}。
 
-
+%\subsection{License}
 \subsection{许可}
 
-Copyright \textcopyright\ 2006--2012 Philipp Lehman, 2012--2013 Philip Kime, Audrey Boruvka, Joseph Wright. Permission is granted to copy, distribute and\slash or modify this software under  the terms of the \lppl, version 1.3.\fnurl{http://www.ctan.org/tex-archive/macros/latex/base/lppl.txt}
+Copyright \textcopyright\ 2006--2012 Philipp Lehman, 2012--2017 Philip Kime, Audrey Boruvka, Joseph Wright, 2018-- Philip Kime and Moritz Wemheuer. Permission is granted to copy, distribute and\slash or modify this software under  the terms of the \lppl, version~1.3.\fnurl{https://www.latex-project.org/lppl.txt}
 
+%\subsection{Feedback}
 \subsection{反馈}
 \label{int:feb}
 
@@ -63,33 +52,47 @@ Copyright \textcopyright\ 2006--2012 Philipp Lehman, 2012--2013 Philip Kime, Aud
 如果你不想报告bug或者请求新功能，而只是需要帮助，
 可以考虑在 \texttt{comp.text.tex} 新闻组或者 \TeX-\LaTeX\ Stack Exchange 提交问题。\fnurl{http://tex.stackexchange.com/questions/tagged/biblatex}
 
+%\subsection{Acknowledgements}
 \subsection{致谢}
 
-The language modules of this package are made possible thanks to the following contributors:
+The package was originally written by Philipp Lehman and much of his excellent
+original code remains in the core. Philip Kime took over the package in
+2012 with Moritz Wemheuer making regular and valuable contributions from 2017.
+The main authors would like to acknowledge the valuable help of Audrey
+Boruvka and Joseph Wright who helped with the transition of ownership in
+2012 and following years.
+
+The language modules of this package are made possible thanks to the following contributors:\\
+Ander Zarketa-Astigarraga (Basque);
 Augusto Ritter Stoffel, Mateus Araújo, Gustavo Barros (Brazilian);
 Kaloyan Ganev (Bulgarian);
 Sebastià Vila-Marta (Catalan);
 Ivo Pletikosić (Croatian);
 Michal Hoftich (Czech);
-Jonas Nyrup (Danish);
+Christian Mondrup, Jonas Nyrup (Danish);
 Johannes Wilm (Danish\slash Norwegian);
 Alexander van Loon, Pieter Belmans, Hendrik Maryns (Dutch);
-Benson Muite (Estonian);
+Kristian Kankainen, Benson Muite (Estonian);
 Hannu Väisänen, Janne Kujanpää (Finnish);
 Denis Bitouzé (French);
 Apostolos Syropoulos, Prokopis (Greek);
+Márton Marczell, Bence Ferdinandy (Hungarian);
 Baldur Kristinsson (Icelandic);
 Enrico Gregorio, Andrea Marchitelli (Italian);
-Håkon Malmedal (Norwegian);
+Rihards Skuja (Latvian);
+Valdemaras Klumbys (Lithuanian);
+Håkon Malmedal, Hans Fredrik Nordhaug (Norwegian);
 Anastasia Kandulina, Yuriy Chernyshov (Polish);
 José Carlos Santos (Portuguese);
 Oleg Domanov (Russian);
+Andrej Radović (Serbian);
 Martin Vrábel, Dávid Lupták (Slovak);
-Tea Tušar and Bogdan Filipič (Slovene);
+Tea Tušar, Bogdan Filipič (Slovene);
 Ignacio Fernández Galván (Spanish);
-Per Starbäck, Carl-Gustav Werner, Filip Åsblom (Swedish).
-Sergiy M. Ponomarenko (Ukrainian);
-Hans Fredrik Nordhaug (Norwegian)
+Per Starbäck, Carl-Gustav Werner, Filip Åsblom (Swedish);
+Abdulkerim Gok (Turkish);
+Sergiy M. Ponomarenko (Ukrainian).
+
 
 %\subsection{Prerequisites}
 \subsection{前提与必备}
@@ -117,13 +120,13 @@ Hans Fredrik Nordhaug (Norwegian)
 如果你得到错误信息，尝试用 \bin{elatex} 或 \bin{pdfelatex} 分别代替 \bin{latex} 或 \bin{pdflatex} 来编译文档。
 
 \item[\biber]
-%\biber is the backend of \biblatex used to transfer data from source files to the \latex code. \biber comes with TeX Live and is also available from SourceForge.\fnurl{http://biblatex-biber.sourceforge.net/}. \biber uses the \texttt{btparse} C library for \bibtex format file parsing which aimed to be compatible with \bibtex's parsing rules but also aimed at correcting some of the common problems. For details, see the manual page for the Perl \texttt{Text::BibTeX} module\fnurl{http://search.cpan.org/~ambs/Text-BibTeX}.
+%\biber is the backend of \biblatex used to transfer data from source files to the \latex code. \biber comes with TeX Live and is also available from SourceForge.\fnurl{http://biblatex-biber.sourceforge.net/}. \biber uses the \texttt{btparse} C library for \bibtex format file parsing which aimed to be compatible with \bibtex's parsing rules but also aimed at correcting some of the common problems. For details, see the manual page for the Perl \texttt{Text::BibTeX} module\fnurl{https://metacpan.org/release/Text-BibTeX}.
 %\biber 是\biblatex 默认的后端程序。你只需要 \BibTeX 或者 \biber 中的一个后端程序。
 \biber 是\biblatex 的后端程序，负责将参考文献源文件中的数据转换为 \latex 代码。
 \TeX Live 中带有 \biber ，也可以从 SourceForge 获取 \fnurl{http://biblatex-biber.sourceforge.net/} 。
 \biber 使用 C 标准库 \texttt{btparse} 解析 \BibTeX 格式文件，
 这既为了兼容 \BibTeX 的解析规则，也用于修正一些常见问题。
-详见 Perl 模块 \texttt{Text::BibTeX} 的手册页 \fnurl{http://search.cpan.org/~ambs/Text-BibTeX}。
+详见 Perl 模块 \texttt{Text::BibTeX} 的手册页 \fnurl{https://metacpan.org/release/Text-BibTeX}。
 
 \item[etoolbox]
 %This \latex package, which is loaded automatically, provides generic programming facilities required by \biblatex. It is available from \acr{CTAN}.\fnurl{http://ctan.org/pkg/etoolbox}
@@ -138,10 +141,20 @@ Hans Fredrik Nordhaug (Norwegian)
 自动加载，它提供的前端可用于将机器可读信息写入辅助 log 文件，
 可以从 \acr{CTAN} 下载。\fnurl{http://ctan.org/pkg/logreq/}
 
-\item[xstring]
+
+\item[pdftexcmds]
+%This \latex package, which is loaded automatically, implements \pdftex primitives for \luatex, it also offers a unified interface for these primitives across engines. It is available from \acr{CTAN}.\fnurl{http://ctan.org/pkg/pdftexcmds/}
+自动加载，为\luatex 实现 \pdftex 的原始命令，也为不同引擎提供了统一接口，
+可以从 \acr{CTAN} 下载。\fnurl{http://ctan.org/pkg/pdftexcmds/}
+
+\biblatex uses \sty{pdftexcmds} to access the MD5 hash primitives, so version~0.27 (2018/01/30) or above is strongly recommended.
+
+
+
+%\item[xstring]
 %This \latex package, which is also loaded automatically, provides advanced string processing macros It is available from \acr{CTAN}.\fnurl{http://ctan.org/pkg/xstring/}
-自动加载，提供了一些高级字符串处理宏。
-可以从 \acr{CTAN} 下载。\fnurl{http://ctan.org/pkg/xstring/}
+%自动加载，提供了一些高级字符串处理宏。
+%可以从 \acr{CTAN} 下载。\fnurl{http://ctan.org/pkg/xstring/}
 
 \end{marglist}
 
@@ -154,16 +167,23 @@ Hans Fredrik Nordhaug (Norwegian)
 \subsubsection{推荐包}
 \label{int:pre:rec}
 
-%The packages listed in this section are not required for \biblatex to function, but they provide recommended additional functions or enhance existing features. The package loading order does not matter.
+%The packages listed in this section are not strictly required for \biblatex to function, but they provide recommended additional functions or enhance existing features. The package loading order does not matter.
 
-这一节所列出的宏包对于运行 \biblatex 不是必须的。
+这一节所列出的宏包对于运行 \biblatex 不是严格必须的。
 不过，它们能提供一些值得推荐的额外功能，或者能增强一些已有的功能。
 宏包载入的顺序并不重要。
 
 \begin{marglist}
 
 \item[babel/polyglossia]
-%The \sty{babel} and \sty{polyglossia} packages provides the core architecture for multilingual typesetting. If you are writing in a language other than American English, using one of these packages is strongly recommended. You should load \sty{babel} or \sty{polyglossia} before \biblatex and then \biblatex will detect \sty{babel} or \sty{polyglossia} automatically.
+%The \sty{babel} and \sty{polyglossia} packages provides the core architecture for multilingual typesetting. If you are writing in a language other than American English, using one of these packages is strongly recommended. You should load \sty{babel} or \sty{polyglossia} before \biblatex and then \biblatex will detect \sty{babel} or \sty{polyglossia} automatically.  (While \sty{babel} may be loaded after \biblatex if so desired, \sty{polyglossia} must always be loaded before \biblatex.)
+
+%Please note that \biblatex can only detect the language (\eg \texttt{english}, \texttt{german}), but not the language variant (\eg \texttt{british}, \texttt{austrian}) and other properties (\eg \texttt{spelling=new} for \texttt{german}) when used with \sty{polyglossia}. To remind you of these shortcomings \biblatex will issue a warning message when it is loaded together with \sty{polyglossia}, the warning message tells you how to silence it should you want to do so.
+
+\biblatex has only limited support for \sty{polyglossia} versions prior to~v1.45 (2019/10/27). Additional useful features for \biblatex were added in version~1.49. If \sty{polyglossia} is used, it should be updated to version~1.49 (2020/04/08) or above.
+
+The minimum supported \sty{babel} version is~v3.9r (2016/04/23).
+
 
 \sty{babel} 和 \sty{polyglossia} 宏包提供了多语种排版的核心架构。
 如果你使用美式英语以外的语言写作，那么强烈推荐使用这两个宏包中的一个。
@@ -172,6 +192,10 @@ Hans Fredrik Nordhaug (Norwegian)
 对于中文文档，出于兼容问题既不应当使用，也没有必要。——译注}
 你应当在 \biblatex 之前载入 \sty{babel} 或 \sty{polyglossia}，
 这样 \biblatex 可以自动检测这两个宏包。
+
+请注意，当使用\sty{polyglossia}时，\biblatex 只能识别语种（\eg \texttt{english}, \texttt{german}），而不能识别变体语言（\eg \texttt{british}, \texttt{austrian}）以及一些其它特性（\eg \texttt{spelling=new} for \texttt{german}）。
+为提示这一问题，当\sty{polyglossia}加载这些变体语言时，\biblatex 会给出一个警告信息，告诉用户该如何处理来避免这一警告。
+
 
 \item[csquotes]
 %If this package is available, \biblatex will use its language sensitive quotation facilities to enclose certain titles in quotation marks. If not, \biblatex uses quotes suitable for American English as a fallback. When writing in a language other than American English, loading \sty{csquotes} is strongly recommended.\fnurl{http://ctan.org/pkg/csquotes/}
@@ -184,6 +208,18 @@ Hans Fredrik Nordhaug (Norwegian)
 %The \sty{xpatch} package extends the patching commands of \sty{etoolbox} to \biblatex bibliography macros, drivers and formatting directives.\fnurl{http://ctan.org/pkg/xpatch/}
 
 \sty{xpatch} 宏包扩展了 \sty{etoolbox} 的一些补丁命令，这些补丁命令用在\biblatex 的宏、驱动和格式化指令中。\fnurl{http://ctan.org/pkg/xpatch/}
+
+\end{marglist}
+
+\subsubsection{Additional Useful Packages}
+\label{int:pre:add}
+
+The packages listed in this section are not required for \biblatex to function, but provide additional specialist functions or enhance existing features. These packages generally only need to be loaded if their functionality is explicitly desired. The package loading order usually does not matter.
+
+\begin{marglist}
+
+\item[xpatch]
+The \sty{xpatch} package extends the patching commands of \sty{etoolbox} to \biblatex bibliography macros, drivers and formatting directives.\fnurl{https://ctan.org/pkg/xpatch/} Its commands are useful to apply surgical-precision changes to bibliography macros, drivers or formatting directives without having to restate the whole definition to change it. The \biblatex core does not need or use these patching commands and styles that make use of them should load the package themselves.
 
 \end{marglist}
 
@@ -218,6 +254,8 @@ Hans Fredrik Nordhaug (Norwegian)
 使用 \sty{scrartcl}、\sty{scrbook} 或 \sty{scrreprt} 文档类中的任何一个时，biblatex 会调整默认的参考文献标题，
 使其与这些文档类默认的页面布局协调一致。
 更多用法请参考 \secref{use:cav:scr} 一节。
+
+If available \biblatex makes use of some of the more recent of \acr{KOMA}-Script's \emph{do-hooks}. The relevant hooks are present from version~3.27 (2019/10/12) onwards, which is therefore the minimum version recommendation.
 \end{marglist}
 
 %\subsubsection{Incompatible Packages}
@@ -280,7 +318,7 @@ Hans Fredrik Nordhaug (Norwegian)
 \item[inlinebib]
 %The \sty{inlinebib} package is designed for traditional citations given in footnotes. For comparable functionality, see the verbose citation styles in \secref{use:xbx:cbx}.
 \sty{inlinebib} 宏包是为在脚注使用的传统标注设计的。
-相应的功能请参考 \secref{use:xbx:cbx} 节中关于多词标注(verbose)样式的说明。
+相应的功能请参考 \secref{use:xbx:cbx} 节中关于完整信息标注(verbose)样式的说明。%多词标注(verbose)样式
 
 \item[jurabib]
 %Originally designed for citations in law studies and (mostly German) judicial documents, the \sty{jurabib} package also provides features aimed at users in the humanities. In terms of the features provided, there are some similarities between \sty{jurabib} and \biblatex but the approaches taken by both packages are quite different. Since both \sty{jurabib} and \biblatex are full"=featured packages, the list of similarities and differences is too long to be discussed here.
@@ -320,18 +358,34 @@ Hans Fredrik Nordhaug (Norwegian)
 %The \sty{titlesec} package redefines user-level document division commands such as \cmd{chapter} or \cmd{section}. This approach is not compatible with internal command changes applied by the \sty{biblatex} \texttt{refsection} and \texttt{refsegment} option settings described in \secref{use:opt:pre:gen}.
 \sty{titlesec} 宏包重新定义了一些用户层的文档章节划分命令，例如 \cmd{chapter} 或 \cmd{section}。
 其方法与 \biblatex 因设置 \texttt{refsection} 和 \texttt{refsegment} 选项导致的内部命令变化不兼容，
-上述两个选项详见\secref{use:opt:pre:gen} 节。\footnote{当使用biblatex时，不设置\texttt{refsection} 和 \texttt{refsegment}选项，那么 titlesec 就没有兼容性问题，完全可以使用——译注}
+上述两个选项详见\secref{use:opt:pre:gen} 节。\footnote{当使用biblatex时，不设置\texttt{refsection} 和 \texttt{refsegment}选项，那么 titlesec 就没有兼容性问题，完全可以正常使用——译注}
 
 \item[ucs]
 %The \sty{ucs} package provides support for \utf encoded input. Either use \sty{inputenc}'s standard \file{utf8} module or a Unicode enabled engine such as \xetex or \luatex instead.
 \sty{ucs} 宏包提供 \utf 编码输入的支持。
 可以使用 \sty{inputenc} 宏包的标准 \file{utf8} 模块或者 \XeTeX 、\LuaTeX 等支持 Unicode 的编译引擎来实现这一功能。
+The \sty{ucs} package provides support for \utf encoded input, but it does so in a way incompatible with \biblatex.
+
+If you get an error about \sty{ucs} being loaded, but you don't load it explicitly in your preamble, check that you don't load \sty{inputenc}'s \file{utf8x} module: \verb|\usepackage[utf8x]{inputenc}| will also load \sty{ucs}.
+
+Instead of \sty{ucs}/\file{utf8x} use a Unicode engine such as \xetex or \luatex if you want full Unicode support. If you use \pdftex or \tex, the Unicode characters predefined by the \latex format are usually enough for many use cases (this is true for \latex from April 2018 or later, in older versions load \sty{inputenc} with the \file{utf8} module) and missing characters can be defined using \cmd{DeclareUnicodeCharacter} or \sty{newunicodechar}'s \cmd{newunicodechar}.
 
 \item[etextools]
 %The \sty{etextools} package provides enhancements to list macros defined by \sty{etoolbox} and a few other tools for command definitions.
 %The package redefines list handling macros in a way incompatible with \biblatex.
 \sty{etextools}宏包增强了\sty{etoolbox}宏包中处理列表的宏，并提供了少量用于定义命令的工具。
 该宏包重新定义列表处理宏的方式与\biblatex 是不兼容的。
+
+
+%If you must load the \sty{etextools} package at all costs, define the control sequence \cs{blx@noerroretextools} before you load \biblatex.
+%If \cs{blx@noerroretextools} is defined, no error will be issued if \sty{etextools} is loaded, the message is degraded to a warning instead.
+%In that case you need to make sure that all redefined macros used by \biblatex\ (currently only \cmd{forlistloop}) have their original \sty{etoolbox} definitions when \biblatex\ is loaded.
+
+如果无论如何都需要加载 \sty{etextools} 包，
+那么请在加载\biblatex 前定义宏\opt{noerroretextools}。
+如果定义了\cs{blx@noerroretextools}， 加载 \sty{etextools} 将不会报错而只是给出警告信息。
+这种情况下，你需要确保在载入\biblatex\ 时\cmd{forlistloop}命令的定义是 \sty{etoolbox}包给出的原始定义。
+
 
 \end{marglist}
 
@@ -357,6 +411,12 @@ Hans Fredrik Nordhaug (Norwegian)
 		\sffamily\bfseries\spotcolor Biber 版本
 		& \sffamily\bfseries\spotcolor \biblatex\ 版本\\
 		\midrule
+2.15 & 3.15\\
+2.14 & 3.14\\
+2.13 & 3.13\\
+2.12 & 3.12\\
+                2.11 & 3.11\\
+                2.10 & 3.10\\
 		2.9 & 3.9\\
 		2.8 & 3.8\\
 		2.7 & 3.7\\
