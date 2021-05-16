@@ -12,7 +12,7 @@ LaTeX常用宏包中文翻译版集锦
 +  `enumitem`
 +  `fancyvrb`
 +  `fntguide`
-+  `fontspec
++  `fontspec`
 +  `graphicx`
 +  `hyperref`
 +  `layout`
