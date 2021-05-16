@@ -18,7 +18,7 @@ LaTeX常用宏包中文翻译版集锦
 +  `mathtools`
 +  [`nicematrix`](https://gitee.com/zhangsming818/nicematrixmanualzh/)(Finished)
 +  `siunitx`
-+  `tkz-euclide`(Finished)
++  [`tkz-euclide`](https://github.com/registor/tkz-euclide-doc-zh-cn)(Finished)
 +  `TikZ&PGF`
 +  [`tlmgr`](https://github.com/syvshc/tlmgr-intro-zh-cn)(Finished)
 +  `unicode-math`
