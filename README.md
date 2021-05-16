@@ -6,12 +6,14 @@ LaTeX常用宏包中文翻译版集锦
 +  `amsthm`(Finished)
 +  `beamer`(Finished)
 +  [`biblatex`](https://github.com/hushidong/biblatex-zh-cn)(Finished)
++  `booktabs`
 +  `caption`
 +  `clsguide`(Finished)
 +  `enumitem`
 +  `fancyvrb`
 +  `fntguide`
-+  `fontspec`
++  `fontspec
++  `graphicx`
 +  `hyperref`
 +  `layout`
 +  `listings`
