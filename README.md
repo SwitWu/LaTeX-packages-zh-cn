@@ -23,6 +23,7 @@ LaTeX常用宏包中文翻译版集锦
 +  `siunitx`
 +  [`tkz-euclide`](https://github.com/registor/tkz-euclide-doc-zh-cn)(Finished)
 +  `TikZ&PGF`
++  [`tocloft`](https://www.latexstudio.net/index/details/index/mid/1547.html)
 +  [`tlmgr`](https://github.com/syvshc/tlmgr-intro-zh-cn)(Finished)
 +  `unicode-math`
 +  `xcolor`
