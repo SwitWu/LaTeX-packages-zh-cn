@@ -1,0 +1,4157 @@
+% \iffalse meta-comment
+%
+% tocloft.dtx
+% Author: Peter Wilson, Herries Press
+% Maintainer: Will Robertson (will dot robertson at latex-project dot org)
+% Copyright 1998-2003 Peter R. Wilson
+% Copyright 2009-2017 Will Robertson
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either
+% version 1.3c of this license or (at your option) any
+% later version. <http://www.latex-project.org/lppl.txt>
+%
+% This work has the LPPL maintenance status "maintained".
+% The Current Maintainer of this work is Will Robertson.
+%
+% This work consists of the files listed in the README file.
+%
+%
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{hypdoc}
+\EnableCrossrefs
+\CodelineIndex
+\setcounter{StandardModuleDepth}{1}
+%翻译增加
+\usepackage{ctex}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+
+\begin{document}
+  \DocInput{tocloft.dtx}
+\end{document}
+%</driver>
+%
+%<*usc>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tocloft}[2017/08/31 v2.3i parameterised ToC, etc., typesetting]
+%</usc>
+%
+% \fi
+%
+% \changes{v0.1}{1998/12/31}{First public (alpha) release}
+% \changes{v0.1a}{1999/01/15}{Improved documentation}
+% \changes{v0.2}{1999/01/17}{Uses the stdclsdv package}
+% \changes{v0.2a}{1999/01/17}{Interfaced with the tocbibind package}
+% \changes{v0.2b}{1999/03/07}{Corrected failure when used with float package}
+% \changes{v0.2c}{1999/06/30}{Added raggedright example}
+% \changes{v0.3}{1999/08/22}{Added option to prevent ToC head change}
+% \changes{v1.0}{1999/09/19}{Added PackageNote reporting}
+% \changes{v1.1}{2000/02/11}{Added cftXpresnum commands}
+% \changes{v1.1}{2000/02/11}{Added support for subfigure package}
+% \changes{v1.1a}{2000/02/11}{Changed X to Z in section 2.2}
+% \changes{v2.0}{2001/03/03}{Added command for new list of...}
+% \changes{v2.0}{2001/03/03}{Removed requirement for stdclsdv package}
+% \changes{v2.0}{2001/03/15}{Removed requirement for hyperref option}
+% \changes{v2.1}{2001/04/08}{Added control over parskip in ToC etc.}
+% \changes{v2.2}{2001/04/17}{Another fix for hyperref}
+% \changes{v2.3}{2002/06/15}{Made to work with the koma classes}
+% \changes{v2.3a}{2002/10/03}{Partial fix for Part changes}
+% \changes{v2.3b}{2003/01/20}{More fixes for Part changes}
+% \changes{v2.3c}{2003/09/26}{More fixes for hyperref}
+% \changes{v2.3d}{2009/09/04}{New maintainer and tiny bug fix}
+% \changes{v2.3e}{2010/10/13}{Remove a message from the console output}
+%
+% \def\dtxfile{\texttt{tocloft.dtx}}
+% \def\fileversion{v1.1a} \def\filedate{2000/02/11}
+% \def\fileversion{v2.0}  \def\filedate{2001/03/15}
+% \def\fileversion{v2.1}  \def\filedate{2001/04/08}
+% \def\fileversion{v2.2}  \def\filedate{2001/04/17}
+% \def\fileversion{v2.3}  \def\filedate{2002/06/15}
+% \def\fileversion{v2.3a} \def\filedate{2002/10/03}
+% \def\fileversion{v2.3b} \def\filedate{2003/01/20}
+% \def\fileversion{v2.3c} \def\filedate{2003/09/26}
+% \def\fileversion{v2.3d} \def\filedate{2009/09/04}
+% \def\fileversion{v2.3e} \def\filedate{2010/10/13}
+% \def\fileversion{v2.3f} \def\filedate{2013/05/02}
+% \def\fileversion{v2.3g} \def\filedate{2014/06/14}
+% \def\fileversion{v2.3h} \def\filedate{2017/08/29}
+% \def\fileversion{v2.3i} \def\filedate{2017/08/31}
+% \def\fileversion{v2.3j} \def\filedate{2020/01/10}
+%^^A 翻译增加
+% \def\chinesefileversion{1.0} \def\chinesefiledate{2021/05/25}
+%
+% \DoNotIndex{\',\.,\@M,\@@input,\@addtoreset,\@arabic,\@badmath}
+% \DoNotIndex{\@centercr,\@cite}
+% \DoNotIndex{\@dotsep,\@empty,\@float,\@gobble,\@gobbletwo,\@ignoretrue}
+% \DoNotIndex{\@input,\@ixpt,\@m}
+% \DoNotIndex{\@minus,\@mkboth,\@ne,\@nil,\@nomath,\@plus,\@set@topoint}
+% \DoNotIndex{\@tempboxa,\@tempcnta,\@tempdima,\@tempdimb}
+% \DoNotIndex{\@tempswafalse,\@tempswatrue,\@viipt,\@viiipt,\@vipt}
+% \DoNotIndex{\@vpt,\@warning,\@xiipt,\@xipt,\@xivpt,\@xpt,\@xviipt}
+% \DoNotIndex{\@xxpt,\@xxvpt,\\,\ ,\addpenalty,\addtolength,\addvspace}
+% \DoNotIndex{\advance,\Alph,\alph}
+% \DoNotIndex{\arabic,\ast,\begin,\begingroup,\bfseries,\bgroup,\box}
+% \DoNotIndex{\bullet}
+% \DoNotIndex{\cdot,\cite,\CodelineIndex,\cr,\day,\DeclareOption}
+% \DoNotIndex{\def,\DisableCrossrefs,\divide,\DocInput,\documentclass}
+% \DoNotIndex{\DoNotIndex,\egroup,\ifdim,\else,\fi,\em,\endtrivlist}
+% \DoNotIndex{\EnableCrossrefs,\end,\end@dblfloat,\end@float,\endgroup}
+% \DoNotIndex{\endlist,\everycr,\everypar,\ExecuteOptions,\expandafter}
+% \DoNotIndex{\fbox}
+% \DoNotIndex{\filedate,\filename,\fileversion,\fontsize,\framebox,\gdef}
+% \DoNotIndex{\global,\halign,\hangindent,\hbox,\hfil,\hfill,\hrule}
+% \DoNotIndex{\hsize,\hskip,\hspace,\hss,\if@tempswa,\ifcase,\or,\fi,\fi}
+% \DoNotIndex{\ifhmode,\ifvmode,\ifnum,\iftrue,\ifx,\fi,\fi,\fi,\fi,\fi}
+% \DoNotIndex{\input}
+% \DoNotIndex{\jobname,\kern,\leavevmode,\let,\leftmark}
+% \DoNotIndex{\list,\llap,\long,\m@ne,\m@th,\mark,\markboth,\markright}
+% \DoNotIndex{\month,\newcommand,\newcounter,\newenvironment}
+% \DoNotIndex{\NeedsTeXFormat,\newdimen}
+% \DoNotIndex{\newlength,\newpage,\nobreak,\noindent,\null,\number}
+% \DoNotIndex{\numberline,\OldMakeindex,\OnlyDescription,\p@}
+% \DoNotIndex{\pagestyle,\par,\paragraph,\paragraphmark,\parfillskip}
+% \DoNotIndex{\penalty,\PrintChanges,\PrintIndex,\ProcessOptions}
+% \DoNotIndex{\protect,\ProvidesClass,\raggedbottom,\raggedright}
+% \DoNotIndex{\refstepcounter,\relax,\renewcommand,\reset@font}
+% \DoNotIndex{\rightmargin,\rightmark,\rightskip,\rlap,\rmfamily,\roman}
+% \DoNotIndex{\roman,\secdef,\selectfont,\setbox,\setcounter,\setlength}
+% \DoNotIndex{\settowidth,\sfcode,\skip,\sloppy,\slshape,\space}
+% \DoNotIndex{\symbol,\the,\trivlist,\typeout,\tw@,\undefined,\uppercase}
+% \DoNotIndex{\usecounter,\usefont,\usepackage,\vfil,\vfill,\viiipt}
+% \DoNotIndex{\viipt,\vipt,\vskip,\vspace}
+% \DoNotIndex{\wd,\xiipt,\year,\z@}
+%
+% \newcommand*{\Lpack}[1]{\textsf {#1}}           ^^A typeset a package
+% \newcommand*{\Lopt}[1]{\textsf {#1}}            ^^A typeset an option
+% \newcommand*{\file}[1]{\texttt {#1}}            ^^A typeset a file
+% \newcommand*{\Lcount}[1]{\textsl {\small#1}}    ^^A typeset a counter
+% \newcommand*{\pstyle}[1]{\textsl {#1}}          ^^A typeset a pagestyle
+% \newcommand*{\Lenv}[1]{\texttt {#1}}            ^^A typeset an environment
+% \providecommand{\bs}{\textbackslash}
+%
+%^^A \title{The \Lpack{tocloft} package\thanks{This
+%^^A        file (\dtxfile) has version number \fileversion, last revised
+%^^A        \filedate.}}
+% \title{\Lpack{tocloft} 宏包手册\thanks{本文档是 \Lpack{tocloft} \fileversion 的助助手册，英文原稿修订时间 \filedate。
+%    本中译手册由zhangsming翻译制作，当前版本号 v\chinesefileversion，成稿时间 \chinesefiledate。在翻译过程中，译者力求忠于原文，但不保证与原稿完全一致。对本中译手册如有任何疑问，请首先参阅英文原稿，如有错情，欢迎不吝赐教。关于宏包本身的疑问，请参阅有关资料或直接联系宏包作者，也可与译者交流。\\\hspace*{2em}本文档同时以 .dtx 和 .pdf 文件的形式发布，如需自行生成 .pdf 文件，可在命令行环境下用 xelatex 编译 .dtx 文件。}}
+%
+%^^A \author{
+%^^A   Author: Peter Wilson, Herries Press \\
+%^^A   Maintainer: Will Robertson \\
+%^^A   \texttt{will dot robertson at latex-project dot org}
+%^^A }
+% \author{
+%    作者：Peter Wilson, Herries Press \\
+%    维护：Will Robertson \\
+%    邮箱：will.robertson@latex-project.org \\
+%    2020/01/20 （著）
+%    \and
+%    译者：zhangsming\\
+%    邮箱：zhangsming@foxmail.com\\
+%    2021/05/25（译）
+%  }
+%^^A \filedate
+% \date{}
+% \maketitle
+% \begin{abstract}
+%^^A    The \Lpack{tocloft} package provides means of controlling the
+%^^A typographic design of the Table of Contents, List of Figures and List of
+%^^A Tables. New kinds of `List of \ldots' can be defined.
+% \Lpack{tocloft} 宏包主要用于控制文档中章节、插图和表格等元素目录的版式，也可用于自定义其他文档元素的目录。
+%
+%^^A The package has been tested with the
+%^^A \Lpack{tocbibind},
+%^^A \Lpack{minitoc},
+%^^A \Lpack{ccaption},
+%^^A \Lpack{subfigure},
+%^^A \Lpack{float},
+%^^A \Lpack{fncychap}, and
+%^^A \Lpack{hyperref}
+%^^A packages.
+% 该宏包与 \Lpack{tocbibind}、\Lpack{minitoc}、\Lpack{ccaption}、\Lpack{subfigure}、\Lpack{float}、\Lpack{fncychap} 以及
+\Lpack{hyperref} 共7个宏包进行了兼容性测试。
+% \end{abstract}
+% \tableofcontents
+% \makeatletter \renewcommand{\@dotsep}{9.0} \makeatother
+% \listoffigures
+% \listoftables
+% \StopEventually{}
+%
+%
+%
+%^^A \section{Introduction}
+% \section{概述}
+%
+%^^A In the standard classes the typographic design of the Table of Contents
+%^^A (ToC), the List of Figures (LoF) and List of Tables (LoT) is fixed or,
+%^^A more precisely, it is buried within the class definitions.
+%^^A The \Lpack{tocloft} package provides handles for an author to
+%^^A change the design to meet the needs of the particular document.
+% 在 \LaTeX{} 的标准文类中，章节目录（Table of Contents，ToC）、插图目录（List of Figures，LoF）和表格目录（List of Tables，LoT）的版式是“固定”（fixed）的，相关的参数被“写死”在文类的内部定义中，系统并没有提供用于修改目录版式的命令接口。
+%^^A 为使文档编写者可以方便地修改文档目录的版式，编作者写并公开发布了 \Lpack{tocloft} 宏包。本宏包还支持自定义目录类型，可以用于生成其他文档元素的目录。
+% \Lpack{tocloft} 宏包提供了相关命令，使文档编写者可以方便地修改文档目录的版式，同时还支持自定义目录类型，可以用于生成其他文档元素的目录。
+%
+%^^A Elements of the package were developed as part of a class
+%^^A and package bundle for typesetting ISO standards~\cite{PRW96i}.
+%^^A This manual is typeset according to the conventions of the
+%^^A \LaTeX{} \textsc{docstrip} utility which enables the automatic
+%^^A extraction of the \LaTeX{} macro source files~\cite{GOOSSENS94}.
+% 本宏包是为编写符合 ISO 规范的文档（\cite{PRW96i}）而研发的文类及其配套宏集的一部分。本手册的代码编写遵循 \LaTeX{} 文学化编程工具 \textsc{docstrip} 的规范（\cite{GOOSSENS94}），可以从源文件中生成 \file{.sty} 格式的宏包文件和相应的帮助文档。
+%
+%^^A    Section~\ref{sec:usc} describes the usage of the package.
+%^^A Commented source code for the package is in Section~\ref{sec:code}.
+% 宏包的使用方法见第 \ref{sec:usc} 节，宏包代码及注释见第 \ref{sec:code} 节。
+%
+%^^A The package has been tested in combination with at least
+%^^A the \Lpack{tocbibind} package~\cite{TOCBIBIND},
+%^^A the \Lpack{minitoc} package~\cite{MINITOC},
+%^^A the \Lpack{ccaption} package~\cite{CCAPTION},
+%^^A the \Lpack{subfigure} package~\cite{SUBFIGURE} (versions 2.0 and 2.1),
+%^^A the \Lpack{algorithm} package~\cite{ALGORITHM} (which, in turn, calls the
+%^^A \Lpack{float} package~\cite{FLOAT}) and the \Lpack{fncychap} package~\cite{FNCYCHAP}.
+%^^A It also works with the \Lpack{hyperref} package.
+%^^A Please send me any comments as to how you think
+%^^A that the package can be improved, or of any interesting examples of
+%^^A how you have used
+%^^A it.\footnote{Thanks to Rowland (\texttt{rebecca@astrid.u-net.com}),
+%^^A   John Foster (\texttt{john@isjf.demon.co.uk}),
+%^^A   Kasper (\texttt{kbg@dkik.dk}),
+%^^A   Lee Nave (\texttt{nave@math.washington.edu}),
+%^^A   and Andrew Thurber (\texttt{athurber@emba.uvm.edu})
+%^^A   for their suggestions.}
+% 本宏包与下列7个宏包（共8个版本）进行了兼容性测试：\Lpack{tocbibind}、\Lpack{minitoc}、\Lpack{ccaption}、\Lpack{subfigure}（v2.0 和 v2.1版）、\Lpack{algorithm}（该宏包调用 \Lpack{float} 宏包）以及 \Lpack{fncychap} 宏包。
+%
+%^^A \subsection{\LaTeX 's methods}
+% \subsection{\LaTeX{}目录处理方法简述}
+%
+%^^A    This is a general description of how \LaTeX{} does the processing
+%^^A for a Table of Contents. As the processing for List of Figures and
+%^^A List of Tables is similar I will, without loss of generality, just
+%^^A discuss the ToC.
+% 在 \LaTeX{} 中，章节目录（ToC）、插图目录（LoF）和表格目录（LoT）的处理方法基本相同。不失一般性，本节以章节目录（ToC）为例，简述 \LaTeX{} 中目录的处理方法。
+%
+% \DescribeMacro{\addcontentsline}
+%^^A    \LaTeX{} generates a \file{.toc} file if the document contains a
+%^^A |\tableofcontents| command. The sectioning
+%^^A commands\footnote{For figures and tables it is the \texttt{\bs caption} command
+%^^A that populates the \file{.lof} and \file{.lot} files.}
+%^^A put entries into the \file{.toc} file by calling the \LaTeX{}
+%^^A |\addcontentsline{|\meta{file}|}{|\meta{kind}|}{|\meta{title}|}|
+%^^A command, where \meta{file} is the file extension (e.g., |toc|),
+%^^A \meta{kind} is the kind of entry (e.g., |section| or |subsection|),
+%^^A and \meta{title} is the (numberered) title text. In the cases where
+%^^A there is a number, the \meta{title} argument is given in the
+%^^A form |{\numberline{number} title-text}|.
+% 在 \LaTeX{} 源文件编译过程中，如果遇到 |\tableofcontents| 命令，则系统会自动创建与源文件同名的 \file{.toc} 文件\footnote{对于插图和表格，当遇到 \texttt{\bs caption} 命令时，则分别生成\file{.lof} 和 \file{.lot} 文件。}，用于存储目录有关的信息。
+% 当遇到章节命令时，如 |\section| 或 |\subsection| 等，系统会在会通过调用 |\addcontentsline{|\meta{扩展名}|}{|\meta{条目类型}|}{|\meta{章节标题}|}| 命令在 \file{.toc} 文件中增加一个目录条目。在上述命令中，\meta{扩展名}指目录文件的扩展名，如 |toc|（注意没有圆点“.”），\meta{条目类型} 指目录条目的类型，如 |section| 或 |subsection| 等，\meta{章节标题} 指目录项中（带编号）的章节标题。如果单节标题附带编号，则其具体形式是 |{\numberline{条目编号} 章节标题}|。
+%
+%^^A NOTE: The \Lpack{hyperref} package dislikes authors using
+%^^A |\addcontentsline|. To get it to work properly with \Lpack{hyperref}
+%^^A you normally have to put |\phantomsection| (a macro defined within
+%^^A the \Lpack{hyperref} package) immediately
+%^^A before |\addcontentsline|.
+% \colorbox{yellow!30}{注意：} 如果文档中载入了 \Lpack{hyperref} 宏包，则应在 |\addcontentsline| 之前使用由 \Lpack{hyperref} 宏包定义的 |\phantomsection| 命令，并且这2个命令应紧密相邻，中间不应有其他命令。
+%
+% \DescribeMacro{\contentsline}
+%^^A     The |\addcontentsline| command writes an entry to the given file
+%^^A in the form |\contentsline{|\meta{kind}|}{|\meta{title}|}{|\meta{page}|}|
+%^^A where \meta{page} is the page number.
+%  |\addcontentsline| 命令的执行结果是在给定扩展名的文件中插入一个目录条目，目录条目的形式是 |\contentsline{|\meta{扩展名}|}{|\meta{条目内容}|}{|\meta{页码}|}|。
+%^^A     For each \meta{kind}, \LaTeX{} provides a command
+%^^A |\l@kind{|\meta{title}|}{|\meta{page}|}| which performs the actual
+%^^A typesetting of the |\contentsline| entry.
+% 对于每一种 \meta{条目类型}，\LaTeX{} 使用内部命令 |\l@条目类型{|\meta{标题}|}{|\meta{页码}|}| 实际完成 |\contentsline| 条目的输出。
+%
+% \DescribeMacro{\@pnumwidth}
+% \DescribeMacro{\@tocrmarg}
+% \DescribeMacro{\@dotsep}
+%^^A The general layout of a
+%^^A typeset entry is illustrated in Figure~\ref{fig:ltoc}. There are three
+%^^A internal \LaTeX{} commands that are used in the typesetting. The page
+%^^A number is typeset flushright in a box of width |\@pnumwidth|, and the box
+%^^A is at the righthand margin. If the page number is too long to fit into
+%^^A the box it will stick out into the righthand margin. The title text
+%^^A is indented from the righthand margin by an amount given by |\@tocrmarg|.
+%^^A Note that |\@tocrmarg| should be greater than |\@pnumwidth|. Some
+%^^A entries are typeset with a dotted leader between the end of the title
+%^^A title text and the righthand margin indentation. The distance, in
+%^^A \emph{math units}\footnote{There are 18mu to 1em.} between the dots
+%^^A in the leader is given by the value of |\@dotsep|. In the standard
+%^^A classes the same values are used for the ToC, LoF and the LoT.
+% 目录条目的版式如图~\ref{fig:ltoc} 示。在目录条目的排版中，使用了 |\@pnumwidth|、 |\@tocrmarg| 和 |\@dotsep| 共3个内部命令控制目录条目的版式。目录条目的页码区域位于版芯右侧、靠右对齐，页码区域占据的宽度由内部参数 |\@pnumwidth| 控制。如果页码的实际宽度大于 |\@pnumwidth| 参数给定的值，则会延伸至边注区域。目录条目中标题区域右缩进（标题右边缘距版芯右侧）的距离由 |\@tocrmarg| 参数控制，需要注意的是 |\@tocrmarg| 的值应大于 |\@pnumwidth| 的值。在某些类型的目录条目中，标题结尾处与右缩进之间的空白用导引符（通常为圆点）填充。导引符之间的间距由 |\@dotsep| 参数控制，该参数的单位为数学长度单位 |mu|（math units）\footnote{18mu = 1em。}。\LaTeX{} 的标准文类中，章节、插图和表格目录版式上述3个参数的值均相同。
+%
+% \newcommand{\maxx}{120}       ^^A picture width
+% \newcommand{\maxxm}{118}      ^^A \maxx - 2\
+% \newcommand{\maxy}{55}        ^^A picture height
+% \newcommand{\maxym}{53}       ^^A \maxy - 2
+% \newcommand{\findent}{20}     ^^A indent
+% \newcommand{\findentp}{22}    ^^A \findent + 2
+% \newcommand{\fnumwidth}{10}   ^^A numwidth
+% \newcommand{\ftocrmarg}{30}   ^^A \@tocrmarg
+% \newcommand{\fpnumwidth}{20}  ^^A \@pnumwidth
+% \newcommand{\fipn}{30}        ^^A \findent + \fnumwidth
+% \newcommand{\frmarg}{90}      ^^A \maxx - \ftocrmarg
+% \newcommand{\frnum}{100}      ^^A \maxx - \fpnumwidth
+% \newcommand{\fyi}{10}         ^^A 1st y height
+% \newcommand{\fyim}{8}         ^^A \fyi - 2
+% \newcommand{\fyii}{20}        ^^A 2nd y height
+% \newcommand{\fyiii}{25}       ^^A 3rd y height
+% \newcommand{\fyiv}{30}        ^^A 4th y height
+% \newcommand{\fyv}{40}         ^^A 5th y height
+% \newcommand{\fyvp}{42}        ^^A \fyv + 2
+% \newcommand{\flin}{4}         ^^A length of leader lines
+% \newcommand{\frmargm}{89}     ^^A \frmarg (90) - a little bit
+%
+% \providecommand{\bs}{\textbackslash}
+%^^A \begin{figure}
+%^^A \centering
+%^^A \setlength{\unitlength}{1mm}
+%^^A \begin{picture}(\maxx,\maxy)
+%^^A     ^^A side lines and linewidth
+%^^A   \put(0,0){\line(0,1){\maxy}}
+%^^A   \put(\maxx,0){\line(0,1){\maxy}}
+%^^A   \put(0,\maxy){\vector(1,0){\maxx}}
+%^^A   \put(2,\maxym){\makebox(0,0)[tl]{\texttt{\bs linewidth}}}
+%^^A     ^^A \@pnumwidth
+%^^A   \put(\maxx,\fyi){\vector(-1,0){\fpnumwidth}}
+%^^A   \put(\maxxm,\fyim){\makebox(0,0)[tr]{\texttt{\bs @pnumwidth}}}
+%^^A   \put(\frnum,\fyi){\line(0,1){\flin}}
+%^^A     ^^A \@tocrmarg
+%^^A   \put(\maxx,\fyv){\vector(-1,0){\ftocrmarg}}
+%^^A   \put(\maxxm,\fyvp){\makebox(0,0)[br]{\texttt{\bs @tocrmarg}}}
+%^^A   \put(\frmarg,\fyv){\line(0,-1){\flin}}
+%^^A     ^^A indent
+%^^A   \put(0,\fyv){\vector(1,0){\findent}}
+%^^A   \put(2,\fyvp){\makebox(0,0)[bl]{\textit{indent}}}
+%^^A   \put(\findent,\fyv){\line(0,-1){\flin}}
+%^^A     ^^A numwidth
+%^^A   \put(\findent,\fyv){\vector(1,0){\fnumwidth}}
+%^^A   \put(\findentp,\fyvp){\makebox(0,0)[bl]{\textit{numwidth}}}
+%^^A   \put(\fipn,\fyv){\line(0,-1){\flin}}
+%^^A     ^^A last title line
+%^^A   \put(\maxx,\fyii){\makebox(0,0)[br]{487}}
+%^^A   \put(\fipn,\fyii){title end}
+%^^A     ^^A second title line
+%^^A   \put(\fipn,\fyiii){continue\ldots}
+%^^A   \put(\frmarg,\fyiii){\makebox(0,0)[br]{\ldots title}}
+%^^A     ^^A first title line
+%^^A   \put(\findent,\fyiv){\textbf{3.5}}
+%^^A   \put(\fipn,\fyiv){Heading\ldots}
+%^^A   \put(\frmarg,\fyiv){\makebox(0,0)[br]{\ldots title}}
+%^^A     ^^A dotted leader
+%^^A   \multiput(\frmargm,\fyii)(-\flin,0){12}{.}
+%^^A   \multiput(\frmarg,\fyi)(-\flin,0){2}{\line(0,1){\flin}}
+%^^A   \put(\frmarg,\fyi){\vector(-1,0){\flin}}
+%^^A   \put(\frmarg,\fyi){\vector(1,0){0}}
+%^^A   \put(\frmarg,\fyim){\makebox(0,0)[tr]{\texttt{\bs @dotsep}}}
+%^^A
+%^^A \end{picture}
+%^^A \setlength{\unitlength}{1pt}
+%^^A \caption{Layout of a ToC (LoF, LoT) entry} \label{fig:ltoc}
+%^^A \end{figure}
+% \begin{figure}[H]
+  % \centering
+  % \setlength{\unitlength}{1mm}
+  % \begin{picture}(\maxx,\maxy)
+  %     ^^A side lines and linewidth
+  %   \put(0,0){\line(0,1){\maxy}}
+  %   \put(\maxx,0){\line(0,1){\maxy}}
+  %   \put(0,\maxy){\vector(1,0){\maxx}}
+  %   \put(2,\maxym){\makebox(0,0)[tl]{\texttt{\bs linewidth\normalfont（行宽）}}}
+  %     ^^A \@pnumwidth
+  %   \put(\maxx,\fyi){\vector(-1,0){\fpnumwidth}}
+  %   \put(\maxxm,\fyim){\makebox(0,0)[tr]{\texttt{\bs \tikzmark{pnumwidth}@pnumwidth}}}
+  %   \put(\frnum,\fyi){\line(0,1){\flin}}
+  %     ^^A \@tocrmarg
+  %   \put(\maxx,\fyv){\vector(-1,0){\ftocrmarg}}
+  %   \put(\maxxm,\fyvp){\makebox(0,0)[br]{\texttt{\bs \tikzmark{tocrmarg}@tocrmarg}}}
+  %   \put(\frmarg,\fyv){\line(0,-1){\flin}}
+  %     ^^A indent
+  %   \put(0,\fyv){\vector(1,0){\findent}}
+  %   \put(2,\fyvp){\makebox(0,0)[bl]{\textit{\tikzmark{indent}indent}}}
+  %   \put(\findent,\fyv){\line(0,-1){\flin}}
+  %     ^^A numwidth
+  %   \put(\findent,\fyv){\vector(1,0){\fnumwidth}}
+  %   \put(\findentp,\fyvp){\makebox(0,0)[bl]{\textit{numwidth}\normalfont{}（编号宽度）}}
+  %   \put(\fipn,\fyv){\line(0,-1){\flin}}
+  %     ^^A last title line
+  %   \put(\maxx,\fyii){\makebox(0,0)[br]{487}}
+  %   \put(\fipn,\fyii){title end}
+  %     ^^A second title line
+  %   \put(\fipn,\fyiii){continue\ldots}
+  %   \put(\frmarg,\fyiii){\makebox(0,0)[br]{\ldots title}}
+  %     ^^A first title line
+  %   \put(\findent,\fyiv){\textbf{3.5}}
+  %   \put(\fipn,\fyiv){Heading\ldots}
+  %   \put(\frmarg,\fyiv){\makebox(0,0)[br]{\ldots title}}
+  %     ^^A dotted leader
+  %   \multiput(\frmargm,\fyii)(-\flin,0){12}{.}
+  %   \multiput(\frmarg,\fyi)(-\flin,0){2}{\line(0,1){\flin}}
+  %   \put(\frmarg,\fyi){\vector(-1,0){\flin}}
+  %   \put(\frmarg,\fyi){\vector(1,0){0}}
+  %   \put(\frmarg,\fyim){\makebox(0,0)[tr]{\texttt{\bs \tikzmark{dotsep}@dotsep}}}
+  %
+  % \end{picture}
+  % \setlength{\unitlength}{1pt}
+  % \caption{章节（插图、表表）目录条目布局示意图} \label{fig:ltoc}
+  % \end{figure}
+% \begin{tikzpicture}[remember picture,overlay]
+% \node at ([xshift=1.5em,yshift=-1\baselineskip]pic cs:indent) {（缩进）};
+% \node at ([xshift=2.5em,yshift=-1\baselineskip]pic cs:pnumwidth) {（页码宽度）};
+% \node at ([xshift=2em,yshift=-1\baselineskip]pic cs:dotsep) {（导引符间距）};
+% \node at ([xshift=1.2em,yshift=\baselineskip]pic cs:tocrmarg) {（条目标题右边距）};
+% \end{tikzpicture}
+%
+%^^A    The standard values for these internal commands are:
+% 上述3个内部命令的初始值如下：
+% \begin{itemize}
+% \item |\@pnumwidth| = 1.55em
+% \item |\@tocrmarg| = 2.55em
+% \item |\@dotsep| = 4.5
+% \end{itemize}
+%^^A The values can be changed by using |\renewcommand|, in spite of the
+%^^A fact that the first two appear to be lengths.
+% 以上内部命令的值均可通过 |\renewcommand| 命令修改。
+%
+%^^A    Dotted leaders are not available for Part and Chapter ToC entries
+%^^A (nor for Section entries in the \Lpack{article} class and its derivatives).
+% 在 \LaTeX{} 标准文类 |book| 和 |report| 的章节目录中，默认不显示部（part）、章（chapter）的导引符，在 \Lpack{article} 及其衍生文类，节（section）的导引符也不显示。
+%
+% \DescribeMacro{\numberline}\label{sec:lkind}
+%^^A    Each |\l@kind| macro is responsible for setting the general
+%^^A \textit{indent} from the lefthand margin, and the \textit{numwidth}.
+%^^A The |\numberline{|\meta{number}|}| macro is responsible for typesetting
+%^^A the number flushleft in a box of width
+%^^A \textit{numwidth}. If the number is too long for the box then it will
+%^^A protrude into the title text. The title text is indented by
+%^^A (\textit{indent + numwidth}) from the lefthand margin. That is, the title
+%^^A text is typeset in a block of width \\
+%^^A (|\linewidth| - \textit{indent} - \textit{numwidth} - |\@tocrmarg|).
+% 每一个 |\l@条目类型| 命令负责设置目录条目左缩进和条目编号占据的宽度。 |\numberline{|\meta{条目编号}|}| 用于在给定宽度的盒子内从左侧开始排布条目编号（即条目编号左对齐）。如果编号实际占据的宽度大于给定的宽度，则会向右延伸至条目的标题区域。目录条目中标题区域左侧缩进的值为目录左缩进与条目编号宽度之和，即：标题区域的宽度 = 行宽 - 条目左缩进 - 编号宽度 - 条目右缩进（
+% |\linewidth| - \textit{indent} - \textit{numwidth} - |\@tocrmarg|）。
+%
+%^^A \begin{table}
+%^^A \centering
+%^^A \caption[Indents and Numwidths]{Indents and Numwidths (in ems)} \label{tab:indents}
+%^^A \begin{tabular}{lcrrrr} \hline
+%^^A Entry & Level & \multicolumn{2}{c}{Chaptered} & \multicolumn{2}{c}{Otherwise} \\
+%^^A       &       & indent & numwidth & indent & numwidth \\ \hline
+%^^A part          & -1 & 0    & --- & 0    & --- \\
+%^^A chapter       & 0  & 0    & 1.5 &      &     \\
+%^^A section       & 1  & 1.5  & 2.3 & 0    & 1.5 \\
+%^^A subsection    & 2  & 3.8  & 3.2 & 1.5  & 2.3 \\
+%^^A subsubsection & 3  & 7.0  & 4.1 & 3.8  & 3.2 \\
+%^^A paragraph     & 4  & 10.0 & 5.0 & 7.0  & 4.1 \\
+%^^A subparagraph  & 5  & 12.0 & 6.0 & 10.0 & 5.0 \\
+%^^A figure/table  & (1) & 1.5 & 2.3 & 1.5  & 2.3 \\ \hline
+%^^A \end{tabular}
+%^^A \end{table}
+% \begin{table}
+% \centering
+% \caption[\LaTeX{}中各类目录的条目缩进及编号宽度默认值一览表]{\LaTeX{}中各类目录条目的缩进及编号宽度默认值一览表（单位：|em|）} \label{tab:indents}
+% \begin{tabular}{lrcrrrr} \hline
+% 条目类型        & 中文名 & 层级   & \multicolumn{2}{c}{含“章”的文类} & \multicolumn{2}{c}{不含“章”的文类} \\
+%                &        &        & 缩进       & 编号宽度  & 缩进     & 编号宽度        \\ \hline
+% part           &  部    & -1     & 0          & ---      & 0         & --- \\
+% chapter        &  章    & 0      & 0          & 1.5      &           &     \\
+% section        &  节    & 1      & 1.5        & 2.3      & 0         & 1.5 \\
+% subsection     & 小节   & 2      & 3.8        & 3.2      & 1.5       & 2.3 \\
+% subsubsection  & 小小节 & 3      & 7.0        & 4.1      & 3.8       & 3.2 \\
+% paragraph      &   段   & 4      & 10.0       & 5.0      & 7.0       & 4.1 \\
+% subparagraph   &  小段  & 5      & 12.0       & 6.0      & 10.0      & 5.0 \\
+% figure/table   & 图/表  & (1)    & 1.5        & 2.3      & 1.5       & 2.3 \\ \hline
+% \end{tabular}
+  % \end{table}
+%
+%^^A Table~\ref{tab:indents} lists the standard values for the \textit{indent}
+%^^A and \textit{numwidth}. There is no explicit \textit{numwidth} for a
+%^^A part; instead a gap of 1em is put between the number and the title text.
+%^^A Note that for a sectioning command the values
+%^^A depend on whether or not the document class provides the |\chapter|
+%^^A command. Also, which somewhat surprises me, the table and figure entries
+%^^A are all indented.
+% 表~\ref{tab:indents} 列出了 \LaTeX{} 标准文类中各种类型目录条目的缩进及编号宽度的默认值。在目录中，“部”编号的宽度无明确值，但在“部”的编号和标题之间有宽度为 1|em| 的空白。需要注意的是，目录中章节条目的具体版式与文类是否提供章（|\chapter|）命令有关。另外，由表~\ref{tab:indents} 可知，标准文类中插图和表格目录的条目也是缩进的。
+%
+% \DescribeMacro{\@dottedtocline}
+%^^A    Most of the |\l@kind| commands are defined in terms of the
+%^^A |\@dottedtocline| command. This command takes three arguments: \\
+%^^A |\@dottedtocline{|\meta{seclevel}|}{|\meta{indent}|}{|\meta{numwidth}|}|. \\
+%^^A For example, one definition of the |\l@section| command is: \\
+%^^A |\newcommand*{\l@section}{\@dottedtocline{1}{1.5em}{2.3em}}| \\
+%^^A If it is necessary to change the default typesetting of the entries,
+%^^A then it is usually necessary to change these definitions (but the
+%^^A \Lpack{tocloft} package gives you handles to easily alter things without
+%^^A having to know the \LaTeX{} internals).
+% 大部分 |\l@条目类型| 命令是通过 |\@dottedtocline| 命令定义的，其基本形式是：|\@dottedtocline{|\meta{条目层级}|}{|\meta{左缩进值}|}{|\meta{编号宽度}|}|。如 |\l@section| 的定义是：\\|\newcommand*{\l@section}{\@dottedtocline{1}{1.5em}{2.3em}}|。\\如需更改目录条目的版式，则需修改上述定义（\Lpack{tocloft} 宏包提供了修改目录条目版式的方法，而无需深入了解 \LaTeX{} 的内部工作机制）。
+%
+%^^A    You can use the |\addcontentsline| command to add |\contentsline|
+%^^A commands to a file.
+% 可以使用 |\addcontentsline| 命令在目录文件中增加 |\contentsline| 命令，以实现在目录中手动增加条目。
+%
+% \DescribeMacro{\addtocontents}
+%^^A    \LaTeX{} also provides the |\addtocontents{|\meta{file}|}{|\meta{text}|}|
+%^^A command that will insert \meta{text} into \meta{file}. You can use
+%^^A this for adding extra text and/or macros into the file, for processing
+%^^A when the file is typeset by |\tableofcontents| (or whatever other
+%^^A command is used for \meta{file} processing, such as |\listoftables|
+%^^A for a \file{.lot} file).
+% 命令 |\addtocontents{|\meta{扩展名}|}{|\meta{内容}|}| 可以将 \meta{内容} 插入到 \meta{扩展名} 文件中。这个命令可以在目录文件中添加文本或命令。
+%
+%
+%^^A As |\addcontentsline| and |\addtocontents| write their arguments to a
+%^^A file, any fragile commands used in their arguments must be |\protect|ed.
+% 由于 |\addcontentsline| 和 |\addtocontents| 命令会将参数写入文件中，当参数中有“脆弱”命令时，应使用“保护”措施，通常的做法是在“脆弱”命令前加 |\protect| 命令。
+%
+%^^A    You can make certain adjustments to the ToC etc., layout without
+%^^A using any package. Some examples are:
+% 恰当使用前述各命令，可以更改目录的版式而不依赖任何辅助宏包。
+% \begin{itemize}
+%^^A \item If your page numbers stick out into the righthand margin
+% \item 如果页码向右延伸至了边注区域，可使用如下命令解决：
+%  \begin{verbatim}
+%  \renewcommand{\@pnumwidth}{3em} \renewcommand{\@tocrmarg}{4em}
+%  \end{verbatim}
+%^^A but using lengths appropriate to your document.
+% 注意：以上代码仅是一个示例，其中的宽度值应根据实际情况调整。
+%
+%^^A \item To have the (sectional) titles in the ToC, etc., typeset ragged right with no
+%^^A hyphenation
+% \item 如需使目录条目的标题左对齐（右边不齐），可使用如下代码：
+% \begin{verbatim}
+% \renewcommand{\@tocrmarg}{2.55em plus 1fil}
+% \end{verbatim}
+%^^A where the value |2.55em| can be changed for whatever margin space you want.
+% 上例中右边距的长度值 |2.55em| 可根据实际情况调整。
+%
+%^^A \item The dots in the leaders can be eliminated by increasing |\@dotsep|
+%^^A to a large value:
+% \item 如不需显示导引符，可以将导引符间距 |\@dotsep| 设置为“很大”的值，如：
+%  \begin{verbatim}
+%  \renewcommand{\@dotsep}{10000}
+%  \end{verbatim}
+%
+%^^A \item To have dotted leaders in your ToC and LoF but not in your LoT:
+% \item 如需在章节和插图目录中显示导引符，而在表格目录中不显示导引符，可通过如下代码实现：
+% \begin{verbatim}
+% ...
+% \tableofcontents
+% \makeatletter \renewcommand{\@dotsep}{10000} \makeatother
+% \listoftables
+% \makeatletter \renewcommand{\@dotsep}{4.5} \makeatother
+% \listoffigures
+% ...
+% \end{verbatim}
+%^^A For this document I used this method to double the dot spacing for
+%^^A the LoF with respect to that for the ToC. As you can see, it is much
+%^^A better that all dot leaders have the same spacing.
+% 在本文的目录中，使用上述方法将插图和表格目录中导引符的间距设置为章节目录中导引符间距的2倍。本文将不同类型目录的导引符间距设置为不同的值仅是为了演示功能，通常情况下，同一文档中所有类型的目录中导引符的间距应相等。
+%
+%^^A \item To add a horizontal line across the whole width of the ToC below
+%^^A an entry for a Part:
+% \item 下列代码可以实现在“部”（part）标题下增加一条与版芯同宽的横线
+% \begin{verbatim}
+% \part{Part title}
+% \addtocontents{toc}{\protect\mbox{}\protect\hrulefill\par}
+% \end{verbatim}
+%^^A Note that as both |\addtocontents| and |\addcontentsline| write their
+%^^A arguments to a file, it means that any \emph{fragile} commands in
+%^^A their arguments must be protected
+%^^A by preceding each fragile command with |\protect|.
+%^^A The result of the example above
+%^^A would be the following two lines in the \file{.toc} file (assuming that it
+%^^A is the second Part and is on page 34):
+% 需要注意的是，如果 |\addtocontents| 和 |\addcontentsline| 命令的参数中如有“脆弱”命令，则必须在“脆弱”命令前增加 |\protect| 命令。上例代码执行的结果是在 \file{.toc} 文件中增加下列2行代码（假设“部”标题编号为“II”，所在页码为“34”）：
+% \begin{verbatim}
+% \contentsline {part}{II\hspace {1em}Part title}{34}
+% \mbox {}\hrulefill \par
+% \end{verbatim}
+%^^A If the |\protect|s were not used, then the second line would instead be:
+% 如果未使用 |\protect| 命令，将在 \file{.toc} 文件中增加下列2行代码：
+% \begin{small}
+% \begin{verbatim}
+% \unhbox \voidb@x \hbox {}\unhbox \voidb@x \leaders \hrule \hfill \kern \z@ \par
+% \end{verbatim}
+% \end{small}
+%
+%^^A \item You may get undesired page breaks in the ToC. For example you
+%^^A may have a long multiline section title and in the ToC there is a page
+%^^A break between the lines. After your document is stable you can use
+%^^A |\addtocontents| at appropriate places in the body of the document
+%^^A to adjust the page breaking in the ToC. As examples:
+% \item 在文档排版过程中，有时会出现目录换页不合理的情况，特别是当章节标题较长时，可能出现一个完整的目录条目被分页排布的情况。针对这种情况，可以在文档内容定稿后，在文档正文区适当位置使用 |\addtocontents| 命令，使目录的换页位置更合理。具体可根据实际情况从下列命令中选用：
+%  \begin{itemize}
+%^^A  \item |\addtocontents{toc}{\protect\newpage}| to force a page break.
+%  \item |\addtocontents{toc}{\protect\newpage}| \% 强制换页
+%^^A  \item |\addtocontents{toc}{\protect\enlargethispage{2\baselineskip}}| to
+%^^A        make the page longer.
+%  \item |\addtocontents{toc}{\protect\enlargethispage{2\baselineskip}}| \% 加高本页
+%^^A  \item |\addtocontents{toc}{\protect\needspace{2\baselineskip}}| to specify
+%^^A        that if there is not a vertical space of two baselines left on
+%^^A        the page then start a new page (the |\needspace| macro is defined
+%^^A        in the \Lpack{needspace} package).
+%  \item |\addtocontents{toc}{\protect\needspace{2\baselineskip}}| \% 若当前页剩余高度小于2倍 |\baselineskip| 时，另起一页排布内容（关于 |\needspace| 命令请参见 \Lpack{needspace} 宏包手册）。
+%  \end{itemize}
+%
+% \end{itemize}
+%^^A Remember, if you are modifying any command that includes an |@| sign then this
+%^^A must be done in either a \file{.sty} file or if in the document itself
+%^^A it must be
+%^^A surrounded by |\makeatletter| and |\makeatother|. For example, if you
+%^^A want to modify |\@dotsep| in the preamble to your document you have
+%^^A to do it like this:
+% \colorbox{yellow!50}{注意：} 修改带 |@| 的命令通常应在宏包文件（\file{.sty}）中进行，如需在文档源文件（\file{.tex}）中修改，则应将带 |@| 的命令包含在 |\makeatletter| 与 |\makeatother| 之间。例：如需在文档导言区修改 |\@dotsep|，可使用如下命令：
+% \begin{verbatim}
+% \makeatletter
+% \renewcommand{\@dotsep}{9.0}
+% \makeatother
+% \end{verbatim}
+%
+%
+%^^A \section{The \Lpack{tocloft} package} \label{sec:usc}
+% \section{\Lpack{tocloft}宏包使用} \label{sec:usc}
+%
+%^^A The \Lpack{tocloft} package provides means of specifying the
+%^^A typography of the Table of Contents (ToC), the List of Figures (LoF)
+%^^A and the List of Tables (LoT).
+% \Lpack{tocloft}宏包用于排布章节目录（Table of Contents，ToC）、插图目录（List of Figures，LoF）和表格目录（List of Tables，LoT）的版式。 
+%
+% \DescribeMacro{\tableofcontents}
+% \DescribeMacro{\listoffigures}
+% \DescribeMacro{\listoftables}
+%^^A The ToC, LoF, and LoT are printed at the point in the document where
+%^^A these commands are called, as per normal \LaTeX. However, there is
+%^^A one difference between the standard \LaTeX{} behaviour and the behaviour
+%^^A with the \Lpack{tocloft} package. In the standard \LaTeX{} classes
+%^^A that have |\chapter| headings, the ToC, LoF and LoT each appear on
+%^^A a new page. With the \Lpack{tocloft} package they do not necessarily
+%^^A start new pages; if you want them to be on new pages you may have to
+%^^A specifically issue an appropriate command beforehand. For example:
+% 与 \LaTeX{} 其他命令相类似，源文件中生成目录的 |\tableofcontents|、|\listoffigures| 以及 |\listoftables| 命令经编译后，会在输出文档的对应位置生成目录。当载入 \Lpack{tocloft} 宏包后，这3个命令的执行结果与 \LaTeX{} 默认效果有些不同。在 \LaTeX{} 的 |book| 和 |report| 标准文类中，章标题（|\chapter|）、章节目录、插图目录及表格目录都会另起一页排布，但在 \Lpack{tocloft} 宏包中，上述内容不会另一起一页排布。如需使前述内容另起一页排布，可使用如下命令：
+% \begin{verbatim}
+%  ...
+% \clearpage
+% \tableofcontents
+% \clearpage
+% \listoftables
+% ...
+% \end{verbatim}
+%
+% \DescribeMacro{\tocloftpagestyle}
+%^^A The |\thispagestyle| page style of the ToC, LoF and/or LoT is set
+%^^A by the command
+%^^A |\tocloftpagestyle{|\meta{style}|}|, where \meta{style} is one of
+%^^A the available page styles. The package initially
+%^^A sets |\tocloftpagestyle{plain}|.
+% 章节、插图、表格目录首页的样式（|\thispagestyle|）可以通过命令 |\tocloftpagestyle{|\meta{样式}|}| 设置，其中 \meta{样式} 可取的值有 |empty|、|plain|、|headings| 以及 |myheadings|。在 |tocloft| 宏包中，目录首页的默认样式是 |\tocloftpagestyle{plain}|。
+% 
+% \colorbox{yellow!50}{译者注：} 
+% 
+% 1. |\tocloftpagestyle| 仅能设置\colorbox{yellow!50}{目录首页}的样式，当目录内容较多分页排布时，如需修改除目录首页外其他页面的版式，还应在 |\tableofcontents| 等命令之后使用 |\pagestyle| 命令；
+% 
+% 2. 页面版式 |plain| 的具体效果是页眉空置、页码位于页脚区域中部、无页脚线。
+%
+%^^A \subsection{Package options}
+% \subsection{宏包选项}
+%
+%^^A    The package takes the following options:
+% 在载入 \Lpack{tocloft} 宏包的同时，可选的选项有：
+% \begin{itemize}
+%^^A \item[\Lopt{subfigure}] This option is required if, and only if,
+%^^A the \Lpack{tocloft} and
+%^^A \Lpack{subfigure} packages are being used together. The two packages
+%^^A can be specified in any order.
+% \item[\Lopt{subfigure}] 当且仅当文档中同时使用 \Lpack{tocloft} 和 \Lpack{subfigure} 宏包时，才启用本选项。前述2个宏包载入的顺序不分先后。
+%
+% \item[\Lopt{titles}]
+%^^A The \Lopt{titles} option causes
+%^^A the titles of the ToC, LoF, and LoT lists to be typeset using the
+%^^A default \LaTeX{} methods. This can be useful, for example, when the
+%^^A \Lpack{tocloft} and \Lpack{fncychap} packages are used together and
+%^^A the `fancy' chapter styles should be used for the ToC, etc., titles.
+% 当启用 \Lopt{titles} 选项后，章节、插图和表格目录的标题将与 \LaTeX{} 文档中其他章（chapter）标题的排布方式相同，而不是使用 \Lpack{tocloft} 宏包定义的方式排布。本选项的一个典型应用场景是，当文档中同时使用 \Lpack{tocloft} 和 \Lpack{fncychap} 宏包时，通过启用本选项使章节、插图、表格目录的标题使用 \Lpack{fncychap} 风格的标题样式。
+%
+% \end{itemize}
+%
+%^^A If you use the \Lopt{titles} option you can ignore the next
+%^^A section and continue reading at section~\ref{sec:entries}.
+% 如果启用了 \Lopt{titles} 选项，可略过第~\ref{sec:titles}节，直接阅读第 \ref{sec:entries} 节。
+%
+%^^A \subsection{Changing the titles} \label{sec:titles}
+% \subsection{修改目录标题的样式} \label{sec:titles}
+%
+%^^A    Commands are provided for controlling the appearance of the
+%^^A titles. Following \LaTeX{} custom, the title texts are the values
+%^^A of the |\contentsname|, |\listfigurename| and |\listtablename| commands.
+% 本节主要介绍控制目录标题样式的有关命令。与 \LaTeX{} 的原生命令相同，\Lpack{tocloft} 宏包也分别使用 |\contentsname|、|\listfigurename| 和 |\listtablename| 表示章节、插图、表格目录中标题的名称。
+%
+%^^A Similar sets of commands are provided for ToC, LoF and LoT title
+%^^A typsetting control. For convenience (certainly mine, and hopefully yours)
+%^^A in the following
+%^^A descriptions I will use |Z| to stand for `toc' or `lof' or `lot'. For
+%^^A example, |\cftmarkZ| stands for |\cftmarktoc| or |\cftmarklof| or
+%^^A |\cftmarklot|.
+% |tocloft| 宏包对章节、插图、表格的目录样式设置分别提供了具有相同结构的独立命令。为便于行文，\colorbox{yellow!80}{下文中将“toc”、“lof”及“lot”用 |Z| 代替}。如\colorbox{yellow!80}{\texttt{\textbackslash}|cftmarkZ|} 分别\colorbox{yellow!80}{表示 \texttt{\textbackslash}|cftmarktoc|、\texttt{\textbackslash}|cftmarklof| 或 \texttt{\textbackslash}|cftmarklot|}。实际使用中，应将 |Z| 替换为所需设置的目录类型。
+%
+% \DescribeMacro{\cftmarkZ}
+%^^A These macros set the appearance of the running heads on the ToC, LoF, and
+%^^A LoT pages. You probably don't need to change these.
+% 本组命令用于设置章节、插图、表格目录的标题样式，通常情况下不需更改。
+%
+% \DescribeMacro{\cftbeforeZtitleskip}
+% \DescribeMacro{\cftafterZtitleskip}
+%^^A These lengths control the vertical spacing before and after the titles.
+%^^A You can change them from their default values by using |\setlength|.
+% 此2组命令用于设置章节、插图、表格目录的标题之前和之后的垂直间距，可通过 |\setlength| 命令修改。
+%
+% \DescribeMacro{\cftZtitlefont}
+% \DescribeMacro{\cftafterZtitle}
+%^^A The code used for typesetting the ToC title looks like
+% 在 |tocloft| 宏包中，章节目录标题的样式通过类似如下代码实现：
+% \begin{verbatim}
+% {\cfttoctitlefont \contentsname}{\cftaftertoctitle}\par
+% \end{verbatim}
+%^^A By default, |\cftZtitlefont| is defined as a font specification
+%^^A (e.g., |\Large\bfseries|), and |\cftafterZtitle| is empty.
+%^^A These commands can be changed (via |\renewcommand|) to change
+%^^A the typesetting. As examples:
+% |\cftZtitlefont| 的默认值是一组字体有关命令序列（如 |\Large\bfseries|），而 |\cftafterZtitle| 的默认值为空。例：
+% \begin{itemize}
+% \item 命令 |\renewcommand{\cftZtitlefont}{\hfill\Large\itshape}| 
+%^^A       will result in a Large italic title typeset flushright.
+% 执行的结果是：将目录的标题格式设置为：|\Large\itshape|，右对齐。
+%^^A \item |\renewcommand{\cftZtitlefont}{\hfill\Large\bfseries}| together
+%^^A       with |\renewcommand{\cftafterZtitle}{\hfill}| will give
+%^^A       a centered Large bold title.
+% \item 命令 |\renewcommand{\cftZtitlefont}{\hfill\Large\bfseries}| 以及
+%        |\renewcommand{\cftafterZtitle}{\hfill}| 的执行的结果是：目录的标题居中排布，字体为 |\Large\bfseries|。
+%^^A \item Doing
+% \item 命令
+% \begin{verbatim}
+% \renewcommand{\cftafterZtitle}{%
+%   \\[\baselineskip]\mbox{}\hfill{\normalfont 页码}}
+% \end{verbatim}
+%^^A       will put the word `Page' flushright on the line following the title.
+%^^A       (If you do this, then you may need to decrease
+%^^A        |\cftafterZtitleskip|).
+% 的执行结果是：在目录标题的下一行以右对齐方式插入“页码”字样（如果使用上述命令，可能需要减少目录标题与下方内容的间距参数 |\cftafterZtitleskip| 的值。
+%^^A \item |\renewcommand{\cftafterZtitle}{\thispagestyle{empty}}| will
+% \item 命令 |\renewcommand{\cftafterZtitle}{\thispagestyle{empty}}| 
+%^^A       make the page with the title empty (i.e., the page
+%^^A       number will not be printed).
+% 的执行结果是：将目录标题所在页的样式设为 |empty|（可实现不显示页码的效果）。
+% \end{itemize}
+%
+%
+%^^A \subsection{Typesetting the entries} \label{sec:entries}
+% \subsection{目录条目的排布} \label{sec:entries}
+%
+%^^A Commands are also provided to enable finer control over the typesetting
+%^^A of the different kinds of entries. The parameters defining the default
+%^^A layout of the entries are illustrated as part of the \Lpack{layouts}
+%^^A package or in~\cite[page 34]{GOOSSENS94}, and are repeated in
+%^^A Figure~\ref{fig:ltoc}.
+% \Lpack{tocloft} 宏包提供了多个命令用于控制不同类型目录的条目排布方式。目录条目的默认版式见 \Lpack{layouts} 宏包手册或~\cite[p.34]{GOOSSENS94}，以及本文的图~\ref{fig:ltoc}。
+%
+% \DescribeMacro{\Zdepth}
+%^^A The command |\Zdepth{|\meta{number}|}| is analogous to the standard
+%^^A |\tocdepth{|\meta{number}|}| command, in that it specifies that entries
+%^^A in the new listing should not be typeset if their numbering level
+%^^A is greater
+%^^A than \meta{number}. The default definition is
+%^^A |\setcounter{Zdepth}{1}|.
+%^^A These commands are needed, for instance by users of packages such as |subcaption|,
+%^^A which will generate subfigure and subtable captions corresponding to a |lofdepth| and
+%^^A |lotdepth| of |2|.
+%  |\Zdepth{|\meta{目录层级}|}| 与 \LaTeX{} 的目录深度命令 |\tocdepth{|\meta{目录层级}|}| 类似，当标题的层级大于给定的目录层级时，标题不会显示在目录中。默认的定义是 |\setcounter{Zdepth}{1}|。在文档排版中，有时需要为多个图（表）给出概括性的标题，而每个子图（表）都有各自的编号和标题，这种需求可以使用子图表标题宏包 |subcaption| 实现。如果需要在插图（表格）目录中输出子图和（或）子表的条目，则可通过将 |lofdepth| 和（或） |lotdepth| 设置为 |2| 实现。
+%
+%^^A \DescribeMacro{\cftdot}
+%^^A  In the default ToC typesetting only the more minor entries have dotted
+%^^A leader lines between the sectioning title and the page number. The
+%^^A \Lpack{tocloft} package provides for general leaders for all entries.
+%^^A The `dot' in a leader is given by the value of |\cftdot|. Its default
+%^^A definition is |\newcommand{\cftdot}{.}| which gives the default
+%^^A dotted leader. By changing |\cftdot| you can use symbols other than
+%^^A a period in the leader. For example
+% 在 \LaTeX{} 标准文类的默认设置中，章节目录中仅部分低层级的条目和页码间使用“虚线”（dotted）导引符填充。\Lpack{tocloft} 宏包可以方便地实现为章节目录中全部层级的目录条目增加导引符。导引符通过  |\cftdot| 命令定义，该命令默认的定义是 |\newcommand{\cftdot}{.}|。如需更改导引符的样式，可通过重定义 |\cftdot| 实现。如命令
+% \begin{verbatim}
+% \renewcommand{\cftdot}{\ensuremath{\ast}}
+% \end{verbatim}
+%^^A will result in a dotted leader using asterisks as the symbol.
+% 的执行结果是将导引符修改为星号（$\ast$）。
+%
+% \DescribeMacro{\cftdotsep}
+% \DescribeMacro{\cftnodots}
+%^^A    Each kind of entry can control the separation between the dots
+%^^A in its leader (see below). For consistency though, all dotted leaders
+%^^A should use the same spacing. The macro |\cftdotsep| specifies the
+%^^A default spacing. Its value is a number.
+%^^A However, if the separation is too large
+%^^A then no dots will be actually typeset. The macro |\cftnodots| is
+%^^A a separation value that is `too large'.
+% 通常情况下，为美观起见，同一文档中章节、插图和图表目录中导引符之间的间距应相等。导引符之间的间距由 |\cftdotsep| 控制，它是一个数值（单位为 |mu|，18 |mu| = 1 |em|）。如果将 |\cftdotsep| 的值设置的“过大”，则导引符不会显示。 |\cftnodots| 表示不显示导引符。
+%
+% \DescribeMacro{\cftsetpnumwidth}
+% \DescribeMacro{\cftsetrmarg}
+%^^A The page numbers are typeset in a fixed width box. The command
+%^^A |\cftsetpnumwidth{|\meta{length}|}| can be used to change the width
+%^^A of the box (\LaTeX 's internal |\@pnumwidth|).
+%^^A The title texts will end before reaching the righthand margin.
+%^^A |\cftsetrmarg{|\meta{length}|}| can be used to set this distance
+%^^A (\LaTeX 's internal |\@tocrmarg|).
+%^^A Note that the length used in |\cftsetrmarg| should be greater
+%^^A than the length set in |\cftsetpnumwidth|. These values should remain
+%^^A constant in any given document.
+% 目录条目中的页码是一个在宽度固定的盒子中排布的。可以使用命令 |\cftsetpnumwidth{|\meta{长度}|}| 设置页码所在盒子的宽度（即设置 \LaTeX{} 内部宏 |\@pnumwidth| 的值）。目录条目中标题与版芯右边缘的间距（即 \LaTeX{} 内部宏 |\@tocrmarg| 的值）可以通过 |\cftsetrmarg{|\meta{长度}|}| 设置。需要注意的是， |\cftsetrmarg| 的值应大于 |\cftsetpnumwidth| 的值。
+%
+% \DescribeMacro{\cftpnumalign}
+%^^A The page numbers are typeset in a box as described above.
+%^^A By default they are right-aligned which is suitable when the page numbers are aligned vertically on the page so their digits line up.
+% 如前所述，页码是排布在一个宽度固定的盒子中，默认靠右对齐。
+%^^A For a design with fixed width between a ToC entry and its page number, say, a left alignment may be more suitable.
+%^^A This can be controlled by setting the \cs{cftpnumalign} macro to \verb|l|, \verb|c|, or \verb|r| (just like \cs{makebox}):
+%  \cs{cftpnumalign} 用于控制页码在盒子中的对齐方式，可取的值有 \verb|l|、\verb|c| 和 \verb|r|。例：
+% \begin{verbatim}
+%   \renewcommand{\cftpnumalign}{l}
+% \end{verbatim}
+%
+% \DescribeMacro{\cftparskip}
+%^^A Normally the |\parskip| in the ToC, etc., is zero. This may be changed
+%^^A by changing the |\cftparskip| length. Note that the current value
+%^^A of |\cftparskip| is used for the ToC, LoF and LoT, but you can change
+%^^A the value before calling |\tableofcontents| or |\listoffigures| or
+%^^A |\listoftables| if one or other of these should have different values
+%^^A (which is not a good idea).
+% 通常情况下，目录中段落之前的垂直空白 |\parskip| 的值为0，可通过 |\cftparskip| 修改段前垂直空白。需要注意的，|\cftparskip| 同时控制章节、插图和表格目录中的 |\parskip|。如需为章节、插图和表格目录分别设置不同的 |\parskip|，可以（但不建议）在 |\tableofcontents|、 |\listoffigures| 或 |\listoftables| 命令前分别设置 |\cftparskip|。
+%
+%
+%^^A    In the following I will use |X| to stand for the following:
+% 为精准控制目录条目的样式，\Lpack{tocloft} 宏包预定义了“部”、“章”等10种目录条目类型，并为每种类型分别定义了11个独立的样式控制命令。因此，在设置目录条目的样式时，有110个结构相同但功能独立的预定义命令可供选用。\colorbox{yellow!50}{为行文方便，下文 用 |X| 统一指代10种预定义的目录条目类型}：
+% \begin{itemize}
+%^^A \item |part| for |\part| titles
+%^^A \item |chap| for |\chapter| titles
+%^^A \item |sec| for |\section| titles
+%^^A \item |subsec| for |\subsection| titles
+%^^A \item |subsubsec| for |\subsubsection| titles
+%^^A \item |para| for |\paragraph| titles
+%^^A \item |subpara| for |\subparagraph| titles
+%^^A \item |fig| for figure |\caption| titles
+%^^A \item |subfig| for subfigure |\caption| titles
+%^^A \item |tab| for table |\caption| titles
+%^^A \item |subtab| for subtable |\caption| titles
+% \item |part| （“部”标题）
+% \item |chap| （“章”标题）
+% \item |sec| （“节”标题）
+% \item |subsec| （“小节”标题）
+% \item |subsubsec| （“小小节”标题）
+% \item |para| （“段”标题）
+% \item |fig| （插图标题）
+% \item |subfig| （子图标题）
+% \item |tab| （表格标题）
+% \item |subtab| （子表标题）
+% \end{itemize}
+%
+% \DescribeMacro{\cftbeforeXskip}
+%^^A This controls the vertical space before an entry. It can be changed
+%^^A by using |\setlength|.
+% 控制 |X| 的段前垂直间距，可通过长度赋值命令 |\setlength| 设置。
+%
+% \DescribeMacro{\cftXindent}
+%^^A This controls the indentation of an entry from the left margin
+%^^A (\textit{indent} in Figure~\ref{fig:ltoc}). It
+%^^A can be changed using |\setlength|.
+% 控制 |X| 的左侧缩进宽度（见图~\ref{fig:ltoc}），可通过长度赋值命令 |\setlength| 设置。
+%
+% \DescribeMacro{\cftXnumwidth}
+%^^A This controls the space allowed for typesetting title numbers
+%^^A (\textit{numwidth} in Figure~\ref{fig:ltoc}). It can
+%^^A be changed using |\setlength|. Second and subsequent lines of a multiline
+%^^A title will be indented by this amount.
+% 控制 |X| 序号占据的宽度（见图~\ref{fig:ltoc}），可通过长度赋值命令 |\setlength| 设置。如标题内容较长而换行排布时，换行后的缩进也使用此值。
+%
+%^^A The remaining commands are related to the specifics of typesetting
+%^^A an entry.
+%^^A This is a simplified pseudo-code version for the typesetting of numbered
+%^^A and unnumbered entries.
+% 以上3个命令用于控制目录条目的总体版式，后续的命令将用于设置目录条目内部各元素的具体样式。
+% 在深入了解每个命令的详细功能之前，可先通过下列2段经简化的伪代码一窥有编号及无编号目录条目样式设置有关命令的用法。
+% \begin{verbatim}
+% {\cftXfont {\cftXpresnum SNUM\cftXaftersnum\hfil} \cftXaftersnumb TITLE}%
+%         {\cftXleader}{\cftXpagefont PAGE}\cftXafterpnum\par
+%
+% {\cftXfont TITLE}{\cftXleader}{\cftXpagefont PAGE}\cftXafterpnum\par
+% \end{verbatim}
+%^^A where |SNUM| is the section number, |TITLE| is the title text and |PAGE|
+%^^A is the page number. In the numbered entry the pseudo-code \\
+%^^A |{\cftXpresnum SNUM\cftaftersnum\hfil}| \\
+%^^A is typeset within a box of width |\cftXnumwidth|.
+% 上述伪代码中，|SNUM| 表示目录条目的编号，|TITLE| 表示条目的标题，|PAGE| 表示条目内容所的页码。在有编号的目录条目中，编号将在宽度为 |\cftXnumwidth| 的盒子内排布，编号的伪代码是 |{\cftXpresnum SNUM\cftaftersnum\hfil}|。
+%
+% \DescribeMacro{\cftXfont}
+%^^A This controls the appearance of the title (and its preceding number,
+%^^A if any). It may be changed using |\renewcommand|.
+% 控制目录条目中标题（及标题之前编号）的字体（样式），可通过重新定义命令 |\renewcommand| 修改。
+%
+% \DescribeMacro{\cftXpresnum}
+% \DescribeMacro{\cftXaftersnum}
+% \DescribeMacro{\cftXaftersnumb}
+% \changes{v1.1}{2000/02/11}{Added description of \cs{cftXpresnum}}
+%^^A Normally the section number is typeset within a box of width |\cftXnumwidth|.
+%^^A Within the box the macro |\cftXpresnum| is first called, then the
+%^^A number is typeset, and next the |\cftXaftersnum|
+%^^A macro is called after the number is typeset. The last command
+%^^A within the box is |\hfil| to make the box contents flushleft.
+%^^A After the box is
+%^^A typeset the |\cftXaftersnumb| macro is called before typesetting
+%^^A the title text. All three of these can be changed by |\renewcommand|.
+%^^A By default they are defined to do nothing.
+% 通常情况下，目录条目中标题的编号在宽度为 |\cftXnumwidth| 的盒子中排布。盒子中命令执行的顺序是：首先执行 |\cftXpresnum|，其次排布页码，而后执行 |\cftXaftersnum|，最后执行 |\hfil| 以使编号在盒子内左对齐。盒子中的内容排布完成后，执行 |\cftXaftersnumb|，而后再排布目录的标题内容。上述3个命令的缺省值都为空，可通过 |\renewcommand| 修改。
+%
+%^^A In the standard classes the ToC entry for a |\part| is just typeset as
+%^^A the number and title, followed by the page number, with the
+%^^A |\cftpartpresnum|
+%^^A macro being called before typesetting the number and title.
+%^^A Due to \LaTeX\ ideosyncracies, |\cftpartpresnum| may become doubled in the output
+%^^A if a third-party package behaves differently to that of the default internal \LaTeX\ commands.
+%^^A The |tocloft| package contains specific code to prevent this in the case of
+%^^A the KomaScript classes and for the |titlesec| package; please contact the maintainer
+%^^A to add further corrections if you discover other packages which also exhibit this mis-behaviour.
+% 在 \LaTeX{} 的标准文类 |book| 和 |report| 中，章节目录中“部”（|\part|）标题的排布流程是：首先执行 |\cftpartpresnum|，而后排布编号、标题及页码。某些第三方宏包对章节目录中“部”标题的实现与 \LaTeX{} 的内部实现有差异，可能导致 |\cftpartpresnum| 命令被执行2次。|tocloft| 宏包对 |KomaScript| 文类及 |titlesec| 宏包进行了适配，可以防止出现上述情况。如你发现 |tocloft| 与其他宏包协同工作时中存在类似的问题，请联系宏包作者。
+%
+%^^A When a standard class is used the |\cftpartaftersnum| and
+%^^A |\cftpartaftersnumb| macros have no effect, but they may do something
+%^^A if a non-standard class is used.
+% 由上文可知，在标准文类（|book| 和 |report|）中，命令 |\cftpartaftersnum| 和 |\cftpartaftersnumb| 没有实际作用，但在非标准文类中，可以使用它们以实现某些需求。
+%
+%
+% \DescribeMacro{\cftXleader}
+% \DescribeMacro{\cftXdotsep}
+%^^A |\cftXleader| defines the leader between the title and the page number;
+%^^A it can be changed by |\renewcommand|.
+%^^A The spacing between any dots in the leader is controlled by |\cftXdotsep|
+%^^A (|\@dotsep| in Figure~\ref{fig:ltoc}).
+%^^A It can be changed by |\renewcommand| and its value must be either a
+%^^A number (e.g., 6.6 or |\cftdotsep|) or |\cftnodots| (to disable the dots).
+%^^A The spacing
+%^^A is in terms of \emph{math units} where there are 18mu to 1em.
+% 目录条目中标题和页码之间的导引符用 |\cftXleader| 表示，可通过 |\renewcommand| 修改。引导符之间的间距用 |\cftXdotsep| 表示（图~\ref{fig:ltoc} 中的 |\@dotsep|），可通过 |\renewcommand| 修改。需要注意的是， |\cftXdotsep| 的值必须是一个数值（如6.6，或 |\cftdotsep|）或 |\cftnodots|。
+%
+% \DescribeMacro{\cftXpagefont}
+%^^A This defines the font to be used for typesetting the page number. It
+%^^A can be changed by |\renewcommand|.
+% 控制页码的格式，可通过 |\renewcommand| 修改。
+%
+% \DescribeMacro{\cftXafterpnum}
+%^^A This macro is called after the page number has been typeset. Its default
+%^^A is to do nothing. It can be changed by |\renewcommand|.
+% 页码排布完成后执行的命令，可通过 |\renewcommand| 修改。
+%
+% \DescribeMacro{\cftsetindents}
+%^^A The command
+%^^A |\cftsetindents{|\meta{entry}|}{|\meta{indent}|}{|\meta{numwidth}|}|
+%^^A sets the \meta{entry}'s \textit{indent} to the length \meta{indent} and its
+%^^A \textit{numwidth} to the length \meta{numwidth}. The \meta{entry} argument
+%^^A is the name of one of the standard entries (e.g., |subsection|) or the name of
+%^^A entry that has been defined with the \Lpack{tocloft} package.
+%^^A For example \\
+%^^A |\cftsetindents{figure}{0em}{1.5em}| \\
+%^^A will make figure entries left justified.
+% |\cftsetindents{|\meta{条目}|}{|\meta{缩进宽度}|}{|\meta{编号宽度}|}| 用于将 \meta{条目} 的缩进设为 \meta{缩进宽度}，同时将编号占据的宽度设为 \meta{编号宽度}。其中，\meta{条目}参数的取值应为 \LaTeX{} 中目录条目的规范化名称（如 |subsection|），也可以是使用 \Lpack{tocloft} 宏包自定义目录条目的名称。如\\
+% |\cftsetindents{figure}{0em}{1.5em}|
+% 命令的执行结果是目录中插图条目不缩进（即左对齐），插图编号的宽度为 |1.5em|。
+%
+%^^A Various effects can be achieved by changing the definitions of |\cftXfont|,
+%^^A |\cftXaftersnum|, |\cftXaftersnumb|, |\cftXleader| and |\cftXafterpnum|,
+%^^A either singly or in combination.
+% 通过修改 |\cftXfont|、|\cftXaftersnum|、|\cftXaftersnumb|、|\cftXleader| 和 |\cftXafterpnum| 等命令的定义，可以实现多种多样的目录版式。
+%^^A For the sake of some examples, assume that we have the following initial
+%^^A definitions
+% 后文的示例基于如下初值：
+% \begin{verbatim}
+% \newcommand{\cftXfont}{}
+% \newcommand{\cftXaftersnum}{}
+% \newcommand{\cftXaftersnumb}{}
+% \newcommand{\cftXleader}{\cftdotfill{\cftXdotsep}}
+% \newcommand{\cftXdotsep}{\cftdotsep}
+% \newcommand{\cftXpagefont}{}
+% \newcommand{\cftXafterpnum}{}
+% \end{verbatim}
+%^^A (Note that the same font should be used for the title, leader and page
+%^^A number to provide a coherent appearance).
+% （注意，宏包的作者建议目录条目中标题、导引符及页码的字体应保持一致。）
+%
+% \begin{itemize}
+%^^A \item To eliminate the dots in the leader:
+% \item 目录条目中不显示导引符
+% \begin{verbatim}
+% \renewcommand{\cftXdotsep}{\cftnodots}
+% \end{verbatim}
+%
+%^^A \item To put something (e.g., a name) before the title (number):
+% \item 在目录条目编号前增加内容（如增加“图”、“表”等字样）
+% \begin{verbatim}
+% \renewcommand{\cftXpresnum}{图/表 }
+% \end{verbatim}
+%
+%^^A \item To add a colon after the section number:
+% \item 在目录条目编号之后增加冒号（:）
+% \begin{verbatim}
+% \renewcommand{\cftXaftersnum}{:}
+% \end{verbatim}
+%
+%^^A \item To put something before the title number, add a colon after the
+%^^A    the title number, set everything in bold font,
+%^^A and start the title text on the following line:
+% \item 下列代码实现的效果是在目录条目编号前增加“SOMETHING”，在编号后增加冒号（:）；将目录条目编号、标题、导引符、页码等各要素的字体设置为 |\bfseries|，并且使每一个条目的标题另一起行排布。
+% \item 
+% \begin{verbatim}
+% \renewcommand{\cftXfont}{\bfseries}
+% \renewcommand{\cftXleader}{\bfseries\cftdotfill{\cftXdotsep}}
+% \renewcommand{\cftXpagefont}{\bfseries}
+% \renewcommand{\cftXpresnum}{SOMETHING }
+% \renewcommand{\cftXaftersnum}{:}
+% \renewcommand{\cftXaftersnumb}{\\}
+% \end{verbatim}
+%
+%^^A    If you are adding text in the number box in addition to the number,
+%^^A then you will probably have to increase the width of the box so that
+%^^A multiline titles have a neat vertical alignment; changing box widths
+%^^A usually implies that the indents will require modification as
+%^^A well.\footnote{Lyndon Dudding (\texttt{lyndon.dudding@totalise.co.uk})
+%^^A discovered this.}
+%^^A One possible method of adjusting the box width for the above example
+%^^A is:
+% 如果在条目编号前增加了内容，并且当条目内容较长而折行排布时，可能出现\colorbox{yellow!50}{折行后的标题内容左侧缩进与首行不能对齐的问题}\footnote{此问题由 Lyndon Dudding \texttt{lyndon.dudding@totalise.co.uk} 报告。}。上述问题应通过增加条目编号盒子宽度的方法解决，示例代码如下：
+% \begin{verbatim}
+% \newlength{\mylen}
+% %计算条目编号前、后增加内容的宽度之和
+% \settowidth{\mylen}{\bfseries\cftXpresnum\cftXaftersnum}
+% %将前述宽度追加至条目编号盒子的宽度上
+% \addtolength{\cftXnumwidth}{\mylen} 
+% \end{verbatim}
+%
+%^^A \item To set the section numbers flushright:\footnote{With thanks to
+%^^A David Holz (\texttt{lbda@earthlink.net}) for requesting this.}
+% \item 使目录条目的编号右对齐\footnote{此需求由 David Holz (\texttt{lbda@earthlink.net}) 提出。}
+% \begin{verbatim}
+% \setlength{\mylen}{0.5em}   % 编号后的空白宽度
+% \renewcommand{\cftXpresnum}{\hfill}  % 注意 \hfill 命令（不是 \hfil 命令）
+% \renewcommand{\cftXaftersnum}{\hspace*{\mylen}}
+% \addtolength{\cftXnumwidth}{\mylen}
+% \end{verbatim}
+%^^A In the above, the added initial |\hfill| in the box overrides the
+%^^A final |\hfil| in the box, thus shifting everything to the right hand
+%^^A end of the box. The extra space is so that the number is not typeset
+%^^A immediately at the left of the title text.
+% 上述代码中，由条目编号盒子中开头的 |\hfill| 伸展能力强于结尾的 |\hfil|，因此可实现右对齐的效果。此外，增加盒子宽度是为了在条目编号与条目标题之间增加空白，而不致于紧密相连。
+%
+%^^A \item To set the entry ragged left (but this only looks good for single
+%^^A       line titles):
+% \item 使目录条目右对齐（左侧不齐，主要适用于单行条目）
+% \begin{verbatim}
+% \renewcommand{\cftXfont}{\hfill\bfseries}
+% \renewcommand{\cftXleader}{}
+% \end{verbatim}
+%
+%^^A \item To set the page number immediately after the entry text instead of at
+%^^A       the righthand margin:
+% \item 使页码紧接条目标题排布，而不是位于版芯右边缘处
+% \begin{verbatim}
+% \renewcommand{\cftXleader}{}
+% \renewcommand{\cftXafterpnum}{\cftparfillskip}
+% \renewcommand{\cftpnumalign}{l}
+% \end{verbatim}
+%^^A By default the |\parfillskip| value is locally set to fill up the last
+%^^A line of a paragraph. Just changing |\cftXleader| puts horrible interword
+%^^A spaces into the last line of the title. The |\cftparfillskip|
+%^^A command
+%^^A is part of the \Lpack{tocloft} package and is provided just so that
+%^^A the above effect can be achieved.
+%^^A In addition, this is a good example of when it would be suitable to change the alignment of the page number box.
+% \TeX{} 基本命令 |\parfillskip| 的默认值是 |0pt plus 1fil|，实现的效果是将段落末尾至该行右端的空间用空白填充。如果仅改变 |\cftXleader| 的值，可能使条目标题最后一行的字符间距增加。|\cftparfillskip| 是 \Lpack{tocloft} 宏包提供的命令，可解决上述问题。此外，上例也是改变页码对齐方式一个非常好的示例。
+%
+%^^A \item To remove the space inserted between table and figure caption entries between chapters:
+% \item 删除插图和表格目录中各章条目之间的附加垂直空白
+% \begin{verbatim}
+% \begingroup
+%   \renewcommand*{\addvspace}[1]{}
+%   \listoftables
+%   \listoffigures
+% \endgroup
+% \end{verbatim}
+% \end{itemize}
+%
+% \DescribeMacro{\cftpagenumbersoff}
+% \DescribeMacro{\cftpagenumberson}
+%^^A The command |\cftpagenumbersoff{|\meta{entry}|}| will
+%^^A eliminate the page numbers for \meta{entry} in the listing, where
+%^^A \meta{entry} is the name of one of the standard
+%^^A kinds of entries (e.g., |subsection|, or |figure| --- including |subfigure|
+%^^A if the \Lpack{subfigure} package is used --- etc.), or the name of a
+%^^A new entry defined with the \Lpack{tocloft} package.
+%  |\cftpagenumbersoff{|\meta{条目类别}|}| 表示不显示指定条目类别的页码，\meta{条目类别}的取值应为条目类别的规范化名称（如 |subsection|、|figure| 等，当载入 \Lpack{subfigure} 宏包后，还可以使用 |subfigure|），也可以是使用 \Lpack{tocloft} 宏包自定义的条目类别名称。
+%
+%^^A    The command |\cftpagenumberson{|\meta{entry}|}| reverses
+%^^A the effect of a corresponding |\cftpagenumbersoff|.
+%  |\cftpagenumberson{|\meta{entry}|}| 表示显示指定条目类别的页码。
+%
+%^^A One question that appeared on the \file{comp.text.tex} newsgroup asked
+%^^A how to get the titles of Appendices list in the ToC \emph{without}
+%^^A page numbers. Here is a simple way of doing it, assuming the document
+%^^A has chapters
+% |\cftpagenumbersoff| 的一个实际应用场景是：在文档目录中显示某一章（如附录）的条目，但不显示其页码。上述需求的实现可参考下列代码：
+% \begin{verbatim}
+% ...
+% \appendix
+% \addtocontents{toc}{\cftpagenumbersoff{chapter}}
+% \chapter{First appendix}
+% \end{verbatim}
+%^^A If there are other chaptered headings to go into the ToC after the
+%^^A appendices, then it will be necessary to do a similar \\
+%^^A |\addtocontents{toc}{\cftpagenumberson{chapter}}| \\
+%^^A to restore the page numbering in the ToC.
+% 在上例中，如目录中后续章的标题需显示页码，可使用\\
+% |\addtocontents{toc}{\cftpagenumberson{chapter}}| 命令。
+%
+%^^A    Similarly, if you are using the \Lpack{subfigure} package you may
+%^^A want to eliminate the page numbers for the subfigure captions. This
+%^^A can be accomplished by: \\
+%^^A |\cftpagenumbersoff{subfigure}|
+% 当使用子图宏包 \Lpack{subfigure} 时，可通过 |\cftpagenumbersoff{subfigure}| 命令使子图的页码不在插图目录中显示。
+%
+%^^A At this point, I leave it up to your ingenuity as to other effects that
+%^^A you can achieve. However, if you come up with further examples, let me
+%^^A know for possible inclusion in a later version of this document.
+% 使用 \Lpack{tocloft} 宏包还可以现实更多的目录效果。如果你有更好的示例，请联系宏包作者，以便在本手册后续版本中增加更多示例。
+%
+%^^A \subsection{New list of\ldots}
+% \subsection{自定义目录类型}
+%
+% \DescribeMacro{\newlistof}
+%^^A The command |\newlistof[|\meta{within}|]{|\meta{entry}|}{|\meta{ext}|}{|\meta{listofname}|}|
+%^^A creates a new List of \ldots, and assorted commands to go along with it.
+% 命令 |\newlistof[|\meta{排序单位}|]{|\meta{条目类型}|}{|\meta{扩展名}|}{|\meta{生成新目录命令}|}| 用于定义新的目录类型及其配套命令。
+%
+%^^A The first required argument, \meta{entry} is used to define a new
+%^^A counter called |entry|. The optional \meta{within} argument can
+%^^A be used so that |entry| gets reset to one every time the counter called
+%^^A |within| is changed. That is, the first two arguments are equivalent to
+%^^A calling |\newcounter{|\meta{entry}|}[|\meta{within}|]|.
+% 第1个必选参数 \meta{条目类型} 用于定义一个名称为 |条目类型| 的计数器，可选参数 \meta{排序单位} 表示当排序单位变化时将 |条目类型| 计数器清零，不设置可选参数时，计数器将全文排序。如将 \meta{排序单位} 设为 \meta{chapter}，表示每当新的一章开始时，计数清零，即计数器按章排序。前2个参数等价于 |\newcounter{|\meta{条目类型}|}[|\meta{排序单位}|]|。
+%
+%^^A The next argument, \meta{ext}, is the file extension for the new List of.
+%^^A The last argument, \meta{listofname}, is the text for the heading of the
+%^^A new List of. As an example:
+% 参数 \meta{扩展名} 表示新定义目录类型的目录条目文件将在与源文件同名的 \meta{.扩展名} 文件中存储，参数 \meta{新目录命令} 用于指定生成新定义类型目录时所使用的命令。例：
+% 
+% \begin{verbatim}
+% \newcommand{\listanswername}{List of Answers}
+% \newlistof[chapter]{answer}{ans}{\listanswername}
+% \end{verbatim}
+%^^A will create a new |answer| counter that will be reset at the start of each
+%^^A |\chapter{...}|. Any answer titles will be written to the file
+%^^A \file{jobname.ans} and |\listanswername| will be used as the list heading.
+%^^A A command |\listofanswer| is created which can be used just like the
+%^^A |\listoftables| or |tableofcontents| commands to generate a listing.
+%^^A It is up to you to specify how the entries are put into the
+%^^A new List of Answers. Here is a very simple example, remembering that an
+%^^A |answer| counter has been created.
+% 上述代码定义了名为 |answer| 的新目录类型，|answer| 的序号按章排序（即每章的 |answer| 都从1开始编号），其目录条目存储文件的扩展名是 |ans|，生成目录的命令是 |\listanswername|。正文中 |answer| 的样式可根据需要进行设置，以下是一个示例：
+% \begin{verbatim}
+% \newcommand{\answer}[1]{%
+%   \refstepcounter{answer}
+%   \par\noindent\textbf{Answer \theanswer. #1}
+%   \addcontentsline{ans}{answer}{\protect\numberline{\theanswer}#1}\par}
+% \end{verbatim}
+%^^A which, when used like: \\
+%^^A |\answer{Hard} The \ldots|  will print as:
+%^^A \par\noindent\textbf{Answer 1. Hard}\par The \ldots
+% 定义上述后命令后，|\answer{Hard} The \ldots| 命令的执行结果是：
+% \par\noindent\textbf{Answer 1. Hard}\par The \ldots
+%
+%^^A    As mentioned above, the |\newlistof| command creates several new
+%^^A commands, most of which you should now be familiar with. For convenience,
+%^^A assume that |\newlistof{X}{Z}{...}| has been issued; so |X| is the name
+%^^A of the new counter and corresponds to the |X| in section~\ref{sec:entries},
+%^^A and |Z| is the new file extension and corresponds to the |Z| in
+%^^A section~\ref{sec:titles}. Then, among others, the following new commands
+%^^A will be made available.
+% 如前所述， |\newlistof| 命令会同时定义一系列新目录相关的命令。为进一步讨论文便，假设已定义了 |\newlistof{X}{Z}{...}| 命令，其中 |X| 是计数器的名称（参见第~\ref{sec:entries} 节），|Z| 是存储目录条目文件的扩展名（参见第~\ref{sec:entries} 节）。在运行 |\newlistof{X}{Z}{...}| 命令之后，以下5个命令也同时被定义：
+%^^A The five commands, |\cftmarkZ|,
+%^^A |\cftbeforeZtitleskip|,
+%^^A |\cftafterZtitleskip|,
+%^^A |\cftZtitlefont|, and
+%^^A |\cftafterZtitle|,
+%^^A are analogous to the commands of the same names
+%^^A described in section~\ref{sec:titles}.
+% |\cftmarkZ|、
+% |\cftbeforeZtitleskip|、
+% |\cftafterZtitleskip|、
+% |\cftZtitlefont| 和
+% |\cftafterZtitle|。上述命令的具体功能参见第~\ref{sec:titles} 节。
+%
+% \DescribeMacro{\listofX}
+%^^A The command |\listofX| is similar to |\listoftables|, etc.,
+%^^A in that it typesets
+%^^A the new listing at the point where it is called.
+% 命令 |\listofX| 的功能与 |\listoftables| 相似，用于在该命令被调用处生成目录。
+%
+% \DescribeMacro{\Zdepth}
+%^^A The command |\Zdepth{|\meta{number}|}| is analogous to the standard
+%^^A |\tocdepth{|\meta{number}|}| command, in that it specifies that entries
+%^^A in the new listing should not be typeset if their numbering level
+%^^A is greater
+%^^A than \meta{number}. The default definition is
+%^^A |\setcounter{Zdepth}{1}|.
+% |\Zdepth{|\meta{目录层级}|}| 命令与 \LaTeX{} 标准命令 |\tocdepth{|\meta{目录层级}|}| 相似，当标题的层级大于给定的目录层级时，标题不会显示在目录中。该命令的默认值是 |\setcounter{Zdepth}{1}|。
+%
+% \DescribeMacro{\newlistentry}
+%^^A The command
+%^^A |\newlistentry[|\meta{within}|]{|\meta{entry}|}{|\meta{ext}|}{|\meta{level-1}|}| creates
+%^^A new commands for typesetting a new kind of entry in a listing. It is used
+%^^A internally by the |\newlistof| command but may be used independently.
+% 命令 |\newlistentry[|\meta{排序单位}|]{|\meta{条目类型}|}{|\meta{扩展名}|}{|\meta{目录层级-1}|}| 用于在目录文件中生成一个新的目录条目。该命令通常由 |\newlistof| 命令自动调用，也可独立使用。
+%
+%^^A The first required argument, \meta{entry} is used to define a new
+%^^A counter called |entry|. The optional \meta{within} argument can
+%^^A be used so that |entry| gets reset to one every time the counter called
+%^^A |within| is changed. That is, the first two arguments are equivalent to
+%^^A calling |\newcounter{|\meta{entry}|}[|\meta{within}|]|.
+%^^A The second required argument, \meta{ext}, is the file extension for the
+%^^A entry listing.
+%^^A The last argument, \meta{level-1}, is a number specifying the numbering
+%^^A level minus one,
+%^^A of the entry in a listing.
+%^^A For example, the command \\
+%^^A |\newlistof[chapter]{answer}{ans}{\listanswername}| \\
+%^^A will call the command: \\
+%^^A |\newlistentry[chapter]{answer}{ans}{0}| \\
+% 第1个必选参数 \meta{条目类型} 用于定义一个名称为 |条目类型| 的计数器，可选参数 \meta{排序单位} 表示当排序单位变化时将 |条目类型| 计数器清零，不设置可选参数时，计数器将全文排序。如将 \meta{排序单位} 设为 \meta{chapter}，表示每当新的一章开始时，计数清零，即计数器按章排序。前2个参数等价于 |\newcounter{|\meta{条目类型}|}[|\meta{排序单位}|]|。参数 \meta{扩展名} 用于指定存储新目录类型目录条目文件的扩展名，参数 \meta{目录层级-1} 是一个整数，值为“目录层级-1”。如，命令 |\newlistof[chapter]{answer}{ans}{\listanswername}| 会调用 |\newlistentry[chapter]{answer}{ans}{0}| 命令。
+%
+%
+%^^A    Calling |\newlistentry| creates several new commands. Assuming that
+%^^A it is called as |\newlistentry[within]{X}{Z}{N}|, where |X| and |Z| are
+%^^A similar to the
+%^^A previous uses of them, and |N| is an integer number, then the following
+%^^A commands are made available.
+% |\newlistentry| 会同时创建多个相关命令。为进一步讨论文便，假设已调用了 |\newlistentry[排序单位]{X}{Z}{N}| 命令，其中 |X| 是计数名的名称（参见第~\ref{sec:entries} 节），|Z| 是存储目录条目文件的扩展名（参见第~\ref{sec:entries} 节）， |N| 是一个整数。在调用 |\newlistentry[排序单位]{X}{Z}{N}| 命令后，
+%^^A  The set of commands |\cftbeforeXskip|,
+%|\cftbeforeXskip|、
+%|\cftXfont|、
+%|\cftXpresnum|、
+%|\cftXaftersnum|、
+%|\cftXaftersnumb|、
+%|\cftXleader|、
+%|\cftXdotsep|、
+%|\cftXpagefont| 以及
+%|\cftXafterpnum| 共9个命令也同时被定义。
+%^^A  are analogous to the commands of the same names
+%^^A described in section~\ref{sec:entries}. Their default values are also
+%^^A as described earlier.
+% 上述命令的含义见第~\ref{sec:entries} 节。初值见前文。
+%
+%^^A The default values of |\cftXindent| and |\cftXnumwidth| are set according
+%^^A to the value of the \meta{level-1} argument (i.e., |N| in this example).
+%^^A For |N=0| the settings correspond to those for
+%^^A sections in non-chaptered documents, as listed in Table~\ref{tab:indents}.
+%^^A For |N=4| the settings correspond
+%^^A to subparagraphs in non-chaptered documents, and for intermediate values
+%^^A correspond to the matching sectional division in chaptered documents.
+%^^A For values of |N| less than zero or greater than four,
+%^^A or for non-default values, use the
+%^^A |\cftsetindents| command to set the values.
+%  |\cftXindent| 和 |\cftXnumwidth| 的初值由 \meta{目录层级-1} 决定（本例中为 |N|）。当 |N = 0| 时，相当于“不含‘章’文类”中的“节”标题；当 |N = 4| 时，相当于“不含‘章’文类”中的“子段”标题，当 |0 < N < 4| 时，分别对应于含章文类中的相应标题层级。详见表~\ref{tab:indents}。当 |N < 0 | 或 |N > 4| 或需使用非默认值时，使用 |\cftsetindents| 命令进行设置\footnote{本段翻译似不准确。}。
+%
+%
+% \DescribeMacro{\l@X}
+%^^A  |\l@X| is an internal command that typesets an entry in the list, and
+%^^A is defined in terms of the above |\cft*X*| commands. It will not typeset
+%^^A an entry if |\Zdepth| is |N| or less, where |Z| is the listing's file
+%^^A extension.
+% |\l@X| 是一个内部命令，用于在目录文件中生成一个目录条目，其定义方法与前述 |\cft*X*| 命令的定义方法相同。当 |\Zdepth| 的值 $\leq$ |N| 时，则不会在目录文件中生成新的目录条目（ |Z| 表示目录文件的扩展名）。
+%
+% \DescribeMacro{\theX}
+%^^A The command |\theX| prints the value of the |X| counter. It is initially
+%^^A defined so that it prints arabic numerals. If the optional \meta{within}
+%^^A argument is used, |\theX| is defined as \\
+%^^A |\renewcommand{\theX}{\thewithin.\arabic{X}}| otherwise as \\
+%^^A |\renewcommand{\theX}{\arabic{X}}|.
+% |\theX| 命令输出计数器 |X| 的值。该命令默认以阿拉伯数字的形式输出计数器的值，即 |\renewcommand{\theX}{\arabic{X}}|。如果使用了可选参数 \meta{排序单位}，则其定义为 |\renewcommand{\theX}{\thewithin.\arabic{X}}|。
+%
+%
+%^^A As an example of the independent use of |\newlistentry|, the following
+%^^A will set up for sub-answers.
+% 在下例中，以生成前述 Answer 的 sub-answer 为例，演示独立使用 |\newlistentry| 命令的方法。
+% \begin{verbatim}
+% \newlistentry[answer]{subanswer}{1}
+% \cftsetindents{subanswer}{1.5em}{3.0em}
+% \renewcommand{\thesubanswer}{\theanswer.\alph{subanswer}}
+% \newcommand{\subanswer}[1]{%
+%    \refstepcounter{subanswer}
+%    \par\textbf{\thesubanswer) #1}
+%    \addcontentsline{ans}{subanswer{\protect\numberline{\thesubanswer}#1}}
+% \setcounter{ansdepth}{2}
+% \end{verbatim}
+%^^A And then:
+% 而后，命令
+% \begin{verbatim}
+% \answer{Harder} The \ldots
+%   \subanswer{Reformulate the problem} It assists \ldots
+% \end{verbatim}
+%^^A will be typeset as:
+% 的输出结果是：
+% \par\noindent\textbf{Answer 2. Harder}\par The \ldots
+% \par\textbf{2.a) Reformulate the problem} It assists \ldots
+%
+%^^A By default the answer entries will appear in the List of Answers listing
+%^^A (typeset by the |\listofanswer| command).
+%^^A In order to get the subanswers to appear,
+%^^A the |\setcounter{ansdepth}{2}| command was used above.
+% 当使用 |\listofanswer| 命令时，默认目录中仅显示“answer” 条目，如需显示“subanswer”条目，应在 |\listofanswer| 命令前使用 |\setcounter{ansdepth}{2}| 命令。
+%
+%^^A To turn off page numbering for the subanswers, do \\
+%^^A |\cftpagenumbersoff{subanswer}|
+% 如不需显示“subanswer”所在的页码，可使用 |\cftpagenumbersoff{subanswer}| 命令。
+%
+%^^A    As another example of |\newlistentry|, suppose that an extra sectioning
+%^^A division below |subparagraph| is required, called |subsubpara|.
+%^^A The |\subsubpara| command itself can be defined via the LaTeX kernel
+%^^A |\@startsection| command.
+%^^A Also it is necessary to define a |\subsubparamark| macro,
+%^^A a new |subsubpara| counter, a |\thesubsubpara| macro and a |\l@subsubpara|
+%^^A macro. Using the \Lpack{tocloft} package's |\newlistentry|
+%^^A takes care of most of these as shown below (remember
+%^^A the caveats about commands with |@| signs in them).
+% 以下是 |\newlistentry| 命令的另一个示例。本例的目标是实现一个新的目录类型 |subsubpara|，这个新的目录类型比子段（|subparagraph|）的层级低一级。 |\subsubpara| 命令可通过 \LaTeX{} 内部命令 |\@startsection| 定义，同时还应定义 |\subsubparamark|（提取标题内容，用以排版页眉）、计数器 |subsubpara|、|\thesubsubpara| 和 |\l@subsubpara| 命令。具体代码如下：
+%^^A \begin{verbatim}
+%^^A \newcommand{\subsubpara}{\@startsection{subpara}%
+%^^A    {6}%                                                level
+%^^A    {\parindent}%                     indent from left margin
+%^^A    {3.25ex \@plus1ex \@minus .2ex}%       skip above heading
+%^^A    {-1em}%       runin heading with 1em between title & text
+%^^A    {\normalfont\normalsize\itshape}% italic number and title
+%^^A }
+%^^A \newlistentry[subparagraph]{subsubpara}{toc}{5}
+%^^A \cftsetindents{subsubpara}{14.0em}{7.0em}
+%^^A \newcommand*{\subsubparamark}[1]{}     % gobble heading mark
+%^^A \end{verbatim}
+% \begin{verbatim}
+% \newcommand{\subsubpara}{\@startsection{subpara}%
+%    {6}%                                                       层次深度
+%    {\parindent}%                                              左缩进值
+%    {3.25ex \@plus1ex \@minus .2ex}%                   标题前的垂直间距
+%    {-1em}%                     下文紧随标题之后，且下文与标题间距为 1em
+%    {\normalfont\normalsize\itshape}%              标题编号及内容的格式
+% }
+% \newlistentry[subparagraph]{subsubpara}{toc}{5}
+% \cftsetindents{subsubpara}{14.0em}{7.0em}
+% \newcommand*{\subsubparamark}[1]{}  % subparagraph 的标题内容不排入页眉
+% \end{verbatim}
+%
+%
+%^^A     Each List of\ldots uses a file to store the list entries, and these
+%^^A files must remain open for writing throughout the document processing.
+%^^A TeX has only a limited number of files that it can keep open, and this
+%^^A puts a limit on the number of listings that can be used. For a document
+%^^A that includes a ToC but no other extra ancillary files (e.g., no
+%^^A index or bibliography output files) the maximum number of LoX's, including
+%^^A a LoF and LoT, is no more than about eleven. If you try and create too many
+%^^A new listings LaTeX will respond with the error message:
+% 每一个 |\listof...| 命令都会使用相应的辅助文件来存储目录的条目。在文档编译过程中，辅助文件应保持打开以便随时写入有关目录条目。在 \TeX{} 内部，使用 |\newwrite| 命令打开待写入的文件。由于 |\newwrite| 命令最多只能同时打开16个待写入的文件，除去源文件编译过程中必须写入的辅助文件，可供宏包使用的待写入文件数量一般不超过 11 个（当文档中有索引或参考文献时甚至更少）。因此，如果创建了多个目录类型时，在源文件编译过程中可能会出现如下错误提示：
+% \begin{center}
+% |No room for a new write|
+% \end{center}
+%^^A If you get such a message the only recourse is to redesign your document.
+% 如果遇到上述情况，宏包作者建议修改源文件以减少对文件写入数量的需求。（译者注：也可考虑使用对目录控制更为精细但只需1个辅助文件的 \Lpack{etoc} 宏包）。
+%
+%^^A    The \Lpack{tocloft} package does not provide a simple means of specifying
+%^^A new Lists of Floats or float environments.
+%^^A For those, I recommend the \Lpack{ccaption} package~\cite{CCAPTION}.
+% 在 \Lpack{tocloft} 宏包中，为浮动体或浮动环境生成目录并不是特别简便。如有这方面的需求，可参考 \Lpack{ccaption} 宏包~\cite{CCAPTION}。
+%
+%^^A \subsection{Experimental utilities}
+% \subsection{实验性功能}
+%
+%^^A The macros described in this section are even more experimental than
+%^^A those described previously.
+% 本节所述功能为实验性功能。
+%
+% \DescribeMacro{\cftchapterprecis}
+%^^A   Some old style novels, and even some modern text
+%^^A books,\footnote{For example, Robert Sedgewick, \textit{Algorithms},
+%^^A Addison-Wesley, 1983.} include a short synopsis of the contents of
+%^^A the chapter either immediately
+%^^A after the chapter heading or in the Toc, or in both places.
+% 在一些早期的小说以及现代的一些书籍\footnote{如，Robert Sedgewick, \textit{Algorithms},
+% Addison-Wesley, 1983.}中，会在正文的章标题或（和）目录条目后紧跟内容概要。
+%
+%^^A     The command |\cftchapterprecis{|\meta{text}|}| prints its argument
+%^^A both at the
+%^^A point in the document where it is called, and also adds it to the \file{.toc}
+%^^A file. For example:
+% |\cftchapterprecis{|\meta{内容概要}|}| 命令可以实现正文的章标题和目录条目后紧跟 \meta{内容概要} 的效果。示例代码如下：
+% \begin{verbatim}
+% \documentclass{book} %\documentclass{report}
+% ...
+% \chapter{} % first chapter
+% \cftchapterprecis{内容概要}
+% ...
+% \end{verbatim}
+%
+% \DescribeMacro{\cftchapterprecishere}
+% \DescribeMacro{\cftchapterprecistoc}
+%^^A The |\cftchapterprecis| command calls these two commands to print the
+%^^A text in the document (the |\...here{|\meta{text}|}| command)
+%^^A and to put it into the ToC (the |\...toc{|\meta{text}|}| command).
+%^^A These can be used individually if required.
+% |\cftchapterprecis| 命令实际上是通过调用 |\cftchapterprecishere| 命令实现在正文中增加内容概要，通过调用 |\cftchapterprecistoc| 命令实现在目录中增加内容概要。这2个命令也可以单独使用。
+%
+%^^A Sometimes it may be desirable to make a change to the global parameters
+%^^A for an individual entry. For example, a figure might be placed on
+%^^A the end paper of a book (the inside of the front or back cover), and
+%^^A this needs to be placed in a LoF with the page number set as, say
+%^^A `inside front cover'. If `inside front cover' is typeset as an ordinary
+%^^A page number it will stick out into the margin. Therefore, the parameters
+%^^A for this particular entry need to be changed.
+% 在文档排版中，有时需要针对某一目录条局部修改有关参数。如，将位于书籍封面或封底的图片加入图片目录中，并将该图片的“页码”设为“见本书封面”或“见本书封底”。如果不改变页码占据的宽度，“见本书封面”可能会延伸至边注区域，但如果全局修改页码宽度，则会影响目录的整体版式。针对这种需求，可以局部修改有关参数。
+%
+% \DescribeMacro{\cftlocalchange}
+%^^A The command |\cftlocalchange{|\meta{file}|}{|\meta{pnumwidth}|}{|\meta{tocrmarg}|}|
+%^^A will write an entry into \meta{file} to reset the global parameters.
+%^^A The command should be called again after any special entry to reset
+%^^A the parameters back to their usual values. Any fragile commands used
+%^^A in the arguments must be protected.
+% 命令 |\cftlocalchange{|\meta{扩展名}|}{|\meta{页码宽度}|}{|\meta{目录右边距}|}| 可实现局部修改目录版式参数的功能。应在适当时机再次调用本命令，以恢复目录版式参数的正常值。在本命令的参数中，如有“脆弱”命令（fragile command），应在脆弱命令前使用“保护”命令（|\protect|）。
+%
+% \DescribeMacro{\cftaddtitleline}
+%^^A The command |\cftaddtitleline{|\meta{file}|}{|\meta{kind}|}{|\meta{title}|}{|\meta{page}|}|
+%^^A will write a |\contentsline| entry into \meta{file} for a \meta{kind}
+%^^A entry with title \meta{title} and page number \meta{page}. That is,
+%^^A an entry is made of the form: \\
+%^^A |\contentsline{kind}{title}{page}| \\
+%^^A Any fragile commands used in the arguments must be protected.
+% 命令 |\cftaddtitleline{|\meta{扩展名}|}{|\meta{条目类型}|}{|\meta{条目标题}|}{|\meta{页码}|}| 可以在目录文件中增加 |\contentsline{kind}{title}{page}| 命令，实现手动添加不含编号的目录条目。同样，在本命令的参数中，如有“脆弱”命令（fragile command），应在脆弱命令前使用“保护”命令（|\protect|）。
+%
+% \DescribeMacro{\cftaddnumtitleline}
+%^^A The command |\cftaddnumtitleline{|\meta{file}|}{|\meta{kind}|}{|\meta{num}|}{|\meta{title}|}{|\meta{page}|}|
+%^^A is similar except that it also includes \meta{num} as the argument to
+%^^A the |\numberline|. That is, an entry is made of the form: \\
+%^^A |\contentsline{kind}{\numberline{num} title}{page}| \\
+%^^A Any fragile commands used in the arguments must be protected.
+% 命令 |\cftaddnumtitleline{|\meta{目录文件后缀名}|}{|\meta{条目类型}|}{|\meta{条目编号}|}{|\meta{条目标题}|}{|\meta{页码}|}| 可以在目录文件中增加 |\contentsline{条目类型}{\numberline{条目编号} 条目标题}{页码}|，实现手动添加含编号的目录条目。同样，在本命令的参数中，如有“脆弱”命令（fragile command），应在脆弱命令前使用“保护”命令（|\protect|）。
+%
+%^^A As an example of the use of these commands,
+%^^A noting that the default \LaTeX{} values for
+%^^A |\@pnumwidth| and |\@tocrmarg| are 1.55em and 2.55em respectively,
+%^^A one might do the
+%^^A following for a figure on the frontispiece page.
+% 下例的代码是上述命令的综合运用，具体实现的效果是在插图目录中显示封面图片的条目。
+%^^A \begin{verbatim}
+%^^A ...
+%^^A % this is the frontispiece page with no number
+%^^A % draw or import the picture (with no \caption)
+%^^A \cftlocalchange{lof}{4em}{5em} % make pnumwidth big enough for
+%^^A                                % frontispiece and change margin to suit
+%^^A \cftaddtitleline{lof}{figure}{The title}{frontispiece}
+%^^A \cftlocalchange{lof}{1.55em}{2.55em} % return to normal settings
+%^^A ...
+%^^A \end{verbatim}
+% \begin{verbatim}
+% ...
+% % 封面图片本身无附加编号（即无 \caption 命令）
+% \cftlocalchange{lof}{4em}{5em} % 加大页码宽度及条目标题右边距宽度
+% \cftaddtitleline{lof}{figure}{图片标题}{见本书封面}
+% \cftlocalchange{lof}{1.55em}{2.55em} % 还原默认值
+% ...
+% \end{verbatim}
+%^^A    Recall that a |\caption| command will put an entry in the \file{.lof}
+%^^A file, which is not wanted here. If a caption is required, then you can
+%^^A either craft one yourself or, assuming that your general captions are not
+%^^A too exotic, use the |\legend| command from the
+%^^A \Lpack{ccaption} package. If the illustration is numbered, use the
+%^^A |\cftaddnumtitleline| command instead of |\cftaddtitleline|.
+% 需要注意的是，|\caption| 命令会在 \file{.lof} 文件中生成插图的目录条目，这在本例是中不需要的。如确需为插图编号，可以“手动”添加编号，或使用 \Lpack{ccaption} 宏包的 |\legend| 命令实现。如果插图是编号的，应将上例代码中的 |\cftaddtitleline| 改为 |\cftaddnumtitleline|。
+%
+% \DescribeMacro{\cftZprehook}
+% \DescribeMacro{\cftZposthook}
+%^^A It's surprisingly difficult to achieve multicolumn ToCs; can you guess what the problem is to write the following?
+% 通常情况下，想要实现目录多栏排布的版式是比较困难的。你能看出下列代码存在什么问题吗？（译者注：原文如此）
+% \begin{verbatim}
+% \begin{multicols}{2}
+% \tableofcontents
+% \end{multicols}
+% \end{verbatim}
+%^^A Probably the easiest way to do it in regular \LaTeX{} is something like
+% 在 \LaTeX{} 中，可用如下代码实现目录双栏排布：
+% \begin{verbatim}
+% \RequirePackage{multicol}
+% \AtBeginDocument{\addtocontents{toc}{\protect\begin{multicols}{2}}}
+% \AtEndDocument  {\addtocontents{toc}{\protect\end  {multicols}}}
+% \end{verbatim}
+%^^A This method of writing to the |.toc| file is most flexible for trying to control the typesetting output within the table of contents.
+% 上述代码所使用的在 |.toc| 文件中写入控制命令的方法可以非常灵活地控制目录输出的版式。
+%
+%^^A To make this \emph{slightly} easier with \Lpack{tocloft}, the following macros are available: \cs{cftZprehook} and \cs{cftZprehook}, where |Z| is |toc|, |lof|, |lot|, etc.
+% 为使上述方法在代码实现上更简洁， \Lpack{tocloft} 宏包提供了 \cs{cftZprehook} 和 \cs{cftZposhook} 2个“钩子”命令（其中 |Z| 表示 |toc|、|lof| 和 |lot| 等目录类型），
+%^^A If these are defined, they insert material just before the actual typesetting of the entries of the table of contents and so on.
+% 分别用于在目录输出之前和之后插入需执行的命令。“钩子”命令通过 |\renewcommand| 命令进行设置。
+%^^A A multicolumn ToC can therefore be achieved with this:
+% 使用“钩子”命令，可将上述目录双栏排布版式的代码改写为如下代码：
+% \begin{verbatim}
+% \RequirePackage{multicol}
+% \renewcommand\cfttocprehook{\begin{multicols}{2}}
+% \renewcommand\cfttocposthook{\end{multicols}}
+% \end{verbatim}
+%
+%^^A \subsection{Usage with other packages}
+% \subsection{与其他宏包的协同}
+%
+%^^A    The \Lpack{tocloft} and \Lpack{tocbibind} packages can be used together
+%^^A in the same document. The \Lpack{tocbibind} package provides easy means
+%^^A of adding document elements like the bibliography or the index to the
+%^^A Table of Contents. However there is one known potential problem:
+% \Lpack{tocbibind} 宏包可以方便地在目录中加入目录项本身、参考文献、索引等项目。在同一个文档中，可以同时使用 \Lpack{tocloft} 和 \Lpack{tocbibind} 宏包，但可能存在的问题是：
+% \begin{itemize}
+%^^A \item If the argument to the |\tocotherhead| command is other than one
+%^^A of the normal sectioning divisions (i.e., part through to sub-paragraph)
+%^^A such as |\tocotherhead{clause}|,
+%^^A then this will almost certainly cause a problem (as the \Lpack{tocloft}
+%^^A package will not know how to define the corresponding |\l@clause| command).
+%^^A In such a case you will have to supply the appropriate macros yourself.
+% \item 当 |\tocotherhead| 命令（由 \Lpack{tocbibind} 宏包提供）的参数不是“标准”的章节类型（“标准”章节类型指 |part|、|section|、|subsection|...等）时，如 |\tocotherhead{clause}|，可能会发生问题。因为 \Lpack{tocloft} 宏包不知道如何去定义 |\l@clause| 命令。针对上述情况，作者应自行添加合适的命令（译者注：关于 |\l@clause|，可参见本文~p.\pageref{sec:lkind} 的 |l@条目类型| 命令）。
+% \end{itemize}
+%
+% \DescribeMacro{\@cftbsnum}
+% \DescribeMacro{\@cftasnum}
+% \DescribeMacro{\@cftasnumb}
+%^^A    Some packages, like the \Lpack{float} package by Anselm Lingnau,
+%^^A enable the creation of other kinds of \textit{List of \ldots}.
+%^^A The \Lpack{tocloft} package is only minimally able to change the
+%^^A formatting of these,
+%^^A principally because the packages are independent of each other and, in
+%^^A the case of the \Lpack{float} package, new kinds of float environments
+%^^A and their associated lists can be created on the fly at any point in
+%^^A a document. Some aspects of the typesetting
+%^^A are controlled by |\@cftbsnum|, |\@cftasnum| and |\@cftasnumb| commands.
+%^^A These are equivalent to the |\cftXpresnum|, |\cftXaftersnum| and |\cftXaftersnumb|
+%^^A commands described earlier. By default they are defined to do nothing, but
+%^^A may be renewed to do something.
+% 除 \Lpack{tocloft} 宏包外，其他一些宏包（如 Anselm Lingnau 编写的 \Lpack{float} 宏包）也支持自定义文档元素的目录。\Lpack{float} 宏包支持在文档的任意位置创建新的浮动体类型及其目录。由于宏包之间相对独立，\Lpack{tocloft} 宏包只能有限度地控制这些第三方宏包所定义目录的版式。部分目录版式可以由 |\@cftbsnum|、|\@cftasnum| 和 |\@cftasnumb| 命令控制，这3个命令分别等效于前述的 |\cftXpresnum|、|\cftXaftersnum| 和 |\cftXaftersnumb| 命令。默认情况下，它们被定义为不执行任何操作，但可以更改其初始定义以执行某些操作。
+%
+%^^A   The \Lpack{tocloft} and \Lpack{minitoc} packages have an unfortunate
+%^^A interaction,\footnote{Discovered by Lyndon Dudding
+%^^A (\texttt{lyndon.dudding@totalise.co.uk}).} which fortunately can be fixed.
+%^^A In the normal course of events, when \Lpack{minitoc} is used in a chaptered
+%^^A document it will typeset section
+%^^A entries in the minitocs in bold font. If \Lpack{tocloft} is used in
+%^^A conjunction with \Lpack{minitoc}, then the minitoc section entries are
+%^^A typeset in the normal font, except for the page numbers which are in
+%^^A bold font, while the ToC section entries are all in normal font.
+% \Lpack{minitoc} 宏包可在正文中每个章标题之间生成小型目录。\Lpack{tocloft} 与 \Lpack{minitoc}  宏包之间存在冲突\footnote{由 Lyndon Dudding
+% (\texttt{lyndon.dudding@totalise.co.uk})报告。}，但可以修复。通常情况下，在有“章”（chapter）的文类中使用 \Lpack{minitoc} 宏包时，小型（还是章节？）目录中的“节”（section）条目的字体样式为 |\small\bfseries|。当同时使用 \Lpack{tocloft} 宏包时，小型目录中“节”条目各元素（不含页码）将以常规字体排布，而在章节目录中“节”条目各元素均以常规字体排布。
+%
+%^^A    One cure, if you want the minitoc section entries to be all in normal
+%^^A font is to put:
+% 如希望小型目部分的条目全部使用常规字体，请在文档导言区使用如下代码：
+% \begin{verbatim}
+% \renewcommand{\mtcSfont}{\small\normalfont}
+% \end{verbatim}
+%^^A in the preamble.
+%
+%^^A    Otherwise, the cure is the following incantation:
+% 另一种解方案是：
+% \begin{verbatim}
+% \renewcommand{\cftsecfont}{\bfseries}
+% \renewcommand{\cftsecleader}{\bfseries\cftdotfill{\cftdotsep}}
+% \renewcommand{\cftsecpagefont}{\bfseries}
+% \end{verbatim}
+%^^A To have the section entries in both the ToC and the minitocs in bold then
+%^^A put the incantation in the preamble. To have only the minitoc section
+%^^A entries in bold while the ToC entries are in the normal font,
+%^^A put the incantation between the |\tableofcontents|
+%^^A command and the first |\chapter| command.
+% 上述代码放在文档的不同位置有不同的效果。如需要要使章节目录（ToC）和小型目录（minitoc）中的“节”条目都以粗体显示，则将上述代码放在文档导言区；如希望使章节目录（ToC）中的“节”条目为常规字体，同时仅小型目录（minitoc）中的“节”条目以粗体显示，则应将上述代码计在 |\tableofcontents| 命令和第一个 |\chapter| 命令之间。
+%
+%
+%^^A In general, use with other packages that redefine any of the macros that
+%^^A \Lpack{tocloft} also modifies is likely to be problematic.
+% 总之，当其他宏包修改的 \LaTeX{} 内部宏与 \Lpack{tocloft} 修改的 \LaTeX{} 内部宏之间有交叉时，都可能会发生问题。
+%
+% \section{宏包代码} \label{sec:code}
+%
+%    \begin{macrocode}
+%<*usc>
+%    \end{macrocode}
+%
+% In order to try and avoid name clashes with other packages, each internal
+% name will include the character string \texttt{@cft}.
+%
+% \begin{macro}{\@cftifundefined}
+% \changes{v2.3h}{2017/08/29}{Use internal ifundefined macro to fix conflict with fancyhdr}
+% Due to a conflict with how this package and fancyhdr checked for undefinedness.
+%    \begin{macrocode}
+\newcommand\@cftifundefined[1]{%
+  \begingroup\expandafter\expandafter\expandafter\endgroup
+  \expandafter\ifx\csname #1\endcsname\relax
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftquit}
+% \begin{macro}{\if@cfthaschapter}
+% We will be using either chapter or section type headings for the ToC, etc.,
+% so we need to know which of these the document class supports.
+% \changes{v2.0}{2001/03/03}{Revamped chapter checking so the stdclsdv package no longer required}
+%    \begin{macrocode}
+\newcommand{\@cftquit}{}
+\newif\if@cfthaschapter
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\if@cftkoma}
+% The \Lpack{koma} classes have different defaults than the standard classes,
+% so we need to know if a \Lpack{koma} class has been loaded.
+% \changes{v2.3}{2002/06/15}{Added check for a koma class}
+%    \begin{macrocode}
+\newif\if@cftkoma
+\@cftkomafalse
+\@ifclassloaded{scrartcl}{\@cftkomatrue}{}
+\@ifclassloaded{scrreprt}{\@cftkomatrue}{}
+\@ifclassloaded{scrbook}{\@cftkomatrue}{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\if@cfttitlesec}
+% \changes{v2.3f}{2013/04/30}{Added check for titlesec package}
+%    \begin{macrocode}
+\newif\if@cfttitlesec
+\AtBeginDocument{\@ifpackageloaded{titlesec}{\@cfttitlesectrue}{}}
+%    \end{macrocode}
+% \end{macro}
+%
+% Issue a warning if there are no recognised sectional divisions
+% and then skip the rest of the package code.
+%    \begin{macrocode}
+\@cftifundefined{chapter}{%
+  \@cfthaschapterfalse
+  \@cftifundefined{section}{%
+    \PackageWarning{tocloft}%
+      {I don't recognize any sectional divisions so I'll do nothing}
+    \renewcommand{\@cftquit}{\endinput}
+    }{\PackageInfo{tocloft}{The document has section divisions}}
+  }{\@cfthaschaptertrue
+    \PackageInfo{tocloft}{The document has chapter divisions}}
+%    \end{macrocode}
+% Perhaps quit now.
+%    \begin{macrocode}
+\@cftquit
+%    \end{macrocode}
+%
+% Use chapter style if |\if@cfthaschapter| is TRUE, otherwise section style.
+%
+% \begin{macro}{\if@cfttocbibind}
+% A flag that is set TRUE iff the \Lpack{tocbibind} package has been loaded.
+% The 1998/11/15 version of \Lpack{tocbibind} does not necessarily work well
+% with \Lpack{tocloft}.
+%    \begin{macrocode}
+\newif\if@cfttocbibind
+\AtBeginDocument{%
+  \@ifpackageloaded{tocbibind}{\@cfttocbibindtrue}{\@cfttocbibindfalse}
+  \if@cfttocbibind
+    \@ifpackagelater{tocbibind}{1998/11/16}{}{%
+      \PackageWarning{tocloft}{%
+You are using a version of the tocbibind package\MessageBreak
+that is not compatible with tocloft.\MessageBreak
+The results may be surprising.\MessageBreak
+Consider installing the current version of tocbibind.}}
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\if@cftnctoc}
+% A boolean used to implement the \Lopt{titles} option. It is TRUE
+% if the ToC, LoT, LoF titles should use the default styles.
+%    \begin{macrocode}
+\newif\if@cftnctoc\@cftnctocfalse
+\DeclareOption{titles}{\@cftnctoctrue}
+  %% \ProcessOptions\relax
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\if@cftsubfigopt}
+% A boolean used to implement the \Lopt{subfigure} option.
+%    \begin{macrocode}
+\newif\if@cftsubfigopt\@cftsubfigoptfalse
+\DeclareOption{subfigure}{\@cftsubfigopttrue}
+%    \end{macrocode}
+% \end{macro}
+%
+% Process the options.
+%
+%    \begin{macrocode}
+
+\ProcessOptions\relax
+
+%    \end{macrocode}
+%
+% \begin{macro}{\tocloftpagestyle}
+% \begin{macro}{\@cftpagestyle}
+% A user-level macro to set the pagestyle for the first page of the ToC, etc.
+% The default is the |plain| pagestyle.
+% \changes{v2.3}{2002/06/15}{Added \cs{tocloftpagestyle}}
+%    \begin{macrocode}
+\newcommand{\tocloftpagestyle}[1]{%
+  \def\@cftpagestyle{\thispagestyle{#1}}}
+\tocloftpagestyle{plain}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftmarktoc}
+% \begin{macro}{\cftmarklof}
+% \begin{macro}{\cftmarklot}
+%  These three macros set the style for running heads. They are initialised
+% to give the default appearance.
+% \changes{v2.3}{2002/06/15}{Marking commands are different for koma}
+%    \begin{macrocode}
+\newcommand{\cftmarktoc}{%
+  \@mkboth{\MakeUppercase\contentsname}{\MakeUppercase\contentsname}}
+\newcommand{\cftmarklof}{%
+  \@mkboth{\MakeUppercase\listfigurename}{\MakeUppercase\listfigurename}}
+\newcommand{\cftmarklot}{%
+  \@mkboth{\MakeUppercase\listtablename}{\MakeUppercase\listtablename}}
+\if@cftkoma
+  \renewcommand{\cftmarktoc}{%
+    \@mkboth{\contentsname}{\contentsname}}
+  \renewcommand{\cftmarklof}{%
+    \@mkboth{\listfigurename}{\listfigurename}}
+  \renewcommand{\cftmarklot}{%
+    \@mkboth{\listtablename}{\listtablename}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@cfttocstart}
+% \begin{macro}{\@cfttocfinish}
+% Two macros to perform the actions at the beginning and end of the
+% |\tableofcontents| command (and friends). |\@cfttocstart| deals with
+% chaptered documents, ensuring that the ToC is typeset in a single
+% column (see \file{classes.dtx} for the original code).
+% These macros are also provided by the \Lpack{ccaption} package.
+%    \begin{macrocode}
+\providecommand{\@cfttocstart}{%
+  \if@cfthaschapter
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+  \fi}
+%    \end{macrocode}
+% |\@cfttocfinish| resets, if required, twocolumn typesetting.
+%    \begin{macrocode}
+\providecommand{\@cfttocfinish}{%
+  \if@cfthaschapter
+    \if@restonecol\twocolumn\fi
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\phantomsection}
+% This is provided because the \Lopt{hyperref} package screws with
+% |\addcontentsline|.
+% \changes{v2.2}{2001/04/17}{Provided \cs{phantomsection}}
+% \changes{v2.2}{2001/04/17}{Added \cs{phantomsection} before \cs{addcontentsline} commands}
+%    \begin{macrocode}
+\providecommand{\phantomsection}{}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftdobibtoc}
+% If the \Lpack{tocbibind} package has been used and it has
+% redefined |\tableofcontents| we need to cater for that. The contents
+% of the definition are defined in \Lpack{tocbibind}.
+%    \begin{macrocode}
+\newcommand{\@cftdobibtoc}{%
+  \if@dotoctoc
+    \if@bibchapter
+      \phantomsection
+      \addcontentsline{toc}{chapter}{\contentsname}
+    \else
+      \phantomsection
+      \addcontentsline{toc}{\@tocextra}{\contentsname}
+    \fi
+  \fi}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftparskip}
+% The |\parskip| local to the ToC, etc., is set to the length |\cftparskip|.
+% \changes{v2.1}{2001/04/08}{Added \cs{cftparskip} for local parskip in ToC, etc.}
+%    \begin{macrocode}
+\newlength{\cftparskip}
+\setlength{\cftparskip}{0pt}
+
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\tableofcontents}
+% This is a parameterised version of the default |\tableofcontents| command.
+% Each class has its own definition, but we have to cater for all classes
+% in one definition, hence some of the checks. The definition is
+% modified after all packages have been loaded.
+%
+% If the \Lopt{titles} option has been used, then the command is not modified.
+%
+%    \begin{macrocode}
+\AtBeginDocument{%
+\if@cftnctoc
+  % ensure \cftparskip is still set properly
+  \let\OLD@starttoc\@starttoc
+  \renewcommand{\@starttoc}[1]{%
+    \begingroup
+      \parskip=\cftparskip
+      \OLD@starttoc{#1}%
+    \endgroup
+  }
+\else
+  \renewcommand{\tableofcontents}{%
+    \@cfttocstart
+%    \end{macrocode}
+% Ensure that any previous paragraph has been finished. Within a group set
+% the local paragraphing style and typeset the title.
+%    \begin{macrocode}
+    \par
+    \begingroup
+      \parindent\z@ \parskip\cftparskip
+      \@cftmaketoctitle
+%    \end{macrocode}
+% If \Lpack{tocbibind} has been used, then add the ToC
+% name to the ToC.
+%    \begin{macrocode}
+      \if@cfttocbibind
+        \@cftdobibtoc
+      \fi
+%    \end{macrocode}
+% Finally, read the \file{.toc} file and finish up.
+%    \begin{macrocode}
+      \@starttoc{toc}%
+    \endgroup
+    \@cfttocfinish}
+\fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftmaketoctitle}
+% This command typesets the title for the ToC.
+% \changes{v2.3}{2002/06/15}{Added \cs{@secpenalty} to \cs{@cftmaketoctitle}}
+% \changes{v2.3}{2002/06/15}{Added \cs{@cftpagestyle} to \cs{@cftmaketoctitle}}
+%    \begin{macrocode}
+\newcommand{\@cftmaketoctitle}{%
+  \addpenalty\@secpenalty
+  \if@cfthaschapter
+    \vspace*{\cftbeforetoctitleskip}%
+  \else
+    \vspace{\cftbeforetoctitleskip}%
+  \fi
+  \@cftpagestyle
+  {\interlinepenalty\@M
+  {\cfttoctitlefont\contentsname}{\cftaftertoctitle}%
+  \cftmarktoc
+  \par\nobreak
+  \vskip \cftaftertoctitleskip
+  \@afterheading}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforetoctitleskip}
+% \begin{macro}{\cftaftertoctitleskip}
+%  These two lengths control the vertical spacing before and after the
+%  ToC title.
+%    \begin{macrocode}
+\newlength{\cftbeforetoctitleskip}
+\newlength{\cftaftertoctitleskip}
+%    \end{macrocode}
+% Their values depend on whether the document has chapters or not. In
+% chaptered documents the default ToC title is typeset as a |\chapter*|,
+% otherwise as a |\section*|.
+%    \begin{macrocode}
+\if@cfthaschapter
+  \setlength{\cftbeforetoctitleskip}{50pt}
+  \setlength{\cftaftertoctitleskip}{40pt}
+\else
+  \setlength{\cftbeforetoctitleskip}{3.5ex \@plus 1ex \@minus .2ex}
+  \setlength{\cftaftertoctitleskip}{2.3ex \@plus.2ex}
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cfttoctitlefont}
+% \begin{macro}{\cftaftertoctitle}
+% The ToC title is typeset in the style given by |\cfttoctitlefont|.
+% The macro |\cftaftertoctitle| is called after typesetting the title.
+% This is initialised to do nothing.
+% Both these macros can be redefined to do other things (e.g., adding
+% an |\hfill| to |\cfttoctitlefont| will make the title flushright).
+% \changes{v2.3}{2002/06/15}{koma changes the title fonts}
+%    \begin{macrocode}
+\if@cfthaschapter
+  \newcommand{\cfttoctitlefont}{\normalfont\Huge\bfseries}
+  \if@cftkoma\renewcommand{\cfttoctitlefont}{\size@chapter\sectfont}\fi
+\else
+  \newcommand{\cfttoctitlefont}{\normalfont\Large\bfseries}
+  \if@cftkoma\renewcommand{\cfttoctitlefont}{\size@section\sectfont}\fi
+\fi
+\newcommand{\cftaftertoctitle}{}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftsetpnumwidth}
+% \begin{macro}{\cftsetrmarg}
+%  Users commands for setting |\@pnumwidth| and |\@tocrmarg|.
+%    \begin{macrocode}
+\newcommand{\cftsetpnumwidth}[1]{\renewcommand{\@pnumwidth}{#1}}
+\newcommand{\cftsetrmarg}[1]{\renewcommand{\@tocrmarg}{#1}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftpnumalign}
+% \changes{v2.3f}{2013/05/02}{Add \cs{cftpnumalign} for page number alignment}
+% Alignment string (as input to \cs{makebox} for the page number box.
+%    \begin{macrocode}
+\newcommand{\cftpnumalign}{r}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftdot}
+% \begin{macro}{\cftdotfill}
+% In the default ToC, a dotted line can be used to provide a leader between
+% a title and the page number. The definition of this leader is buried
+% in the |\@dottedtocline| command. The |\cftdotfill{|\meta{sep}|}|
+% command provides a parameterised version of the leader code, where
+% \meta{sep} is the separation between the dots in mu units.
+% The symbol used for the `dots' in the leader is given by the value
+% of |\cftdot|. These macros are also provided by the \Lpack{ccaption} package.
+%    \begin{macrocode}
+\providecommand{\cftdot}{.}
+\providecommand{\cftdotfill}[1]{%
+  \def\@tempa{#1}%
+  \def\@tempb{\cftnodots}%
+  \ifx\@tempa\@tempb
+    \hfill
+  \else
+    \leaders\hbox{$\m@th\mkern #1 mu\hbox{\cftdot}\mkern #1 mu$}\hfill
+  \fi
+}
+%    \end{macrocode}
+% \changes{v2.3f}{2013/04/30}{Specifically avoid placing dots when \cs{cftnodots} is used}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftdotsep}
+% \begin{macro}{\cftnodots}
+% |\cftdotsep| holds the default dot separation, and is also provided
+% by the \Lpack{ccaption} package.
+% If the kerns in |\cftdotfill| are large enough, then no dots will
+% be printed. |\cftnodots| should be `large enough'.
+% (Actually, |\cftnodots| is now used as a flag for a conditional branch, so its numerical value isn't as important now.)
+%    \begin{macrocode}
+\providecommand{\cftdotsep}{4.5}
+\newcommand{\cftnodots}{5000}
+%    \end{macrocode}
+% \changes{v2.3f}{2013/04/30}{Reduce \cs{cftnodots} to avoid very large dotsep sizes.}
+% \end{macro}
+% \end{macro}
+%
+%     Now for the trickier bits regarding the typesetting of the ToC
+% entries.
+%
+%     A \file{.toc} (also \file{.lof} and \file{.lot}) file consists
+% of a list of
+% |\contentsline{|\meta{kind}|}{|\meta{title}|}{|\meta{page}|}|
+% commands, where \meta{kind} is the kind of heading (e.g., |part| or
+% |section| or |figure|), \meta{title} is the title text (including the number),
+% and \meta{page} is the page number. The entries are inserted into the
+% file by calling the
+% |\addcontentsline{|\meta{file}|}{|\meta{kind}|}{|\meta{title}|}|
+% command, where \meta{file} is the file extension (e.g., |toc|, |lot|)
+% and the other arguments are the same as for the |\contentsline|
+% command. (Arbitrary stuff may also be put into the file via the
+% |\addtocontents{|\meta{file}|}{|\meta{text}|}| command).
+% The typesetting of the |\contentsline| entries is performed by
+% commands of the form |\l@kind|. The sectioning and captioning commands
+% call |\addcontentsline| to insert their titles into the \file{.toc}
+% etc., files.
+%
+%     For the purposes at hand it is generally impossible to treat
+% the typesetting
+% of a title and its number separately, as both are bundled into the
+% \meta{title} argument within |\contentsline|. They could be handled
+% separately if the |\contentsline| command was suitably modified. If
+% this was done, then the |\addtocontentsline| command would also need
+% to be changed which would then require the sectioning and captioning
+% commands to be modified as well. This is certainly possible, but would
+% cause problems if any other package also modified the sectioning or
+% captioning commands, and there are several packages which do this.
+%
+%     Having said this, for all but Part entries, the sectional number
+% is typeset via the |\numberline| command. We can take advantage of
+% this fact.
+%
+%     I have taken the decision to not touch the |\contentsline| macro
+% and instead to do what can be done with it as it exists. That is, I will
+% modify the |\l@kind| commands. Essentially, my new definitions
+% consist of inlined versions of the code for |\@dottedtocline|.
+%
+% \begin{macro}{\cftparfillskip}
+% The |\l@kind| commands modify (locally) the value of |\parfillskip|.
+% |\cftparfillskip| is a copy of the default \textit{\TeX book}
+% |\parfillskip| definition.
+%    \begin{macrocode}
+\newcommand{\cftparfillskip}{\parfillskip=0pt plus1fil}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\numberline}
+% \changes{v1.1}{2000/02/11}{Added \cs{@cftbsnum} to \cs{numberline}}
+% The purpose of the |\numberline{|\meta{secnum}|}| command is to typeset
+% \meta{secnum} left justified in a box of width |\@tempdima|. I redefine
+% it to add three additional parameters, namely |\@cftbsnum|,
+% |\@cftasnum| and |\@cftasnumb|
+% (see \file{ltsect.dtx} for the original
+% definition).
+%    \begin{macrocode}
+\renewcommand{\numberline}[1]{%
+  \hb@xt@\@tempdima{\@cftbsnum #1\@cftasnum\hfil}\@cftasnumb}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftbsnum}
+% \begin{macro}{\@cftasnum}
+% \begin{macro}{\@cftasnumb}
+% \changes{v0.2b}{1999/03/07}{Added empty definitions for @cftasnum and @cftasnumb commands}
+% \changes{v1.1}{2000/02/11}{Added empty definition of \cs{@cftbsnum}}
+% Originally these were not defined but were |\let| to appropriate commands
+% in the |\l@...| commands, but they
+% have to be defined in case something unexpected calls |\numberline|,
+% for example through use of the \Lpack{float} package.\footnote{This bug
+% was discovered by Andrew Thurber when using the \Lpack{tocloft} and
+% \Lpack{algorithm} packages together.}
+%    \begin{macrocode}
+\newcommand{\@cftbsnum}{}
+\newcommand{\@cftasnum}{}
+\newcommand{\@cftasnumb}{}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%
+%
+% \begin{macro}{\l@part}
+% \begin{macro}{\if@cftdopart}
+% \changes{v1.1}{2000/02/11}{Added \cs{@cftbsnum} and \cs{cftXpresnum} to
+%                            all \cs{\l@X} commands}
+% \changes{v1.1}{2000/02/11}{Added \cs{cftXpresnum} commands}
+%  |\l@part{|\meta{title}|}{|\meta{page}|}| typesets the ToC entry for
+% a |part| heading. It is a parameterised copy of the default |\l@part|
+% (see \file{classes.dtx} for the original definition and the code
+%  below for |\l@subsection| for an explanation of most of this
+%  code). By default, Parts
+% (and Chapters) do not have dotted leaders. This package provides
+% for all entries to have dotted leaders.
+% \changes{v0.2a}{1999/01/24}{In article class, Part level is 0 not -1}
+% \changes{v2.0}{2001/03/03}{Checked directly for \cs{part} definition}
+% \changes{v2.3a}{2002/10/03}{Added \cs{cftpartpresnum} to \cs{l@part}}
+%
+%    \begin{macrocode}
+\newif\if@cftdopart
+\newif\if@cfthaspart
+\@cftifundefined{part}{\@cfthaspartfalse}{\@cfthasparttrue}
+\if@cfthaspart
+\renewcommand*{\l@part}[2]{%
+  \@cftdopartfalse
+  \ifnum \c@tocdepth >-2\relax
+    \if@cfthaschapter
+      \@cftdoparttrue
+    \fi
+    \ifnum \c@tocdepth >\m@ne
+      \if@cfthaschapter\else
+        \@cftdoparttrue
+      \fi
+    \fi
+  \fi
+  \if@cftdopart
+    \if@cfthaschapter
+      \addpenalty{-\@highpenalty}%
+    \else
+      \addpenalty\@secpenalty
+    \fi
+    \addvspace{\cftbeforepartskip}%
+    \begingroup
+      {\leftskip \cftpartindent\relax
+       \rightskip \@tocrmarg
+       \parfillskip -\rightskip
+       \parindent \cftpartindent\relax\@afterindenttrue
+       \interlinepenalty\@M
+       \leavevmode
+       \@tempdima \cftpartnumwidth\relax
+       \let\@cftbsnum \cftpartpresnum
+       \let\@cftasnum \cftpartaftersnum
+       \let\@cftasnumb \cftpartaftersnumb
+       \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+%    \end{macrocode}
+% In default \LaTeX, the part ToC entry is written without \verb|\numberline|
+% and hence the `presnum' needs to be inserted manually.
+% In Koma-Script and titlesec (and probably others---let me know!), however, this is not the case.
+%    \begin{macrocode}
+       {\cftpartfont \if@cftkoma\else\if@cfttitlesec\else\cftpartpresnum\fi\fi #1}%
+       \cftpartfillnum{#2}}
+      \nobreak
+      \if@cfthaschapter
+        \global\@nobreaktrue
+        \everypar{\global\@nobreakfalse\everypar{}}%
+      \else
+        \if@compatibility
+          \global\@nobreaktrue
+          \everypar{\global\@nobreakfalse\everypar{}}%
+        \fi
+      \fi
+    \endgroup
+  \fi}
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforepartskip}
+% \begin{macro}{\cftpartnumwidth}
+% \begin{macro}{\cftpartfont}
+% \begin{macro}{\cftpartpresnum}
+% \begin{macro}{\cftpartaftersnum}
+% \begin{macro}{\cftpartaftersnumb}
+% \begin{macro}{\cftpartleader}
+% \begin{macro}{\cftpartdotsep}
+% \begin{macro}{\cftpartpagefont}
+% \begin{macro}{\cftpartafterpnum}
+% \begin{macro}{\cftpartindent}
+% \begin{macro}{\cftpartfillnum}
+%  These are the user commands to control the typesetting of Part entries.
+%  They are initialised to give the standard appearance.
+% \changes{v2.3a}{2002/10/03}{Deleted \cs{cftpartaftersnum} and \cs{cftpartaftersnumb}}
+% \changes{v2.3b}{2003/01/20}{Reinstated \cs{cftpartaftersnum} and \cs{cftpartaftersnumb}}
+%    \begin{macrocode}
+\if@cfthaspart
+  \newlength{\cftbeforepartskip}
+    \setlength{\cftbeforepartskip}{2.25em \@plus\p@}
+  \newlength{\cftpartnumwidth}
+    \setlength{\cftpartnumwidth}{0em}
+  \newcommand{\cftpartfont}{\large\bfseries}
+  \newcommand{\cftpartpresnum}{}
+  \newcommand{\cftpartaftersnum}{}
+  \newcommand{\cftpartaftersnumb}{}
+  \newcommand{\cftpartleader}{\large\bfseries\cftdotfill{\cftpartdotsep}}
+  \newcommand{\cftpartdotsep}{\cftnodots}
+  \newcommand{\cftpartpagefont}{\large\bfseries}
+  \newcommand{\cftpartafterpnum}{}
+  \newlength{\cftpartindent}
+    \setlength{\cftpartindent}{0em}
+  \newcommand{\cftpartfillnum}[1]{%
+    {\cftpartleader}%
+    {\makebox[\@pnumwidth][\cftpnumalign]{\cftpartpagefont #1}\cftpartafterpnum\par}%
+  }
+%    \end{macrocode}
+% \Lpack{koma} classes use some different settings.
+% \changes{v2.3}{2002/06/15}{koma has different part settings}
+%    \begin{macrocode}
+  \if@cftkoma
+    \setlength{\cftpartnumwidth}{2em}
+    \renewcommand{\cftpartfont}{\sectfont\large}
+    \renewcommand{\cftpartpagefont}{\sectfont\large}
+  \fi
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\l@chapter}
+%  |\l@chapter{|\meta{title}|}{|\meta{page}|}| typesets the ToC entry for
+% a |chapter| heading. It is a parameterised copy of the default |\l@chapter|
+% (see \file{classes.dtx} for the original definition). This only applies
+% to chaptered documents.
+%    \begin{macrocode}
+\if@cfthaschapter
+\renewcommand*{\l@chapter}[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip \cftbeforechapskip
+    {\leftskip \cftchapindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cftchapindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cftchapnumwidth\relax
+     \let\@cftbsnum \cftchappresnum
+     \let\@cftasnum \cftchapaftersnum
+     \let\@cftasnumb \cftchapaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cftchapfont #1}\nobreak
+     \cftchapfillnum{#2}}%
+  \fi}%
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforechapskip}
+% \begin{macro}{\cftchapindent}
+% \begin{macro}{\cftchapnumwidth}
+% \begin{macro}{\cftchapfont}
+% \begin{macro}{\cftchappresnum}
+% \begin{macro}{\cftchapaftersnum}
+% \begin{macro}{\cftchapaftersnumb}
+% \begin{macro}{\cftchapleader}
+% \begin{macro}{\cftchapdotsep}
+% \begin{macro}{\cftchappagefont}
+% \begin{macro}{\cftchapafterpnum}
+% \begin{macro}{\cftchapfillnum}
+%  These are the user commands to control the typesetting of Chapter entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\if@cfthaschapter
+  \newlength{\cftbeforechapskip}
+    \setlength{\cftbeforechapskip}{1.0em \@plus\p@}
+  \newlength{\cftchapindent}
+    \setlength{\cftchapindent}{0em}
+  \newlength{\cftchapnumwidth}
+    \setlength{\cftchapnumwidth}{1.5em}
+  \newcommand{\cftchapfont}{\bfseries}
+  \newcommand{\cftchappresnum}{}
+  \newcommand{\cftchapaftersnum}{}
+  \newcommand{\cftchapaftersnumb}{}
+  \newcommand{\cftchapleader}{\bfseries\cftdotfill{\cftchapdotsep}}
+  \newcommand{\cftchapdotsep}{\cftnodots}
+  \newcommand{\cftchappagefont}{\bfseries}
+  \newcommand{\cftchapafterpnum}{}
+  \newcommand{\cftchapfillnum}[1]{%
+    {\cftchapleader}\nobreak
+    \makebox[\@pnumwidth][\cftpnumalign]{\cftchappagefont #1}\cftchapafterpnum\par
+  }
+%    \end{macrocode}
+% \Lpack{koma} classes have different chapter settings.
+% \changes{v2.3}{2002/06/15}{koma has different chapter settings}
+%    \begin{macrocode}
+  \if@cftkoma
+    \renewcommand{\cftchapfont}{\sectfont}
+  \fi
+\fi
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\l@section}
+%  |\l@section{|\meta{title}|}{|\meta{page}|}| typesets the ToC entry for
+% a |section| heading. It is a parameterised copy of the default |\l@section|
+% (see \file{classes.dtx} for the original definition).
+%    \begin{macrocode}
+\renewcommand*{\l@section}[2]{%
+  \ifnum \c@tocdepth >\z@
+    \if@cfthaschapter
+      \vskip \cftbeforesecskip
+    \else
+      \addpenalty\@secpenalty
+      \addvspace{\cftbeforesecskip}
+    \fi
+    {\leftskip \cftsecindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cftsecindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cftsecnumwidth\relax
+     \let\@cftbsnum \cftsecpresnum
+     \let\@cftasnum \cftsecaftersnum
+     \let\@cftasnumb \cftsecaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cftsecfont #1}\nobreak
+     \cftsecfillnum{#2}}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforesecskip}
+% \begin{macro}{\cftsecindent}
+% \begin{macro}{\cftsecnumwidth}
+% \begin{macro}{\cftsecfont}
+% \begin{macro}{\cftsecpresnum}
+% \begin{macro}{\cftsecaftersnum}
+% \begin{macro}{\cftsecaftersnumb}
+% \begin{macro}{\cftsecleader}
+% \begin{macro}{\cftsecdotsep}
+% \begin{macro}{\cftsecpagefont}
+% \begin{macro}{\cftsecafterpnum}
+% \begin{macro}{\cftsecfillnum}
+%  These are the user commands to control the typesetting of Section entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\newlength{\cftbeforesecskip}
+\newlength{\cftsecindent}
+\newlength{\cftsecnumwidth}
+\newcommand{\cftsecpresnum}{}
+\newcommand{\cftsecaftersnum}{}
+\newcommand{\cftsecaftersnumb}{}
+\if@cfthaschapter
+  \setlength{\cftbeforesecskip}{\z@ \@plus.2\p@}
+  \setlength{\cftsecindent}{1.5em}
+  \setlength{\cftsecnumwidth}{2.3em}
+  \newcommand{\cftsecfont}{\normalfont}
+  \newcommand{\cftsecleader}{\normalfont\cftdotfill{\cftsecdotsep}}
+  \newcommand{\cftsecdotsep}{\cftdotsep}
+  \newcommand{\cftsecpagefont}{\normalfont}
+\else
+  \setlength{\cftbeforesecskip}{1.0em \@plus\p@}
+  \setlength{\cftsecindent}{0em}
+  \setlength{\cftsecnumwidth}{1.5em}
+  \newcommand{\cftsecfont}{\bfseries}
+  \newcommand{\cftsecleader}{\bfseries\cftdotfill{\cftsecdotsep}}
+  \newcommand{\cftsecdotsep}{\cftnodots}
+  \newcommand{\cftsecpagefont}{\bfseries}
+\fi
+\newcommand{\cftsecafterpnum}{}
+\newcommand{\cftsecfillnum}[1]{%
+  {\cftsecleader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cftsecpagefont #1}\cftsecafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\l@subsection}
+%  |\l@subsection{|\meta{title}|}{|\meta{page}|}| typesets the ToC entry for
+% a |subsection| heading. It is a parameterised copy of the default
+% |\l@subsection|
+% (see \file{classes.dtx} for the original definition).
+%    \begin{macrocode}
+\renewcommand*{\l@subsection}[2]{%
+%    \end{macrocode}
+% Only typeset the entry if it falls within the |tocdepth|.
+%    \begin{macrocode}
+  \ifnum \c@tocdepth >\@ne
+%    \end{macrocode}
+% Add some vertical space.
+%    \begin{macrocode}
+    \vskip \cftbeforesubsecskip
+%    \end{macrocode}
+% Start a group to keep paragraphing changes local. Set the |\leftskip|
+% to the entry's indentation.
+%    \begin{macrocode}
+    {\leftskip \cftsubsecindent\relax
+%    \end{macrocode}
+% Set the |\rightskip| to |\@tocrmarg| to leave room for the page number.
+%    \begin{macrocode}
+     \rightskip \@tocrmarg
+%    \end{macrocode}
+% Ensure that the last line of the entry will be filled. Setting
+% |\parfillskip| to a negative number prevents any overfull box messages.
+%    \begin{macrocode}
+     \parfillskip -\rightskip
+%    \end{macrocode}
+% Set the paragraph indent to the entry's indentation.
+%    \begin{macrocode}
+     \parindent \cftsubsecindent\relax\@afterindenttrue
+%    \end{macrocode}
+% Try and prevent breaks between lines in a multiple line entry.
+%    \begin{macrocode}
+     \interlinepenalty\@M
+%    \end{macrocode}
+% Make sure that we have left vertical mode.
+%    \begin{macrocode}
+     \leavevmode
+%    \end{macrocode}
+% Our version of |\numberline| expects that the width of the number box
+% is in |\@tempdima|, and that the three macros |\@cftbsnum|,
+% |\@cftasnum| and |\@cftasnumb|
+% are defined. We set all these to the values for this entry.
+%    \begin{macrocode}
+     \@tempdima \cftsubsecnumwidth\relax
+     \let\@cftbsnum \cftsubsecpresnum
+     \let\@cftasnum \cftsubsecaftersnum
+     \let\@cftasnumb \cftsubsecaftersnumb
+%    \end{macrocode}
+% Arrange that the (section number and) first line of the title is set
+% at the current indent, and any further lines are further indented.
+%    \begin{macrocode}
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+%    \end{macrocode}
+% Print the (number and) title, prohibiting any breaking.
+%    \begin{macrocode}
+     {\cftsubsecfont #1}\nobreak
+%    \end{macrocode}
+% Print the leader and the page number, and close the group.
+%    \begin{macrocode}
+     \cftsubsecfillnum{#2}}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforesubsecskip}
+% \begin{macro}{\cftsubsecindent}
+% \begin{macro}{\cftsubsecnumwidth}
+% \begin{macro}{\cftsubsecfont}
+% \begin{macro}{\cftsubsecpresnum}
+% \begin{macro}{\cftsubsecaftersnum}
+% \begin{macro}{\cftsubsecaftersnumb}
+% \begin{macro}{\cftsubsecleader}
+% \begin{macro}{\cftsubsecdotsep}
+% \begin{macro}{\cftsubsecpagefont}
+% \begin{macro}{\cftsubsecafterpnum}
+%  These are the user commands to control the typesetting of Sub-section entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\newlength{\cftbeforesubsecskip}
+  \setlength{\cftbeforesubsecskip}{\z@ \@plus.2\p@}
+\newlength{\cftsubsecindent}
+\newlength{\cftsubsecnumwidth}
+\if@cfthaschapter
+  \setlength{\cftsubsecindent}{3.8em}
+  \setlength{\cftsubsecnumwidth}{3.2em}
+\else
+  \setlength{\cftsubsecindent}{1.5em}
+  \setlength{\cftsubsecnumwidth}{2.3em}
+\fi
+\newcommand{\cftsubsecfont}{\normalfont}
+\newcommand{\cftsubsecpresnum}{}
+\newcommand{\cftsubsecaftersnum}{}
+\newcommand{\cftsubsecaftersnumb}{}
+\newcommand{\cftsubsecleader}{\normalfont\cftdotfill{\cftsubsecdotsep}}
+\newcommand{\cftsubsecdotsep}{\cftdotsep}
+\newcommand{\cftsubsecpagefont}{\normalfont}
+\newcommand{\cftsubsecafterpnum}{}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftsubsecfillnum}
+% |\cftsubsecfillnum{|\meta{page}|}| typesets the leader and the \meta{page}
+% number of a |subsection| entry.
+% First print the leader and then, with no break, set the page number
+% flushright in  a box of width |\@pnumwidth|,
+% not forgetting to finish the paragraph.
+%    \begin{macrocode}
+\newcommand{\cftsubsecfillnum}[1]{%
+  {\cftsubsecleader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cftsubsecpagefont #1}\cftsubsecafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@subsubsection}
+%  |\l@subsubsection{|\meta{title}|}{|\meta{page}|}| typesets the ToC entry for
+% a |subsubsection| heading. It is a parameterised copy of the default
+% |\l@subsubsection|
+% (see \file{classes.dtx} for the original definition).
+%    \begin{macrocode}
+\renewcommand*{\l@subsubsection}[2]{%
+  \ifnum \c@tocdepth >\tw@
+    \vskip \cftbeforesubsubsecskip
+    {\leftskip \cftsubsubsecindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cftsubsubsecindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cftsubsubsecnumwidth\relax
+     \let\@cftbsnum \cftsubsubsecpresnum
+     \let\@cftasnum \cftsubsubsecaftersnum
+     \let\@cftasnumb \cftsubsubsecaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cftsubsubsecfont #1}\nobreak
+     \cftsubsubsecfillnum{#2}}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforesubsubsecskip}
+% \begin{macro}{\cftsubsubsecindent}
+% \begin{macro}{\cftsubsubsecnumwidth}
+% \begin{macro}{\cftsubsubsecfont}
+% \begin{macro}{\cftsubsubsecpresnum}
+% \begin{macro}{\cftsubsubsecaftersnum}
+% \begin{macro}{\cftsubsubsecaftersnumb}
+% \begin{macro}{\cftsubsubsecleader}
+% \begin{macro}{\cftsubsubsecdotsep}
+% \begin{macro}{\cftsubsubsecpagefont}
+% \begin{macro}{\cftsubsubsecafterpnum}
+% \begin{macro}{\cftsubsubsecfillnum}
+%  These are the user commands to control the typesetting of Sub-sub-section entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\newlength{\cftbeforesubsubsecskip}
+  \setlength{\cftbeforesubsubsecskip}{\z@ \@plus.2\p@}
+\newlength{\cftsubsubsecindent}
+\newlength{\cftsubsubsecnumwidth}
+\if@cfthaschapter
+  \setlength{\cftsubsubsecindent}{7.0em}
+  \setlength{\cftsubsubsecnumwidth}{4.1em}
+\else
+  \setlength{\cftsubsubsecindent}{3.8em}
+  \setlength{\cftsubsubsecnumwidth}{3.2em}
+\fi
+\newcommand{\cftsubsubsecfont}{\normalfont}
+\newcommand{\cftsubsubsecpresnum}{}
+\newcommand{\cftsubsubsecaftersnum}{}
+\newcommand{\cftsubsubsecaftersnumb}{}
+\newcommand{\cftsubsubsecleader}{\normalfont\cftdotfill{\cftsubsubsecdotsep}}
+\newcommand{\cftsubsubsecdotsep}{\cftdotsep}
+\newcommand{\cftsubsubsecpagefont}{\normalfont}
+\newcommand{\cftsubsubsecafterpnum}{}
+\newcommand{\cftsubsubsecfillnum}[1]{%
+  {\cftsubsubsecleader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cftsubsubsecpagefont #1}\cftsubsubsecafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\l@paragraph}
+%  |\l@paragraph{|\meta{title}|}{|\meta{page}|}| typesets the ToC entry for
+% a |paragraph| heading. It is a parameterised copy of the default
+% |\l@paragraph|
+% (see \file{classes.dtx} for the original definition).
+%    \begin{macrocode}
+\renewcommand*{\l@paragraph}[2]{%
+  \ifnum \c@tocdepth >3\relax
+    \vskip \cftbeforeparaskip
+    {\leftskip \cftparaindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cftparaindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cftparanumwidth\relax
+     \let\@cftbsnum \cftparapresnum
+     \let\@cftasnum \cftparaaftersnum
+     \let\@cftasnumb \cftparaaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cftparafont #1}\nobreak
+     \cftparafillnum{#2}}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforeparaskip}
+% \begin{macro}{\cftparaindent}
+% \begin{macro}{\cftparanumwidth}
+% \begin{macro}{\cftparafont}
+% \begin{macro}{\cftparapresnum}
+% \begin{macro}{\cftparaaftersnum}
+% \begin{macro}{\cftparaaftersnumb}
+% \begin{macro}{\cftparaleader}
+% \begin{macro}{\cftparadotsep}
+% \begin{macro}{\cftparapagefont}
+% \begin{macro}{\cftparaafterpnum}
+% \begin{macro}{\cftparafillnum}
+%  These are the user commands to control the typesetting of Paragraph entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\newlength{\cftbeforeparaskip}
+  \setlength{\cftbeforeparaskip}{\z@ \@plus.2\p@}
+\newlength{\cftparaindent}
+\newlength{\cftparanumwidth}
+\if@cfthaschapter
+  \setlength{\cftparaindent}{10em}
+  \setlength{\cftparanumwidth}{5em}
+\else
+  \setlength{\cftparaindent}{7.0em}
+  \setlength{\cftparanumwidth}{4.1em}
+\fi
+\newcommand{\cftparafont}{\normalfont}
+\newcommand{\cftparapresnum}{}
+\newcommand{\cftparaaftersnum}{}
+\newcommand{\cftparaaftersnumb}{}
+\newcommand{\cftparaleader}{\normalfont\cftdotfill{\cftparadotsep}}
+\newcommand{\cftparadotsep}{\cftdotsep}
+\newcommand{\cftparapagefont}{\normalfont}
+\newcommand{\cftparaafterpnum}{}
+\newcommand{\cftparafillnum}[1]{%
+  {\cftparaleader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cftparapagefont #1}\cftparaafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\l@subparagraph}
+%  |\l@subparagraph{|\meta{title}|}{|\meta{page}|}| typesets the ToC entry for
+% a |subparagraph| heading. It is a parameterised copy of the default
+% |\l@subparagraph|
+% (see \file{classes.dtx} for the original definition).
+%    \begin{macrocode}
+\renewcommand*{\l@subparagraph}[2]{%
+  \ifnum \c@tocdepth >4\relax
+    \vskip \cftbeforesubparaskip
+    {\leftskip \cftsubparaindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cftsubparaindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cftsubparanumwidth\relax
+     \let\@cftbsnum \cftsubparapresnum
+     \let\@cftasnum \cftsubparaaftersnum
+     \let\@cftasnumb \cftsubparaaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cftsubparafont #1}\nobreak
+     \cftsubparafillnum{#2}}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforesubparaskip}
+% \begin{macro}{\cftsubparaindent}
+% \begin{macro}{\cftsubparanumwidth}
+% \begin{macro}{\cftsubparafont}
+% \begin{macro}{\cftsubparapresnum}
+% \begin{macro}{\cftsubparaaftersnum}
+% \begin{macro}{\cftsubparaaftersnumb}
+% \begin{macro}{\cftsubparaleader}
+% \begin{macro}{\cftsubparadotsep}
+% \begin{macro}{\cftsubparapagefont}
+% \begin{macro}{\cftsubparaafterpnum}
+% \begin{macro}{\cftsubparafillnum}
+%  These are the user commands to control the typesetting of Sub-paragraph entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\newlength{\cftbeforesubparaskip}
+  \setlength{\cftbeforesubparaskip}{\z@ \@plus.2\p@}
+\newlength{\cftsubparaindent}
+\newlength{\cftsubparanumwidth}
+\if@cfthaschapter
+  \setlength{\cftsubparaindent}{12em}
+  \setlength{\cftsubparanumwidth}{6em}
+\else
+  \setlength{\cftsubparaindent}{10em}
+  \setlength{\cftsubparanumwidth}{5em}
+\fi
+\newcommand{\cftsubparafont}{\normalfont}
+\newcommand{\cftsubparapresnum}{}
+\newcommand{\cftsubparaaftersnum}{}
+\newcommand{\cftsubparaaftersnumb}{}
+\newcommand{\cftsubparaleader}{\normalfont\cftdotfill{\cftsubparadotsep}}
+\newcommand{\cftsubparadotsep}{\cftdotsep}
+\newcommand{\cftsubparapagefont}{\normalfont}
+\newcommand{\cftsubparaafterpnum}{}
+\newcommand{\cftsubparafillnum}[1]{%
+  {\cftsubparaleader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cftsubparapagefont #1}\cftsubparaafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%
+% \begin{macro}{\@cftdobiblof}
+% If the \Lpack{tocbibind} package has been used and it has
+% redefined |\listoffigures| we need to cater for that. The contents
+% of the definition are defined in \Lpack{tocbibind}.
+%    \begin{macrocode}
+\newcommand{\@cftdobiblof}{%
+  \if@dotoclof
+    \if@bibchapter
+      \phantomsection
+      \addcontentsline{toc}{chapter}{\listfigurename}
+    \else
+      \phantomsection
+      \addcontentsline{toc}{\@tocextra}{\listfigurename}
+    \fi
+  \fi}
+
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\listoffigures}
+% This is a parameterised version of the default |\listoffigures| command.
+% The changes are postponed until after all packages have been loaded.
+% Each class has its own definition, but we have to cater for all classes
+% in one definition, hence some of the checks. First, perform the default
+% checks for multicolumns. (Do nothing if \Lopt{titles} option is used).
+%    \begin{macrocode}
+\AtBeginDocument{%
+\if@cftnctoc\else
+\renewcommand{\listoffigures}{%
+  \@cfttocstart
+%    \end{macrocode}
+% Ensure that any previous paragraph has been finished. Within a group set
+% the local paragraphing style. Typeset the title and then do the contents
+% of the \file{.lof} file.
+%    \begin{macrocode}
+  \par
+  \begingroup
+    \parindent\z@ \parskip\cftparskip
+    \@cftmakeloftitle
+    \if@cfttocbibind
+      \@cftdobiblof
+    \fi
+    \@starttoc{lof}%
+  \endgroup
+%    \end{macrocode}
+% Finally, restore any multicolumn typesetting.
+%    \begin{macrocode}
+  \@cfttocfinish}%
+\fi
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftmakeloftitle}
+% This command typesets the title for the LoF.
+% \changes{v2.3}{2002/06/15}{Added \cs{@secpenalty} to \cs{cftmakeloftitle}}
+% \changes{v2.3}{2002/06/15}{Added \cs{@cftpagestyle} to \cs{cftmakeloftitle}}
+%    \begin{macrocode}
+\newcommand{\@cftmakeloftitle}{%
+  \addpenalty\@secpenalty
+  \if@cfthaschapter
+    \vspace*{\cftbeforeloftitleskip}
+  \else
+    \vspace{\cftbeforeloftitleskip}
+  \fi
+  \@cftpagestyle
+  {\interlinepenalty\@M
+  {\cftloftitlefont\listfigurename}{\cftafterloftitle}
+  \cftmarklof
+  \par\nobreak
+  \vskip \cftafterloftitleskip
+  \@afterheading}}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforeloftitleskip}
+% \begin{macro}{\cftafterloftitleskip}
+%  These two lengths control the vertical spacing before and after the
+%  LoF title.
+%    \begin{macrocode}
+\newlength{\cftbeforeloftitleskip}
+\newlength{\cftafterloftitleskip}
+%    \end{macrocode}
+% Their values depend on whether the document has chapters or not. In
+% chaptered documents the default LoF title is typeset as a |\chapter*|,
+% otherwise as a |\section*|.
+%    \begin{macrocode}
+\if@cfthaschapter
+  \setlength{\cftbeforeloftitleskip}{50pt}
+  \setlength{\cftafterloftitleskip}{40pt}
+\else
+  \setlength{\cftbeforeloftitleskip}{3.5ex \@plus 1ex \@minus .2ex}
+  \setlength{\cftafterloftitleskip}{2.3ex \@plus.2ex}
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftloftitlefont}
+% \begin{macro}{\cftafterloftitle}
+% The LoF title is typeset in the style given by |\cftloftitlefont|.
+% The macro |\cftafterloftitle| is called after typesetting the title.
+% This is initialised to do nothing.
+% Both these macros can be redefined to do other things (e.g., adding
+% an |\hfill| to |\cftloftitlefont| will make the title flushright).
+% \changes{v2.3}{2002/06/15}{koma has different settings for LoF titles}
+%    \begin{macrocode}
+\if@cfthaschapter
+  \newcommand{\cftloftitlefont}{\normalfont\Huge\bfseries}
+  \if@cftkoma\renewcommand{\cftloftitlefont}{\size@chapter\sectfont}\fi
+\else
+  \newcommand{\cftloftitlefont}{\normalfont\Large\bfseries}
+  \if@cftkoma\renewcommand{\cftloftitlefont}{\size@section\sectfont}\fi
+\fi
+\newcommand{\cftafterloftitle}{}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\l@figure}
+%  |\l@figure{|\meta{title}|}{|\meta{page}|}| typesets the LoF entry for
+% a |figure| caption heading. It is a parameterised copy of the default
+% |\l@figure|
+% (see \file{classes.dtx} for the original definition).
+%    \begin{macrocode}
+\renewcommand*{\l@figure}[2]{%
+  \ifnum \c@lofdepth >\z@
+    \vskip \cftbeforefigskip
+    {\leftskip \cftfigindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cftfigindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cftfignumwidth\relax
+     \let\@cftbsnum \cftfigpresnum
+     \let\@cftasnum \cftfigaftersnum
+     \let\@cftasnumb \cftfigaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cftfigfont #1}\nobreak
+     \cftfigfillnum{#2}}%
+   \fi
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforefigskip}
+% \begin{macro}{\cftfigindent}
+% \begin{macro}{\cftfignumwidth}
+% \begin{macro}{\cftfigfont}
+% \begin{macro}{\cftfigpresnum}
+% \begin{macro}{\cftfigaftersnum}
+% \begin{macro}{\cftfigaftersnumb}
+% \begin{macro}{\cftfigleader}
+% \begin{macro}{\cftfigdotsep}
+% \begin{macro}{\cftfigpagefont}
+% \begin{macro}{\cftfigafterpnum}
+% \begin{macro}{\cftfigfillnum}
+%  These are the user commands to control the typesetting of Figure caption entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\newlength{\cftbeforefigskip}
+  \setlength{\cftbeforefigskip}{\z@ \@plus.2\p@}
+\newlength{\cftfigindent}
+  \setlength{\cftfigindent}{1.5em}
+\newlength{\cftfignumwidth}
+  \setlength{\cftfignumwidth}{2.3em}
+\newcommand{\cftfigfont}{\normalfont}
+\newcommand{\cftfigpresnum}{}
+\newcommand{\cftfigaftersnum}{}
+\newcommand{\cftfigaftersnumb}{}
+\newcommand{\cftfigleader}{\normalfont\cftdotfill{\cftfigdotsep}}
+\newcommand{\cftfigdotsep}{\cftdotsep}
+\newcommand{\cftfigpagefont}{\normalfont}
+\newcommand{\cftfigafterpnum}{}
+\newcommand{\cftfigfillnum}[1]{%
+  {\cftfigleader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cftfigpagefont #1}\cftfigafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{lofdepth}
+% \begin{macro}{lotdepth}
+% The counters |lofdepth| and |lotdepth| are defined by the
+% \Lpack{subfigure} package.
+% Define them here if that package is not used.
+%    \begin{macrocode}
+\if@cftsubfigopt\else
+  \newcounter{lofdepth}\setcounter{lofdepth}{1}
+  \newcounter{lotdepth}\setcounter{lotdepth}{1}
+\fi
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@cftdobiblot}
+% If the \Lpack{tocbibind} package has been used and it has
+% redefined |\listoftables| we need to cater for that. The contents
+% of the definition are defined in \Lpack{tocbibind}.
+%    \begin{macrocode}
+\newcommand{\@cftdobiblot}{%
+  \if@dotoclot
+    \if@bibchapter
+      \phantomsection
+      \addcontentsline{toc}{chapter}{\listtablename}
+    \else
+      \phantomsection
+      \addcontentsline{toc}{\@tocextra}{\listtablename}
+    \fi
+  \fi}
+
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\listoftables}
+% This is a parameterised version of the default |\listoftables| command.
+% The changes are postponed until after all packages have been loaded.
+% Each class has its own definition, but we have to cater for all classes
+% in one definition, hence some of the checks. First, perform the default
+% checks for multicolumns. (Do nothing if the \Lopt{titles} option has
+%  been used).
+%    \begin{macrocode}
+\AtBeginDocument{%
+\if@cftnctoc\else
+\renewcommand{\listoftables}{%
+  \@cfttocstart
+%    \end{macrocode}
+% Ensure that any previous paragraph has been finished. Within a group set
+% the local paragraphing style. Typeset the title and then do the contents
+% of the \file{.lot} file.
+%    \begin{macrocode}
+  \par
+  \begingroup
+    \parindent\z@ \parskip\cftparskip
+    \@cftmakelottitle
+    \if@cfttocbibind
+      \@cftdobiblot
+    \fi
+    \@starttoc{lot}%
+  \endgroup
+%    \end{macrocode}
+% Finally, restore any multicolumn typesetting.
+%    \begin{macrocode}
+  \@cfttocfinish}%
+\fi
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftmakelottitle}
+% This command typesets the title for the LoT.
+% \changes{v2.3}{2002/06/15}{Added \cs{@secpenalty} to \cs{@cftmakelottitle}}
+% \changes{v2.3}{2002/06/15}{Added \cs{@cftpagestyle} to \cs{@cftmakelottitle}}
+%    \begin{macrocode}
+\newcommand{\@cftmakelottitle}{%
+  \addpenalty\@secpenalty
+  \if@cfthaschapter
+    \vspace*{\cftbeforelottitleskip}
+  \else
+    \vspace{\cftbeforelottitleskip}
+  \fi
+  \@cftpagestyle
+  {\interlinepenalty\@M
+  {\cftlottitlefont\listtablename}{\cftafterlottitle}
+  \cftmarklot
+  \par\nobreak
+  \vskip \cftafterlottitleskip
+  \@afterheading}}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforelottitleskip}
+% \begin{macro}{\cftafterlottitleskip}
+%  These two lengths control the vertical spacing before and after the
+%  LoT title.
+%    \begin{macrocode}
+\newlength{\cftbeforelottitleskip}
+\newlength{\cftafterlottitleskip}
+%    \end{macrocode}
+% Their values depend on whether the document has chapters or not. In
+% chaptered documents the default LoT title is typeset as a |\chapter*|,
+% otherwise as a |\section*|.
+%    \begin{macrocode}
+\if@cfthaschapter
+  \setlength{\cftbeforelottitleskip}{50pt}
+  \setlength{\cftafterlottitleskip}{40pt}
+\else
+  \setlength{\cftbeforelottitleskip}{3.5ex \@plus 1ex \@minus .2ex}
+  \setlength{\cftafterlottitleskip}{2.3ex \@plus.2ex}
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftlottitlefont}
+% \begin{macro}{\cftafterlottitle}
+% The LoT title is typeset in the style given by |\cftlottitlefont|.
+% The macro |\cftafterlottitle| is called after typesetting the title.
+% This is initialised to do nothing.
+% Both these macros can be redefined to do other things (e.g., adding
+% an |\hfill| to |\cftlottitlefont| will make the title flushright).
+% \changes{v2.3}{2002/06/15}{koma has different settings for LoT titles}
+%    \begin{macrocode}
+\if@cfthaschapter
+  \newcommand{\cftlottitlefont}{\normalfont\Huge\bfseries}
+  \if@cftkoma\renewcommand{\cftlottitlefont}{\size@chapter\sectfont}\fi
+\else
+  \newcommand{\cftlottitlefont}{\normalfont\Large\bfseries}
+  \if@cftkoma\renewcommand{\cftlottitlefont}{\size@section\sectfont}\fi
+\fi
+\newcommand{\cftafterlottitle}{}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\l@table}
+%  |\l@table{|\meta{title}|}{|\meta{page}|}| typesets the LoT entry for
+% a |table| caption heading. It is a parameterised copy of the default
+% |\l@table|
+% (see \file{classes.dtx} for the original definition).
+%    \begin{macrocode}
+\renewcommand*{\l@table}[2]{%
+  \ifnum\c@lotdepth >\z@
+    \vskip \cftbeforetabskip
+    {\leftskip \cfttabindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cfttabindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cfttabnumwidth\relax
+     \let\@cftbsnum \cfttabpresnum
+     \let\@cftasnum \cfttabaftersnum
+     \let\@cftasnumb \cfttabaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cfttabfont #1}\nobreak
+     \cfttabfillnum{#2}}%
+   \fi
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforetabskip}
+% \begin{macro}{\cfttabindent}
+% \begin{macro}{\cfttabnumwidth}
+% \begin{macro}{\cfttabfont}
+% \begin{macro}{\cfttabpresnum}
+% \begin{macro}{\cfttabaftersnum}
+% \begin{macro}{\cfttabaftersnumb}
+% \begin{macro}{\cfttableader}
+% \begin{macro}{\cfttabdotsep}
+% \begin{macro}{\cfttabpagefont}
+% \begin{macro}{\cfttabafterpnum}
+% \begin{macro}{\cfttabfillnum}
+%  These are the user commands to control the typesetting of Table caption entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\newlength{\cftbeforetabskip}
+  \setlength{\cftbeforetabskip}{\z@ \@plus.2\p@}
+\newlength{\cfttabindent}
+  \setlength{\cfttabindent}{1.5em}
+\newlength{\cfttabnumwidth}
+  \setlength{\cfttabnumwidth}{2.3em}
+\newcommand{\cfttabfont}{\normalfont}
+\newcommand{\cfttabpresnum}{}
+\newcommand{\cfttabaftersnum}{}
+\newcommand{\cfttabaftersnumb}{}
+\newcommand{\cfttableader}{\normalfont\cftdotfill{\cfttabdotsep}}
+\newcommand{\cfttabdotsep}{\cftdotsep}
+\newcommand{\cfttabpagefont}{\normalfont}
+\newcommand{\cfttabafterpnum}{}
+\newcommand{\cfttabfillnum}[1]{%
+  {\cfttableader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cfttabpagefont #1}\cfttabafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Support for the \Lpack{subfigure} package}
+% \changes{v1.1}{2000/02/12}{Added subfigure support}
+%
+%  The code for supporting the \Lpack{subfigure} package is, in all
+% essentials, the same as that for the figure and table captions; only the
+% names are changed. However, the code need only be executed if the
+% \Lpack{subfigure} package is actually loaded.
+%
+% \begin{macro}{\@cftl@subfig}
+%    This command redefines the |\l@subfigure| command.
+%    \begin{macrocode}
+\newcommand{\@cftl@subfig}{%
+%    \end{macrocode}
+% \begin{macro}{\l@subfigure}
+%  |\l@subfigure{|\meta{title}|}{|\meta{page}|}| typesets the LoF entry for
+% a |subfigure| caption heading. It is essentially the same as the
+% parameterised code for |\l@figure| except that account has to be taken
+% of |lofdepth|.
+%    \begin{macrocode}
+\renewcommand*{\l@subfigure}[2]{%
+  \ifnum \c@lofdepth > \toclevel@subfigure
+    \vskip \cftbeforesubfigskip
+    {\leftskip \cftsubfigindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cftsubfigindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cftsubfignumwidth\relax
+     \let\@cftbsnum \cftsubfigpresnum
+     \let\@cftasnum \cftsubfigaftersnum
+     \let\@cftasnumb \cftsubfigaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cftsubfigfont ##1}\nobreak
+     \cftsubfigfillnum{##2}}%
+  \fi
+  }%
+}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@cftsetsubfig}
+% This command initialises the setup for subfigure captions in the LoF.
+%    \begin{macrocode}
+\newcommand{\@cftsetsubfig}{%
+%    \end{macrocode}
+% \begin{macro}{\cftbeforesubfigskip}
+% \begin{macro}{\cftsubfigindent}
+% \begin{macro}{\cftsubfignumwidth}
+% \begin{macro}{\cftsubfigfont}
+% \begin{macro}{\cftsubfigpresnum}
+% \begin{macro}{\cftsubfigaftersnum}
+% \begin{macro}{\cftsubfigaftersnumb}
+% \begin{macro}{\cftsubfigleader}
+% \begin{macro}{\cftsubfigdotsep}
+% \begin{macro}{\cftsubfigpagefont}
+% \begin{macro}{\cftsubfigafterpnum}
+% \begin{macro}{\toclevel@subfig}
+% \begin{macro}{\cftsubfigfillnum}
+%    \begin{macrocode}
+\newlength{\cftbeforesubfigskip}
+  \setlength{\cftbeforesubfigskip}{\z@ \@plus.2\p@}
+\newlength{\cftsubfigindent}
+  \setlength{\cftsubfigindent}{3.8em}
+\newlength{\cftsubfignumwidth}
+  \setlength{\cftsubfignumwidth}{2.5em}
+\newcommand{\cftsubfigfont}{\normalfont}
+\newcommand{\cftsubfigpresnum}{}
+\newcommand{\cftsubfigaftersnum}{}
+\newcommand{\cftsubfigaftersnumb}{}
+\newcommand{\cftsubfigleader}{\normalfont\cftdotfill{\cftsubtabdotsep}}
+\newcommand{\cftsubfigdotsep}{\cftdotsep}
+\newcommand{\cftsubfigpagefont}{\normalfont}
+\newcommand{\cftsubfigafterpnum}{}
+\providecommand{\toclevel@subfigure}{1}
+\newcommand{\cftsubfigfillnum}[1]{%
+  {\cftsubfigleader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cftsubfigpagefont ##1}\cftsubfigafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% This is the end of |\@cftsetsubfig|.
+%    \begin{macrocode}
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftl@subtab}
+%    This code redefines the code for |\l@subtable|.
+%    \begin{macrocode}
+\newcommand{\@cftl@subtab}{%
+%    \end{macrocode}
+% \begin{macro}{\l@subtable}
+%  |\l@subtable{|\meta{title}|}{|\meta{page}|}| typesets the LoT entry for
+% a |subtable| caption heading. It is essentially the same as the
+% parameterised code for |\l@table| except account has to be taken of
+% |lotdepth|.
+%    \begin{macrocode}
+\renewcommand*{\l@subtable}[2]{%
+  \ifnum \c@lotdepth > \toclevel@subtable
+    \vskip \cftbeforesubtabskip
+    {\leftskip \cftsubtabindent\relax
+     \rightskip \@tocrmarg
+     \parfillskip -\rightskip
+     \parindent \cftsubtabindent\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima \cftsubtabnumwidth\relax
+     \let\@cftbsnum \cftsubtabpresnum
+     \let\@cftasnum \cftsubtabaftersnum
+     \let\@cftasnumb \cftsubtabaftersnumb
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {\cftsubtabfont ##1}\nobreak
+     \cftsubtabfillnum{##2}}%
+  \fi
+  }%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@cftsetsubtab}
+% This command sets up the defaults for subtable entries in the LoT.
+%    \begin{macrocode}
+\newcommand{\@cftsetsubtab}{%
+%    \end{macrocode}
+% \begin{macro}{\cftbeforesubtabskip}
+% \begin{macro}{\cftsubtabindent}
+% \begin{macro}{\cftsubtabnumwidth}
+% \begin{macro}{\cftsubtabfont}
+% \begin{macro}{\cftsubtabpresnum}
+% \begin{macro}{\cftsubtabaftersnum}
+% \begin{macro}{\cftsubtabaftersnumb}
+% \begin{macro}{\cftsubtableader}
+% \begin{macro}{\cftsubtabdotsep}
+% \begin{macro}{\cftsubtabpagefont}
+% \begin{macro}{\cftsubtabafterpnum}
+% \begin{macro}{\toclevel@subtable}
+% \begin{macro}{\cftsubtabfillnum}
+%  These are the user commands to control the typesetting of Subtable
+% caption entries.
+%  They are initialised to give the standard appearance.
+%    \begin{macrocode}
+\newlength{\cftbeforesubtabskip}
+  \setlength{\cftbeforesubtabskip}{\z@ \@plus.2\p@}
+\newlength{\cftsubtabindent}
+  \setlength{\cftsubtabindent}{3.8em}
+\newlength{\cftsubtabnumwidth}
+  \setlength{\cftsubtabnumwidth}{2.5em}
+\newcommand{\cftsubtabfont}{\normalfont}
+\newcommand{\cftsubtabpresnum}{}
+\newcommand{\cftsubtabaftersnum}{}
+\newcommand{\cftsubtabaftersnumb}{}
+\newcommand{\cftsubtableader}{\normalfont\cftdotfill{\cftsubtabdotsep}}
+\newcommand{\cftsubtabdotsep}{\cftdotsep}
+\newcommand{\cftsubtabpagefont}{\normalfont}
+\newcommand{\cftsubtabafterpnum}{}
+\providecommand{\toclevel@subtable}{1}
+\newcommand{\cftsubtabfillnum}[1]{%
+  {\cftsubtableader}\nobreak
+  \makebox[\@pnumwidth][\cftpnumalign]{\cftsubtabpagefont ##1}\cftsubtabafterpnum\par
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% This is the end of |\@cftsetsubtab|.
+%    \begin{macrocode}
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+%    Call the \Lpack{subfigure} package setup code only if the
+% \Lopt{subfigure} option is specified. The |\l@...| redefinitions have to
+% come after the \Lpack{subfigure} package is loaded.
+%    \begin{macrocode}
+
+\if@cftsubfigopt
+  \@cftsetsubfig\@cftsetsubtab
+  \AtBeginDocument{\@cftl@subfig\@cftl@subtab}
+\fi
+%%  \AtBeginDocument{\if@cftsubfigopt
+%%    \@cftsetsubfig\@cftsetsubtab
+%%    \@cftl@subfig\@cftl@subtab
+%%  \fi}
+
+%    \end{macrocode}
+%
+%
+% \subsection{New list of\ldots}
+% \changes{v2.0}{2001/03/03}{Added \cs{newlistof} and \cs{newlistentry}}
+%
+% \begin{macro}{\newlistentry}
+% |\newlistentry[|\meta{within}|]{|\meta{counter}|}{|\meta{ext}|}{|\meta{level-1}|}| creates a set of commands for a new kind of entry into a List of.
+%    \begin{macrocode}
+\newcommand{\newlistentry}[4][\@empty]{%
+%    \end{macrocode}
+% \begin{macro}{\c@X}
+% \begin{macro}{\theX}
+% Check if \meta{within} and \meta{counter} have been defined. It is
+% an error if \meta{within} has not been defined, and an error if
+% \meta{counter} has been defined. Set the default counter values.
+%    \begin{macrocode}
+  \@ifundefined{c@#2}{%    check & set the counter
+    \ifx \@empty#1\relax
+      \newcounter{#2}
+    \else
+      \@ifundefined{c@#1}{\PackageWarning{tocloft}%
+                          {#1 has no counter for use as a `within'}
+        \newcounter{#2}}%
+      {\newcounter{#2}[#1]%
+       \expandafter\edef\csname the#2\endcsname{%
+         \expandafter\noexpand\csname the#1\endcsname.\noexpand\arabic{#2}}}
+    \fi
+    \setcounter{#2}{0}
+  }
+  {\PackageError{tocloft}{#2 has been previously defined}{\@eha}}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% That finishes off the error checking. No matter what the result, the
+% rest of the new commands are defined.
+%
+% \begin{macro}{\l@X}
+% |\l@X{|\meta{title}|}{|\meta{page}|}| typesets the entry.
+%    \begin{macrocode}
+  \@namedef{l@#2}##1##2{%
+%    \end{macrocode}
+% Only typeset if the |\Zdepth| is greater than \meta{level-1}.
+%    \begin{macrocode}
+    \ifnum \@nameuse{c@#3depth} > #4\relax
+      \vskip \@nameuse{cftbefore#2skip}
+      {\leftskip \@nameuse{cft#2indent}\relax
+       \rightskip \@tocrmarg
+       \parfillskip -\rightskip
+       \parindent \@nameuse{cft#2indent}\relax\@afterindenttrue
+       \interlinepenalty\@M
+       \leavevmode
+       \@tempdima \@nameuse{cft#2numwidth}\relax
+       \expandafter\let\expandafter\@cftbsnum\csname cft#2presnum\endcsname
+       \expandafter\let\expandafter\@cftasnum\csname cft#2aftersnum\endcsname
+       \expandafter\let\expandafter\@cftasnumb\csname cft#2aftersnumb\endcsname
+       \advance\leftskip\@tempdima \null\nobreak\hskip -\leftskip
+       {\@nameuse{cft#2font}##1}\nobreak
+       \@nameuse{cft#2fillnum}{##2}}%
+    \fi
+  }  % end of \l@#2
+
+%    \end{macrocode}
+% \end{macro}
+%
+% Now define all the layout commands used by |\l@X|. The default
+% values of these correspond to those for section entries in
+% non-chaptered documents.
+% \begin{macro}{\cftbeforeXskip}
+%    \begin{macrocode}
+  \expandafter\newlength\csname cftbefore#2skip\endcsname
+    \setlength{\@nameuse{cftbefore#2skip}}{\z@ \@plus .2\p@}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\cftXindent}
+% \begin{macro}{\cftXnumwidth}
+%    \begin{macrocode}
+  \expandafter\newlength\csname cft#2indent\endcsname
+  \expandafter\newlength\csname cft#2numwidth\endcsname
+%    \end{macrocode}
+% Set the default values for the indent and numwidth depending on
+% the entry's level. A level of 1 corresponds to a figure entry.
+%    \begin{macrocode}
+  \ifcase #4\relax  % 0
+    \setlength{\@nameuse{cft#2indent}}{0em}
+    \setlength{\@nameuse{cft#2numwidth}}{1.5em}
+  \or               % 1
+    \setlength{\@nameuse{cft#2indent}}{1.5em}
+    \setlength{\@nameuse{cft#2numwidth}}{2.3em}
+  \or               % 2
+    \setlength{\@nameuse{cft#2indent}}{3.8em}
+    \setlength{\@nameuse{cft#2numwidth}}{3.2em}
+  \or               % 3
+    \setlength{\@nameuse{cft#2indent}}{7.0em}
+    \setlength{\@nameuse{cft#2numwidth}}{4.1em}
+  \else             % anything else
+    \setlength{\@nameuse{cft#2indent}}{10.0em}
+    \setlength{\@nameuse{cft#2numwidth}}{5.0em}
+  \fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\cftXfont}
+% \begin{macro}{\cftXpresnum}
+% \begin{macro}{\cftXaftersnum}
+% \begin{macro}{\cftXaftersnumb}
+% \begin{macro}{\cftXdotsep}
+% \begin{macro}{\cftXleader}
+% \begin{macro}{\cftXpagefont}
+% \begin{macro}{\cftXafterpnum}
+% And the remaining commands.
+%    \begin{macrocode}
+  \@namedef{cft#2font}{\normalfont}
+  \@namedef{cft#2presnum}{}
+  \@namedef{cft#2aftersnum}{}
+  \@namedef{cft#2aftersnumb}{}
+  \@namedef{cft#2dotsep}{\cftdotsep}
+  \@namedef{cft#2leader}{\normalfont\cftdotfill{\@nameuse{cft#2dotsep}}}
+  \@namedef{cft#2pagefont}{\normalfont}
+  \@namedef{cft#2afterpnum}{}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\toclevel@X}
+% The hyperref package needs a command |\toclevel@X|, holding
+% the \meta{level-1} value.
+%    \begin{macrocode}
+  \@namedef{toclevel@#2}{#4}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftXfillnum}
+% Typeset the leader and page number.
+%    \begin{macrocode}
+  \@namedef{cft#2fillnum}##1{%
+    {\@nameuse{cft#2leader}}\nobreak
+    \makebox[\@pnumwidth][\cftpnumalign]{\@nameuse{cft#2pagefont}##1}\@nameuse{cft#2afterpnum}\par
+  }
+%    \end{macrocode}
+% \end{macro}
+% This ends the definition of |\newlistentry|.
+%    \begin{macrocode}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\newlistof}
+% |\newlistof[|\meta{within}|]{|\meta{entry}|}{|\meta{ext}|}{|\meta{listofname}|}|
+% creates the commands for a new List of.
+%    \begin{macrocode}
+\newcommand{\newlistof}[4][\@empty]{%
+%    \end{macrocode}
+% Call |\newlistentry| to set up the first level entry.
+%    \begin{macrocode}
+  \ifx \@empty#1\relax
+    \newlistentry{#2}{#3}{0}
+  \else
+    \newlistentry[#1]{#2}{#3}{0}
+  \fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ext@Z}
+% \begin{macro}{\Zdepth}
+% The file extension and listing depth.
+%    \begin{macrocode}
+  \@namedef{ext@#2}{#3}
+  \newcounter{#3depth}
+  \setcounter{#3depth}{1}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftmarkZ}
+% The heading marks for the listing.
+% \changes{v2.3}{2002/06/15}{different koma settings in \cs{newlistof}}
+%    \begin{macrocode}
+  \if@cftkoma
+    \@namedef{cftmark#3}{%
+      \@mkboth{#4}{#4}}
+  \else
+    \@namedef{cftmark#3}{%
+      \@mkboth{\MakeUppercase{#4}}{\MakeUppercase{#4}}}
+  \fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\listofX}
+% Typeset the listing title and entries.
+%    \begin{macrocode}
+ \if@cftnctoc
+%    \end{macrocode}
+% For the \Lopt{titles} option, basically copy the code from
+% the standard |\tableofcontents| command.
+%    \begin{macrocode}
+  \@namedef{listof#2}{%
+    \@cfttocstart
+    \if@cfthaschapter
+      \chapter*{#4}
+    \else
+      \section*{#4}
+    \fi
+    \@nameuse{cftmark#3}
+    \@starttoc{#3}%
+    \@cfttocfinish}
+ \else
+%    \end{macrocode}
+% Otherwise use the fully parameterised definition.
+%    \begin{macrocode}
+  \@namedef{listof#2}{%
+    \@cfttocstart
+    \par
+    \begingroup
+      \parindent\z@ \parskip\cftparskip
+      \@nameuse{@cftmake#3title}
+      \@starttoc{#3}%
+    \endgroup
+    \@cfttocfinish}
+ \fi
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftmakeZtitle}
+% Typeset the title.
+% \changes{v2.3}{2002/06/15}{Added \cs{@secpenalty} to \cs{@cftmakeZtitle}}
+% \changes{v2.3}{2002/06/15}{Added \cs{@cftpagestyle} to \cs{@cftmakeZtitle}}
+%    \begin{macrocode}
+  \@namedef{@cftmake#3title}{%
+    \addpenalty\@secpenalty
+    \if@cfthaschapter
+      \vspace*{\@nameuse{cftbefore#3titleskip}}%
+    \else
+      \vspace{\@nameuse{cftbefore#3titleskip}}%
+    \fi
+    \@cftpagestyle
+    {\interlinepenalty\@M
+    {\@nameuse{cft#3titlefont}#4}{\@nameuse{cftafter#3title}}%
+    \@nameuse{cftmark#3}%
+    \par\nobreak
+    \vskip \@nameuse{cftafter#3titleskip}%
+    \@afterheading}}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftbeforeZtitleskip}
+% \begin{macro}{\cftafterZtitleskip}
+% \begin{macro}{\cftZtitlefont}
+% The skips before and after the title heading, and the title font.
+% The default values depend on whether or not the document class
+% has chapters.
+%    \begin{macrocode}
+   \expandafter\newlength\csname cftbefore#3titleskip\endcsname
+   \expandafter\newlength\csname cftafter#3titleskip\endcsname
+   \if@cfthaschapter
+      \setlength{\@nameuse{cftbefore#3titleskip}}{50pt}
+      \setlength{\@nameuse{cftafter#3titleskip}}{40pt}
+      \if@cftkoma
+        \@namedef{cft#3titlefont}{\size@chapter\sectfont}
+      \else
+        \@namedef{cft#3titlefont}{\normalfont\Huge\bfseries}
+      \fi
+    \else
+      \setlength{\@nameuse{cftbefore#3titleskip}}{3.5ex \@plus 1ex \@minus .2ex}
+      \setlength{\@nameuse{cftafter#3titleskip}}{2.3ex \@plus .2ex}
+      \if@cftkoma
+        \@namedef{cft#3titlefont}{\size@section\sectfont}
+      \else
+        \@namedef{cft#3titlefont}{\normalfont\Huge\bfseries}
+      \fi
+    \fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftafterZtitle}
+% Something to go after the title.
+%    \begin{macrocode}
+    \@namedef{cftafter#3title}{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftZprehook}
+% \begin{macro}{\cftZposthook}
+% Hooks before and after the list of entries.
+%    \begin{macrocode}
+    \@namedef{cft#3prehook}{}
+    \@namedef{cft#3posthook}{}
+%    \end{macrocode}
+% \end{macro}
+%
+% This is the end of the definition of |\newlistof|.
+%    \begin{macrocode}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftsetindents}
+% \changes{v2.0}{2001/03/15}{Added \cs{cftsetindents}}
+% |\cftsetindents{|\meta{entry}|}{|\meta{indent}|}{|\meta{numwidth}|}| sets
+% the \textit{indent} and \textit{numwidth} for entry \meta{entry}. The macro
+% has to map between the external entry name and the internal shorthand.
+%    \begin{macrocode}
+\newcommand{\cftsetindents}[3]{%
+  \def\@cftemp{#1}
+  \ifx\@cftemp\cftchapname
+    \@cftsetindents{chap}{#2}{#3}
+  \else
+    \ifx\@cftemp\cftsecname \@cftsetindents{sec}{#2}{#3}
+    \else
+      \ifx\@cftemp\cftsubsecname \@cftsetindents{subsec}{#2}{#3}
+      \else
+        \ifx\@cftemp\cftsubsubsecname \@cftsetindents{subsubsec}{#2}{#3}
+        \else
+          \ifx\@cftemp\cftparaname \@cftsetindents{para}{#2}{#3}
+          \else
+            \ifx\@cftemp\cftsubparaname \@cftsetindents{subpara}{#2}{#3}
+            \else
+              \ifx\@cftemp\cftfigname \@cftsetindents{fig}{#2}{#3}
+              \else
+                \ifx\@cftemp\cftsubfigname \@cftsetindents{subfig}{#2}{#3}
+                \else
+                  \ifx\@cftemp\cfttabname \@cftsetindents{tab}{#2}{#3}
+                  \else
+                    \ifx\@cftemp\cftsubtabname \@cftsetindents{subtab}{#2}{#3}
+                    \else
+                      \@cftsetindents{#1}{#2}{#3}
+                    \fi
+                  \fi
+                \fi
+              \fi
+            \fi
+          \fi
+        \fi
+      \fi
+    \fi
+  \fi
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@cftsetindents}
+% |\@cftsetindents{|\meta{X}|}{|\meta{indent}|}{|\meta{numwidth}|}| is
+% the internal version of |\cftsetindents|, where in this case \meta{X}
+% is the internal (shorthand) name of the entry.
+%    \begin{macrocode}
+\newcommand{\@cftsetindents}[3]{%
+  \setlength{\@nameuse{cft#1indent}}{#2}
+  \setlength{\@nameuse{cft#1numwidth}}{#3}
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{Switching page numbering}
+% \changes{v2.0}{2001/03/03}{Added page number switching off/on}
+%
+% \begin{macro}{\@cftpnumoff}
+% |\@cftpnumoff{|\meta{shorthand}|}| is the workhorse
+% for switching page numbering off. The \meta{shorthand} argument is the
+% shorthand name of the entry (e.g. |subsec| for |subsection|).
+% The macro redefines the |\cftXnumfill| command so that there is no leader
+% and the page number is ignored.
+%    \begin{macrocode}
+\newcommand{\@cftpnumoff}[1]{%
+  \@namedef{cft#1fillnum}##1{%
+    \cftparfillskip\@nameuse{cft#1afterpnum}\par}}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftchapname}
+% \begin{macro}{\cftsecname}
+% \begin{macro}{\cftsubsecname}
+% \begin{macro}{\cftsubsubsecname}
+% \begin{macro}{\cftparaname}
+% \begin{macro}{\cftsubparaname}
+% \begin{macro}{\cftfigname}
+% \begin{macro}{\cftsubfigname}
+% \begin{macro}{\cfttabname}
+% \begin{macro}{\cftsubtabname}
+%  Unfortunately an early design decision was the use shorthands like |sec|
+% for |section|. For the page switching I need to be able to correlate the
+% shorthands and longhands.
+%    \begin{macrocode}
+\newcommand*{\cftchapname}{chapter}
+\newcommand*{\cftsecname}{section}
+\newcommand*{\cftsubsecname}{subsection}
+\newcommand*{\cftsubsubsecname}{subsubsection}
+\newcommand*{\cftparaname}{paragraph}
+\newcommand*{\cftsubparaname}{subparagraph}
+\newcommand*{\cftfigname}{figure}
+\newcommand*{\cftsubfigname}{subfigure}
+\newcommand*{\cfttabname}{table}
+\newcommand*{\cftsubtabname}{subtable}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cftpagenumbersoff}
+% The user level command for switching off page numbers is
+% |\cftpagenumbersoff{|\meta{entry}|}| where \meta{entry} is the longhand
+% name of the entry. The principal task opf this macro is to determine
+% the corresponding shorthand name of the \meta{entry} and then call
+% |\@cftpnumoff| to do the work. For |part| and user-defined entries
+% the long- and short-hand entry names are identical.
+%    \begin{macrocode}
+\DeclareRobustCommand{\cftpagenumbersoff}[1]{%
+  \def\@cftemp{#1}
+  \ifx\@cftemp\cftchapname
+    \@cftpnumoff{chap}
+  \else
+    \ifx\@cftemp\cftsecname \@cftpnumoff{sec}
+    \else
+      \ifx\@cftemp\cftsubsecname \@cftpnumoff{subsec}
+      \else
+        \ifx\@cftemp\cftsubsubsecname \@cftpnumoff{subsubsec}
+        \else
+          \ifx\@cftemp\cftparaname \@cftpnumoff{para}
+          \else
+            \ifx\@cftemp\cftsubparaname \@cftpnumoff{subpara}
+            \else
+              \ifx\@cftemp\cftfigname \@cftpnumoff{fig}
+              \else
+                \ifx\@cftemp\cftsubfigname \@cftpnumoff{subfig}
+                \else
+                  \ifx\@cftemp\cfttabname \@cftpnumoff{tab}
+                  \else
+                    \ifx\@cftemp\cftsubtabname \@cftpnumoff{subtab}
+                    \else
+                      \@cftpnumoff{#1}
+                    \fi
+                  \fi
+                \fi
+              \fi
+            \fi
+          \fi
+        \fi
+      \fi
+    \fi
+  \fi
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftpagenumberson}
+% |\cftpagenumberson{|\meta{entry}|}| is the user level command for
+% reversing the corresponding |\cftpagenumbersoff|.
+%    \begin{macrocode}
+\DeclareRobustCommand{\cftpagenumberson}[1]{%
+  \def\@cftemp{#1}
+  \ifx\@cftemp\cftchapname
+    \@cftpnumon{chap}
+  \else
+    \ifx\@cftemp\cftsecname \@cftpnumon{sec}
+    \else
+      \ifx\@cftemp\cftsubsecname \@cftpnumon{subsec}
+      \else
+        \ifx\@cftemp\cftsubsubsecname \@cftpnumon{subsubsec}
+        \else
+          \ifx\@cftemp\cftparaname \@cftpnumon{para}
+          \else
+            \ifx\@cftemp\cftsubparaname \@cftpnumon{subpara}
+            \else
+              \ifx\@cftemp\cftfigname \@cftpnumon{fig}
+              \else
+                \ifx\@cftemp\cftsubfigname \@cftpnumon{subfig}
+                \else
+                  \ifx\@cftemp\cfttabname \@cftpnumon{tab}
+                  \else
+                    \ifx\@cftemp\cftsubtabname \@cftpnumon{subtab}
+                    \else
+                      \@cftpnumon{#1}
+                    \fi
+                  \fi
+                \fi
+              \fi
+            \fi
+          \fi
+        \fi
+      \fi
+    \fi
+  \fi
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\@cftpnumon}
+% |\@cftpnumon{|\meta{shorthand}|}| is the workhorse
+% for switching page numbering off. The \meta{shorthand} argument is the
+% shorthand name of the entry (e.g. |subsec| for |subsection|).
+% The macro defines the |\cftXnumfill| command to correspond to
+% the default definition.
+%    \begin{macrocode}
+\newcommand{\@cftpnumon}[1]{%
+  \@namedef{cft#1fillnum}##1{%
+    {\@nameuse{cft#1leader}}\nobreak
+    \makebox[\@pnumwidth][\cftpnumalign]{\@nameuse{cft#1pagefont}##1}\@nameuse{cft#1afterpnum}\par
+  }%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+%
+%
+%
+% \subsection{Experimental utilities}
+%
+%    The code in this section is experimental but in the sense that the
+% capabilities might be modified in the future rather than that the code
+% does not work.
+%
+% \begin{macro}{\cftchapterprecis}
+% This is experimental. |\cftchapterprecis{|\meta{text}|}| typesets
+% \meta{text} at the point where it is called, and also adds \meta{text}
+% to the \file{.toc} file. It is expects to be called immediately after
+% a |\chapter| command.
+%    \begin{macrocode}
+\newcommand{\cftchapterprecis}[1]{%
+  \cftchapterprecishere{#1}
+  \cftchapterprecistoc{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftchapterprecishere}
+% |\cftchapterprecishere{|\meta{text}|}| typesets \meta{text}. It expects
+% to be called immediately after a |\chapter| command. First add some
+% negative vertical space to move it closer to the chapter heading.
+%    \begin{macrocode}
+\newcommand{\cftchapterprecishere}[1]{%
+  \vspace*{-2\baselineskip}
+%    \end{macrocode}
+% Typeset its argument using italic font in a |quote| environment.
+%    \begin{macrocode}
+  \begin{quote}\textit{#1}\end{quote}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftchapterprecistoc}
+% |\cftchapterprecistoc{|\meta{text}|}| adds \meta{text} to the \file{.toc}
+% file. The \meta{text} will be typeset within the same margins as the
+% the title text of a |\chapter| heading, using an italic font.
+%    \begin{macrocode}
+\newcommand{\cftchapterprecistoc}[1]{\addtocontents{toc}{%
+%    \end{macrocode}
+% Start a group to localize changes to the paragraphing. Set the
+% left margin to the chapter indent plus the chapter number width.
+%    \begin{macrocode}
+  {\leftskip \cftchapindent\relax
+   \advance\leftskip \cftchapnumwidth\relax
+%    \end{macrocode}
+% Set the right hand margin to |\@tocrmarg|.
+%    \begin{macrocode}
+   \rightskip \@tocrmarg\relax
+%    \end{macrocode}
+% Typeset \meta{text} using an italic font, then ensure that the paragraph
+% is finished (to use the local skips). Finally close the group and we
+% are done.
+%    \begin{macrocode}
+   \textit{#1}\protect\par}}}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftlocalchange}
+% |\cftmakelocalchange{|\meta{file}|}{|\meta{pnumwidth}|}{|\meta{tocrmarg}|}|
+% makes an entry into \meta{file} to change the |\@pnumwidth| and
+% the |\@tocrmarg| values.
+%    \begin{macrocode}
+\newcommand{\cftlocalchange}[3]{%
+  \addtocontents{#1}{\protect\cftsetpnumwidth{#2} \protect\cftsetrmarg{#3}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftaddtitleline}
+% |\cftaddtitleline{|\meta{file}|}{|\meta{kind}|}{|\meta{title}|}{|\meta{page}|}|
+% adds a |\contentsline| entry to \meta{file} with the given information.
+%    \begin{macrocode}
+\newcommand{\cftaddtitleline}[4]{\addtocontents{#1}{%
+  \protect\contentsline{#2}{#3}{#4}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cftaddnumtitleline}
+% |\cftaddtitleline{|\meta{file}|}{|\meta{kind}|}{|\meta{num}|}{|\meta{title}|}{|\meta{page}|}|
+% adds a |\contentsline| entry to \meta{file} with the given information.
+% \changes{v2.3c}{2003/09/26}{Removed \cs{ignorespaces} from \cs{cftaddnumtitleline}}
+%    \begin{macrocode}
+\newcommand{\cftaddnumtitleline}[5]{\addtocontents{#1}{%
+    \protect\contentsline{#2}{\protect\numberline{#3}#4}{#5}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% And, if dear old \Lpack{hyperref} has been used, we have to fix up these
+% two macros.
+% \changes{2003/09/26}{v2.3c}{Hyperref fix for \cs{cftaddtitleline} and
+%                             \cs{cftaddnumtitleline}}
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \@ifpackageloaded{hyperref}{%
+    \renewcommand{\cftaddtitleline}[4]{\addtocontents{#1}{%
+      \protect\contentsline{#2}{#3}{#4}{\@currentHref}}}
+    \renewcommand{\cftaddnumtitleline}[5]{\addtocontents{#1}{%
+      \protect\contentsline{#2}{\protect\numberline{#3}#4}{#5}{\@currentHref}}}
+  }{}
+}
+
+%    \end{macrocode}
+%
+%
+% \begin{macro}{\@starttoc}
+%
+% Okay, here's a roughly-comprehensive list where \cs{@starttoc} is redefined in \TeX{} Live 2014.
+% \begin{itemize}
+% \item amsart, amsbook, amsdtx, amsproc
+% \item asect
+% \item latx.ltx (of course)
+% \item newfloat
+% \item flowfram
+% \item gmampulex (?), gmtypos
+% \item hyperref, memhfixc
+% \item ijmart
+% \item scrartcl, scrbook, scrreprt
+% \item scrwtfile
+% \item tocbasic
+% \item tocstyle
+% \item memoir
+% \item multitoc
+% \item nccsect
+% \item notoccite
+% \item artikel3, boek3, rapport3,
+% \item rerunfilecheck
+% \item parskip
+% \item pdfwin
+% \item revtex4
+% \item devanagari
+% \end{itemize}
+% This makes things difficult if we want to redefine \cs{@starttoc} here.
+% Many of the packages/classes above will not be used in conjunction with tocloft; on the other hand, we don't want to trample too much on others' code.
+%
+% So for our own work here, let's be extra conservative, at least for now, and only hook into \cs{starttoc} if it's the standard \LaTeX{} version.
+%    \begin{macrocode}
+\def\@starttoc@latex@orig#1{%
+ \begingroup
+   \makeatletter
+   \@input{\jobname.#1}%
+   \if@filesw
+     \expandafter\newwrite\csname tf@#1\endcsname
+     \immediate\openout \csname tf@#1\endcsname \jobname.#1\relax
+   \fi
+  \@nobreakfalse
+\endgroup}
+\ifx\@starttoc\@starttoc@latex@orig
+  \def\@starttoc#1{%
+    \csname cft#1prehook\endcsname
+    \begingroup
+      \makeatletter
+      \@input{\jobname.#1}%
+      \if@filesw
+        \expandafter\newwrite\csname tf@#1\endcsname
+        \immediate\openout \csname tf@#1\endcsname \jobname.#1\relax
+      \fi
+      \@nobreakfalse
+    \endgroup
+    \csname cft#1posthook\endcsname}
+  \newcommand\cfttocprehook{}
+  \newcommand\cftlofprehook{}
+  \newcommand\cftlotprehook{}
+  \newcommand\cfttocposthook{}
+  \newcommand\cftlofposthook{}
+  \newcommand\cftlotposthook{}
+\else
+  \PackageWarning{tocloft}{\string\@starttoc\space has already been redefined; tocloft bailing out.}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+%
+%    The end of this package.
+%    \begin{macrocode}
+%</usc>
+%    \end{macrocode}
+%
+%
+% \bibliographystyle{alpha}
+%
+% \begin{thebibliography}{GMS94}
+%
+% \bibitem[Coc95]{SUBFIGURE}
+% Steven Douglas Cochran.
+% \newblock \emph{{The subfigure package}}.
+% \newblock March 1995.
+% \newblock (Available from CTAN as file \texttt{subfigure.dtx})
+%
+% \bibitem[Dru99]{MINITOC}
+% Jean-Pierre Drucbert.
+% \newblock \emph{{The minitoc package}}.
+% \newblock August 1999.
+% \newblock (Available from CTAN in subdirectory \texttt{/minitoc})
+%
+% \bibitem[GMS94]{GOOSSENS94}
+% Michel Goossens, Frank Mittelbach, and Alexander Samarin.
+% \newblock {\em The LaTeX Companion}.
+% \newblock Addison-Wesley Publishing Company, 1994.
+%
+% \bibitem[Lin97]{FNCYCHAP}
+% Ulf~A. Lindgren.
+% \newblock \emph{{FncyChap V1.11}}.
+% \newblock April 1997.
+% \newblock (Available from CTAN in subdirectory \texttt{/fncychap})
+%
+% \bibitem[Lin95]{FLOAT}
+% Anselm Lingnau.
+% \newblock \emph{{An Improved Environment for Floats}}.
+% \newblock March 1995.
+% \newblock (Available from CTAN in subdirectory \texttt{/float})
+%
+% \bibitem[Wil96a]{ALGORITHM}
+% Peter Williams.
+% \newblock \emph{{Algorithms}}.
+% \newblock April 1996.
+% \newblock (Available from CTAN in subdirectory \texttt{/algorithm})
+%
+% \bibitem[Wil96b]{PRW96i}
+% Peter~R. Wilson.
+% \newblock \emph{{LaTeX for standards: The LaTeX package files user manual}}.
+% \newblock NIST Report NISTIR, June 1996.
+%
+% \bibitem[Wil00]{TOCBIBIND}
+% Peter~R. Wilson.
+% \newblock \emph{{The tocbibind package}}.
+% \newblock March 2000.
+% \newblock (Available from CTAN as file \texttt{tocbibind.dtx})
+%
+% \bibitem[Wil01]{CCAPTION}
+% Peter~R. Wilson.
+% \newblock \emph{{The ccaption package}}.
+% \newblock March 2001.
+% \newblock (Available from CTAN as file \texttt{ccaption.dtx})
+%
+% \end{thebibliography}
+%
+%
+% \Finale
+% \PrintIndex
+%
+\endinput
+
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+
+
