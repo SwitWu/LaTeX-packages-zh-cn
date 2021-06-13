@@ -11,6 +11,7 @@ LaTeX常用宏包中文翻译版集锦
 +  `caption`
 +  `clsguide`(Finished)
 +  `enumitem`
++  `expl3`
 +  `fancyvrb`
 +  `fntguide`
 +  `fontspec`
