@@ -21,7 +21,7 @@ LaTeX常用宏包中文翻译版集锦
 +  `listings`
 +  `mathtools`
 +  [`nicematrix`](https://gitee.com/zhangsming818/nicematrixmanualzh/)(Finished)
-+  `physics`
++  `physics`(Finished)
 +  `siunitx`
 +  [`tkz-euclide`](https://github.com/registor/tkz-euclide-doc-zh-cn)(Finished)
 +  `TikZ&PGF`
