@@ -9,7 +9,7 @@ LaTeX常用宏包中文翻译版集锦
 +  [`biblatex`](https://github.com/hushidong/biblatex-zh-cn)(Finished)
 +  `booktabs`
 +  `caption`
-+  `clsguide`(Finished)
++  [`clsguide`](https://github.com/CTeX-org/ctex-doc/tree/master/clsguide-zh-cn)(Finished)
 +  `enumitem`
 +  `expl3`
 +  `fancyvrb`
