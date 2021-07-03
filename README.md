@@ -4,7 +4,7 @@ LaTeX常用宏包中文翻译版集锦
 ## 任务列表
 +  `algorithm2e`
 +  [`amsmath`](https://github.com/yuxtech/translation-of-amsmath-package)(Finished)
-+  `amsthm`(Finished)
++  [`amsthm`](https://github.com/sikouhjw/amsthm-zh)(Finished)
 +  `beamer`(Finished)
 +  [`biblatex`](https://github.com/hushidong/biblatex-zh-cn)(Finished)
 +  `booktabs`
