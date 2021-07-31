@@ -23,6 +23,7 @@ LaTeX常用宏包中文翻译版集锦
 +  [`nicematrix`](https://gitee.com/zhangsming818/nicematrixmanualzh/)(Finished)
 +  `physics`(Finished)
 +  `siunitx`
++  [`tabularray`](https://www.latexstudio.net/index/details/index/mid/1776.html)(Finished)
 +  [`tkz-euclide`](https://github.com/registor/tkz-euclide-doc-zh-cn)(Finished)
 +  `TikZ&PGF`
 +  [`tocloft`](https://www.latexstudio.net/index/details/index/mid/1547.html)(Finished)
