@@ -1,0 +1,322 @@
+% -*- coding: utf-8 -*-
+% !TEX program = lualatex
+\documentclass[oneside]{book}
+
+\input{manual.sty}
+\CodeHigh{lite}
+\setcounter{chapter}{2}
+
+\begin{document}
+
+% \chapter{Extra Interfaces}
+\chapter{附加接口}
+
+% \section{Table Specifications}
+\section{表格参数}
+
+% All available keys for the whole table are described in Table \ref{key:table}.
+表格的整体设置参数的键与键值见表\ref{key:table}。
+
+% \begin{spectblr}[
+%   caption = {Keys for the Whole Table},
+%   label = {key:table},
+% ]{}
+%   Key & Description and Values & Initial Value \\
+%   \K{rulesep} & space between two hlines or vlines & \V{2pt} \\
+%   \K{stretch} & stretch ratio for struts added to cell text & \V{1} \\
+%   \K{abovesep} & set vertical space above every row & \V{2pt} \\
+%   \K{belowsep} & set vertical space below every row & \V{2pt} \\
+%   \K{rowsep} & set vertical space above and below every row & \V{2pt} \\
+%   \K{leftsep} & set horizontal space to the left of every column & \V{6pt} \\
+%   \K{rightsep} & set horizontal space to the right of every column & \V{6pt} \\
+%   \K{colsep} & set horizontal space to both sides of every column & \V{6pt} \\
+%   \K{hspan} & horizontal span algorithm: \V{default}, \V{even}, or \V{minimal} & \V{default} \\
+%   \K{vspan} & vertical span algorithm: \V{default} or \V{even} & \V{default} \\
+% \end{spectblr}
+\begin{spectblr}[
+  caption = {表格整体设置的键与键值},
+  label = {key:table},
+]{}
+  键 & 说明与可选键值 & 初始值 \\
+  \K{rulesep} & 两条表格横线或竖线间的间距 & \V{2pt} \\
+  \K{stretch} & 单元格文本行距拉伸系数 & \V{1} \\
+  \K{abovesep} & 每行前的垂直间距 & \V{2pt} \\
+  \K{belowsep} & 每行后的垂直间距 & \V{2pt} \\
+  \K{rowsep} & 每行前后的垂直间距 & \V{2pt} \\
+  \K{leftsep} & 每列左边的水平间距 & \V{6pt} \\
+  \K{rightsep} & 每列右边的水平间距 & \V{6pt} \\
+  \K{colsep} & 每列左右的水平间距 & \V{6pt} \\
+  \K{hspan} & 单元格水平合并算法： \V{default}、 \V{even}或 \V{minimal} & \V{default} \\
+  \K{vspan} & 单元格垂直合并算法： \V{default}或 \V{even} & \V{default} \\
+\end{spectblr}
+
+% The following example shows that we can replace \verb!\doublerulesep! parameter with \verb!rulesep! key.
+下面的示例演示了使用 \verb!rulesep! 键替代\verb!\doublerulesep!参数的方法。
+\nopagebreak
+\begin{demohigh}
+\begin{tblr}{
+ colspec={||llll||},rowspec={|QQQ|},rulesep=4pt,
+}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\end{tblr}
+\end{demohigh}
+
+% The following example shows that we can replace \verb!\arraystretch! parameter with \verb!stretch! key.
+下面的示例演示了使用 \verb!stretch! 键替代 \verb!\arraystretch! 参数的方法。
+
+\begin{demohigh}
+\begin{tblr}{hlines,stretch=1.5}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\end{tblr}
+\end{demohigh}
+
+% The following example uses \verb!rowsep! and \verb!colsep! keys to set padding for all rows and columns.
+下面的示例演示了使用 \verb!rowsep! 和\verb!colsep!键设置行和列间距设置。
+\nopagebreak
+\begin{demohigh}
+\SetTblrInner{rowsep=2pt,colsep=2pt}
+\begin{tblr}{hlines,vlines}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\end{tblr}
+\end{demohigh}
+
+% With \verb!hspan=default! or \verb!hspan=even!,
+% \verb!tabularray! package will compute column widths from span widths.
+% But with \verb!hspan=minimal!, it will compute span widths from column widths.
+% The following examples show the results from different \verb!hspan! values.
+使用\verb!hspan=default! 或 \verb!hspan=even!时，
+\verb!Tabularray! 宏包会使用合并宽度计算列宽度。
+但是，使用\verb!hspan=minimal!时，则使用列宽度计算合并宽度。
+下面的示例演示了使用 \verb!hspan! 键的设置结果。
+
+\begin{demohigh}
+\SetTblrInner{hlines, vlines, hspan=default}
+\begin{tblr}{cell{2}{1}={c=2}{l},cell{3}{1}={c=3}{l},cell{4}{2}={c=2}{l}}
+ 111 111 & 222 222 & 333 333 \\
+ 12 Multi Columns Multi Columns 12 & & 333 \\
+ 13 Multi Columns Multi Columns Multi Columns 13 & & \\
+ 111 & 23 Multi Columns Multi Columns 23 & \\
+\end{tblr}
+\end{demohigh}
+
+\begin{demohigh}
+\SetTblrInner{hlines, vlines, hspan=even}
+\begin{tblr}{cell{2}{1}={c=2}{l},cell{3}{1}={c=3}{l},cell{4}{2}={c=2}{l}}
+ 111 111 & 222 222 & 333 333 \\
+ 12 Multi Columns Multi Columns 12 & & 333 \\
+ 13 Multi Columns Multi Columns Multi Columns 13 & & \\
+ 111 & 23 Multi Columns Multi Columns 23 & \\
+\end{tblr}
+\end{demohigh}
+
+\begin{demohigh}
+\SetTblrInner{hlines, vlines, hspan=minimal}
+\begin{tblr}{cell{2}{1}={c=2}{l},cell{3}{1}={c=3}{l},cell{4}{2}={c=2}{l}}
+ 111 111 & 222 222 & 333 333 \\
+ 12 Multi Columns Multi Columns 12 & & 333 \\
+ 13 Multi Columns Multi Columns Multi Columns 13 & & \\
+ 111 & 23 Multi Columns Multi Columns 23 & \\
+\end{tblr}
+\end{demohigh}
+
+% The following examples show the results from different \verb!vspan! values.
+下面的示例演示了使用 \verb!vspan! 键的设置结果。
+\nopagebreak
+\begin{demohigh}
+\SetTblrInner{hlines, vlines, vspan=default}
+\begin{tblr}{column{2}={3.25cm}, cell{2}{2}={r=3}{l}}
+  Column1 & Column2 \\
+  Row1 & Long text that needs multiple lines.
+         Long text that needs multiple lines.
+         Long text that needs multiple lines. \\
+  Row2 & \\
+  Row3 & \\
+  Row4 & Short text \\
+\end{tblr}
+\end{demohigh}
+
+\begin{demohigh}
+\SetTblrInner{hlines, vlines, vspan=even}
+\begin{tblr}{column{2}={3.25cm}, cell{2}{2}={r=3}{l}}
+  Column1 & Column2 \\
+  Row1 & Long text that needs multiple lines.
+         Long text that needs multiple lines.
+         Long text that needs multiple lines. \\
+  Row2 & \\
+  Row3 & \\
+  Row4 & Short text \\
+\end{tblr}
+\end{demohigh}
+
+% \section{Default Specifications}
+\section{参数默认值}
+
+% \verb!Tabularray! package provides \verb!\SetTblrInner! and \verb!\SetTblrOuter! commands
+% for you to change the default inner and outer specifications of tables.
+% Inner specifications are all specifications written in the mandatory argument of the \verb!tblr! environment,
+% while outer specifications are all specifications written in the optional argument of the \verb!tblr! environment.
+% At this time, most of the outer specifications are used for long tables (see Chapter \ref{chap:long}).
+\verb!Tabularray! 宏包提供了 \verb!\SetTblrInner! 和 \verb!\SetTblrOuter! 两个命令，
+这两个命令用于设置表格的内部和外部参数的默认值。
+内部参数是指在 \verb!tblr! 环境的必选参数，
+而外部参数是指在 \verb!tblr! 环境的可选参数。
+目前，本宏包的外部参数主要用于长表格的参数设置(参见第\ref{chap:long}章).
+
+% In the below example, the first line draws all hlines and vlines for all tables created afterwards,
+% while the second line makes all tables created afterwards vertically align at bottom.
+下面的示例中，第一行代码用于设置此后所有表格都绘制表格横线和竖线，
+第二行代码用于设置此后所有表格的垂直对齐方式为底端基线对齐。
+
+\begin{codehigh}
+\SetTblrInner{hlines,vlines}
+\SetTblrOuter{valign=b}
+\end{codehigh}
+
+% You can define new \verb!tabularray! environments using \verb!\NewTblrEnviron! command:
+可以使用 \verb!\NewTblrEnviron! 命令定义新的 \verb!Tabularray! 环境：
+
+\begin{demohigh}
+\NewTblrEnviron{mytblr}
+\SetTblrInner[mytblr]{hlines,vlines}
+\SetTblrOuter[mytblr]{valign=b}
+Text \begin{mytblr}{cccc}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\end{mytblr} Text
+\end{demohigh}
+
+% If not giving the optional argument to \verb!\SetTblrInner! or \verb!\SetTblrOuter! command,
+% we set the default specifications for \verb!tblr! environment.
+% And different tabularray environments could have different default specifications.
+如果在 \verb!\SetTblrInner! 或 \verb!\SetTblrOuter! 命令中未指定可选参数，
+则是为 \verb!tblr! 环境指定默认参数。
+因此，不同的 \verb!Tabularray! 环境可以具有不同的默认参数。
+
+% \section{New Table Commands}
+\section{定义表格新命令}
+
+% All commands which change the specifications of tables \textcolor{red3}{must} be defined with \verb!\NewTableCommand!.
+% The following example demonstrates how to define a new table command:
+\textcolor{red3}{必须} 使用 \verb!\NewTableCommand! 命令定义所有用于改变表格参数的命令 。
+下面的示例演示了如何定义一个新的表格命令：
+
+\begin{demohigh}
+\NewTableCommand\myhline{\hline[0.1em,red5]}
+\begin{tblr}{llll}
+\myhline
+ Alpha   & Beta  & Gamma   & Delta \\
+ Epsilon & Zeta  & Eta     & Theta \\
+ Iota    & Kappa & Lambda  & Mu    \\
+\myhline
+\end{tblr}
+\end{demohigh}
+
+% \section{Expand Macros First}
+\section{提前展开表格内容宏}
+
+% \verb!Tabularray! need to see every \verb!&! and \verb!\\! when splitting the table body
+% with \verb!l3regex!. And you can not put cell text inside any table command defined with
+% \verb!\NewTableCommand!. But you could use outer specification \verb!expand! to make \verb!tabularray!
+% expand every occurrence of a specified macro \underline{once} before splitting the table body:
+\verb!Tabularray! 宏包使用\verb!l3regex!解析表格内容，因此，需要知道每一个 \verb!&! 和 \verb!\\! 符号。
+所以，不能将表格内容放在任何由 \verb!\NewTableCommand! 命令定义的表格命令中。
+但是，可以使用 \verb!expand! 选项为 \verb!Tabularray! 宏包指定在解析表格内容之前
+\underline{一次}性展开包含表格内容的宏。
+
+\begin{demohigh}
+\def\tblrbody{
+ \hline
+  20 & 30 & 40 \\
+  50 & 60 & 70 \\
+ \hline
+}
+\begin{tblr}[expand=\tblrbody]{ccc}
+ \hline
+  AA & BB & CC \\
+  \tblrbody
+  DD & EE & FF \\
+  \tblrbody
+  GG & HH & II \\
+ \hline
+\end{tblr}
+\end{demohigh}
+
+% With this \verb!expand! option, you can also use \verb!environ! package
+% to define a new environment based on \verb!tblr! environment:
+通过 \verb!expand! 选项，可以利用 \verb!environ! 宏包
+定义基于 \verb!tblr! 环境的新环境：
+
+
+\begin{demohigh}
+\NewEnviron{fancytblr}{
+ Before Text
+ \begin{tblr}[expand=\BODY]{hlines}
+   \BODY
+ \end{tblr}
+ After Text
+}
+\begin{fancytblr}
+  One   & Two   & Three \\
+  Four  & Five  & Six   \\
+  Seven & Eight & Nine  \\
+\end{fancytblr}
+\end{demohigh}
+
+% \section{Use Verbatim Commands}
+\section{原文排版命令}
+
+% With inner specification \verb!verb!, you can write \verb!\verb! commands in the cell text:
+通过 \verb!verb! 参数，可以在单元格文本中使用 \verb!\verb! 原文排版命令：
+
+\begin{demohigh}
+\begin{tblr}{hlines,verb}
+  20 & 30 & \verb!\hello{world}!40 \\
+  50 & \verb!\hello!60 & 70 \\
+\end{tblr}
+\end{demohigh}
+
+% \section{Counters and Lengths}
+\section{计数器和长度}
+
+% Counters \verb!rownum!, \verb!colnum!, \verb!rowcount!, \verb!colcount! can be used in cell text:
+可以在单元格文本中使用\verb!rownum!、 \verb!colnum!、 \verb!rowcount!和 \verb!colcount!  计数器：
+\nopagebreak
+\begin{demohigh}
+\begin{tblr}{hlines}
+ Cell[\arabic{rownum}][\arabic{colnum}] & Cell[\arabic{rownum}][\arabic{colnum}] &
+ Cell[\arabic{rownum}][\arabic{colnum}] & Cell[\arabic{rownum}][\arabic{colnum}] \\
+ Row=\arabic{rowcount}, Col=\arabic{colcount} &
+ Row=\arabic{rowcount}, Col=\arabic{colcount} &
+ Row=\arabic{rowcount}, Col=\arabic{colcount} &
+ Row=\arabic{rowcount}, Col=\arabic{colcount} \\
+ Cell[\arabic{rownum}][\arabic{colnum}] & Cell[\arabic{rownum}][\arabic{colnum}] &
+ Cell[\arabic{rownum}][\arabic{colnum}] & Cell[\arabic{rownum}][\arabic{colnum}] \\
+\end{tblr}
+\end{demohigh}
+
+% Also, lengths \verb!\leftsep!, \verb!\rightsep!, \verb!\abovesep!, \verb!\belowsep! can be used in cell text.
+也可以在单元格文本中也可以使用
+\verb!\leftsep!、 \verb!\rightsep!、 \verb!\abovesep!和 \verb!\belowsep!长度。
+
+% \section{Tracing Tabularray}
+\section{跟踪Tabularray}
+
+% To trace internal data behind \verb!tblr! environment, you can use \verb!\SetTblrTracing! command.
+% For example, \verb!\SetTblrTracing{all}! will turn on all tracings,
+% and \verb!\SetTblrTracing{none}! will turn off all tracings.
+% \verb!\SetTblrTracing{+row,+column}! will only tracing row and column data.
+% All tracing messages will be written to the log files.
+可以使用 \verb!\SetTblrTracing! 命令跟踪 \verb!tblr! 环境的内部数据流。
+例如，\verb!\SetTblrTracing{all}! 用于打开所有跟踪，
+\verb!\SetTblrTracing{none}! 用于关闭所有跟踪。
+而\verb!\SetTblrTracing{+row,+column}! 仅跟踪指定的行和列的数据流。
+所有的跟踪结果都将写入log文件。
+
+\end{document}

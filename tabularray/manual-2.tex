@@ -1,0 +1,812 @@
+% -*- coding: utf-8 -*-
+% !TEX program = lualatex
+\documentclass[oneside]{book}
+
+\input{manual.sty}
+\CodeHigh{lite}
+\setcounter{chapter}{1}
+
+\begin{document}
+
+% \chapter{Basic Interfaces}
+\chapter{用户接口}
+
+% \section{Old and New Interfaces}
+\section{新旧用户接口}
+
+% With \verb!tabularray! package, you can change the styles of tables via old interfaces or new interfaces.
+在 \verb!Tabularray! 宏包中，可以通过用户接口实现对表格样式的控制。
+
+% The old interfaces consist of some table commands inside the table contents.
+% Same as \verb!tabular! and \verb!array! environments,
+% all table commands \textcolor{red3}{must} be put at the beginning ot the cell text.
+% Also, new table commands \textcolor{red3}{must} be defined with \verb!\NewTableCommand!.
+旧的用户接口由置于表格内容中的一系列命令组成。
+此时，与\verb!tabular!和\verb!array!环境类似，
+所有的命令\textcolor{red3}{必须}用于单元格的文本内容之前。
+另外，如果需要新的表格命令，
+则\textcolor{red3}{必须}使用 \verb!\NewTableCommand! 命令进行定义。
+
+
+% The new interfaces consist of some options inside the mandatory argument,
+% hence totally separating the styles and the contents of tables.
+新的用户接口由\verb!tblr!环境必选参数的选项实现，
+因此，使用新用户接口可以实现表格内容与格式的完全分离。
+
+\begin{newtblr}[
+  % caption = {Old Interfaces and New Interfaces},
+  caption = {新旧用户接口},
+  label = {key:interface},
+]{verb}
+  % Old Interfaces                                 & New Interfaces          \\
+  旧接口                                         & 新接口                  \\
+  \verb!\SetHlines!                              & \K{hlines}              \\
+  \verb!\SetHline!, \verb!\hline!, \verb!\cline! & \K{hline}, \K{rowspec}  \\
+  \verb!\SetVlines!                              & \K{vlines}              \\
+  \verb!\SetVline!, \verb!\vline!, \verb!\rline! & \K{vline}, \K{colspec}  \\
+  \verb!\SetCells!                               & \K{cells}               \\
+  \verb!\SetCell!                                & \K{cell}                \\
+  \verb!\SetRows!                                & \K{rows}                \\
+  \verb!\SetRow!                                 & \K{row}, \K{rowspec}    \\
+  \verb!\SetColumns!                             & \K{columns}             \\
+  \verb!\SetColumn!                              & \K{column}, \K{colspec} \\
+\end{newtblr}
+
+% \section{Hlines and Vlines}
+\section{表格横线和竖线}
+
+% All available keys for hlines and vlines are described in Table \ref{key:hvline}.
+表格横线和竖线\verb!hlines!和\verb!vlines!选项的所有有效键值参见表\ref{key:hvline}。
+
+% \begin{spectblr}[
+%   caption = {Keys for Hlines and Vlines},
+%   label = {key:hvline},
+%   remark{Note} = {In most cases, you can omit the underlined key names and write only their values.}
+% ]{}
+%   Key & Description and Values & Initial Value \\
+%   \underline{\K{dash}} & dash style: \V{solid}, \V{dashed} or \V{dotted} & \V{solid} \\
+%   \K{text}             & replace hline/vline with text (like \V{!} specifier in \K{colspec}) & None \\
+%   \underline{\K{wd}}   & rule width dimension & None \\
+%   \underline{\K{fg}}   & rule color name & None \\
+% \end{spectblr}
+\begin{spectblr}[
+  caption = {\V{hlines}和\V{vlines}的键值},
+  label = {key:hvline},
+  remark{注意} = {多数情况下，对于带有下划线的键，可以省略键名而只给出键值。}
+]{}
+  键 & 说明与可选键值 & 初始值 \\
+  \underline{\K{dash}} & 线型：\V{solid}, \V{dashed} or \V{dotted} & \V{solid} \\
+  \K{text}             & hline/vline的替换文本(如在\K{colspec}中将竖线替换为\V{!}) & 无 \\
+  \underline{\K{wd}}   & 线宽 & 无 \\
+  \underline{\K{fg}}   & 颜色 & 无 \\
+\end{spectblr}
+
+% \subsection{Hlines and Vlines in New Interfaces}
+\subsection{新接口中的表格横线与竖线}
+
+% Options \verb!hlines! and \verb!vlines! are for setting all hlines and vlines, respectively.
+% With empty value, all hlines/vlines will be solid.
+\verb!hlines! 和 \verb!vlines! 选项分别用于设置表格所有横线与竖线样式。
+如果其键值留空，则会把表格所有横线/竖线都设置为实线。
+
+\begin{demohigh}
+\begin{tblr}{hlines,vlines}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+\end{tblr}
+\end{demohigh}
+
+% With values inside one pair of braces, all hlines/vlines will be styled.
+可以在一对大括号中通过参数指定横线/竖线的样式。
+
+\begin{demohigh}
+\begin{tblr}{
+ hlines = {1pt,solid}, vlines = {red3,dashed},
+}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+\end{tblr}
+\end{demohigh}
+
+% Another pair of braces before will select segments in all hlines/vlines.
+也可以在大括号前用另一对大括号选择需要设置的横线/竖线的单元格线段。
+
+\begin{demohigh}
+\begin{tblr}{
+ vlines = {1,3,5}{dashed},
+ vlines = {2,4,6}{solid},
+}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+ Nu      & Xi    & Omicron & Pi      \\
+ Rho     & Sigma & Tau     & Upsilon \\
+ Phi     & Chi   & Psi     & Omega   \\
+\end{tblr}
+\end{demohigh}
+
+% The above example can be simplified with \verb!odd! and \verb!even! values.
+% (More child selectors can be defined with \verb!\NewChildSelector! command.
+% Advanced users could read the source code for this.)
+以上的示例也可以简单地通过设置\verb!odd!和\verb!even!选择算子进行选择
+(可以通过 \verb!\NewChildSelector! 命令定义选择算子，高级用户请阅读
+\verb!Tabularray!源代码，通过模仿实现需要的选择算子的定义)。
+
+\begin{demohigh}
+\begin{tblr}{
+ vlines = {odd}{dashed},
+ vlines = {even}{solid},
+}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+ Nu      & Xi    & Omicron & Pi      \\
+ Rho     & Sigma & Tau     & Upsilon \\
+ Phi     & Chi   & Psi     & Omega   \\
+\end{tblr}
+\end{demohigh}
+
+% Another pair of braces before will draw more hlines/vlines (in which \verb!-! stands for all line segments).
+可以再增加一对大括号用于设置多重横线/竖线(其中，\verb!-! 表示选择所有单元格线段)。
+
+\begin{demohigh}
+\begin{tblr}{
+ hlines = {1}{-}{dashed},
+ hlines = {2}{-}{solid},
+}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+\end{tblr}
+\end{demohigh}
+
+% Options \verb!hline{i}! and \verb!vline{j}! are for setting some hlines and vlines, respectively.
+% Their values are the same as options \verb!hliness! and \verb!vlines!:
+\verb!hline{i}!和\verb!vline{j}!选项分别用于设置指定的横线/竖线，
+\verb!i!或\verb!j!的值与 \verb!hlines! and \verb!vlines! 的参数含义相同：
+
+\begin{demohigh}
+\begin{tblr}{
+ hline{1,7} = {1pt,solid},
+ hline{3-5} = {blue3,dashed},
+ vline{1,5} = {3-4}{dotted},
+}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+ Nu      & Xi    & Omicron & Pi      \\
+ Rho     & Sigma & Tau     & Upsilon \\
+ Phi     & Chi   & Psi     & Omega   \\
+\end{tblr}
+\end{demohigh}
+
+% You can use \verb!X!, \verb!Y!, \verb!Z! to denote the last three childs, respectively.
+% It is especially useful when you are writing long tables:
+也可以使用\verb!X!、\verb!Y!和\verb!Z!分别指定三线样式，
+这在排版长表格是特别有用。
+
+\begin{demohigh}
+\begin{tblr}{
+ hline{1,Z} = {2pt},
+ hline{2,Y} = {1pt},
+ hline{3-X} = {dashed},
+}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+ Nu      & Xi    & Omicron & Pi      \\
+ Rho     & Sigma & Tau     & Upsilon \\
+ Phi     & Chi   & Psi     & Omega   \\
+\end{tblr}
+\end{demohigh}
+
+% Now we show the usage of \verb!text! key by the following example%
+% \footnote{Code from \url{https://tex.stackexchange.com/questions/603023/tabularray-and-tabularx-column-separator}.}:
+下面的示例演示了 \verb!text! 键的使用方式%
+\footnote{代码来自 \url{https://tex.stackexchange.com/questions/603023/tabularray-and-tabularx-column-separator}。}：
+
+\begin{demohigh}
+\begin{tblr}{
+  vlines, hlines,
+  colspec = {lX[c]X[c]X[c]X[c]},
+  vline{2} = {1}{text=\clap{:}},
+  vline{3} = {1}{text=\clap{\ch{+}}},
+  vline{4} = {1}{text=\clap{\ch{->}}},
+  vline{5} = {1}{text=\clap{\ch{+}}},
+}
+  Equation & \ch{CH4} & \ch{2 O2} & \ch{CO2} & \ch{2 H2O} \\
+  Initial  & $n_1$    & $n_2$     & 0        & 0 \\
+  Final    & $n_1-x$  & $n_2-2x$  & $x$      & $2x$ \\
+\end{tblr}
+\end{demohigh}
+
+% You need to load \verb!chemmacros! package for the \verb!\ch! command.
+注意，为使用 \verb!\ch! 命令，必须载入\verb!chemmacros!宏包。
+
+% \subsection{Hlines and Vlines in Old Interfaces}
+\subsection{旧接口中的表格横线与竖线}
+
+% The \verb!\hline! command has an optional argument which accepts key-value options.
+% The available keys are described in Table \ref{key:hvline}.
+可以在\verb!\hline!命令中通过选项指定横线样式，
+其有效的键值见表\ref{key:hvline}.
+
+\begin{demohigh}
+\begin{tblr}{llll}
+\hline
+ Alpha   & Beta  & Gamma  & Delta \\
+\hline[dashed]
+ Epsilon & Zeta  & Eta    & Theta \\
+\hline[dotted]
+ Iota    & Kappa & Lambda & Mu    \\
+\hline[2pt,blue5]
+\end{tblr}
+\end{demohigh}
+
+% The \verb!\cline! command also has an optional argument which is the same as \verb!\hline!.
+\verb!\cline!命令的选项与\verb!\hline!相同。
+
+\begin{demohigh}
+\begin{tblr}{llll}
+\cline{1-4}
+ Alpha   & Beta  & Gamma  & Delta \\
+\cline[dashed]{1,3}
+ Epsilon & Zeta  & Eta    & Theta \\
+\cline[dashed]{2,4}
+ Iota    & Kappa & Lambda & Mu    \\
+\cline[2pt,blue5]{-}
+\end{tblr}
+\end{demohigh}
+
+% You can use child selectors in the mandatory argument of \verb!\cline!.
+也可以在 \verb!\cline! 命令的必选参数中通过选择算子实现行/列的选择。
+
+\begin{demohigh}
+\begin{tblr}{llll}
+\cline{1-4}
+ Alpha   & Beta  & Gamma  & Delta \\
+\cline[dashed]{odd}
+ Epsilon & Zeta  & Eta    & Theta \\
+\cline[dashed]{even}
+ Iota    & Kappa & Lambda & Mu    \\
+\cline[2pt,blue5]{-}
+\end{tblr}
+\end{demohigh}
+
+% Commands \verb!\SetHline! combines the usages of \verb!\hline! and \verb!\cline!:
+\verb!\SetHline! 命令组合了 \verb!\hline! 和 \verb!\cline!命令：
+
+\begin{demohigh}
+\begin{tblr}{llll}
+\SetHline{1-3}{blue5,1pt}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\SetHline{2-4}{teal5,1pt}
+\end{tblr}
+\end{demohigh}
+
+\begin{demohigh}
+\begin{tblr}{llll}
+\SetHline[1]{1-3}{blue5,1pt}
+\SetHline[2]{1-3}{azure5,1pt}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\SetHline[1]{2-4}{teal5,1pt}
+\SetHline[2]{2-4}{green5,1pt}
+\end{tblr}
+\end{demohigh}
+
+% In fact, table command \verb!\SetHline[<index>]{<columns>}{<styles>}! at the beginning of row \verb!i!
+% is the same as table option \verb!hline{i}={<index>}{<columns>}{<styles>}!.
+本质上, 在第\verb!i!行前使用的表格命令 \verb!\SetHline[<index>]{<columns>}{<styles>}!
+与表格选项 \verb!hline{i}={<index>}{<columns>}{<styles>}!的作用完全相同。
+
+% Also, table command \verb!\SetHlines[<index>]{<columns>}{<styles>}! at the beginning of some row
+% is the same as table option \verb!hlines{i}={<index>}{<columns>}{<styles>}!.
+同样，在某些行前使用的表格命令 \verb!\SetHlines[<index>]{<columns>}{<styles>}!
+与表格选项 \verb!hlines{i}={<index>}{<columns>}{<styles>}!的作用完全相同。
+
+% The usages of table commands \verb!\vline!, \verb!\rline!, \verb!\SetVline!, \verb!\SetVlines!
+% are similar to those of \verb!\hline!, \verb!\cline!, \verb!\SetHline!, \verb!\SetHlines!, respectively.
+% But normally you don't need to use them.
+\verb!\vline!、 \verb!\rline!、 \verb!\SetVline!和 \verb!\SetVlines!命令的使用方法
+分别与\verb!\hline!, \verb!\cline!, \verb!\SetHline!, \verb!\SetHlines!的使用方法相同。
+但通常情况下，一般不建议直接使用这些命令。
+
+% \section{Cells and Spancells}
+\section{单元格与单元格合并选项}
+
+% All available keys for cells are described in Table \ref{key:cell} and Table \ref{key:cellspan}.
+单元格选项的所有有效键值见表\ref{key:cell}和表 \ref{key:cellspan}.
+
+% \begin{spectblr}[
+%   caption = {Keys for the Content of Cells},
+%   label = {key:cell},
+%   remark{Note} = {In most cases, you can omit the underlined key names and write only their values.}
+% ]{}
+%   Key & Description and Values & Initial Value \\
+%   \underline{\K{halign}}
+%     & horizontal alignment: \V{l} (left), \V{c} (center), or \V{r} (right)
+%     & \V{l} \\
+%   \underline{\K{valign}}
+%     & vertical alignment: \V{t} (top), \V{m} (middle), \V{b} (bottom),
+%       \V{h} (head) or \V{f} (foot)
+%     & \V{t} \\
+%   \underline{\K{wd}} & width dimension & None \\
+%   \underline{\K{bg}} & background color name & None \\
+%   \K{fg}    & foreground color name & None \\
+%   \K{font}  & font commands & None \\
+%   \K{preto} & prepend text to the cell & None \\
+%   \K{appto} & append text to the cell & None \\
+%   \K{cmd}   & execute command for the cell text & None \\
+% \end{spectblr}
+\begin{spectblr}[
+  caption = {\V{cells}键与键值},
+  label = {key:cell},
+  remark{注意} = {多数情况下，对于带有下划线的键，可以省略键名而只给出键值。}
+]{}
+  键 & 说明与可选键值 & 初始值 \\
+  \underline{\K{halign}}
+    & 水平对齐方式： \V{l} (left), \V{c} (center)或\V{r} (right)
+    & \V{l} \\
+  \underline{\K{valign}}
+    & 垂直对齐方式： \V{t} (top), \V{m} (middle), \V{b} (bottom),
+      \V{h} (head)或\V{f} (foot)
+    & \V{t} \\
+  \underline{\K{wd}} & 宽度 & 无 \\
+  \underline{\K{bg}} & 背景颜色 & 无 \\
+  \K{fg}    & 前景颜色 & 无 \\
+  \K{font}  & 字体命令 & 无 \\
+  \K{preto} & 单元格前导文本 & 无 \\
+  \K{appto} & 单元格附加文本 & 无 \\
+  \K{cmd}   & 对单元格文本要执行的命令 & 无 \\
+\end{spectblr}
+\vspace{-2em}
+% \begin{spectblr}[
+%   caption = {Keys for Multispan of Cells},
+%   label = {key:cellspan},
+% ]{}
+%   Key & Description and Values & Initial Value \\
+%   \K{r} & number of rows the cell spans    & 1 \\
+%   \K{c} & number of columns the cell spans & 1 \\
+% \end{spectblr}
+\begin{spectblr}[
+  caption = {单元格合并键与键值},
+  label = {key:cellspan},
+]{}
+  键 & 说明与可选键值 & 初始值 \\
+  \K{r} & 合并行数    & 1 \\
+  \K{c} & 合并列数    & 1 \\
+\end{spectblr}
+
+% \subsection{Cells and Spancells in New Interfaces}
+\subsection{单元格与单元格合并新接口}
+
+% Option \verb!cells! is for setting all cells.
+\verb!cells! 选项用于设置所有单元格样式。
+\nopagebreak
+\begin{demohigh}
+\begin{tblr}{hlines={white},cells={c,blue7}}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+ Nu      & Xi    & Omicron & Pi      \\
+\end{tblr}
+\end{demohigh}
+
+% Option \verb!cell{i}{j}! is for setting some cells.
+\verb!cell{i}{j}! 选项用于设置指定单元格样式。
+
+\begin{demohigh}
+\begin{tblr}{
+ hlines = {white},
+ vlines = {white},
+ cell{1,6}{odd} = {teal7},
+ cell{1,6}{even} = {green7},
+ cell{2,4}{1,4} = {red7},
+ cell{3,5}{1,4} = {purple7},
+ cell{2}{2} = {r=4,c=2}{c,azure7},
+}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+ Nu      & Xi    & Omicron & Pi      \\
+ Rho     & Sigma & Tau     & Upsilon \\
+ Phi     & Chi   & Psi     & Omega   \\
+\end{tblr}
+\end{demohigh}
+
+% \subsection{Cells and Spancells in Old Interfaces}
+\subsection{单元格与单元格合并旧接口}
+
+% The \verb!\SetCell! command has a mandatory argument for setting the styles of current cell.
+% The available keys are described in Table \ref{key:cell}.
+\verb!\SetCell!命令的必选参数用于设置当前单元格的样式。
+其键与键值的有效值见表 \ref{key:cell}.
+
+\begin{demohigh}
+\begin{tblr}{llll}
+\hline[1pt]
+ Alpha   & \SetCell{bg=teal2,fg=white} Beta & Gamma \\
+\hline
+ Epsilon & Zeta & \SetCell{r,font=\scshape} Eta \\
+\hline
+ Iota    & Kappa & Lambda \\
+\hline[1pt]
+\end{tblr}
+\end{demohigh}
+
+% The \verb!\SetCell! command also has an optional argument for setting the multispan of current cell.
+% The available keys are described in Table \ref{key:cellspan}.
+ \verb!\SetCell!命令也可以使用可选参数设置当前单元格需要合并的列数和行数。
+其键和键值的有效值见表 \ref{key:cellspan}.
+
+\begin{demohigh}
+\begin{tblr}{|X|X|X|X|X|X|}
+\hline
+ Alpha & Beta & Gamma & Delta & Epsilon & Zeta \\
+\hline
+ \SetCell[c=2]{c} Eta & 2-2
+              & \SetCell[c=2]{c} Iota & 2-4
+                              & \SetCell[c=2]{c} Lambda  & 2-6 \\
+\hline
+ \SetCell[c=3]{c} Nu & 3-2 & 3-3
+                      & \SetCell[c=3]{c} Pi & 3-5 & 3-6   \\
+\hline
+ \SetCell[c=6]{c} Tau & 4-2 & 4-3 & 4-4 & 4-5 & 4-6 \\
+\hline
+\end{tblr}
+\end{demohigh}
+
+\begin{demohigh}
+\begin{tblr}{|X|X|X|X|X|X|}
+\hline
+ Alpha & Beta    & Gamma   & Delta & Epsilon & Zeta \\
+\hline
+ \SetCell[r=2]{m} Eta
+       & Theta   & Iota    & Kappa & Lambda  & \SetCell[r=2]{m} Mu  \\
+\hline
+ Nu    & Xi      & Omicron & Pi    & Rho     & Sigma \\
+\hline
+\end{tblr}
+\end{demohigh}
+
+% In fact, table command \verb!\SetCell[<span>]{<styles>}! at the beginning of cell at row \verb!i!
+% and column \verb!j! is the same as table option \verb!cell{i}{j}={<span>}{<styles>}!.
+本质上，在第\verb!i!行、第\verb!j!列的单元格前使用的表格命令\verb!\SetCell[<span>]{<styles>}!
+与表格选项\verb!cell{i}{j}={<span>}{<styles>}!的作用完全相同。
+
+% Also, table command \verb!\SetCells[<span>]{<styles>}! at the beginning of some cell
+% is the same as table option \verb!cells={<span>}{<styles>}!.
+同样，表格命令 \verb!\SetCells[<span>]{<styles>}!
+与表格选项 \verb!cells={<span>}{<styles>}!的作用完全相同。
+
+% \section{Rows and Columns}
+\section{行(\V{rows})和列(\V{columns})选项}
+
+% All available keys for rows and columns are described in Table \ref{key:row} and Table \ref{key:column}.
+行(\V{rows})和列(\V{columns})选项的键及键值的有效值见表 \ref{key:row}和表 \ref{key:column}。
+
+% \begin{spectblr}[
+%   caption = {Keys for Rows},
+%   label = {key:row},
+%   remark{Note} = {In most cases, you can omit the underlined key names and write only their values.}
+% ]{}
+%   Key & Description and Values & Initial Value \\
+%   \underline{\K{halign}}
+%     & horizontal alignment: \V{l} (left), \V{c} (center), or \V{r} (right)
+%     & \V{l} \\
+%   \underline{\K{valign}}
+%     & vertical alignment: \V{t} (top), \V{m} (middle), \V{b} (bottom),
+%       \V{h} (head) or \V{f} (foot)
+%     & \V{t} \\
+%   \underline{\K{ht}} & height dimension & None \\
+%   \underline{\K{bg}} & background color name & None \\
+%   \K{fg} & foreground color name & None \\
+%   \K{font} & font commands & None \\
+%   \K{abovesep} & set vertical space above the row & \V{2pt} \\
+%   \K{abovesep+} & increase vertical space above the row & None \\
+%   \K{belowsep} & set vertical space below the row & \V{2pt} \\
+%   \K{belowsep+} & increase vertical space below the row & None \\
+%   \K{rowsep} & set vertical space above and below the row & \V{2pt} \\
+%   \K{rowsep+} & increase vertical space above and below the row & None \\
+%   \K{preto} & prepend text to every cell (like \V{>} specifier in \K{rowspec}) & None \\
+%   \K{appto} & append text to every cell (like \V{<} specifier in \K{rowspec}) & None \\
+%   \K{cmd}   & execute command for every cell text & None \\
+% \end{spectblr}
+\begin{spectblr}[
+  caption = {\V{rows}选项的键和键值},
+  label = {key:row},
+  remark{注意} = {多数情况下，对于带有下划线的键，可以省略键名而只给出键值。}
+]{}
+  键 & 说明与可选键值 & 初始值 \\
+  \underline{\K{halign}}
+    & 水平对齐方式： \V{l} (left)、 \V{c} (center)或\V{r} (right)
+    & \V{l} \\
+  \underline{\K{valign}}
+    & 垂直对齐方式： \V{t} (top)、 \V{m} (middle)、 \V{b} (bottom)、
+      \V{h} (head) 或 \V{f} (foot)
+    & \V{t} \\
+  \underline{\K{ht}} & 行高 & 无 \\
+  \underline{\K{bg}} & 背景颜色 & 无 \\
+  \K{fg} & 前景颜色 & 无 \\
+  \K{font} & 字体命令 & 无 \\
+  \K{abovesep} & 行前垂直间距 & \V{2pt} \\
+  \K{abovesep+} & 行前垂直间距增量 & 无 \\
+  \K{belowsep} & 行后垂直间距 & \V{2pt} \\
+  \K{belowsep+} & 行后垂直间距增量 & 无 \\
+  \K{rowsep} & 行前行后垂直间距 & \V{2pt} \\
+  \K{rowsep+} & 行前行后垂直间距增量 & 无 \\
+  \K{preto} & 单元格前导文本(如\K{rowspec}选项中的\V{>}) & 无 \\
+  \K{appto} & 单元格附加文本(如\K{rowspec}选项中的\V{<}) & 无 \\
+  \K{cmd}   & 对单元格文本要执行的命令 & 无 \\
+\end{spectblr}
+\vspace{-2em}
+% \begin{spectblr}[
+%   caption = {Keys for Columns},
+%   label = {key:column},
+%   remark{Note} = {In most cases, you can omit the underlined key names and write only their values.}
+% ]{}
+%   Key & Description and Values & Initial Value \\
+%   \underline{\K{halign}}
+%     & horizontal alignment: \V{l} (left), \V{c} (center), or \V{r} (right)
+%     & \V{l} \\
+%   \underline{\K{valign}}
+%     & vertical alignment: \V{t} (top), \V{m} (middle), \V{b} (bottom),
+%       \V{h} (head) or \V{f} (foot)
+%     & \V{t} \\
+%   \underline{\K{wd}} & width dimension & None \\
+%   \underline{\K{co}} & coefficient for the extendable column (\V{X} column) & None \\
+%   \underline{\K{bg}} & background color name & None \\
+%   \K{fg} & foreground color name & None \\
+%   \K{font} & font commands & None \\
+%   \K{leftsep} & set horizontal space to the left of the column & \V{6pt} \\
+%   \K{leftsep+} & increase horizontal space to the left of the column & None \\
+%   \K{rightsep} & set horizontal space to the right of the column & \V{6pt} \\
+%   \K{rightsep+} & increase horizontal space to the right of the column & None \\
+%   \K{colsep} & set horizontal space to both sides of the column & \V{6pt} \\
+%   \K{colsep+} & increase horizontal space to both sides of the column & None \\
+%   \K{preto} & prepend text to every cell (like \V{>} specifier in \K{colspec}) & None \\
+%   \K{appto} & append text to every cell (like \V{<} specifier in \K{colspec}) & None \\
+%   \K{cmd}   & execute command for every cell text & None \\
+% \end{spectblr}
+\begin{spectblr}[
+  caption = {\V{columns}选项的键和键值},
+  label = {key:column},
+  remark{注意} = {多数情况下，对于带有下划线的键，可以省略键名而只给出键值。}
+]{}
+  键 & 说明与可选键值 & 初始值 \\
+  \underline{\K{halign}}
+    & 水平对齐方式： \V{l} (left)、 \V{c} (center)或 \V{r} (right)
+    & \V{l} \\
+  \underline{\K{valign}}
+    & 垂直对齐方式： \V{t} (top)、 \V{m} (middle)、 \V{b} (bottom)、
+      \V{h} (head)或 \V{f} (foot)
+    & \V{t} \\
+  \underline{\K{wd}} & 列宽 & 无 \\
+  \underline{\K{co}} & 可扩展列的扩展系数(\V{X}列) & 无 \\
+  \underline{\K{bg}} & 背景颜色 & 无 \\
+  \K{fg} & 前景颜色 & 无 \\
+  \K{font} & 字体命令 & 无 \\
+  \K{leftsep} & 列左侧水平间距 & \V{6pt} \\
+  \K{leftsep+} & 列左侧水平间距增量 & 无 \\
+  \K{rightsep} & 列右侧水平间距 & \V{6pt} \\
+  \K{rightsep+} & 列右侧水平间距增量 & 无 \\
+  \K{rowsep} & 列左右水平间距 & \V{6pt} \\
+  \K{rowsep+} & 列左右水平间距增量 & 无 \\
+  \K{preto} & 单元格前导文本(如\K{colspec}选项中的\V{>}) & 无 \\
+  \K{appto} & 单元格附加文本(如\K{colspec}选项中的\V{<}) & 无 \\
+  \K{cmd}   & 对单元格文本要执行的命令 & 无 \\
+\end{spectblr}
+
+% \subsection{Rows and Columns in New Interfaces}
+\subsection{行和列设置新接口}
+
+% Options \verb!rows! and \verb!columns! are for setting all rows and columns, respectively.
+\verb!rows! 和 \verb!columns! 选项分别用于设置表格的所有行/列格式。
+\nopagebreak
+\begin{demohigh}
+\begin{tblr}{
+ hlines, vlines,
+ rows = {7mm}, columns = {15mm,c},
+}
+ Alpha   & Beta  & Gamma   & Delta \\
+ Epsilon & Zeta  & Eta     & Theta \\
+ Iota    & Kappa & Lambda  & Mu    \\
+\end{tblr}
+\end{demohigh}
+
+% Options \verb!row{i}! and \verb!column{j}! are for setting some rows and columns, respectively.
+ \verb!row{i}! 和 \verb!column{j}! 选项分别用于设置表格中指定行/列格式。
+
+\begin{demohigh}
+\begin{tblr}{
+ hlines = {1pt,white},
+ row{odd} = {blue7},
+ row{even} = {azure7},
+ column{1} = {purple7,c},
+}
+ Alpha   & Beta  & Gamma   & Delta   \\
+ Epsilon & Zeta  & Eta     & Theta   \\
+ Iota    & Kappa & Lambda  & Mu      \\
+ Nu      & Xi    & Omicron & Pi      \\
+ Rho     & Sigma & Tau     & Upsilon \\
+ Phi     & Chi   & Psi     & Omega   \\
+\end{tblr}
+\end{demohigh}
+
+% The following example demonstrates the usages of \verb!bg!, \verb!fg! and \verb!font! keys.
+下面的示例演示了 \verb!bg!、 \verb!fg! 和 \verb!font! 键的基本用法。
+\nopagebreak
+\begin{demohigh}
+\begin{tblr}{
+ row{odd} = {bg=azure8},
+ row{1}   = {bg=azure3, fg=white, font=\sffamily},
+}
+ Alpha & Beta    & Gamma \\
+ Delta & Epsilon & Zeta  \\
+ Eta   & Theta   & Iota  \\
+ Kappa & Lambda  & Mu    \\
+ Nu Xi Omicron & Pi Rho Sigma & Tau Upsilon Phi \\
+\end{tblr}
+\end{demohigh}
+
+% The following example demonstrates the usages of
+% \verb!abovesep!, \verb!belowsep!, \verb!leftsep!, \verb!rightsep! keys.
+下面的示例演示了\verb!abovesep!、 \verb!belowsep!、 \verb!leftsep!、 \verb!rightsep! 键的用法。
+%\nopagebreak
+\begin{demohigh}
+\begin{tblr}{
+ hlines, vlines,
+ rows = {abovesep=1pt,belowsep=5pt},
+ columns = {leftsep=1pt,rightsep=5pt},
+}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\end{tblr}
+\end{demohigh}
+
+% The following example shows that we can replace \verb!\\[dimen]! with \verb!belowsep+! key.
+下面的示例说明了可以用\verb!belowsep+! 键替代 \verb!\\[dimen]!命令。
+
+\begin{demohigh}
+\begin{tblr}{
+ hlines, row{2} = {belowsep+=5pt},
+}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\end{tblr}
+\end{demohigh}
+
+% \subsection{Rows and Columns in Old Interfaces}
+\subsection{行和列设置旧接口}
+
+% The \verb!\SetRow! command has a mandatory argument for setting the styles of current row.
+% The available keys are described in Table \ref{key:row}.
+可以通过\verb!\SetRow! 命令的必选参数设置当前行的格式。
+其有效参数见表 \ref{key:row}.
+
+\begin{demohigh}
+\begin{tblr}{llll}
+\hline[1pt]
+ \SetRow{azure8} Alpha & Beta & Gamma & Delta \\
+\hline
+ \SetRow{blue8,c} Epsilon & Zeta & Eta & Theta \\
+\hline
+ \SetRow{violet8} Iota & Kappa & Lambda & Mu \\
+\hline[1pt]
+\end{tblr}
+\end{demohigh}
+
+% In fact, table command \verb!\SetRow{<styles>}! at the beginning of row \verb!i!
+% is the same as table option \verb!row{i}={<styles>}!.
+本质上，在第\verb!i!行开始的表格命令\verb!\SetRow{<styles>}!与
+表格选项\verb!row{i}={<styles>}!的作用相同。
+
+% Also, table command \verb!\SetRows{<styles>}! at the beginning of some row
+% is the same as table option \verb!rows={<styles>}!.
+另外，在一些行开始的表格命令\verb!\SetRows{<styles>}!与
+表格选项\verb!rows={<styles>}!的作用相同。
+
+% The usages of table commands \verb!\SetColumn! and \verb!\SetColumns!
+% are similar to those of \verb!\SetRow! and \verb!\SetRows!, respectively.
+% But normally you don't need to use them.
+\verb!\SetColumn! 和 \verb!\SetColumns!表格命令的用法分别与
+\verb!\SetRow! 和 \verb!\SetRows!命令类似。
+但一般不直接使用这两个命令。
+
+% \section{Colspec and Rowspec}
+\section{\V{colspec}和\V{rowspec}选项}
+
+% Options \verb!colspec!/\verb!rowspec! are for setting column/row specifications
+% with column/row type specifiers.
+\verb!colspec!/\verb!rowspec! 选项用于使用column/row格式参数设置column/row的格式。
+
+% \subsection{Colspec and Width}
+\subsection{\V{colspec}选项和\V{width}选项}
+
+% Option \verb!width! are for setting the width of the table with extendable columns.
+% The following example demonstrates the usage of \verb!width! option.
+\verb!width! 选项用于设置具备可扩展列的表格的宽度。
+下面的示例演示了 \verb!width! 选项的用法。
+\nopagebreak
+\begin{demohigh}
+\begin{tblr}{width=0.8\textwidth, colspec={|l|X[2]|X[3]|X[-1]|}}
+ Alpha   & Beta  & Gamma  & Delta \\
+ Epsilon & Zeta  & Eta    & Theta \\
+ Iota    & Kappa & Lambda & Mu    \\
+\end{tblr}
+\end{demohigh}
+
+% \subsection{Column Types}
+\subsection{列格式}
+
+% The \verb!tabularray! package has only one type of primitive column: the \verb!Q! column.
+% Other types of columns are defined as \verb!Q! columns with some keys.
+\verb!Tabularray! 宏包仅设计了一个\verb!Q! 列格式的元格式。
+其它的列格式都是通过为\verb!Q! 元格式指定不同的参数实现定义的。
+
+\begin{codehigh}
+\NewColumnType{l}{Q[l]}
+\NewColumnType{c}{Q[c]}
+\NewColumnType{r}{Q[r]}
+\NewColumnType{t}[1]{Q[t,wd=#1]}
+\NewColumnType{m}[1]{Q[m,wd=#1]}
+\NewColumnType{b}[1]{Q[b,wd=#1]}
+\NewColumnType{h}[1]{Q[h,wd=#1]}
+\NewColumnType{f}[1]{Q[f,wd=#1]}
+\NewColumnType{X}[1][]{Q[co=1,#1]}
+\end{codehigh}
+
+\begin{demohigh}
+\begin{tblr}{|t{15mm}|m{15mm}|b{20mm}|}
+ Alpha   & Beta  & {Gamma\\Gamma} \\
+ Epsilon & Zeta  & {Eta\\Eta} \\
+ Iota    & Kappa & {Lambda\\Lambda} \\
+\end{tblr}
+\end{demohigh}
+
+% Any new column type must be defined with \verb!\NewColumnType! command.
+% It can have an optional argument when it's defined.
+任何新的列格式都需要使用 \verb!\NewColumnType! 命令进行定义。
+在定义时，可以使用可选参数。
+
+% \subsection{Row Types}
+\subsection{行格式}
+
+% The \verb!tabularray! package has only one type of primitive row: the \verb!Q! row.
+% Other types of rows are defined as \verb!Q! rows with some keys.
+同样，\verb!Tabularray! 宏包仅设计了一个\verb!Q! 行格式的元格式。
+其它的行格式都是通过为\verb!Q! 元格式指定不同的参数实现定义的。
+
+\begin{codehigh}
+\NewRowType{l}{Q[l]}
+\NewRowType{c}{Q[c]}
+\NewRowType{r}{Q[r]}
+\NewRowType{t}[1]{Q[t,ht=#1]}
+\NewRowType{m}[1]{Q[m,ht=#1]}
+\NewRowType{b}[1]{Q[b,ht=#1]}
+\NewRowType{h}[1]{Q[h,ht=#1]}
+\NewRowType{f}[1]{Q[f,ht=#1]}
+\end{codehigh}
+
+\begin{demohigh}
+\begin{tblr}{rowspec={|t{12mm}|m{10mm}|b{10mm}|}}
+ Alpha   & Beta  & {Gamma\\Gamma} \\
+ Epsilon & Zeta  & {Eta\\Eta} \\
+ Iota    & Kappa & {Lambda\\Lambda} \\
+\end{tblr}
+\end{demohigh}
+
+% Any new row type must be defined with \verb!\NewRowType! command.
+% It can have an optional argument when it's defined.
+任何新的行格式都需要使用 \verb!\NewRowType! 命令进行定义。
+在定义时，可以使用可选参数。
+
+\end{document}
