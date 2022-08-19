@@ -1,5 +1,5 @@
 # LaTeX-packages-zh-cn
-本仓库用于收集 $\mathrm{\LaTeX}$ 常用宏包手册的中文翻译版本，源文件 code 只存放所有编译所需的`.tex`、`.sty`和`.cls`等文件, 一般不包含相应的 PDF 文件, 需要相应的 PDF 请到 [Releases](https://github.com/SwitWu/LaTeX-packages-zh-cn/releases) 中进行下载。
+本仓库用于收集 $\mathsf{\LaTeX}$ 常用宏包手册的中文翻译版本，源文件 code 只存放所有编译所需的`.tex`、`.sty`和`.cls`等文件, 一般不包含相应的 PDF 文件, 需要相应的 PDF 请到 [Releases](https://github.com/SwitWu/LaTeX-packages-zh-cn/releases) 中进行下载。
 ## 任务列表
 +  `algorithm2e`
 +  [`amsmath`](https://github.com/yuxtech/translation-of-amsmath-package)(Finished)
