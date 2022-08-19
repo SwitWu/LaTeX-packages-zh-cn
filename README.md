@@ -24,6 +24,7 @@
 +  `physics`(Finished)
 +  `siunitx`
 +  [`tabularray`](https://www.latexstudio.net/index/details/index/mid/1776.html)(Finished)
++  `titlesec`
 +  [`tkz-euclide`](https://github.com/registor/tkz-euclide-doc-zh-cn)(Finished)
 +  `TikZ&PGF`
 +  [`tocloft`](https://www.latexstudio.net/index/details/index/mid/1547.html)(Finished)
