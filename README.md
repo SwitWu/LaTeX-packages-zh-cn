@@ -14,6 +14,7 @@
 +  `fancyvrb`
 +  `fntguide`
 +  `fontspec`
++  `footmisc`
 +  `graphicx`
 +  `hyperref`
 +  `layout`
