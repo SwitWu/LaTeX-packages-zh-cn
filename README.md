@@ -39,4 +39,4 @@
 
 ## Contributor
 
-Huang Xuhua, Xiang Yu, 行者, 
+Huang Xuhua, Xiang Yu, 行者, syvshc, hushidong, CTeX-org
