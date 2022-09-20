@@ -36,3 +36,7 @@
 +  [`tlmgr`](https://github.com/syvshc/tlmgr-intro-zh-cn)(Finished)
 +  `unicode-math`
 +  `xcolor`
+
+## Contributor
+
+Huang Xuhua, Xiang Yu, 行者, 
