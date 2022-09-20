@@ -37,6 +37,8 @@
 +  `unicode-math`
 +  `xcolor`
 
-## Contributor
+## Contributors
 
-Huang Xuhua, Xiang Yu, 行者, syvshc, hushidong, CTeX-org
+Huang Xuhua, [Xiang Yu](https://github.com/yuxtech), 行者, [syvshc](https://github.com/syvshc), [hushidong](https://github.com/hushidong), 
+[CTeX-org](https://github.com/CTeX-org), [registor](https://github.com/registor),
+[sikowhjw](https://github.com/sikouhjw)
