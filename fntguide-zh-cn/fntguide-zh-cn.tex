@@ -1,0 +1,2109 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 1993-2022
+%
+% The LaTeX Project and any individual authors listed elsewhere
+% in this file.
+%
+% This file is part of the LaTeX base system.
+% -------------------------------------------
+%
+% It may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3c
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%    https://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2008 or later.
+%
+% This file has the LPPL maintenance status "maintained".
+%
+% The list of all files belonging to the LaTeX base distribution is
+% given in the file `manifest.txt'. See also `legal.txt' for additional
+% information.
+%
+% The list of derived (unpacked) files belonging to the distribution
+% and covered by LPPL is defined by the unpacking scripts (with
+% extension .ins) which are part of the distribution.
+%
+% \fi
+% Filename: fntguide.tex
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+
+\documentclass{ltxguide}[1995/11/28]
+
+\setcounter{totalnumber}{8}
+\setcounter{topnumber}{8}
+
+\usepackage[trace]{fewerfloatpages}
+%\usepackage{booktabs,varioref}
+\usepackage{varioref}
+\usepackage[T1]{fontenc}
+\usepackage{tabularray}
+\usepackage{caption}
+%%%%%%%%%%%%% 以下设置中文字体 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xeCJK}  %%
+\setCJKfamilyfont{heiti}{SimHei} %%黑体hei，在幻灯片中黑体(SimHei)最漂亮
+\newcommand{\heiti}{\CJKfamily{heiti}} %% 自定义\heiti命令，显示黑体
+\setCJKfamilyfont{songti}{SimSun}
+\newcommand{\songti}{\CJKfamily{heiti}}%%置主中文字体为宋体
+\setCJKmainfont{SimSun} %%设置主中文字体为宋体
+\setCJKfamilyfont{kaiti}{KaiTi} %%设置中文字体楷体，用于强调
+\newcommand{\kaiti}{\CJKfamily{kaiti}} %%
+%%%%%%%%%%%%% 以上设置中文字体 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%% 以下设置中文版式 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{indentfirst} %%% 首行缩进
+\setlength{\parindent}{2em} %%% 缩进2个字符（中文为2个字）
+\linespread{1.28} %%% 设置行间距
+%%%%%%%%%%%%% 以上设置中文版式 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%% 以下设置书签、目录 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=red]{hyperref}
+%%%%%%%%%%%% 以上设置书签、目录 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%% 以下在 tabular 表格中定制 横线如\hlinew{1.2pt} %%%%%%
+\makeatletter
+\def\hlinew#1{%
+\noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
+\reserved@a\@xhline}
+\makeatother%
+%%%%%%% 以上在 tabular 表格中定制 横线如\hlinew{1.2pt} %%%%%%
+
+
+
+\title{\Huge \textbf{\LaTeXe{}}\ \heiti 的字体选择}
+
+\author{\copyright~Copyright 1995--2021，\LaTeX\ 项目团队 \thanks{感谢 Arash Esbati(阿拉什·埃斯巴蒂)记录了 2020 年 NFSS 的新特性}\\[6pt]
+  版权所有\\[6pt]赣医一附院神经科\ \ \ 黄旭华\ \ \ \ \ \ 翻译}
+
+\date{2021年12月}
+
+\begin{document}
+
+\maketitle
+\renewcommand{\contentsname}{\heiti 目\ 录}   %%% 在{document}后面加入该命令，将"contents"变成“目  录”
+\renewcommand{\refname}{\heiti 参考文献}
+\renewcommand{\tablename}{表}
+
+\tableofcontents
+
+\newpage
+
+\section{\heiti 介绍(Introduction)}
+
+本文档描述了 \LaTeX{}\ 文档准备系统(Document Preparation System)的新字体选择特性(new font selection features)。它适用于希望编写与 |times| 或 |latexsym| 类似的字体加载宏包(font-loading packages)的包编写者。
+
+本文档只是对新设施(new facilities)的简要介绍，适用于熟悉 \TeX{}\ 字体和 \LaTeX{}\ 宏包的包编写人员。它{\kaiti 既不是}用户指南(user-guide)，{\kaiti 也不是} \LaTeXe\ 字体的参考手册(reference manual)。
+
+\subsection[\LaTeXe~的字体]{\textbf{\LaTeXe}~{\heiti 的字体}}
+%%% 上面这句加了中括号，可以使目录中相应条目的字体显示为宋体（在导言区中设定的主字体就是宋体），否侧显示为黑体，这是更改目录的一种重要的方法
+\LaTeX~2.09\ 和 \LaTeXe{}\ 之间最重要的区别在于字体的选择方式。在 \LaTeX~2.09\ 中，计算机现代字体(Computer Modern fonts，CMF)被内置到 \LaTeX~格式中，因此定制 \LaTeX{} 以使用其他字体是一个主要的工作。
+
+在 \LaTeXe\ 中，只有很少的字体被内置到格式中(built into the format)，并且有命令来加载新的文本字体(text fonts)和数学字体(math fonts)。|times| 或 |latexsym| 等宏包允许作者访问这些字体。本文档描述了如何编写类似的字体加载宏包(font-loading packages)。
+
+\LaTeXe{}\ 字体选择系统(font selection system)在 1989 年首次发布为“新字体选择框架(New Font Selection Scheme，NFSS)”，然后在 1993 年发布了第 2 版。\LaTeXe{}\ 包括标准的 NFSS 第 2 版。
+
+\subsection[概述]{\heiti 概述}
+
+本文档概述了 \LaTeX\ 的新字体命令(new font commands)。
+
+\begin{description}
+
+\item[第~\ref{Sec:text}~节]  描述了在文档类(classes)和宏包(packages)中选择字体的命令。它列出了 \LaTeX{}\ 字体的五种属性(attributes)，并列出了选择字体的命令。它还描述了如何自定义命令(如 |\textrm| 和 |\textit|)以适应文档设计(document design)。
+
+\item[第~\ref{Sec:math}~节]  解释用于控制 \LaTeX{}\ 数学字体的命令。它描述了如何指定新的数学字体(new math fonts)和新的数学符号(new math symbols)。
+
+\item[第~\ref{Sec:install}~节]  解释如何在 \LaTeX\ 中安装新字体。它显示了 \LaTeX{}\ 字体属性(font attributes)如何转换为 \TeX{}\ 字体名称，以及如何使用字体定义文件(font definition files)指定自己的字体。
+
+\item[第~\ref{Sec:encode}~节]  讨论文本字体编码(text font encodings)。它描述了如何声明(declare)一个新的编码和如何定义命令，例如 |\AE| 或 |\"|，它们在不同的编码中有不同的定义，这取决于编码中是否有连字(ligatures)等。
+
+\item[第~\ref{Sec:misc}~节]  涵盖字体杂项(font miscellanea)。它描述了 \LaTeX{}\ 如何执行字体替换(font substitution)，如何自定义以 \LaTeX{}\ 格式预加载的字体，以及在 \LaTeX{}\ 字体选择中使用的命名规范(naming conventions)。
+
+\end{description}
+
+\subsection[更多的信息]{\heiti 更多的信息}
+
+对于一般性的介绍(general introduction)，包括 \LaTeXe\ 的新特性(new features)，您应该阅读\ {\color{blue} {\emph{\LaTeXbook}}}, Leslie Lamport, Addison Wesley, 2nd~ed, 1994 \quad 【{\color{blue}{《\LaTeX：一个文档准备系统》}}，莱斯利·兰波特(Leslie Lamport)，艾迪森·韦斯利(Addison Wesley)，第 2 版，1994。】
+
+关于 \LaTeX{}\ 字体选择方案(font selection scheme)的更详细描述，请参考：{\color{blue}{\emph{\LaTeXcomp}}}, Mittelbach, Goossens, Addison Wesley, 2nd~ed, 2004 \quad 【{\color{blue}{《\LaTeX{}\ 指南》}}，密特巴赫(Mittelbach)，古森斯(Goossens)，艾迪森·韦斯利(Addison Wesley)，第 2 版，2004。】
+
+\LaTeX{}\ 的字体选择方案(font selection scheme)基于 \TeX， \TeX\ 的开发者高德纳(Donald E.~Knuth)和艾迪森·韦斯利(Addison Wesley)于 1986 年在\ {\color{blue}{\emph{The \TeX book}}} 【{\color{blue}{《特可爱原本》}}】中对其进行了描述，并于 1991 年进行了修订，以包括 \TeX~3\ 的功能。
+
+
+塞巴斯蒂安·拉茨 (Sebastian Rahtz) 的\ {\color{blue}{|psnfss| 软件}}包含了在 \LaTeX\ 中使用大量 Type~1 字体(包括 Adobe Laser Writer 35 和 Monotype CD-ROM 字体)的软件。它应该与您的 \LaTeX\ 副本来源相同。
+
+|psnfss| 软件使用由艾伦·杰弗里 (Alan Jeffrey) 的 |fontinst| 软件生成的字体。这可以将字体从 Adobe Font Metric 格式转换为 \LaTeX\ 可读的格式，包括生成第~\ref{Sec:install}~节中描述的字体定义文件(font definition files)。|fontinst| 软件应与您 \LaTeX\ 的副本来源相同。
+
+只要可行，\LaTeX{}\ 使用名为“fontname”的字体命名方案(font naming scheme)；这在\ {\color{blue}{\emph{Filenames for fonts}}}\ \footnote{该文档的最新电子版可在任何 CTAN 服务器上的目录 \texttt{info/fontname}\ 中找到。}【{\color{blue} {《字体文件的文件名》}}】中有所描述，\emph{TUGboat}~11(4),~1990。
+
+文档类作者指南(class-writer's guide)\ {\color{blue}{\emph{\clsguide}}}【{\color{blue}{《文档类和宏包作者的 \LaTeXe》}}】描述了针对文档类和宏包作者的新的 \LaTeX{}\ 特性，这保存在 |clsguide.tex| 中。在 \texttt{cfgguide.tex} 中，指南\ {\color{blue}{\emph{\cfgguide}}}【{\color{blue}{《\LaTeXe\ 的配置选项》}}】涵盖了 \LaTeX{}\ 的配置(configuring)，而我们关于修改 \LaTeX{}\ 的策略其背后的理念在\ {\color{blue}{\texttt{modguide.tex}}}\ 中的\  {\color{blue}{\emph{\modguide}}}【{\color{blue}{《修改 \LaTeX{}》}}】有描述。
+
+文档化的源代码(documented source code)(来自用于生成内核格式文件的文件，生成内核格式文件是通过 |latex.ltx|)现在可作为 {\color{blue}{\emph{The \LaTeXe\ Sources}}}\ 【{\color{blue}{《\LaTeXe\ 源代码》}}】。这个非常大的文档还包括一个 \LaTeX{}\ 命令的索引(index)。它可以从 |base| 目录中的 \LaTeX{}\ 文件 |source2e.tex| 进行排版；这使用文档类文件 |ltxdoc.cls|。
+
+欲了解更多关于\TeX{} 和 \LaTeX{}\ 的信息，请联系您当地的 \TeX{}\ 用户组或国际 \TeX{}\ 用户组。地址及其他详情，请浏览：
+\begin{quote}\small\label{addrs}
+  \texttt{https://www.tug.org/lugs.html}
+\end{quote}
+
+\newpage
+
+\section{\heiti 文本字体(Text fonts)}
+\label{Sec:text}
+
+本节介绍文档类和宏包作者用于指定和选择字体的命令。
+
+\subsection[文本字体的属性]{\heiti 文本字体的属性}
+\label{sec:textfontattributes}
+
+\LaTeX{}\ 中的每个文本字体(text font)都有五个{\kaiti 属性}\emph{(attributes)}：
+\begin{description}
+
+\item[{\heiti 编码}(encoding)] \ \ 这指定字符(characters)在字体(font)中的显示顺序(order)。\LaTeX{}\ 中使用的两种最常见的文本编码(text encodings)是 高德纳(Knuth)的“\TeX{}\ 文本(\TeX{}\ text)”编码和 \TeX{}\ 用户组成员在 1990 年科克 \TeX{}\ 会议(\TeX{}\ Conference at Cork)期间开发的“\TeX{}\ 文本扩展(\TeX{}\ text extended)”编码(故其非正式名称为“科克编码[Cork encoding]”)。
+
+\item[{\heiti 族}(family)] \ \ 一组字体(字体集合)的名称，通常由字体设计公司(font foundry)按通用名称(common name)分组。例如，“Adobe Times”、“ITC Garamond”和 Knuth 的“Computer Modern Roman”都是字体族(font families)。
+
+\item[{\heiti 序列}(series)] \ \ 字体的粗细(heavy，权)和/或宽度(expanded)。例如，“中等粗细(medium weight)”、“窄(narrow)”和“粗松(bold extended)”都是系列(series)。
+
+\item[{\heiti 形状}(shape)] \ \ 字体族(font family)中字母(letters)的形状(form)。例如，“斜体(italic)”、“倾斜(oblique)”和“直立(upright)”(有时称为“罗马[roman]”)都是字体形状(font shapes)。
+
+\item[{\heiti 尺寸}(size)] \ \ 字体的设计大小(design size)，例如“10pt”。如果没有指定尺寸，则假定为“ pt”。
+
+\end{description}
+\vspace{-0.6em}
+这些属性(attributes)的可能值由 \LaTeX\ 给出简短的首字母缩写。
+
+字体编码(font encoding)最常见的值是：
+\vspace{-1.5em}
+\begin{center}
+%   \begin{minipage}{0.7\linewidth}
+%    \begin{tabular}{|r|l|l|l|l|}
+%     \begin{tblr}{width=1.2\linewidth,colspec={|X[2,r]|X[8,l]|X[8,l]|X[3,l]|X[2,l]|}}
+     \begin{tblr}{
+     width=1.2\linewidth,
+     colspec={X[2,r]X[8,l]X[8,l]X[3,l]X[2,l]},
+     }
+      \cline[1.2pt,black]{-}
+      {\heiti 编码值}     & {\heiti 描述}   &{\heiti 描述}  &{\heiti 字体样例}  &{\heiti 页码} \\ \cline[0.7pt,black]{-}
+      |OT1|   & \TeX{} text &  Knuth 的原始文本字体 & cmr10  & 368 \\
+      |T1|    & \TeX{} extended text & Cork(DC)字体 & dcr10  & --  \\
+      |OML|   & \TeX{} math italic & \TeX{}\ 数学字母字体  & cmmi10 & 371  \\
+      |OMS|   & \TeX{} math symbols & \TeX{}\ 数学符号字体  & cmsy10 & 371  \\
+      |OMX|   & \TeX{} math large symbols & \TeX{}\ 数学扩展字体  & cmex10 & 372  \\
+      |U|     & Unknown & 未知编码 & -- & --  \\
+      |L<xx>| & A local encoding  & 局部编码 & -- & --  \\ \cline[1.25pt,black]{-}
+    \end{tblr}
+%   \end{minipage}
+\end{center}
+“局部(local)”编码用于仅在局部可用的字体编码，例如，包含各种尺寸的组织徽标(organization's logo)的字体。
+
+字体族(font families)太多，无法全部列出，一些常见的如下：
+\begin{center}
+  \begin{minipage}{1.09\linewidth}
+%    \begin{tabular}{rl}
+    \begin{tblr}{width=1.1\linewidth,colspec={X[r,2.5]X[l,8]X[l,8]}}
+    \cline[1.2pt,black]{-}
+    {\heiti 字体族的值}    & {\heiti 描述}    & {\heiti 描述} \\
+    \cline[0.7pt,black]{-}
+      |cmr|  & Computer Modern Roman & 计算机现代罗马字体 \\
+      |cmss| & Computer Modern Sans & 计算机现代无衬线字体 \\
+      |cmtt| & Computer Modern Typewriter & 计算机现代打字机(等宽)字体 \\
+      |cmm|  & Computer Modern Math Italic & 计算机现代数学斜体 \\
+      |cmsy| & Computer Modern Math Symbols & 计算机现代数学符号 \\
+      |cmex| & Computer Modern Math Extensions & 计算机现代数学扩展符号 \\
+      |ptm|  & Adobe Times & Adobe Times \\
+      |phv|  & Adobe Helvetica & Adobe Helvetica \\
+      |pcr|  & Adobe Courier   & Adobe Courier \\ \cline[1.2pt,black]{-}
+    \end{tblr}
+  \end{minipage}
+\end{center}
+\NEWdescription{2019/07/10}\label{page:seriesvalues}
+字体序列(font series)表示权重(粗细)[weight (boldness)]和宽度(展开量)[width (amount of expansion)]的组合。所支持的权重和宽度标准是：
+\begin{center}
+\begin{minipage}{\linewidth}
+%  \begin{tabular}{rl}
+   \begin{tblr}{rll}
+    \cline[1.2pt,black]{-}
+    {\heiti 权重值}  & {\heiti 描述} & {\heiti 描述} \\ \cline[0.7pt,black]{-}
+    |ul| & Ultra Ligh  & 超轻 \\
+    |el| & Extra Light  & 较轻 \\
+    |l|  & Light   & 轻 \\
+    |sl| & Semi Light  & 半轻 \\
+    |m|  & Medium (normal)& 中等(正常) \\
+    |sb| & Semi Bold      & 半黑 \\
+    |b|  & Bold     & 黑 \\
+    |eb| & Extra Bold   & 较黑 \\
+    |ub| & Ultra Bold   & 超黑 \\ \cline[1.2pt,black]{-}
+   \end{tblr}
+%  \end{tabular}
+  \quad
+%  \begin{tabular}{rlr}
+  \begin{tblr}{rlll}
+  \cline[1.2pt,black]{-}
+    {\heiti 宽度值}  & {\heiti 描述} & {\heiti 描述} & {\heiti 百分比} \\ \cline[0.7pt,black]{-}
+    |uc| & Ultra Condensed & 超紧 & 50\%    \\
+    |ec| & Extra Condensed & 较紧 & 62.5\%  \\
+    |c|  & Condensed       & 紧 & 75\%    \\
+    |sc| & Semi Condensed  & 半紧 & 87.5\%  \\
+    |m|  & Medium          & 中等 & 100\%   \\
+    |sx| & Semi Expanded   & 半松  & 112.5\% \\
+    |x|  & Expanded        & 松 & 125\%   \\
+    |ex| & Extra Expanded  & 较松 & 150\%   \\
+    |ux| & Ultra Expanded  & 超松 & 200\%   \\ \cline[1.2pt,black]{-}
+  \end{tblr}
+\end{minipage}
+\end{center}
+只当权重(weight)和宽度(width)都是中等(medium)即为 |m| 时，序列只用单一的 |m| 表示，否则，序列用权重和宽度的缩写字母联在一起表示。
+
+序列值(series values)的示例如下：
+\begin{center}
+  \begin{minipage}{1.1\linewidth}
+%    \begin{tabular}{rl}
+   \begin{tblr}{width=1.1\linewidth,colspec={X[r,2]X[l,8]X[l,4]}}
+   \cline[1.2pt,black]{-}
+     {\heiti 序列的值} &{\heiti 描述} &{\heiti 描述} \\ \cline[0.7pt,black]{-}
+      |m|   & Medium weight and width &(权重和宽度均为)中等  \\
+      |b|   & Bold weight, medium width &黑，中等宽  \\
+      |bx|  & Bold extended &黑，松\\
+      |sb|  & Semi-bold, medium width &半黑，中等宽\\
+      |sbx| & Semi-bold extended&半黑，松\\
+      |c|   & Medium weight, condensed width &权重中等，紧\\ \cline[1.2pt,black]{-}
+   \end{tblr}
+%    \end{tabular}
+  \end{minipage}
+\end{center}
+\NEWdescription{2019/07/10}
+请注意，有各种各样的名字，如“常规(regular)”、“黑色(black)”、“半粗体(demi-bold)”、“瘦(thin)”、“重(heavy)”等等。如有可能，应将其匹配到标准命名方案(standard naming scheme)中，以便在必要时进行合理的默认替换(default substitutions)，例如，“微粗体(demi-bold)”通常只是“半粗体(semi-bold)”，因此应分配 |sb| 等。
+
+
+%\newpage
+
+\NEWdescription{2020/02/02}
+字体形状(font shape)最常见的值如下：
+\vspace{-1.0em}
+\begin{center}
+  \begin{minipage}{1.1\linewidth}
+%    \begin{tabular}{rl}
+   \begin{tblr}{width=1.1\linewidth,colspec={X[r,6]X[l,16]X[l,14]}}
+   \cline[1.2pt,black]{-}
+      {\heiti 字体形状的值} & {\heiti 描述} & {\heiti 描述} \\ \cline[0.7pt,black]{-}
+      |n|    & Normal (that is `upright' or `roman')& 正常(即“直立”或“罗马”) \\
+      |it|   & Italic       & 斜体                         \\
+      |sl|   & Slanted (or `oblique') & 倾斜(或“变形”)               \\
+      |sc|   & Caps and small caps   &  大写和小体大写              \\
+      |scit| & Caps and small caps italic & 大写和小体大写斜体           \\
+      |scsl| & Caps and small caps slanted& 大写和小体大写倾斜           \\
+      |sw|   & Swash & 花式  \\ \cline[1.2pt,black]{-}
+    \end{tblr}
+%    \end{tabular}
+  \end{minipage}
+\end{center}
+
+字体形状(font shape)的一个不太常见的值是：
+\vspace{-1.5em}
+\begin{center}
+  \begin{minipage}{1.1\linewidth}
+%    \begin{tabular}{rl}
+    \begin{tblr}{width=1.1\linewidth,colspec={X[r,6]X[l,16]X[l,14]}}
+       \cline[1.2pt,black]{-}
+      {\heiti 字体形状的值} & {\heiti 描述} & {\heiti 描述} \\ \cline[0.7pt,black]{-}
+      |ssc|  & Spaced caps and small caps & 间隔大写和小体大写\\ \cline[1.2pt,black]{-}
+    \end{tblr}
+%    \end{tabular}
+  \end{minipage}
+\end{center}
+还有用于直立斜体(upright italic)的 |ui|，即斜体形状(italic shape)，但人为地竖直(turned upright)。这在某些字体中有时很有用。
+
+
+字体尺寸(font size)指定为面积(dimension)，例如 |10pt| 或 |1.5in| 或 |3mm|；如果未指定单位，则假定为 |pt|。
+
+这五个参数(parameters)[译者注：即属性]指定了每个 \LaTeX{}\ 字体，例如：
+\vspace{-1.5em}
+\begin{center}
+%  \begin{tabular}{@{}r@{\,}l@{\,}c@{\,}c@{\,}cc@{}r@{}}
+        \begin{tblr}{
+        width=1.21\linewidth,
+        colspec={Q[3,c,m]Q[3.5,c,m]Q[1.5,c,m]Q[2,c,m]Q[3.5,c,m]Q[30.5,c,l]Q[13.5,l,l]}, %%% 设置列
+        hline{2}={0.5pt,solid}
+        }
+        \cline[1.2pt,black]{-}
+        \SetCell[c=5]{c}{\emph{\textbf{\LaTeX{}}}\ {\heiti 规范}}&&&&&\SetCell[r=2]{c}{\heiti 字体}&\SetCell[r=2]{l}\emph{\textbf{\TeX{}}}{\heiti 字体名} \\
+        编码& 字\ 族 & 序\ 列&形状& 尺\ 寸& & \\ \cline[0.7pt,black]{-}
+        |OT1| & |cmr|  & |m| & |n| & |10|& Computer Modern Roman 10 point &|cmr10| \\
+        |OT1| & |cmss| & |m| & |sl| & |1pc| & Computer Modern Sans Oblique 1 pica &|cmssi12| \\
+        |OML| & |cmm|  & |m| & |it| & |10pt| & Computer Modern Math Italic 10 point &|cmmi10| \\
+        |T1| & |ptm|   & |b| & |it| & |1in|& Adobe Times Bold Italic 1 inch &|ptmb8t at 1in|\\\cline[1.2pt,black]{-}
+        \end{tblr}
+%   \end{tabular}
+\end{center}
+
+每当 \LaTeX{}\ 发出溢框警告(overfull box warning)时，就会显示这五个参数，例如：
+\begin{verbatim}
+   Overfull \hbox (3.80855pt too wide) in paragraph at lines 314--318
+   []\OT1/cmr/m/n/10 Normally [] and [] will be iden-ti-cal,
+
+   在第 314--318 行的段落中 \hbox 溢框(3.80855 pt 太宽)[]\OT1/cmr/m/n/10
+   通常[]和[]会是同一个字符，
+\end{verbatim}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{rlc}
+     \hlinew{1.2pt}
+    \multicolumn{1}{r}{\heiti 作者的命令} & {\heiti 属性}
+                          & {\heiti 在 |article| 文档类中的值} \\ \hlinew{0.7pt}
+    |\textnormal{..}| 或 |\normalfont| & 字族 & |cmr|     \\
+                                       & 序列 & |m|       \\
+                                       & 形状  & |n|       \\ \hlinew{0.5pt}
+    |\textrm{..}| 或 |\rmfamily|       & 字族 & |cmr|     \\
+    |\textsf{..}| 或 |\sffamily|       & 字族 & |cmss|    \\
+    |\texttt{..}| 或 |\ttfamily|       & 字族 & |cmtt|    \\
+    |\textmd{..}| 或 |\mdseries|       & 序列 & |m|       \\
+    |\textbf{..}| 或 |\bfseries|       & 序列 & |bx|      \\ \hlinew{0.5pt}
+    |\textit{..}| 或 |\itshape|        & 形状  & |it|      \\
+    |\textsl{..}| 或 |\slshape|        & 形状  & |sl|      \\
+    |\textsc{..}| 或 |\scshape|        & 形状  & |sc|      \\
+    |\textssc{..}| 或 |\sscshape|      & 形状  & |ssc|     \\
+    |\textsw{..}| 或 |\swshape|        & 形状  & |sw|      \\
+    |\textulc{..}| 或 |\ulcshape|      & 形状  & |ulc| (虚拟) $\to$ |n|, |it|, |sl| 或 |ssc|     \\
+    |\textup{..}| 或 |\upshape|        & 形状  & | up| (虚拟) $\to$ |n| 或 |sc     |\phantom{, , } \\%\midrule%[2pt]
+    |\tiny|                            & 尺寸   & |5pt|     \\
+    |\scriptsize|                      & 尺寸   & |7pt|     \\
+    |\footnotesize|                    & 尺寸   & |8pt|     \\
+    |\small|                           & 尺寸   & |9pt|     \\
+    |\normalsize|                      & 尺寸   & |10pt|    \\
+    |\large|                           & 尺寸   & |12pt|    \\
+    |\Large|                           & 尺寸   & |14.4pt|  \\
+    |\LARGE|                           & 尺寸   & |17.28pt| \\
+    |\huge|                            & 尺寸   & |20.74pt| \\
+    |\Huge|                            & 尺寸   & |24.88pt| \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{作者的字体命令及其效果(article\ 文档类)}\label{tab:attributes}
+\end{table}
+字体作者的命令设置了表~\vref{tab:attributes}~所示的五个属性(five attributes)。这些命令使用的值由文档类(document class)使用第~\ref{Sec:text.param}~节中定义的参数确定。
+
+请注意，没有用于选择新编码(selecting new encodings)的作者命令(author commands)。这些应该由宏包(packages)提供，例如 |fontenc| 宏包。
+
+本节不解释如何将 \LaTeX{}\ 字体规范(font specifications)转换为 \TeX{}\ 字体名称(font names)。这在第~\ref{Sec:install}~节中有阐述。
+
+
+\subsection[选择文本字体的命令]{\heiti 选择文本字体的命令}
+
+用于选择文本字体(select a text font)的低级命令(low-level commands)如下：
+
+\begin{decl}
+  |\fontencoding| \arg{encoding} \quad \quad \quad
+  |\fontfamily|  \arg{family} \quad \quad \quad
+  |\fontseries| \arg{series} \\
+  |\fontshape| \arg{shape}  \quad \quad \quad
+  |\fontsize| \arg{size} \arg{baselineskip} \\
+  |\linespread| \arg{factor}
+\end{decl}
+
+\NEWdescription{1998/12/01}
+每个以 |\font...| 开头的命令都设置一个字体属性(font attribute)；|\fontsize| 还设置 |\baselineskip|(行基线间距)。|\linespread| 命令准备将当前(或新定义的) |\baselineskip| 乘以 \m{factor}(因子)\ \ (例如，把线分开，得到更大的值)。
+
+这些命令不会改变实际使用的字体，但当前属性(current attributes)用于确定在下一个 |\selectfont|\ 命令后要使用的字体(font)和基线(baseline)。
+
+\begin{decl}
+  |\selectfont|
+\end{decl}
+根据字体属性(font attributes)的当前值(current values)选择文本字体。
+
+{\kaiti 警告}：在设置上述六个命令中的某些命令的字体参数(font parameters)后，{\kaiti 必须}立即放置一个 |\selectfont| 命令，然后再放置文本。例如，可以这样写：
+\begin{verbatim}
+   \fontfamily{ptm}\fontseries{b}\selectfont Some text.
+\end{verbatim}
+但下面这样写是{\kaiti 不}合法的：
+\begin{verbatim}
+   \fontfamily{ptm} Some \fontseries{b}\selectfont text.
+\end{verbatim}
+如果您将文本(text)放在 |\font<parameter>|\ 命令(或 |\linespread|) 和 |\selectfont| 之间，可能会得到意外的结果。
+
+\begin{decl}
+  |\usefont| \arg{encoding} \arg{family} \arg{series} \arg{shape}
+\end{decl}
+是 |\font...| 命令等效命令的简写，必需紧跟其后调用 |\selectfont|。
+
+\subsection[内部宏]{\heiti 内部宏}
+
+字体属性(font attributes)的当前值(current values)保存在以下内部宏(internal macros)中：
+
+\begin{decl}
+  |\f@encoding| \quad
+  |\f@family| \quad
+  |\f@series| \quad
+  |\f@shape|  \quad
+  |\f@size| \quad
+  |\f@baselineskip| \\
+  |\tf@size| \quad
+  |\sf@size| \quad
+  |\ssf@size|
+\end{decl}
+
+这些内部宏存储(hold)编码(encoding)、族(family)、序列(series)、形状(shape)、尺寸(size)、基线间距(baseline skip)、主数学字体尺寸(main math size)、“角标(script)”数学字体尺寸和“二级及以上角标(scriptscript)”数学字体尺寸等的当前值(current values)。后三个只能在公式(formula)中访问；在数学之外，它们可能存储任意值。
+
+例如，要在不更改基线间距(baseline skip)的情况下将字体尺寸设置为 12：
+\begin{verbatim}
+   \fontsize{12}{\f@baselineskip}
+\end{verbatim}
+但是，永远{\kaiti 不要}直接更改内部命令(internal commands)的值；只能使用低级命令(low-level commands)如 |\fontfamily|、|\fontseries| 等修改它们。如果不遵守此警告，可能会生成循环代码(code that loops)。
+
+\subsection[作者命令的参数]{\heiti 作者命令的参数}
+\label{Sec:text.param}
+
+由作者命令(author commands)(如 |\textrm| 和 |\rmfamily| 等)设置的参数值(parameter values)不是硬连接到(hard-wired into) \LaTeX\ 中的；相反，这些命令使用文档类和宏包设置的许多参数值。例如，|\rmdefault| 是 |\textrm| 和 |\rmfamily| 选择的默认族(default family)的名称。因此，要在 Adobe Times、 Helvetica 和 Courier 中设置文档，其规范是：
+\begin{verbatim}
+   \renewcommand{\rmdefault}{ptm}
+   \renewcommand{\sfdefault}{phv}
+   \renewcommand{\ttdefault}{pcr}
+\end{verbatim}
+
+\begin{decl}
+  |\encodingdefault| \qquad
+  |\familydefault|   \qquad
+  |\seriesdefault|   \qquad
+  |\shapedefault|
+\end{decl}
+主体字体(main body font)的编码、族、系列和形状。默认值是 |OT1|、|\rmdefault|、|m| 和 |n|。请注意，由于默认族(default family)是 |\rmdefault|，这意味着更改 |\rmdefault| 将更改文档的主体字体。
+
+\begin{decl}
+  |\rmdefault| \qquad
+  |\sfdefault| \qquad
+  |\ttdefault|
+\end{decl}
+由 |\textrm|、|\rmfamily|、|\textsf|、|\sffamily|、|\texttt| 和 |\ttfamily| 选择的族(families)，默认情况下是 |cmr|、|cmss| 和 |cmtt|。
+
+\begin{decl}
+  |\bfdefault| \qquad
+  |\mddefault|
+\end{decl}
+由 |\textbf|、|\bfseries|、|\textmd| 和 |\mdseries| 选择的系列(series)。默认情况下，它们是 |bx| 和 |m|。这些值适用于所使用的默认族(default families)。如果使用其他字体作为标准文档字体(standard document fonts)(例如，某些 Postscript 字体) ，可能有必要将 |\bfdefault| 的值调整为 |b|，因为只有少数这样的字体族具有“粗体扩展(bold extended)”系列。另一种替代方法(用于 |psnfss| 提供的字体)是使用特殊的  |\DeclareFontShape| 声明和 |ssub| 尺寸函数(size function)，定义从 |bx| 序列到 |b| 序列的静默替换(silent substitutions)，参见第~\ref{sec:sizefunct}~节。
+
+\begin{decl}
+  |\itdefault|  \qquad
+  |\sldefault|  \qquad
+  |\scdefault|  \qquad
+  |\sscdefault| \qquad
+  |\swdefault|  \\
+  |\ulcdefault| \qquad
+  |\updefault|
+\end{decl}
+\NEWfeature{2020/02/02}
+由|\textit|、|\itshape|、|\textsl|、|\slshape|、|\textsc|、|\scshape|、|\textssc|、|\sscshape|、|\textsw|、 |\swshape|、|\textulc|、|\ulcshape|、|\textup| 和 |\upshape| 选择的形状(shapes)，默认情况下，它们是 |it|、|sl|、 |sc|、|ssc|、|sw|、|ulc| 和 |up|。注意，|ulc| 和 |up| 在这里是特殊的，因为它们是虚拟形状(virtual shapes)，即它们不作为真实形状值(real shape values)存在。相反，它们根据规则(rules)更改现有形状值(existing shape value)，即结果取决于上下文(context)。相应的宏 |\textulc| 或 |\ulcshape| 将小体大写(small capitals)改回大写/小写(upper/lower case)，但不会改变斜体(italics)、倾斜(slanted)或花式(swash)字体。相比之下，|\upshape| 或 |\textup| 将斜体(italics)或倾斜(slanted)切换为直立(upright)，但不会改变大写/小写(upper/lower case)的状态，例如，如果存在，保持小体大写(small capitals)。最后，|\normalshape| 命令将形状(shape)重置为正常(normal)，这是 |\upshape\ulcshape| 的简略表达方式(shorthand)。
+
+请注意，尺寸命令(size commands)没有参数。这些应直接在类文件(class files)中定义，例如：
+\begin{verbatim}
+   \renewcommand{\normalsize}{\fontsize{10}{12}\selectfont}
+\end{verbatim}
+
+可以在 |classes.dtx| 中找到更详细的示例(在文本尺寸改变时设置附加参数[ additional parameters])，|classes.dtx| 是 |article|、|report| 和 |book| 类的源文档。
+
+\subsection[特殊的字体声明命令]{\heiti 特殊的字体声明命令}
+
+\begin{decl}
+  |\DeclareFixedFont| \arg{cmd} \arg{encoding} \arg{family} \arg{series}
+                      \arg{shape} \arg{size}
+\end{decl}
+
+声明命令(declares command) \m{cmd} 为字体开关(font switch)，该字体开关选择了由 \m{encoding}、\m{family}、 \m{series}、\m{shape} 和 \m{size} 等属性指定的字体。
+
+选择字体时，不会对基线间距(baselineskip)和其他周围条件(surrounding conditions)作任何调整(adjustments)。
+
+下面的示例使 |{\picturechar .}| 快速选择一个小点(a small dot)：
+\begin{verbatim}
+   \DeclareFixedFont{\picturechar}{OT1}{cmr}{m}{n}{5}
+\end{verbatim}
+
+\begin{decl}
+|\DeclareTextFontCommand| \arg{cmd} \arg{font-switches}
+\end{decl}
+
+声明命令 \m{cmd}\ 是一个带有一个参数的字体命令(font command)。当前的字体属性(font attributes)通过 \m{font-switches}\ 进行局部修改(locally modified)，然后在生成的新字体中对 \m{cmd}\ 的参数进行排版。
+
+由 |\DeclareTextFontCommand| 定义的命令自动处理任何必要的斜体修正(italic correction)(在两边)。
+
+下面的示例演示内核如何定义 |\textrm|。
+\begin{verbatim}
+   \DeclareTextFontCommand{\textrm}{\rmfamily}
+\end{verbatim}
+
+要定义一个命令，该命令始终使用主文档字体(main document font)的斜体形状(italic shape)排版其参数，可以声明：
+\begin{verbatim}
+   \DeclareTextFontCommand{\normalit}{\normalfont\itshape}
+\end{verbatim}
+
+此声明可用于更改命令(command)的含义(meaning)，如果已经定义了 \m{cmd}，则将重新定义的日志(log)放入记录文件(transcript file)中。
+
+\begin{decl}
+  |\DeclareOldFontCommand| \arg{cmd} \arg{text-switch}
+                                     \arg{math-switch}
+\end{decl}
+
+声明命令 \m{cmd}\ 为字体开关(font switch)(即与语法 |{<cmd>...}| 一起使用)，在文本中使用时具有定义 \m{text-switch}，在公式(formula)中使用时具有定义 \m{math-switch}。数学字母表命令(math alphabet commands)，如 |\mathit|，用于 \m{math-switch}\ 中时不应该有参数。在这个参数中使用它们会导致它们的语义(semantics)发生变化，因此它们在这里充当字体开关(font switch)，这是 \m{cmd}\ 的用法所要求的。
+
+这个声明对于设置像 |\rm| 这样的命令的行为非常有用，就像它们在 \LaTeX~2.09\ 中所做的那样。我们强烈建议您{\kaiti 不要}滥用此声明来创建(invent)新的字体命令。
+
+下面的示例定义了 |\it|，以在文本中使用时生成主文档字体(main document font)的斜体形状(italic shape)，并在公式中使用时切换到通常由数学字母(math alphabet) |\mathit| 生成的字体。
+\begin{verbatim}
+   \DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\end{verbatim}
+
+此声明可用于更改命令的含义(meaning)，如果已经定义了 \m{cmd}，则将重新定义的日志(log)放入记录文件(transcript file)中。
+
+\newpage
+
+\section{\heiti 数学字体(Math fonts)}
+\label{Sec:math}
+
+本节介绍类(class)和宏包(package)编写者可用于指定数学字体(math fonts)和数学命令(math commands)的命令。
+
+\subsection[数学字体的属性]{\heiti 数学字体的属性}
+
+数学模式(math mode)中字体的选择与文本字体(text fonts)的选择有很大的不同。
+
+某些数学字体(math fonts)由单参数命令(one-argument commands)显式选择(selected explicitly)，如 |\mathsf{max}| 或 |\mathbf{vec}|，这种字体称为{\kaiti 数学字母}(\emph{math alphabets})。这些数学字母命令(math alphabet commands)只影响用于字母(letters)的字体和排版 |\mathalpha| 的符号(symbols)，|\mathalpha| 请参见第~\ref{Sec:math.commands}~节；参数中的其他符号将保持不变。预定义的数学字母(predefined math alphabets)如下：
+\begin{center}
+    \begin{tabular}{rll}
+   \hlinew{1.2pt}
+    {\heiti 预定义的数学字母} &{\heiti 描述} &{\heiti 示例} \\ \hlinew{0.7pt}
+    |\mathnormal|   & default (默认)            & $abcXYZ$ \\
+    |\mathrm|       & roman (罗马)             & $\mathrm{abcXYZ}$ \\
+    |\mathbf|       & bold roman (粗体罗马)        & $\mathbf{abcXYZ}$ \\
+    |\mathsf|       & sans serif (无衬线)        & $\mathsf{abcXYZ}$ \\
+    |\mathit|       & text italic (文本斜体)        & $\mathit{abcXYZ}$ \\
+    |\mathtt|       & typewriter  (打字机字体，或等宽字体)        & $\mathtt{abcXYZ}$ \\
+    |\mathcal|      & calligraphic (美术字体)       & $\mathcal{XYZ}$ \\ \hlinew{1.2pt}
+\end{tabular}
+
+\end{center}
+\TeX{}\ 使用诸如 |\oplus| (生成 $\oplus$)这样的命令，或 |>>|、|+| 这样的直接字符(straight characters)，来隐式地选择用于符号(symbols)的其他数学字体(math fonts)。包含这些数学符号(math symbols)的字体称为{\kaiti 数学符号字体}(\emph{math symbol fonts})。预定义的数学符号字体如下：
+\begin{center}
+  \begin{tabular}{rll}
+    \hlinew{1.2pt}
+    {\heiti 符号字体} & {\heiti 描述}         & {\heiti 示例} \\ \hlinew{0.7pt}
+    |operators| (运算符)        & 由 |\mathrm| 生成的符号     & $[\;+\;]$ \\
+    |letters| (字母)          & 由 |\mathnormal| 生成的符号 & $<<\star>>$ \\
+    |symbols| (符号)          & 大部分 \LaTeX{}\ 符号      & $\leq*\geq$ \\
+    |largesymbols| (大型符号)     & 大型符号(large symbols)              & $\sum\prod\int$ \\ \hlinew{1.2pt}
+   \end{tabular}
+\end{center}
+有些数学字体(math fonts)既是{\kaiti 数学字母}(\emph{math alphabets})又是{\kaiti 数学符号字体}(\emph{math symbol fonts})，例如 |\mathrm| 和 |operators|(运算符)是相同的字体，|\mathnormal| 和 |letters|(字母)是相同的字体。
+
+\LaTeX{}\ 中的数学字体(math fonts)与文本字体(text fonts)具有相同的五个属性(attributes)：编码(encoding)、族(family)、序列(series)、形状(shape)和尺寸(size)。但是，没有允许单独更改属性的命令。相反，从数学字体到这五个属性的转换是由{\kaiti 数学版本}(\emph{math version})控制的。例如，|normal|(普通)的数学版本映射(math version maps)如下：
+\begin{center}
+  \begin{tabular}{rlc@{ }c@{ }c@{ }c}
+   \hlinew{1.2pt}
+    \multicolumn{2}{c}{{\heiti 数学字体}} &
+    \multicolumn{4}{c}{{\heiti 外部字体}} \\
+    {\kaiti 数学字母} & {\kaiti 符号字体} &
+    \multicolumn{4}{c}{\kaiti 属性} \\ \hlinew{0.7pt}
+    |\mathnormal| & |letters|      & |OML| & |cmm|  & |m|  & |it| \\
+    |\mathrm|     & |operators|    & |OT1| & |cmr|  & |m|  & |n|  \\
+    |\mathcal|    & |symbols|      & |OMS| & |cmsy| & |m|  & |n|  \\
+                  & |largesymbols| & |OMX| & |cmex| & |m|  & |n|  \\
+    |\mathbf|     &                & |OT1| & |cmr|  & |bx| & |n|  \\
+    |\mathsf|     &                & |OT1| & |cmss| & |m|  & |n|  \\
+    |\mathit|     &                & |OT1| & |cmr|  & |m|  & |it| \\
+    |\mathtt|     &                & |OT1| & |cmtt| & |m|  & |n| \\ \hlinew{1.2pt}
+  \end{tabular}
+\end{center}
+|bold|(粗体)数学版本与之类似，只是它包含粗体字体(bold fonts)。命令 |\boldmath| 选择 |bold| 数学版本。
+
+数学版本只能在数学模式(math mode)之外更改。
+
+两个预定义的数学版本(math versions)是:
+\begin{center}
+  \begin{tabular}{rl}
+  \hlinew{1.2pt}
+   {\heiti 名称}& {\heiti 含义} \\ \hlinew{0.7pt}
+    |normal| & 默认的数学版本(the default math version) \\
+    |bold|   & 粗体数学版本(the bold math version) \\ \hlinew{1.2pt}
+  \end{tabular}
+\end{center}
+宏包(packages)可以定义新的数学字母(math alphabets)、数学符号字体(math symbol fonts)和数学版本(math versions)。本节描述编写此类宏包的命令。
+
+\subsection[选择数学字体的命令]{\heiti 选择数学字体的命令}
+
+没有用于选择符号字体(symbol fonts)的命令。相反，它们是由符号命令(如 |\oplus|)间接选择的。第~\ref{Sec:math.commands}~节解释了如何定义符号命令(symbol commands)。
+
+\begin{decl}
+  |\mathnormal{<math>}| \quad
+  |\mathcal{<math>}| \quad
+  |\mathbf{<math>}| \quad
+  |\mathit{<math>}| \\
+  |\mathrm{<math>}| \qquad
+  |\mathsf{<math>}| \qquad
+  |\mathtt{<math>}|
+\end{decl}
+每个数学字母(math alphabet)都是一个命令，只能在数学模式中使用。例如，|$x + \mathsf{y} + \mathcal{Z}$| 生成 $x + \mathsf{y} + \mathcal{Z}$
+
+\begin{decl}
+  |\mathversion{<version>}|
+\end{decl}
+该命令选择数学版本(math version)；它只能在数学模式之外使用。例如，将 |\boldmath| 定义为 |\mathversion{bold}|。
+
+\subsection[声明数学版本]{\heiti 声明数学版本}
+
+\begin{decl}
+  |\DeclareMathVersion| \arg{version}
+\end{decl}
+
+定义 \m{version} 为数学版本版(math version)。
+
+新声明的版本使用迄今为止声明的所有符号字体(symbol fonts)和数学字母(math alphabets)的默认值进行初始化(请参阅命令 |\DeclareSymbolFont| 和 |\DeclareMathAlphabet|)。
+
+如果在现存的版本中使用，信息消息(information message)会被写入到转录文件(transcript file)中，并且此版本之前的所有 |\SetSymbolFont| 或 |\SetMathAlphabet| 声明都会被默认的数学字母(math alphabet)和符号字体(symbol font)覆盖，也就是说，最终使用原始数学版本(virgin math version)。
+
+示例：
+\begin{verbatim}
+   \DeclareMathVersion{normal}
+\end{verbatim}
+
+\subsection[声明数学字母]{\heiti 声明数学字母}
+
+\begin{decl}
+  |\DeclareMathAlphabet| \arg{math-alph} \arg{encoding} \arg{family}
+                         \arg{series}    \arg{shape}
+\end{decl}
+
+\NEWdescription{1997/12/01}
+如果这是 \m{math-alph}\ 的第一个声明，那么将创建一个新的数学字母(math alphabet)，并将其作为命令名。
+
+参数 \m{encoding} \m{family} \m{series} \m{shape} 用于在所有数学版本中设置(set)或重置(reset)该数学字母的默认值；如果需要，以后必须通过 |\SetMathAlphabet| 命令为特定数学版本进一步重置这些值。
+
+如果 \m{shape}\ 是空的，那么这个 \m{math-alph}\ 在所有版本中声明为无效，除非它是由稍后的 |\SetMathAlphabet| 命令针对特定数学版本设置的。
+
+检查命令 \m{math-alph}\ 是否已经是数学字母命令(math alphabet command)或未定义(undefined)，以及 \m{encoding}\ 是一个已知的编码方案(encoding scheme)，即先前已声明。
+
+在这些示例中，|\foo|\ 是为所有数学版本定义的，但是在默认情况下，|\baz| 没有被定义
+\begin{verbatim}
+   \DeclareMathAlphabet{\foo}{OT1}{cmtt}{m}{n}
+   \DeclareMathAlphabet{\baz}{OT1}{}{}{}
+\end{verbatim}
+
+
+\begin{decl}
+  |\SetMathAlphabet| \arg{math-alph} \arg{version}\\
+         \null\hfill \arg{encoding} \arg{family} \arg{series} \arg{shape}
+\end{decl}
+
+更改(changes)或设置(sets)数学版本 \m{version}\ 中数学字母 \m{math-alph}\ 的字体为 \m{encoding}\m{family}\m{series}\m{shape}。
+
+检查 \m{math-alph}\ 已被声明为一个数学字母(math alphabet)，\m{version}\ 是一个已知的数学版本，而 \m{encoding}\ 是一个已知的编码方案(encoding scheme)。
+
+此示例仅为“normal(正常)”数学版本定义 |\baz|：
+\begin{verbatim}
+   \SetMathAlphabet{\baz}{normal}{OT1}{cmss}{m}{n}
+\end{verbatim}
+
+注意，这个声明并不适用于所有的数学字母(math alphabets)：第~\ref{sec:symalph}~节描述了 |\DeclareSymbolFontAlphabet|，它用于设置已声明为符号字体(symbol fonts)的字体中包含的数学字母。
+
+\subsection[声明符号字体]{\heiti 声明符号字体}
+\label{sec:symalph}
+
+\begin{decl}
+  |\DeclareSymbolFont| \arg{sym-font} \arg{encoding} \arg{family}
+                       \arg{series} \arg{shape}
+\end{decl}
+
+\NEWdescription{1997/12/01}
+如果这是第一次声明 \m{sym-font}，那么将创建一个具有这个名称的新符号字体，即这个标识符(identifier)被分配给一个新的 \TeX{}\ 数学组(math group)。
+
+参数 \m{encoding} \m{family} \m{series} \m{shape}\ 用于设置(set)或重置(reset)。{\kaiti 所有}数学版本中此符号字体的默认值；如果需要，以后必须通过 |\SetSymbolFont| 命令对特定数学版本进行进一步重置。
+
+检查 \m{encoding}\ 是一种已声明的编码方案(encoding scheme)。
+
+例如，下面设置了前四种标准数学符号字体(standard math symbol fonts)：
+\begin{verbatim}
+   \DeclareSymbolFont{operators}{OT1}{cmr}{m}{n}
+   \DeclareSymbolFont{letters}{OML}{cmm}{m}{it}
+   \DeclareSymbolFont{symbols}{OMS}{cmsy}{m}{n}
+   \DeclareSymbolFont{largesymbols}{OMX}{cmex}{m}{n}
+\end{verbatim}
+
+\begin{decl}
+  |\SetSymbolFont| \arg{sym-font} \arg{version}\\
+       \null\hfill \arg{encoding} \arg{family} \arg{series} \arg{shape}
+\end{decl}
+
+将数学版本 \m{version}\ 的符号字体(symbol font) \m{sym-font}\ 更改为 \m{encoding} \m{family} \m{series} \m{shape}。
+
+检查 \m{sym-font}\ 是一个已声明为符号字体(symbol font)，\m{version}\ 是已知的数学版本，\m{encoding}\ 是已声明的编码方案(declared encoding scheme)。
+
+例如，以下内容来自“粗体(bold)”数学版本的设置：
+\begin{verbatim}
+   \SetSymbolFont{operators}{bold}{OT1}{cmr}{bx}{n}
+   \SetSymbolFont{letters}{bold}{OML}{cmm}{b}{it}
+\end{verbatim}
+
+
+\begin{decl}
+  |\DeclareSymbolFontAlphabet| \arg{math-alph} \arg{sym-font}
+\end{decl}
+
+\NEWdescription{1997/12/01}
+允许先前声明的符号字体 \m{sym-font}\ 成为{\kaiti 所有}数学版本中具有命令 \m{math-alph}\ 的数学字母(math alphabet)。
+
+检查命令 \m{math-alph}\ 是否已经是一个数学字母命令(math alphabet command)或未定义(undefined)，以及 \m{sym-font}\ 是一个符号字体(symbol font)。
+
+%\newpage
+
+示例：
+\begin{verbatim}
+   \DeclareSymbolFontAlphabet{\mathrm}{operators}
+   \DeclareSymbolFontAlphabet{\mathcal}{symbols}
+\end{verbatim}
+
+当数学字母(math alphabet)与符号字体(symbol font)相同时，这个声明应该优先于|\DeclareMathAlphabet| 和 |\SetMathAlphabet| 使用，这是因为它更好地利用了 \TeX\ 数学组(math groups)的有限数量(只有16个)。
+
+\NEWdescription{1997/12/01}
+请注意，当第一次声明时，每个符号字体(symbol font)都分配了一个 \TeX{}\ 数学组(math group)，而数学字母(math alphabet)仅当其命令在数学公式(math formula)中使用时才使用 \TeX{}\ 数学组。
+
+\subsection[声明数学符号]{\heiti 声明数学符号}
+\label{Sec:math.commands}
+
+\begin{decl}
+  |\DeclareMathSymbol| \arg{symbol} \arg{type} \arg{sym-font}
+                       \arg{slot}
+\end{decl}
+
+这个 \m{symbol}\ 可以是单个字符，如“|>>|”，也可以是宏名(macro name)，如 |\sum|。
+
+定义 \m{symbol}\ 为一个数学字体 \m{slot}\ 插槽中的 \m{type}\ 型的数学符号(math symbol)。这个 \m{type}\ 可以作为数字(number)或命令(command)给出：
+\begin{center}
+  \begin{tabular}{llc}
+  \hlinew{1.2pt}
+    {\heiti 类型}         & {\heiti 含义}     & {\heiti 示例} \\ \hlinew{0.7pt}
+    |0| 或 |\mathord  | & 普通 (Ordinary)           & $\alpha$ \\
+    |1| 或 |\mathop   | & 大运算符 (Large operator)     & $\sum$ \\
+    |2| 或 |\mathbin  | & 二元运算符 (Binary operation)   & $\times$ \\
+    |3| 或 |\mathrel  | & 关系 (Relation)           & $\leq$ \\
+    |4| 或 |\mathopen | & 开 (Opening)            & $\langle$ \\
+    |5| 或 |\mathclose| & 关 (Closing)            & $\rangle$ \\
+    |6| 或 |\mathpunct| & 标点符号 (Punctuation)        & $;$ \\
+    |7| 或 |\mathalpha| & 字母字符 (Alphabet character) & $A$ \\ \hlinew{1.2pt}
+  \end{tabular}
+\end{center}
+只有 |\mathalpha| 类型的符号(symbols)会受到数学字母命令(math alphabet commands)的影响：在数学字母命令参数内，它们会生成该数学字母字体(math alphabet's font) \m{slot}\ 插槽中的字符(character)。其他类型的符号总是生成相同的符号(在一个数学版本中)。
+
+只有在以前将宏 \m{symbol}\ 定义为数学符号(math symbol)时，|\DeclareMathSymbol| 才允许重新定义宏 \m{symbol}。它还检查 \m{sym-font}\ 是否是已声明的符号字体(symbol font)。
+
+示例：
+\begin{verbatim}
+   \DeclareMathSymbol{\alpha}{0}{letters}{"0B}
+   \DeclareMathSymbol{\lessdot}{\mathbin}{AMSb}{"0C}
+   \DeclareMathSymbol{\alphld}{\mathalpha}{AMSb}{"0C}
+\end{verbatim}
+
+\begin{decl}
+  |\DeclareMathDelimiter| \arg{cmd} \arg{type}
+                          \arg{sym-font-1} \arg{slot-1}\\
+              \null\hfill \arg{sym-font-2} \arg{slot-2}
+\end{decl}
+将 \m{cmd}\ 定义为一个数学定界符(math delimiter)，其中小型变体(small variant)位于符号字体 \m{sym-font-1}\ 的 \m{slot-1}\ 插槽中，大型变体(large variant)位于符号字体 \m{sym-font-2}\ 的\m{slot-2}\ 插槽中。必须在前面先声明这两种符号字体。
+
+检查 \m{sym-font-i}\ 都是已声明的符号字体(symbol fonts)。
+
+如果 \TeX{}\ 没有寻找定界符(delimiter)，那么 \m{cmd}\ 将被当作 \m{sym-font-1} 和 \m{slot-1}\ 来对待，就像 \m{cmd}\ 已使用 \m{type}\ 定义了 |\DeclareMathSymbol| 一样。换句话说，如果一个命令被定义为分隔符，则它将自动被定义为数学符号(math symbol)。
+
+\NEWdescription{1998/06/01}
+如果 \m{cmd}\ 是单个字符(single character)，如“|[|”，则使用相同的语法(syntax)。以前不存在 \arg{type}\ 参数(因此必须单独提供相应的数学符号声明)。
+
+示例：
+\begin{verbatim}
+   \DeclareMathDelimiter{\langle}{\mathopen}{symbols}{"68}
+                                            {largesymbols}{"0A}
+   \DeclareMathDelimiter{(}      {\mathopen}{operators}{"28}
+                                            {largesymbols}{"00}
+\end{verbatim}
+
+
+\begin{decl}
+  |\DeclareMathAccent| \arg{cmd} \arg{type} \arg{sym-font} \arg{slot}
+\end{decl}
+
+定义 \m{cmd}\ 作为数学重音(math accent)。
+
+重音字符(accent character)来自 \m{sym-font}\ 中的 \m{slot}。\m{type}\ 可以是 |\mathord| 或 |\mathalpha|，在后一种情况下，重音字符在数学字母(math alphabet)中使用时会更改字体。
+
+示例：
+\begin{verbatim}
+   \DeclareMathAccent{\acute}{\mathalpha}{operators}{"13}
+   \DeclareMathAccent{\vec}{\mathord}{letters}{"7E}
+\end{verbatim}
+
+
+\begin{decl}
+  |\DeclareMathRadical| \arg{cmd}
+                        \arg{sym-font-1} \arg{slot-1}\\
+            \null\hfill \arg{sym-font-2} \arg{slot-2}
+\end{decl}
+
+将 \m{cmd}\ 定义为一个根号(radical)，其中小型变体(small variant)位于符号字体 \m{sym-font-1}\ 的 \m{slot-1}\ 槽中，大型变体(large variant)位于符号字体 \m{sym-font-2}\ 的\m{slot-2}\ 插槽中。必须在前面先声明这两种符号字体。
+
+示例(可能是它唯一的用途！)：
+\begin{verbatim}
+   \DeclareMathRadical{\sqrt}{symbols}{"70}{largesymbols}{"70}
+\end{verbatim}
+
+\subsection[声明数学尺寸]{\heiti 声明数学尺寸}
+
+\begin{decl}
+  |\DeclareMathSizes| \arg{t-size} \arg{mt-size} \arg{s-size}
+                      \arg{ss-size}
+\end{decl}
+
+声明 \m{mt-size}\ 是(主)数学文本尺寸(math text size)，\m{s-size}\ 是数学中使用的“script(角标)”尺寸，\m{ss-size}\ 则是“二级及以上角标(scriptscript)”尺寸，而 \m{t-size}\ 是当前文本尺寸(current text size)。对于没有给出这种声明的文本尺寸，将计算“script”和“scriptscript”尺寸，然后按该计算的尺寸或最佳近似值加载字体(这可能导致警告消息)。
+
+通常，\m{t-size}\ 和 \m{mt-size}\ 是相同的。但是，例如，如果 PostScript 文本字体(text fonts)与位图数学字体(bit-map math fonts)混合，你可能没有适用于每个 \m{t-size}\ 的 \m{mt-size}。
+
+示例：
+\begin{verbatim}
+   \DeclareMathSizes{13.82}{14.4}{10}{7}
+\end{verbatim}
+
+\newpage
+
+\section{\heiti 安装字体(Font installation)}
+\label{Sec:install}
+
+本节解释如何将 \LaTeX\ 的字体属性(font attributes)转换为 \TeX{}\ 字体规范(font specifications)。
+
+
+\subsection[字体定义文件]{\heiti 字体定义文件}
+
+\NEWdescription{1997/12/01}
+如何将 \LaTeX{}\ 字体属性(font attributes)转换为 \TeX{}\ 字体规范(font specifications)的有关说明通常保存在{\kaiti 字体定义文件}(\emph{font definition file})(|.fd|)中。编码为 \m{ENC}\ 而族为 \m{family}\ 的文件必需命名为 |<enc><family>.fd|：例如，|ot1cmr.fd| 用于计算机现代罗马(Computer Modern Roman)字体，编码为 |OT1|；而 |t1ptm.fd| 用于 Adobe Times 字体，编码为 |T1|。请注意，当作为文件名(file names)的一部分使用时，编码名称(encoding names)会转换为小写(lowercase)。
+
+每当 \LaTeX{}\ 遇到它不知道的编码/族(encoding/family)组合时(例如，如果文档设计者说|\fontfamily{ptm}\selectfont|)，\LaTeX{} 就会尝试加载适当的 |.fd| 文件。“未知(Not known)”表示：没有为该编码/族组合发布 |\DeclareFontFamily| 声明。如果找不到 |.fd| 文件，将发出警告并进行字体替换(font substitutions)。
+
+字体定义文件(font definition file)中的声明负责告诉 \LaTeX{}\ 如何加载该编码/族组合的字体。
+
+
+
+\subsection[字体定义文件中的命令]{\heiti 字体定义文件中的命令}
+
+{\kaiti 注意}：字体定义文件(font definition file)应该只包含本小节中的命令。
+
+请注意，这些命令也可以在字体定义文件之外使用：它们可以放在宏包(package)或类文件(class files)中，甚至可以放在文档的前言(preamble)中。
+
+\begin{decl}
+  |\ProvidesFile{<file-name>}[<release-info>]|
+\end{decl}
+文件应该使用 |\ProvidesFile| 命令声明自己，如在 {\color{blue}{\emph{\clsguide}}}\ 【{\color{blue}{《文档类和宏包作者的 \LaTeXe》}}】中所述的那样。
+
+例如：
+\begin{verbatim}
+   \ProvidesFile{t1ptm.fd}[1994/06/01 Adobe Times font definitions]
+\end{verbatim}
+
+忽略特定于字体定义文件的参数中的空格(spaces)，以避免文档中出现多余的空格。如果确实需要空格，请使用 |\space|。
+\NEWdescription{2004/02/10}
+但是，请注意，只有在顶层(top level)声明时，这才是正确的！如果在另一个命令的定义中使用，以及在 |\AtBeginDocument|、选项代码(option code)或类似位置中使用，则参数中的空格将被保留，并可能导致不正确的表条目(table entries)。
+
+\begin{decl}
+  |\DeclareFontFamily| \arg{encoding} \arg{family} \arg{loading-settings}
+\end{decl}
+
+声明一个字体族(font family) \m{family}\ 在编码方案(encoding scheme) \m{encoding}\ 中可用。
+
+在使用这种编码(encoding)和族(family)加载任何字体之后，会立即执行 \m{loading-settings} 。
+
+检查 \m{encoding} 是先前声明的。
+
+本示例涉及科克编码(Cork encoding)中的计算机现代打字机字体族(Computer Modern Typewriter font family)：
+\begin{verbatim}
+   \DeclareFontFamily{T1}{cmtt}{\hyphenchar\font=-1}
+\end{verbatim}
+
+每个 |.fd| 文件应该恰好包含一个 |\DeclareFontFamily| 命令，并且应该是适当的编码/家族组合(encoding/family combination)。
+
+\begin{decl}
+|\DeclareFontShape| \arg{encoding} \arg{family} \arg{series}
+                    \arg{shape}\\
+        \null\hfill \arg{loading-info} \arg{loading-settings}
+\end{decl}
+
+声明一个字体形状组合(font shape combination)；这里 \m{loading-info}\ 包含尺寸(sizes)和外部字体(external fonts)的组合信息。语法很复杂，在下面的第~\ref{sec:loadinfo}~节中有描述。
+
+在加载任何具有此字体形状(font shape)的字体之后，将执行 \m{loading-settings}。它们在由 |\DeclareFontFamily| 声明的“加载设置(loading-settings)”之后立即执行，因此它们可以用来覆盖在族级(family level)别做出的设置(settings)。
+
+检查先前通过 |\DeclareFontFamily| 声明的 \m{encoding}\m{family}\ 组合。
+
+示例：
+\begin{verbatim}
+   \DeclareFontShape{OT1}{cmr}{m}{sl}{%
+             <<5-8>> sub * cmr/m/n
+             <<8>> cmsl8
+             <<9>> cmsl9
+             <<10>> <<10.95>> cmsl10
+             <<12>> <<14.4>> <<17.28>> <<20.74>> <<24.88>> cmsl12
+             }{}
+\end{verbatim}
+该文件可以包含任意数量的 |\DeclareFontShape| 命令，这些命令应该适用于适当的 \m{encoding}\ 和 \m{family}。
+
+\NEWfeature{1996/06/01}
+|OT1| 编码的字体其字体族声明(font family declarations)现在都包含：
+\begin{verbatim}
+   \hyphenchar\font=`\-
+\end{verbatim}
+这允许在其他编码中使用可替代的 |\hyphenchar| (连字符)，同时保持所有字体的正确值(correct value)。
+
+\NEWfeature{2020/02/02} 根据 NFSS 的惯例(conventions)，序列值(series value)应该是权重(weight)和宽度(width)的组合，每个值用一个或两个字母缩写(abbreviated)，如第~\pageref{page:seriesvalues}~页所述。特别是它不应该包含一个“\texttt{m}”，除非它仅由一个字符组成。在过去，像“\texttt{cm}”这样的错误值(incorrect values)是可以接受的，但是由于这会导致扩展机制(extended mechanism)出现问题，所以现在要强制执行正确的语法(correct syntax)。
+
+更确切地说，如果序列值(series values)是一组特定值(\texttt{ulm}、\texttt{elm}、\texttt{lm}、\texttt{slm}、\texttt{mm}、\texttt{sbm}、\texttt{bm}、\texttt{ebm}、\texttt{ubm}、\texttt{muc}、\texttt{mec}、\texttt{mc}、\texttt{msc}、\texttt{msx}、\texttt{mx}、\texttt{mex} 或 \texttt{mux})中的一个，则假定它使用的是不正确的 NFSS 符号(notation)，因此给出警告并删除剩余的“\texttt{m}”。不触及其他值，以允许自动安装程序(\texttt{autoinst} program)使用像“\texttt{semibold}”或“\texttt{medium}”这样的值。
+
+
+\subsection[用于加载字体文件的信息]{\heiti 用于加载字体文件的信息}
+\label{sec:loadinfo}
+
+|\DeclareFontShape| 声明中的 \m{loading-info}\ 部分包含这样的信息，该信息能准确地告诉 \LaTeX{}\ 要加载的字体(\texttt{.tfm})文件。这一部分由一个或多个 \m{fontshape-decl}s\ 组成，每个 \m{fontshape-decl}\ 具有以下形式：
+
+\begin{center}
+  \begin{tabular}{r@{ $::=$ }l}
+    \m{fontshape-decl} &  \m{size-infos} \m{font-info} \\
+    \m{size-infos}     &  \m{size-infos} \m{size-info} $\mid$
+                          \m{size-info} \\
+    \m{size-info}      & ``|<<|''  \m{number-or-range} ``|>>|'' \\
+    \m{font-info}      & $[$ \m{size-function} ``|*|''  $]$
+                         $[$ ``|[|'' \m{optarg} ``|]|'' $]$ \m{fontarg} \\
+  \end{tabular}
+\end{center}
+这个 \m{number-or-range}\ 表示此条目适用的尺寸(size)或尺寸范围(size-range)。
+
+如果它包含连字符(hyphen)，则它是一个范围(range)：左边的下界(如果缺失，则表示零)，右边的上界(如果缺失，则表示 $\infty$)。对于范围，上限{\kaiti 不}包括在范围内，而下界包括在范围内。
+
+示例：
+\begin{center}
+  \begin{tabular}{rll}
+   \hlinew{1.2pt}
+    \m{number-or-range}& {\heiti 属于} & {\heiti 含义} \\ \hlinew{0.7pt}
+    |<<10>>|     & 单尺寸 (simple size) & 仅 10pt \\
+    |<<-8>>|     & 尺寸范围 (range)       & 所有尺寸小于 8pt \\
+    |<<8-14.4>>| & 尺寸范围 (range)       & 所有尺寸大于或等于 8pt \\
+                 &             & \ 但小于 14.4pt \\
+    |<<14.4->>|  & 尺寸范围 (range)       & 所有尺寸大于或等于 14.4pt \\ \hlinew{1.2pt}
+\end{tabular}
+\end{center}
+如果后面有多个 \m{size-info}\ 条目(entry)而没有任何中间的 \m{font-info}，那么它们都共享下一个 \m{font-info}。
+
+这个 \m{size-function}，如果存在，则处理 \m{font-info}，如果不存在，则假定“空的(empty)”\m{size-function}。
+
+所有 \m{size-info}s\ 都按照它们在字体形状声明(font shape declaration)中的出现顺序进行检查。如果 \m{size-info}\ 与请求的尺寸(size)匹配，则执行它的 \m{size-function}。如果 |\external@font| 在此过程结束后不为空(non-empty)，则检查下一个 \m{size-info}。(另见 |\DeclareSizeFunction|)
+
+如果此过程不导致非空 |\external@font|，\LaTeX{}\ 尝试最接近的单尺寸(\LaTeX{})。如果条目仅包含范围(ranges)，则返回错误。
+
+\subsection[尺寸函数]{\heiti 尺寸函数}
+\label{sec:sizefunct}
+
+\LaTeX{}\ 提供了以下尺寸函数(size functions)，其“输入(inputs)”为 \m{fontarg} 和 \m{optarg}(当存在时)。
+
+\begin{description}
+\item[`' (empty)]
+  按用户请求的尺寸(size)加载外部字体(external fon) \m{fontarg}。如果存在 \m{optarg}，它将用作缩放因子(scale-factor)。
+
+\item[s]
+  类似于空函数(empty function)，但没有终端警告(terminal warnings)，只有日志记录(loggings)。
+
+\item[gen]
+  从 \m{fontarg}\ 生成外部字体(external font)，然后是用户请求的尺寸(size)，例如~|<<8>> <<9>> <<10>> gen * cmtt|
+
+\item[sgen]
+  与“gen”函数类似，但没有终端警告(terminal warnings)，只有日志记录(loggings)。
+
+\item[genb]
+  \NEWfeature{1995/12/01}
+  使用“ec”字体的规范(conventions)，从 \m{fontarg}\ 生成外部字体(external font)，后跟用户请求的尺寸(size)。例如~|<<10.98>> genb * dctt| 生成  |dctt1098|。
+
+\item[sgenb]
+  \NEWfeature{1995/12/01}
+  Like the `genb' function but without terminal warnings, only loggings.
+  与“genb”函数类似，但没有终端警告(terminal warnings)，只有日志记录(loggings)。
+
+\item[sub]
+  尝试从由 \m{fontarg}\ 以 \m{family}|/|\m{series}|/|\m{shape}\ 形式给出的不同字体形状声明(font shape declaration)中加载字体。
+
+\item[ssub]
+  “sub”的静默变体(silent variant)，仅用于日志记录(loggings)。
+
+\item[alias]
+  \NEWfeature{2019/10/15}
+  与“ssub”相同，但记录消息不同。用于替换只是为了更改名称的情况，例如，从 \texttt{regular}\ (常规)序列(series)更改为正式名称 \texttt{m}。在这种情况下，给出未找到某些形状的警告是不正确的。
+
+\item[subf]
+  类似于空函数(empty function)，但发出警告，表示必须替换外部字体 \m{fontarg}，因为所需字体形状在请求的尺寸中不可用。
+
+\item[ssubf]
+  “subf”的静默变体(silent variant)，仅用于日志记录(loggings)。
+
+\item[fixed]
+  加载字体 \m{fontarg}\ 而不考虑用户请求的尺寸。如果存在，\m{optarg}\  给出要使用的“在 \ldots pt”尺寸。
+
+\item[sfixed]
+  “fixed(固定)”的静默变体(silent variant)，仅用于日志记录(loggings)。
+\end{description}
+
+上面大多数尺寸函数(size functions)的使用示例可以在文件 |cmfonts.fdd| 中找到，该文件是 Donald Knuth (高德纳)描述计算机现代字体(Computer Modern fonts)的标准 |.fd| 文件的来源。
+
+
+\begin{decl}
+  |\DeclareSizeFunction| \arg{name} \arg{code}
+\end{decl}
+
+声明尺寸函数(size-function) \m{name}\ 以便在 |\DeclareFontShape| 命令中使用。该接口(interface)仍在开发中，但实际上不需要定义新的尺寸函数。
+
+当 |\DeclareFontShape| 中的尺寸(size)或尺寸范围(size-range)与用户请求的尺寸匹配时，将执行 \m{code}。
+
+会自动解析尺寸函数(size-function)的参数并将其放入 |\mandatory@arg| 或 |\optional@arg| 以便在 \m{code}\ 中便用。当然，还可以使用 |\f@size|，它是用户请求的尺寸(user-requested size)。
+
+为了表示成功(signal success)，\m{code}\ 必须定义 |\external@font| 命令来包含要加载的字体的外部名称(external name)和任何缩放选项(scaling options)(如果存在)。
+
+这个例子设置了“空(empty)”尺寸函数(size function)(简化)：
+\begin{verbatim}
+   \DeclareSizeFunction{}
+           {\edef\external@font{\mandatory@arg\space at\f@size}
+\end{verbatim}
+
+\newpage
+
+\section{\heiti 编码(Encodings)}
+\label{Sec:encode}
+
+本节解释如何声明(declare)和使用(use)新的字体编码(new font encodings)，以及如何声明用于特定编码(particular encodings)的命令。
+
+\subsection[fontenc\ 宏包]{\textsf{fontenc}\ {\heiti 宏包}}
+
+用户可以使用 |fontenc| 宏包选择新的字体编码。|fontenc| 包具有编码选项；最后一个选项将成为默认编码(default encoding)。例如，要使用 |OT2| (华盛顿大学西里尔文编码[Cyrillic encoding])和 |T1| 编码，其中 |T1| 为默认值，可以输入：
+\begin{verbatim}
+   \usepackage[OT2,T1]{fontenc}
+\end{verbatim}
+
+\NEWdescription{1997/12/01}
+对于作为选项给出的每个字体编码 \m{ENC}，此包加载{\kaiti 编码定义}(\emph{encoding definition})(|<enc>enc.def|，具有全小写名称)文件；它还将 |\encodingdefault| 设置为选项列表中的最后一个编码。
+
+编码定义文件(encoding definition file)|<enc>enc.def| 中的用于编码 \m{ENC}\ 的声明，负责声明此编码并告诉 \LaTeX{}\ 如何使用此编码生成字符(produce characters)；该文件不应包含任何其他内容(见第~\ref{Sec:encode.def}~节)。
+
+标准 \LaTeX{}\ 格式通过导入文件 |ot1enc.def| 和 |t1enc.def| 声明 |OT1| 和 |T1| 文本编码(text encodings)。导入的这两个文件还设置了各种默认值，这些默认值要求 |OT1| 编码的字体可用。其他编码设置(encoding set-ups)可能会在以后的阶段添加到发行版(distribution)中。
+
+因此，上面的示例加载 |ot2enc.def| 和 |t1enc.def| 这两个文件并将 |\encodingdefault| 的值设为 |T1|。
+
+{\kaiti 警告}：如果您希望使用“cmr”族以外的 |T1| 编码字体，则可能需要在加载 \texttt{fontenc}\ {\kaiti 之前}加载用于选择这些字体的包(例如~\texttt{times})，这样可以防止系统试图从“cmr”族中加载任何 |T1 |编码的字体。
+
+\subsection[包含在编码定义文件中的命令]{\heiti 包含在编码定义文件中的命令}
+\label{Sec:encode.def}
+
+{\kaiti 注意}：编码定义文件(encoding definition file)应该只包含本小节中的命令。
+
+\NEWdescription{2019/07/10}
+  作为一个例外，它还可能包含一个 |\DeclareFontsubstitution| 声明(在 \ref{sec:encoding-defaults} 中描述过)，以指定如何处理这种编码的字体替换(font substitution)。在这种情况下，所使用的值必须指向一种字体，这种字体保证在所有 \LaTeX{}\ 安装中都可用。\footnote{如果字体编码文件作为 CTAN 捆绑包(bundle)的一部分可用，那么它可能是与该捆绑包一起提供的字体，但是它不应该指向需要进一步安装步骤的字体，因此可能会安装，也可能不会安装。}
+
+\NEWdescription{1997/12/01}
+与字体定义文件命令(font definition file commands)一样，也可以直接在类(class)或宏包(package)文件中使用这些声明(尽管通常不需要)。
+
+{\kaiti 警告}：字体定义文件(font definition files)内容的某些方面仍在开发中。因此，文件 |ot1enc.def| 和 |t1enc.def| 的当前版本(|ot1enc.def| and |t1enc.def| )是临时版本(temporary versions)，不应用作生成进一步此类文件(further such files)的模型(models)。有关更多信息，请阅读 |ltoutenc.dtx| 中的文档。
+
+\begin{decl}
+  |\ProvidesFile{<file-name>}[<release-info>]|
+\end{decl}
+该文件应使用 |\ProvidesFile| 命令声明自己，如在 {\color{blue}{\emph{\clsguide}}}\ 【{\color{blue}{《文档类和宏包作者的 \LaTeXe》}}】中所述的那样。例如：
+\begin{verbatim}
+   \ProvidesFile{ot2enc.def}
+                [1994/06/01 Washington University Cyrillic encoding]
+\end{verbatim}
+
+
+\begin{decl}
+  |\DeclareFontEncoding| \arg{encoding} \arg{text-settings}
+                         \arg{math-settings}
+\end{decl}
+
+声明一个新的编码方案(encoding scheme) \m{encoding}。
+
+每次 |\selectfont| 将编码更改为 \m{encoding}\ 时均执行 \m{text-settings}\ 这个声明。
+
+这个 \m{math-settings}\ 也类似，但用于数学字母(math alphabets)。只要调用具有这种编码的数学字母，就会执行它们。
+
+\NEWfeature{1998/12/01}
+它还在宏 |\LastDeclaredEncoding| 中保存 \m{encoding}\ 的值。
+
+示例：
+\begin{verbatim}
+   \DeclareFontEncoding{OT1}{}{}
+\end{verbatim}
+
+有些作者命令(author commands)需要根据当前使用的编码更改其定义(definition)。例如，在 |OT1| 编码中，字母“\AE”在插槽(slot) |"1D| 中，而在 |T1| 编码中它在插槽 |"C6| 中。因此 |\AE| 的定义必须根据当前编码是 |OT1| 还是 |T1| 而改变。下面的命令允许这种情况发生。
+
+\begin{decl}
+  |\DeclareTextCommand| \arg{cmd} \arg{encoding}
+                        \oarg{num} \oarg{default} \arg{definition}
+\end{decl}
+这个命令类似于 |\newcommand|，只不过它定义了一个特定于一种编码(specific to one encoding)的命令。例如，|T1| 编码中 |\k| 的定义是：
+\begin{verbatim}
+   \DeclareTextCommand{\k}{T1}[1]
+      {\oalign{\null#1\crcr\hidewidth\char12}}
+\end{verbatim}
+|\DeclareTextCommand| 采用与 |\newcommand| 相同的可选参数。
+
+生成的命令(resulting command)是健壮的(robust)，即使 \m{definition}\ 中的代码是脆弱的(fragile)。
+
+如果已经定义了命令，但是在记录文件(transcript file)中记录了重新定义(redefinition)，则不会产生错误。
+
+\begin{decl}[1994/12/01]
+  |\ProvideTextCommand| \arg{cmd} \arg{encoding}
+                        \oarg{num} \oarg{default} \arg{definition}
+\end{decl}
+该命令与 |\DeclareTextCommand| 相同，只是如果 \m{cmd} 已经在 \m{encoding} 编码中定义了，则忽略该定义。
+
+\begin{decl}
+  |\DeclareTextSymbol| \arg{cmd} \arg{encoding} \arg{slot}
+\end{decl}
+这个命令定义了一个文本符号(text symbol)，在编码中使用 \m{slot}\ 插槽(slot)。例如，在 |OT1| 编码中 |\ss| 的定义是：
+\begin{verbatim}
+   \DeclareTextSymbol{\ss}{OT1}{25}
+\end{verbatim}
+如果已经定义了命令，但是在记录文件(transcript file)中记录了重新定义(redefinition)，则不会产生错误。
+
+\begin{decl}
+  |\DeclareTextAccent| \arg{cmd} \arg{encoding} \arg{slot}
+\end{decl}
+这个命令声明一个文本重音(text accent)，在编码过程中使用来自 \m{slot}\ 插槽(slot)的重音(accent)。例如，|OT1| 编码中 |\"| 的定义是：
+\begin{verbatim}
+   \DeclareTextAccent{\"}{OT1}{127}
+\end{verbatim}
+如果已经定义了命令，但是在记录文件(transcript file)中记录了重新定义(redefinition)，则不会产生错误。
+
+\begin{decl}
+  |\DeclareTextComposite| \arg{cmd} \arg{encoding} \arg{letter}
+                          \arg{slot}
+\end{decl}
+这个命令声明将 \m{cmd}\ 应用到 \m{letter}\ 时形成的复合字母(composite letter)在编码中定义为简单的插槽 \m{slot}。\m{letter}\ 应该是单个字母(single letter)(如 |a|)或单个命令(single command)(如 |\i|)。
+
+例如，|T1| 编码中 |\'{a}| 的定义可以这样声明：
+\begin{verbatim}
+   \DeclareTextComposite{\'}{T1}{a}{225}
+\end{verbatim}
+
+先前通过使用 |\DeclareTextAccent| 或作为单参数(one-argument)的 |\DeclareTextCommand|，\m{cmd}\ 通常已经声明过这种编码。
+
+\begin{decl}[1994/12/01]
+  |\DeclareTextCompositeCommand| \arg{cmd} \arg{encoding} \arg{letter}
+                                 \arg{definition}
+\end{decl}
+这是 |\DeclareTextComposite| 的更一般形式，它允许任意 \m{definition}，不只是\m{slot}。这样做的主要用途是允许 |i| 上的重音像(accents)表现得像 |\i| 上的重音，例如：
+\begin{verbatim}
+   \DeclareTextCompositeCommand{\'}{OT1}{i}{\'\i}
+\end{verbatim}
+它与 |\DeclareTextComposite| 具有相同的限制(restrictions)。
+
+
+\begin{decl}[1998/12/01]
+  |\LastDeclaredEncoding|
+\end{decl}
+这容纳通过 |\DeclareFontEncoding| 声明的最后一个编码的名称(这也是当前最有效的编码)。它可以用于上述声明的 \m{encoding}\ 参数，而不是明确提及(explicitly mentioning)编码，例如：
+\begin{verbatim}
+   \DeclareFontEncoding{T1}{}{}
+   \DeclareTextAccent{\`}{\LastDeclaredEncoding}{0}
+   \DeclareTextAccent{\'}{\LastDeclaredEncoding}{1}
+\end{verbatim}
+从一个来源(source)生成共享公共代码(sharing common code)的编码文件(encoding files)这种情况下，上面的命令很有用。
+
+\subsection[默认的定义]{\heiti 默认的定义}
+
+\NEWdescription{1997/12/01}
+编码定义文件(encoding definition files)中使用的声明(declarations)定义了特定于编码的命令(encoding-specific commands)，但它们不允许在不显式更改(without explicitly changing)编码的情况下使用这些命令。对于某些命令，如符号(symbols)，这是不够的。例如，|OMS| 编码包含符号“\S”，但我们需要能够使用命令~|\S|，无论当前编码是什么，而无需显式选择编码~|OMS|。
+
+\NEWdescription{1997/12/01}
+为了实现这一点，\LaTeX{}\ 有一些命令，这些命令声明了命令的默认定义(default definitions)；当命令未在当前编码(current encoding)中定义时，使用这些默认值。例如，|\S| 的默认编码是~|OMS|，因此在不包含~|\S| 的编码(如|OT1|)中，选择~|OMS| 编码以访问此字形(glyph)。但在包含~|\S| 的编码(如~|T1|)中，则使用该编码中的字形。标准的 \LaTeXe{}\ 格式使用以下编码设置了几种默认值：|OT1|、|OMS|、|OML|。
+
+{\kaiti 警告}：这些命令{\kaiti 不}应出现在编码定义文件(encoding definition files)中，因为这些文件应仅声明在选择编码时使用的命令。它们应该放在宏包(packages)中；当然，它们必须始终引用已知可用的编码。
+
+\begin{decl}[1994/12/01]
+  |\DeclareTextCommandDefault| \arg{cmd} \arg{definition}
+\end{decl}
+此命令允许为特定于编码的命令(encoding-specific command)提供默认定义(default definition)。例如，将 |\copyright| 的默认定义定义为带圆圈的“c”：
+\begin{verbatim}
+   \DeclareTextCommandDefault{\copyright}{\textcircled{c}}
+\end{verbatim}
+\begin{decl}[1994/12/01]
+  |\DeclareTextAccentDefault| \arg{cmd} \arg{encoding} \\
+  |\DeclareTextSymbolDefault| \arg{cmd} \arg{encoding}
+\end{decl}
+这些命令允许为特定于编码的命令(encoding-specific command)提供默认编码(default encoding)。例如，下面的命令设置 |\"| 和 |\ae| 的默认编码为 |OT1|：
+\begin{verbatim}
+   \DeclareTextAccentDefault{\"}{OT1}
+   \DeclareTextSymbolDefault{\ae}{OT1}
+\end{verbatim}
+请注意，|\DeclareTextAccentDefault| 可用于任何单参数特定于编码的命令(one-argument encoding-specific command)，而不仅仅是用 |\DeclareTextAccent| 定义的命令。类似地，|\DeclareTextSymbolDefault| 可以用于任何不带参数的特定于编码的命令(encoding-specific command with no arguments)，而不仅仅是使用 |\DeclareTextSymbol| 定义的命令。
+
+有关这些定义的更多示例，请参阅 |ltoutenc.dtx|。
+
+\begin{decl}[1994/12/01]
+  |\ProvideTextCommandDefault| \arg{cmd} \arg{definition}
+\end{decl}
+此命令与 |\DeclareTextCommandDefault| 相同，但如果该命令已经有默认定义(default definition)，则忽略该定义。这对于给出“伪造(faked)”的符号定义(definitions of symbols)很有用，这些符号可能被其他宏包给出“真实(real)”的定义。例如，一个宏包可能会通过以下方式给出 |\textonequarter| 的假定义(fake definition)：
+\begin{verbatim}
+   \ProvideTextCommandDefault{\textonequarter}{$\m@th\frac14$}
+\end{verbatim}
+
+\subsection[编码的默认值]{\heiti 编码的默认值} \label{sec:encoding-defaults}
+
+\begin{decl}
+  |\DeclareFontEncodingDefaults| \arg{text-settings} \arg{math-settings}
+\end{decl}
+
+声明所有编码方案(encoding schemes)的 \m{text-settings} 和 \m{math-settings}。这些在依赖于编码方案的方案执行之前被执行，这样就可以对主要情况(major cases)使用默认值，并在必要时使用 |\DeclareFontEncoding| 覆盖它们。
+
+如果使用 |\relax| 作为参数，则此默认值的当前设置保持不变。
+
+这个示例由 |amsfonts.sty| 用于重音定位(accent positioning)；它只更改数学设置(math settings)：
+\begin{verbatim}
+   \DeclareFontEncodingDefaults{\relax}{\def\accentclass@{7}}
+\end{verbatim}
+
+
+\begin{decl}
+  |\DeclareFontSubstitution|  \arg{encoding} \arg{family} \arg{series}
+                              \arg{shape}
+\end{decl}
+
+声明字体替换(font substitution)的默认值，当应该加载具有 \m{encoding}\ 编码但是找不到具有当前属性((current attributes))的字体时，将使用该值。
+
+这些替换(substitutions)是编码方案的局部(local)替换，因为编码方案永远不会被替换！他们按照 \m{shape}(形状)、\m{series}(序列)、\m{family}(族)的顺序进行了尝试。
+
+\NEWdescription{2019/07/10}
+这种声明通常在编码定义文件(encoding definition file)(参见第~\ref{Sec:encode.def}~节)中完成，但也可以在类文件(class file)或文档前言(document preamble)中使用，以更改特定编码(specific encoding)的默认值。
+
+如果没有为编码设置默认值，则使用 |\DeclareErrorFont| 给出的值。
+
+\m{encoding}\m{family}\m{series}\m{shape}\ 的字体规范(font specification)必须在 |\begin{document}| 之前由 |\DeclareFontShape| 定义。
+
+示例：
+\begin{verbatim}
+   \DeclareFontSubstitution{T1}{cmr}{m}{n}
+\end{verbatim}
+
+\subsection[更改大小写]{\heiti 更改大小写}
+\label{sec:case}
+
+\begin{decl}
+  |\MakeUppercase| \arg{text} \\
+  |\MakeLowercase| \arg{text}
+\end{decl}
+
+\NEWfeature{1995/06/01}
+\TeX{}\ 提供了两个原语(primitives) |\uppercase|(大写) 和 |\lowercase|(小写)，用于更改文本的大小写。不幸的是，这些 \TeX{}\ 原语不会改变 |\ae| 或 |\aa| 等命令访问的字符的大小写。为了克服这个问题，\LaTeX{}\ 提供了这两个命令。
+
+从长远来看，我们希望使用全大写字体(all-caps fonts)，而不是像 |\MakeUppercase| 这样的任何命令，但目前这是不可能的，因为这样的字体不存在。
+
+有关更多详细信息，请参阅 \texttt{clsguide.tex}。
+
+\NEWdescription{1999/04/23}
+为了使大/小写工作正常，并提供任何正确的连字符(hyphenation)，\LaTeXe{}\ {\kaiti 必须}在整个文档中使用相同的固定表(fixed table)来更改大小写。所使用的表是为字体编码 |T1| 而设计的，这适用于所有拉丁字母(Latin alphabets)的标准 \TeX{}\ 字体，但是在使用其他字母时会出现问题。作为一个实验，它现在已经被扩展(extended)用于一些西里尔语编码(Cyrillic encodings)。
+
+\newpage
+
+\section{\heiti 杂项(Miscellanea)}
+\label{Sec:misc}
+
+本节介绍 \LaTeX{}\ 中的其余字体命令和其他一些问题。
+
+\subsection[字体替换]{\heiti 字体替换}
+
+\begin{decl}
+  |\DeclareErrorFont| \arg{encoding} \arg{family} \arg{series}
+                      \arg{shape} \arg{size}
+\end{decl}
+
+声明 \m{encoding}\m{family}\m{series}\m{shape}\ 是在标准替换机制(standard substitution mechanism)失败(即可能循环)的情况下使用的字体形状(font shape)。有关标准机制，请参见上面的命令 |\DeclareFontSubstitution|。
+
+字体规范(font specification)\m{encoding}\m{family}\m{series}\m{shape}\ 必须在 |\begin{document}| 到达之前由 |\DeclareFontShape| 定义
+
+示例：
+\begin{verbatim}
+   \DeclareErrorFont{OT1}{cmr}{m}{n}{10}
+\end{verbatim}
+
+\NEWdescription{2019/07/10}
+这个声明是一个系统范围的备份(system wide fallback)，通常不应该被更改，特别是它不属于字体编码定义文件(font encoding definition files)，而是 \LaTeX{}\ 格式(\LaTeX{}\ format)。它通常在 \texttt{fonttext.cfg}\ 中设置。在每个编码基础上的调整应该通过 |\DeclareFontSubstitution| 代替！
+
+\begin{decl}
+  |\fontsubfuzz|
+\end{decl}
+
+此参数用于决定是否在发生字体尺寸替换(font size substitution)时产生终端警告(terminal warning)。如果请求的尺寸和选择的尺寸之间的差异小于 |\fontsubfuzz|，则警告只写入到记录文件(transcript file)中。默认值为 |0.4pt|。这可以通过 |\renewcommand| 命令重新定义，例如：
+\begin{verbatim}
+   \renewcommand{\fontsubfuzz}{0pt}   % always warn
+\end{verbatim}
+
+\subsection[预加载]{\heiti 预加载}
+
+\begin{decl}
+  |\DeclarePreloadSizes| \arg{encoding} \arg{family} \arg{series}
+                         \arg{shape}
+\arg{size-list}
+\end{decl}
+
+指定按格式(format)应预加载的(preloaded)字体。这些命令应该放在 |preload.cfg| 文件中，在构建 \LaTeX{}\ 格式时读入该文件。有关如何构建此类配置文件(configuration file)的更多信息，请参阅 |preload.dtx|。
+
+示例：
+\begin{verbatim}
+   \DeclarePreloadSizes{OT1}{cmr}{m}{sl}{10,10.95,12}
+\end{verbatim}
+
+\NEWdescription{2019/07/10}
+预加载(preloading)实际上是在处理文档时加载字体的一个工件(artifact)，大大增加了处理时间。现在，最好不要再使用这种机制。
+
+\subsection[重音字符]{\heiti 重音字符}
+
+\NEWdescription{1996/06/01}
+可以使用诸如 |\"a| 这样的命令生成 \LaTeX{}\ 中的重音字符(Accented characters)。这些命令的精确效果(precise effect)取决于所使用的字体编码。当使用包含重音字符的字体编码(font encoding)作为单个的字形(individual glyphs)(例如 |T1| 编码，在|\"a|的情况下)时，包含重音字符的单词(words)可以自动用连字符连接(automatically hyphenated)。对于不包含所请求的单个字形的字体编码(例如 |OT1| 编码)，这样的命令调用排版指令(typesetting instructions)，以字符字形(character glyphs)和变音符号(diacritical marks)的组合形式生成重音字符(accented character)。在大多数情况下，这涉及到对 \TeX{}\ 原语(primitive) |\accent| 的调用。以这种方式构造的复合字形抑制当前单词的连字符，这就是为什么 |T1| 编码优于原始 \TeX{}\ 字体编码 |OT1| 的原因之一。
+
+重要的是要理解在 \LaTeXe{}\ 中像 |\"a| 这样的命令仅代表单个字形的名称(在这个例子中是“umlaut a”)，不包含有关如何排版该字形的信息---因此这并{\kaiti 不}意味着“在字符 a 的顶部放两个点”。至于使用什么排版程序的决定将取决于当前字体的编码，因此这一决定是在最后一分钟做出的。事实上，相同的输入(same input)可能在同一文档中以多种方式排版，例如，节标题(section headings)中的文本也可能出现在目录(table of contents)和连续标题(running heads)中，每个标题可能使用不同编码的字体。
+
+因此，符号(notation) |\"a| 不等同于：
+\begin{verbatim}
+   \newcommand \chara {a}     \"\chara
+\end{verbatim}
+在后一种情况下，\LaTeX{}\ 不会展开宏 |\chara|，而只是简单地将符号(notation)(字符串 |\"\chara|)与当前编码中已知的复合符号(composite notations)列表进行比较，当它找不到 |\"\chara| 时，它会尽其所能地调用排版指令(typesetting instructions)，将元音重音(umlaut accent)放在 |\chara| 扩展(expansion)的顶部。因此，即使字体实际上包含“\"a”作为单字形(individual glyph)，它也不会被使用。
+
+\LaTeX{}\ 中的低级重音命令(low-level accent commands)的定义方式是，可以将一种字体的变音符号(diacritical mark)与另一种字体中的字形(glyph)相结合，例如，|\"\textparagraph| 将生成 \"\textparagraph。此处的元音(umlaut)取自 |OT1| 编码字体 |cmr10|，而段落符号(paragraph sign)取自 |OMS| 编码字体 |cmsy10|。这个例子在字体排版上可能有点傻，但是更好的例子应该包含像 |OT2|(西里尔字母)这样的字体编码，而这些字体编码可能不是每个网站都可用。
+
+但是，对于字体更改命令(font-changing commands)有一些限制，这些命令将在此类重音命令(accent command)的参数中起作用。从某种意义上说，它们是 \TeX{}\ 的(\TeX{}nical)，因为它们遵循了 \TeX{}\ 的 |\accent| 原语工作方式(primitive works)，在重音(accent)和重音字符(accented character)之间只允许一类特殊的命令。
+
+下面是一些不能正常工作的命令例子，因为重音(accent)将出现在空格(space)上方：带有文本参数(text arguments)(|\textbf{...}| 和同伴)的字体命令；所有字体尺寸声明(|\fontsize| 和 |\Large| 等)；|\usefont| 和依赖于它的声明，如 |\normalfont|；盒子命令(box commands)(如~|\mbox{...}|)。
+
+设置簇(family)、序列(series)和形状(shape)(例如 |\fontshape{sl}\selectfont|)等属性(attributes)的底层字体声明(lower-level font declarations)将生成正确的排版，默认声明(例如 |\bfseries|)也将生成正确的排版。
+
+\subsection[命名约定]{\heiti 命名约定}
+
+\begin{itemize}
+\item
+  数学字母命令(math alphabet commands)都以 |\math...| 开头：例如，|\mathbf|、|\mathcal| 等。
+
+\item
+  带参数的文本字体更改命令(text font changing commands)都以 |\text...| 开头：例如，|\textbf| 和 |\textrm|。|\emph| 是个例外，因为它在作者文档(author documents)中非常常见，因此应该使用较短的名称(shorter name)。
+
+\item
+  编码方案(encoding schemes)的名称是：最多三个字母(均为大写)加数字组成的字符串。
+
+  \LaTeX\ 项目保留使用以下字母开头的编码(encodings)：|T|(标准 256 长文本编码)、|TS|(旨在扩展相应 |T| 编码的符号)、|X|(不符合 |T| 编码严格要求的文本编码)、|M|(标准 256 长数学编码)、|S|(其他符号编码)、|A|(其他特殊应用)，|OT|(标准 128 长文本编码)和 |OM|(标准 128 长数学编码)。
+
+  请不要将上述起始字母(starting letters)用于非便携式编码(non-portable encodings)。如果出现新的标准编码(standard encodings)，我们将在 \LaTeX\ 的后续版本中添加它们。
+
+  对于站点(site)或系统(system)本地的编码方案(encoding schemes)应以 |L| 开头，用于广泛发布的实验编码(experimental encodings)将以 |E| 开头，而 |U| 是未知或未分类编码。
+
+\item
+  \NEWdescription{2019/10/15}
+  字体族名称(font family names)应仅包含大小写字母和连字符(hyphen characters)。在可能的情况下，这些应符合由 \texttt{autoinst}\ 实现的字体文件名(\emph{Filenames for fonts})这样的字体命名方案(font naming scheme)，诸如 \texttt{-LF}、\texttt{-OsF}\ 这样的后缀表示不同的图形样式(figure styles)。
+
+\item
+  \NEWdescription{2019/10/15}
+  字体序列名称(font series names)最多应包含四个小写字母(lower case letters)。如果可能，应使用第~\ref{sec:textfontattributes}~节中建议的标准名称(standard names)。字体特定的名称(font specific names)，如 \texttt{regular} 或 \texttt{black}\ 等，应至少别名相应的标准名称。
+
+\item
+  \NEWdescription{2019/10/15}
+  字体形状名称(font shapes names)最多应包含四个字母小写。请使用第~\ref{sec:textfontattributes}~节中建议的名称。
+
+\item
+  符号字体的名称(names for symbol fonts)由大小写字母构成，没有任何限制。
+\end{itemize}
+
+只要有可能，您应该使用\ {\color{blue} {\emph{\LaTeXcomp}}}【{\color{blue}{《\LaTeX{}\ 指南》}}】中建议的序列(series)和形状(shape)名称，因为这样可以更容易地将新字体与现有字体组合。
+
+
+\NEWdescription{1994/12/01}
+在可能的情况下，文本符号(text symbols)应该以 |\text| 命名，后跟 Adobe 字形名称(Adobe glyph name)：例如 |\textonequarter| 或 |\textsterling|。类似地，数学符号(math symbols)应该以 |\math| 命名，后跟字形名称(glyph name)，例如 |\mathonequarter| 或 |\mathsterling|。可以在文本(text)或数学(math)中使用的命令可以由 |\ifmmode| 来定义，例如：
+
+\begin{verbatim}
+   \DeclareRobustCommand{\pounds}{%
+      \ifmmode \mathsterling \else \textsterling \fi
+   }
+\end{verbatim}
+   注意，以这种方式定义的命令必须是健壮的(robust)，以防它们被放入节标题(section title)或其他移动参数(moving argument)中。
+
+\subsection[声明的顺序]{\heiti 声明的顺序}
+
+\NEWdescription{2019/10/15}
+\NFSS{}\ 强制您按照特定的顺序(specific order)给出所有声明(all declarations)，这样它就可以检查您是否指定了所有必要的信息。如果您以错误的顺序声明对象(declare objects)，它就会抱怨(complain)。以下是您必须遵守的依赖关系：
+\begin{itemize}
+\item
+  |\DeclareFontFamily| 检查编码方案(encoding scheme)是否以前使用 |\DeclareFontEncoding| 声明过。
+
+\item
+  |\DeclareFontShape| 检查字体族(font family)是否在请求的编码(|\DeclareFontFamily|)中声明为可用。
+
+\item
+  |\DeclareSymbolFont| 检查编码方案(encoding scheme)是否有效。
+
+\item
+  |\SetSymbolFont| 此外，还确保声明了请求的数学版本(|\DeclareMathVersion|) ，并声明了请求的符号字体(|\DeclareSymbolFont|)。
+
+\item
+  |\DeclareSymbolFontAlphabet| 检查是否可以使用字母标识符(alphabet identifier)的命令名以及是否声明了符号字体(symbol font)。
+
+\item
+  |\DeclareMathAlphabet| 检查所选命令名(chosen command name)是否可以使用，以及是否声明了编码方案(encoding scheme)。
+
+\item
+  |\SetMathAlphabet| 检查字母表标识符(alphabet identifier)之前是否使用 |\DeclareMathAlphabet| 或 |\DeclareSymbolFontAlphabet| 声明过，以及数学版本(math version)和编码方案(encoding scheme)是否已知。
+
+\item
+  |\DeclareMathSymbol| 确保可以使用命令名(command name)(即，未定义或以前声明为数学符号)，并确保以前声明了符号字体(symbol font)。
+
+\item
+    当到达 |\begin{document}| 命令时，\NFSS{}\ 会进行一些额外的检查---例如，验证每个编码方案的替换默认值是否指向已知的字体形状组声明(font shape group declarations)。
+\end{itemize}
+
+\subsection[字体序列预设每个文档族]{\heiti 字体序列预设每个文档族 \footnote{Font series defaults per document family：字体序列预设每个文档族。不知道这句的翻译是否正确？}}
+
+\NEWfeature{2020/02/02}
+如今，许多字体族(font families)中都有额外的权重(weights)和宽度(widths)，因此，很可能有人希望将中等权重(medium weight)的衬线族(serif family)与半轻(semi-light)无衬线族(sans serif family)相匹配，或者在一个族中，当使用 |\textbf| 时，希望使用黑松外形(bold-extended face，bx)，而在另一个字体族中，它应该是黑(不松)或半黑(semi-bold)等。可以使用宏包或文档前言中的 |\DeclareFontSeriesDefault| 声明更改默认值：
+\begin{decl}
+  |\DeclareFontSeriesDefault| \oarg{meta family}
+  \arg{meta series} \arg{series value}
+\end{decl}
+该声明包含三个参数：
+\begin{description}
+\item[元族接口(Meta family interface)：] 可以是 |rm|、|sf| 或 |tt|。这是可选的，如果不存在，接下来的两个参数将应用于全部默认值(overall default)。
+\item[元序列接口(Meta series interface)：] 可以是 |md| 或 |bf|。
+\item[序列值(Series value)：] 这是当要求组合 \m{meta family}\ 和 \m{meta series}\ 时要使用的值。
+\end{description}
+例如：
+\begin{verbatim}
+   \DeclareFontSeriesDefault[rm]{bf}{sb}
+\end{verbatim}
+当在文档中请求 |\rmfamily\bfseries| 时，将使用 |sb|(semi-bold，即半黑)。
+
+\subsection[嵌套强调的处理]{\heiti 嵌套强调的处理}
+
+\begin{decl}
+  |\DeclareEmphSequence| \arg{list of font declarations}
+\end{decl}
+
+\NEWfeature{2020/02/02}
+这个声明使用一个以逗号分隔的(comma separated)字体声明列表，每个声明指定应如何处理不断增加的强调级别(levels of emphasis)。例如：
+\begin{verbatim}
+   \DeclareEmphSequence{\itshape,%
+                        \upshape\scshape,%
+                        \itshape}
+\end{verbatim}
+第一层使用斜体(italics)，第二层使用小体大写(small capitals)，第三层使用斜体小体大写(italic small capitals)。如果嵌套级别(nesting levels)多于提供的级别，则存储在 |\emreset|(默认为|\ulcshape\upshape|)中的声明将用于下一级别，然后重启列表。
+
+\subsection[提供字体族替换]{\heiti 提供字体族替换}
+
+\begin{decl}
+  |\DeclareFontFamilySubstitution| \arg{encoding}
+                                   \arg{family}
+                                   \arg{new-family}
+\end{decl}
+
+\NEWfeature{2020/02/02}
+此声明选择 \m{new-family}\ 字体族(font family)代替 \m{encoding}\ 字体编码(font encoding)中的 \m{family}，例如：
+\begin{verbatim}
+   \DeclareFontFamilySubstitution{LGR}
+           {Montserrat-LF}{IBMPlexSans-TLF}
+\end{verbatim}
+一旦在文档中请求，就告诉 \LaTeX{}\ 用 |IBMPlexSans-TLF| 替换希腊语编码 |LGR| 中的 |Montserrat-LF| 无衬线字体(sans serif font)。
+
+\newpage
+
+\section{{\heiti 附加文本符号 --} \textsf{textcomp}}
+
+\NEWfeature{2020/02/02}
+在很长一段时间内，附加文本符号(additional text symbols)和文本伴随编码(text companion encoding)|TS1| 的接口通常是 \textsf{textcomp}\ 宏包。\textsf{textcomp}\ 宏包提供的所有符号(symbols)现在都可以在 \LaTeX{}\ 内核中使用。此外，还实现了智能替换机制(intelligent substitution mechanism)，因此，如果使用 |\textsf| 排版，某些字体中缺失的字形(glyphs)将自动替换为无衬线的(sans serif)默认字形，如果使用 |\texttt| 排版，则替换为等宽(monospaced)字形。在过去，如果需要替换，它们总是替换为计算机现代罗马(Computer Modern Roman)。
+
+{\sffamily 这一点在 |\oldstylenums| 中最为明显，它们现在取自 |TS1|，因此在使用无衬线字体(sans serif fonts) \ttfamily\ 排版时，您不再获得 \legacyoldstylenums{1234}，而在使用打字机字体(typewriter fonts)时，您将获得 \oldstylenums{1234}。}
+
+\begin{decl}
+  |\legacyoldstylenums| \arg{nums}\\
+  |\UseLegacyTextSymbols|
+\end{decl}
+如果需要使用原始(低级)定义，则仍可以使用 |\legacyoldstylenums|；为了完全恢复到旧的行为(old behavior)，还可使用 |\UseLegacyTextSymbols|。后一个声明还原 |\oldstylenums|，并更改脚注符号(footnote symbols)，如 |\textdagger|、|\textparagraph| 等。从数学字体(math fonts)而不是当前文本字体(text font)中提取它们的字形(这意味着它们总是保持相同的形状，不能与文本字体很好地融合)。
+
+下表显示了可用的宏(macros)。下面的命令“构造(constructed)”重音(accents)，是通过 \TeX{}\ 宏构建的。
+\begin{center}
+  \begin{tabular}[t]{@{}rl}
+    \hlinew{1.2pt}
+    {\heiti 命令} & {\heiti 符号} \\ \hlinew{0.7pt}
+    \verb*|\capitalcedilla A| & \capitalcedilla A \\
+    \verb*|\capitalogonek A|  & \capitalogonek A  \\ \hlinew{1.2pt}
+  \end{tabular}
+  \quad
+  \begin{tabular}[t]{@{}rl}
+    \hlinew{1.2pt}
+    {\heiti 命令} & {\heiti 符号} \\ \hlinew{0.7pt}
+    \verb*|\textcircled a|    & \textcircled a \\
+             &     \\ \hlinew{1.2pt}
+  \end{tabular}
+\end{center}
+
+这些重音可通过字体编码得到。第三列中的数字显示槽号(slot number)：
+\begin{center}
+\begin{minipage}[t]{1.0\textwidth}
+ \begin{minipage}[t]{0.5\textwidth}
+%  \begin{tabular}[t]{@{}p{0.5\textwidth}p{2em}p{2em}@{}}
+  \begin{tabular}[t]{rcc}
+  \hlinew{1.2pt}
+    {\heiti 命令} & {\heiti 重音} & {\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb |\capitalgrave|        & \capitalgrave{}        & 0 \\
+    \verb |\capitalacute|        & \capitalacute{}        & 1 \\
+    \verb |\capitalcircumflex|   & \capitalcircumflex{}   & 2 \\
+    \verb |\capitaltilde|        & \capitaltilde{}        & 3 \\
+    \verb |\capitaldieresis|     & \capitaldieresis{}     & 4 \\
+    \verb |\capitalhungarumlaut| & \capitalhungarumlaut{} & 5 \\
+    \verb |\capitalring|         & \capitalring{}         & 6 \\
+    \verb |\capitalcaron|        & \capitalcaron{}        & 7 \\ \hlinew{1.2pt}
+  \end{tabular}
+ \end{minipage}
+%  \hspace{2em}
+  \qquad
+ \begin{minipage}[t]{0.5\textwidth}
+%  \begin{tabular}[t]{@{}p{0.4\textwidth}p{2em}p{2em}@{}}
+  \begin{tabular}[t]{rcc}
+  \hlinew{1.2pt}
+    {\heiti 命令} & {\heiti 重音} & {\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\capitalbreve|        & \capitalbreve{}        & 8  \\
+    \verb|\capitalmacron|       & \capitalmacron{}       & 9  \\
+    \verb|\capitaldotaccent|    & \capitaldotaccent{}    & 10 \\
+    \verb|\t|                   & \t{}                   & 26 \\
+    \verb|\capitaltie|          & \capitaltie{}          & 27 \\
+    \verb|\newtie|              & \newtie{}              & 28 \\
+    \verb|\capitalnewtie|       & \capitalnewtie{}       & 29 \\
+                                &                        &     \\ \hlinew{1.2pt}
+  \end{tabular}
+  \end{minipage}
+\end{minipage}
+\end{center}
+
+表~\vref{tab:textcomp}~包含访问文本符号(text symbols)的完整命令列表。同样，其中的数字是编码中的槽号(slot number)。
+%
+% Tables~\vrefrange{tab:ts1-subset-always}{tab:ts1-subset-9-disable}
+% contain the commands to access the text symbols.
+%
+
+\iftrue
+
+\begin{table}[!htp]
+  \centering\footnotesize
+  \renewcommand\arraystretch{0.80}
+  \setlength{\abovecaptionskip}{-3.5em}  %段前
+%  \setlength{\belowcaptionskip}{0cm} %段后
+  \begin{minipage}[t]{0.49\textwidth}
+  \begin{tabular}[t]{@{}rp{2em}c@{}}
+     \hlinew{1.2pt}
+     {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textcapitalcompwordmark|  & \textcapitalcompwordmark  & 23 \\
+    \verb|\textascendercompwordmark| & \textascendercompwordmark & 31 \\
+    \verb|\textquotestraightbase|    & \textquotestraightbase    & 13 \\
+    \verb|\textquotestraightdblbase| & \textquotestraightdblbase & 18 \\
+    \verb|\texttwelveudash|          & \texttwelveudash          & 21 \\
+    \verb|\textthreequartersemdash|  & \textthreequartersemdash  & 22 \\
+    \verb|\textleftarrow|            & \textleftarrow            & 24 \\
+    \verb|\textrightarrow|           & \textrightarrow           & 25 \\
+    \verb|\textblank|                & \textblank                & 32 \\
+    \verb|\textdollar|               & \textdollar               & 36 \\
+    \verb|\textquotesingle|          & \textquotesingle          & 39 \\
+    \verb|\textasteriskcentered|     & \textasteriskcentered     & 42 \\
+    \verb|\textdblhyphen|            & \textdblhyphen            & 45 \\
+    \verb|\textfractionsolidus|      & \textfractionsolidus      & 47 \\
+    \verb|\textzerooldstyle|         & \textzerooldstyle         & 48 \\
+    \verb|\textoneoldstyle|          & \textoneoldstyle          & 49 \\
+    \verb|\texttwooldstyle|          & \texttwooldstyle          & 50 \\
+    \verb|\textthreeoldstyle|        & \textthreeoldstyle        & 51 \\
+    \verb|\textfouroldstyle|         & \textfouroldstyle         & 52 \\
+    \verb|\textfiveoldstyle|         & \textfiveoldstyle         & 53 \\
+    \verb|\textsixoldstyle|          & \textsixoldstyle          & 54 \\
+    \verb|\textsevenoldstyle|        & \textsevenoldstyle        & 55 \\
+    \verb|\texteightoldstyle|        & \texteightoldstyle        & 56 \\
+    \verb|\textnineoldstyle|         & \textnineoldstyle         & 57 \\
+    \verb|\textlangle|               & \textlangle               & 60 \\
+    \verb|\textminus|                & \textminus                & 61 \\
+    \verb|\textrangle|               & \textrangle               & 62 \\
+    \verb|\textmho|                  & \textmho                  & 77 \\
+    \verb|\textbigcircle|            & \textbigcircle            & 79 \\
+    \verb|\textohm|                  & \textohm                  & 87 \\
+    \verb|\textlbrackdbl|            & \textlbrackdbl            & 91 \\
+    \verb|\textrbrackdbl|            & \textrbrackdbl            & 93 \\
+    \verb|\textuparrow|              & \textuparrow              & 94 \\
+    \verb|\textdownarrow|            & \textdownarrow            & 95 \\
+    \verb|\textasciigrave|           & \textasciigrave           & 96 \\
+    \verb|\textborn|                 & \textborn                 & 98 \\
+    \verb|\textdivorced|             & \textdivorced             & 99 \\
+    \verb|\textdied|                 & \textdied                 & 100 \\
+    \verb|\textleaf|                 & \textleaf                 & 108 \\
+    \verb|\textmarried|              & \textmarried              & 109 \\
+    \verb|\textmusicalnote|          & \textmusicalnote          & 110 \\
+    \verb|\texttildelow|             & \texttildelow             & 126 \\
+    \verb|\textdblhyphenchar|        & \textdblhyphenchar        & 127 \\
+    \verb|\textasciibreve|           & \textasciibreve           & 128 \\
+    \verb|\textasciicaron|           & \textasciicaron           & 129 \\
+    \verb|\textacutedbl|             & \textacutedbl             & 130 \\
+    \verb|\textgravedbl|             & \textgravedbl             & 131 \\
+    \verb|\textdagger|               & \textdagger               & 132 \\
+    \verb|\textdaggerdbl|            & \textdaggerdbl            & 133 \\
+    \verb|\textbardbl|               & \textbardbl               & 134 \\
+    \verb|\textperthousand|          & \textperthousand          & 135 \\
+    \verb|\textbullet|               & \textbullet               & 136 \\
+    \verb|\textcelsius|              & \textcelsius              & 137 \\
+    \verb|\textdollaroldstyle|       & \textdollaroldstyle       & 138 \\
+    \verb|\textcentoldstyle|         & \textcentoldstyle         & 139 \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \end{minipage}
+  \vspace{4em}%\qquad %
+  \begin{minipage}[t]{0.49\textwidth}
+  \begin{tabular}[t]{@{}rp{2em}c@{}}%{lp{1.5em}l}
+    \hlinew{1.2pt}
+    {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textflorin|               & \textflorin               & 140 \\
+    \verb|\textcolonmonetary|        & \textcolonmonetary        & 141 \\
+    \verb|\textwon|                  & \textwon                  & 142 \\
+    \verb|\textnaira|                & \textnaira                & 143 \\
+    \verb|\textguarani|              & \textguarani              & 144 \\
+    \verb|\textpeso|                 & \textpeso                 & 145 \\
+    \verb|\textlira|                 & \textlira                 & 146 \\
+    \verb|\textrecipe|               & \textrecipe               & 147 \\
+    \verb|\textinterrobang|          & \textinterrobang          & 148 \\
+    \verb|\textinterrobangdown|      & \textinterrobangdown      & 149 \\
+    \verb|\textdong|                 & \textdong                 & 150 \\
+    \verb|\texttrademark|            & \texttrademark            & 151 \\
+    \verb|\textpertenthousand|       & \textpertenthousand       & 152 \\
+    \verb|\textpilcrow|              & \textpilcrow              & 153 \\
+    \verb|\textbaht|                 & \textbaht                 & 154 \\
+    \verb|\textnumero|               & \textnumero               & 155 \\
+    \verb|\textdiscount|             & \textdiscount             & 156 \\
+    \verb|\textestimated|            & \textestimated            & 157 \\
+    \verb|\textopenbullet|           & \textopenbullet           & 158 \\
+    \verb|\textservicemark|          & \textservicemark          & 159 \\
+    \verb|\textlquill|               & \textlquill               & 160 \\
+    \verb|\textrquill|               & \textrquill               & 161 \\
+    \verb|\textcent|                 & \textcent                 & 162 \\
+    \verb|\textsterling|             & \textsterling             & 163 \\
+    \verb|\textcurrency|             & \textcurrency             & 164 \\
+    \verb|\textyen|                  & \textyen                  & 165 \\
+    \verb|\textbrokenbar|            & \textbrokenbar            & 166 \\
+    \verb|\textsection|              & \textsection              & 167 \\
+    \verb|\textasciidieresis|        & \textasciidieresis        & 168 \\
+    \verb|\textcopyright|            & \textcopyright            & 169 \\
+    \verb|\textordfeminine|          & \textordfeminine          & 170 \\
+    \verb|\textcopyleft|             & \textcopyleft             & 171 \\
+    \verb|\textlnot|                 & \textlnot                 & 172 \\
+    \verb|\textcircledP|             & \textcircledP             & 173 \\
+    \verb|\textregistered|           & \textregistered           & 174 \\
+    \verb|\textasciimacron|          & \textasciimacron          & 175 \\
+    \verb|\textdegree|               & \textdegree               & 176 \\
+    \verb|\textpm|                   & \textpm                   & 177 \\
+    \verb|\texttwosuperior|          & \texttwosuperior          & 178 \\
+    \verb|\textthreesuperior|        & \textthreesuperior        & 179 \\
+    \verb|\textasciiacute|           & \textasciiacute           & 180 \\
+    \verb|\textmu|                   & \textmu                   & 181 \\
+    \verb|\textparagraph|            & \textparagraph            & 182 \\
+    \verb|\textperiodcentered|       & \textperiodcentered       & 183 \\
+    \verb|\textreferencemark|        & \textreferencemark        & 184 \\
+    \verb|\textonesuperior|          & \textonesuperior          & 185 \\
+    \verb|\textordmasculine|         & \textordmasculine         & 186 \\
+    \verb|\textsurd|                 & \textsurd                 & 187 \\
+    \verb|\textonequarter|           & \textonequarter           & 188 \\
+    \verb|\textonehalf|              & \textonehalf              & 189 \\
+    \verb|\textthreequarters|        & \textthreequarters        & 190 \\
+    \verb|\texteuro|                 & \texteuro                 & 191 \\
+    \verb|\texttimes|                & \texttimes                & 214 \\
+    \verb|\textdiv|                  & \textdiv                  & 246 \\
+    \null \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \end{minipage}
+  \hspace{-1em}
+  \caption{以前来自 \textsf{textcomp}\ 宏包的文本符号(text symbols)}
+  \label{tab:textcomp}
+\end{table}
+
+\fi
+
+|TS1| 编码包含丰富的符号集(set of symbols)，这意味着一些符号仅在少数 \TeX{}\ 字体中可用，而一些符号(如大写重音符号)根本不可用，但作为参考字体实现(reference font implementation)的一部分开发。事实上，许多现有字体不提供 |TS1| 编码中定义的完整字形集(full set of glyphs)，因此出现了一个问题：“|TS1| 编码的哪些字形由哪个字体实现？”
+
+\NEWfeature{2021/06/01}
+字体可以使用 |\DeclareEncodingSubset| 宏按子编码(sub-encodings)排序：
+\begin{decl}
+  |\DeclareEncodingSubset| \arg{encoding}
+                           \arg{font family}
+                           \arg{subset number}
+\end{decl}
+宏接受 3 个强制参数(mandatory arguments)：需要子集(subsetting)的 \m{encoding}\ 编码(目前仅 |TS1|)，我们为 \m{font family}\ 声明子集(subset)，最终 \m{subset number}\ 介于 |0| (支持所有编码)和 |9| (许多字形缺失)之间。因此，假设某些符号(symbols)总是可用于所有字体，并且每个子编码(sub-encoding)定义了不可用的宏，即在子编码中不提供该数字，而在所有子编码中提供更高数字(higher numbers)。
+
+\begin{table}[tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+     \hlinew{1.2pt}
+     {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textquotestraightbase|     & \textquotestraightbase     & 13  \\
+    \verb|\textquotestraightdblbase|  & \textquotestraightdblbase  & 18  \\
+    \verb|\textcapitalcompwordmark|   & \textcapitalcompwordmark   & 23  \\
+    \verb|\textascendercompwordmark|  & \textascendercompwordmark  & 31  \\
+    \verb|\textdollar|                & \textdollar                & 36  \\
+    \verb|\textquotesingle|           & \textquotesingle           & 39  \\
+    \verb|\textasteriskcentered|      & \textasteriskcentered      & 42  \\
+    \verb|\textdagger|                & \textdagger                & 132 \\
+    \verb|\textdaggerdbl|             & \textdaggerdbl             & 133 \\
+    \verb|\textperthousand|           & \textperthousand           & 135 \\
+    \verb|\textbullet|                & \textbullet                & 136 \\
+    \verb|\texttrademark|             & \texttrademark             & 151 \\
+    \verb|\textcent|                  & \textcent                  & 162 \\
+    \verb|\textsterling|              & \textsterling              & 163 \\
+    \verb|\textyen|                   & \textyen                   & 165 \\
+    \verb|\textbrokenbar|             & \textbrokenbar             & 166 \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+     \hlinew{1.2pt}
+      {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textsection|               & \textsection               & 167 \\
+    \verb|\textcopyright|             & \textcopyright             & 169 \\
+    \verb|\textordfeminine|           & \textordfeminine           & 170 \\
+    \verb|\textlnot|                  & \textlnot                  & 172 \\
+    \verb|\textregistered|            & \textregistered            & 174 \\
+    \verb|\textdegree|                & \textdegree                & 176 \\
+    \verb|\textpm|                    & \textpm                    & 177 \\
+    \verb|\textparagraph|             & \textparagraph             & 182 \\
+    \verb|\textperiodcentered|        & \textperiodcentered        & 183 \\
+    \verb|\textordmasculine|          & \textordmasculine          & 186 \\
+    \verb|\textonequarter|            & \textonequarter            & 188 \\
+    \verb|\textonehalf|               & \textonehalf               & 189 \\
+    \verb|\textthreequarters|         & \textthreequarters         & 190 \\
+    \verb|\texttimes|                 & \texttimes                 & 214 \\
+    \verb|\textdiv|                   & \textdiv                   & 246 \\
+    \null \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{所有 \texttt{TS1}\ 子编码(sub-encodings)中可用的符号(symbols)}
+  \label{tab:ts1-subset-always}
+\end{table}
+
+
+
+\begin{table}[!tbp]
+  \centering
+  \begin{tabular}[t]{@{}rll@{}}
+  \hlinew{1.2pt}
+     {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb*|\textcircled| & \textcircled{} & acc \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{1}\ 及更高版本中不可用的符号}
+  \label{tab:ts1-subset-1-disable}
+\end{table}
+
+
+
+\begin{table}[!tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+    \hlinew{1.2pt}
+    {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\capitalcedilla|       & \capitalcedilla{}       & acc \\
+    \verb|\capitalogonek|        & \capitalogonek{}        & acc \\
+    \verb|\capitalgrave|         & \capitalgrave{}         & 0   \\
+    \verb|\capitalacute|         & \capitalacute{}         & 1   \\
+    \verb|\capitalcircumflex|    & \capitalcircumflex{}    & 2   \\
+    \verb|\capitaltilde|         & \capitaltilde{}         & 3   \\
+    \verb|\capitaldieresis|      & \capitaldieresis{}      & 4   \\
+    \verb|\capitalhungarumlaut|  & \capitalhungarumlaut{}  & 5   \\
+    \verb|\capitalring|          & \capitalring{}          & 6   \\
+    \verb|\capitalcaron|         & \capitalcaron{}         & 7   \\
+    \verb|\capitalbreve|         & \capitalbreve{}         & 8   \\
+    \verb|\capitalmacron|        & \capitalmacron{}        & 9   \\
+    \verb|\capitaldotaccent|     & \capitaldotaccent{}     & 10  \\
+    \verb|\capitaltie|           & \capitaltie{}           & 27  \\
+    \verb|\newtie|               & \newtie{}               & 28  \\
+    \verb|\capitalnewtie{}|      & \capitalnewtie{}        & 29  \\
+    \verb|\textdblhyphen|        & \textdblhyphen          & 45  \\
+    \verb|\textzerooldstyle|     & \textzerooldstyle       & 48  \\
+    \verb|\textoneoldstyle|      & \textoneoldstyle        & 49  \\
+    \verb|\texttwooldstyle|      & \texttwooldstyle        & 50  \\
+    \verb|\textthreeoldstyle|    & \textthreeoldstyle      & 51  \\
+    \verb|\textfouroldstyle|     & \textfouroldstyle       & 52  \\
+    \verb|\textfiveoldstyle|     & \textfiveoldstyle       & 53  \\
+    \verb|\textsixoldstyle|      & \textsixoldstyle        & 54  \\
+    \verb|\textsevenoldstyle|    & \textsevenoldstyle      & 55  \\
+    \verb|\texteightoldstyle|    & \texteightoldstyle      & 56  \\
+    \verb|\textnineoldstyle|     & \textnineoldstyle       & 57  \\
+    \verb|\textmho|              & \textmho                & 77  \\
+    \verb|\textbigcircle|        & \textbigcircle          & 79  \\
+    \verb|\textlbrackdbl|        & \textlbrackdbl          & 91  \\
+    \verb|\textrbrackdbl|        & \textrbrackdbl          & 93  \\
+    \verb|\textasciigrave|       & \textasciigrave         & 96  \\
+    \verb|\textborn|             & \textborn               & 98  \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+     \hlinew{1.2pt}
+      {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textdivorced|         & \textdivorced           & 99  \\
+    \verb|\textdied|             & \textdied               & 100 \\
+    \verb|\textleaf|             & \textleaf               & 108 \\
+    \verb|\textmarried|          & \textmarried            & 109 \\
+    \verb|\textmusicalnote|      & \textmusicalnote        & 110 \\
+    \verb|\texttildelow|         & \texttildelow           & 126 \\
+    \verb|\textdblhyphenchar|    & \textdblhyphenchar      & 127 \\
+    \verb|\textasciibreve|       & \textasciibreve         & 128 \\
+    \verb|\textasciicaron|       & \textasciicaron         & 129 \\
+    \verb|\textacutedbl|         & \textacutedbl           & 130 \\
+    \verb|\textgravedbl|         & \textgravedbl           & 131 \\
+    \verb|\textdollaroldstyle|   & \textdollaroldstyle     & 138 \\
+    \verb|\textcentoldstyle|     & \textcentoldstyle       & 139 \\
+    \verb|\textnaira|            & \textnaira              & 143 \\
+    \verb|\textguarani|          & \textguarani            & 144 \\
+    \verb|\textpeso|             & \textpeso               & 145 \\
+    \verb|\textrecipe|           & \textrecipe             & 147 \\
+    \verb|\textpertenthousand|   & \textpertenthousand     & 152 \\
+    \verb|\textpilcrow|          & \textpilcrow            & 153 \\
+    \verb|\textbaht|             & \textbaht               & 154 \\
+    \verb|\textdiscount|         & \textdiscount           & 156 \\
+    \verb|\textopenbullet|       & \textopenbullet         & 158 \\
+    \verb|\textservicemark|      & \textservicemark        & 159 \\
+    \verb|\textlquill|           & \textlquill             & 160 \\
+    \verb|\textrquill|           & \textrquill             & 161 \\
+    \verb|\textasciidieresis|    & \textasciidieresis      & 168 \\
+    \verb|\textcopyleft|         & \textcopyleft           & 171 \\
+    \verb|\textcircledP|         & \textcircledP           & 173 \\
+    \verb|\textasciimacron|      & \textasciimacron        & 175 \\
+    \verb|\textasciiacute|       & \textasciiacute         & 180 \\
+    \verb|\textreferencemark|    & \textreferencemark      & 184 \\
+    \verb|\textsurd|             & \textsurd               & 187 \\
+    \null \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{2}\ 及更高版本中不可用的符号}
+  \label{tab:ts1-subset-2-disable}
+\end{table}
+
+
+\begin{table}[!tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+  \hlinew{1.2pt}
+    {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|textlangle|                & \textlangle               & 60 \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textrangle|               & \textrangle               & 62 \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{3}\ 及更高版本中不可用的符号}
+  \label{tab:ts1-subset-3-disable}
+\end{table}
+
+
+因此，子编码(sub-encoding) $x$ 中可用的符号是表~\ref{tab:ts1-subset-always}~中的符号(始终可用)和仅在子编码 $> x$ 中变得不可用的符号。表 \vrefrange{tab:ts1-subset-1-disable}{tab:ts1-subset-9-disable}\ 显示了不同子编码中变得不可使用的符号。同样，数字是 |TS1| 编码中的插槽(slots)，|acc| 表示“构造(constructed)”重音(accent)。
+
+\begin{table}[!tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textleftarrow|            & \textleftarrow            & 24  \\
+    \verb|\textrightarrow|           & \textrightarrow           & 25  \\
+    \verb|\textuparrow|              & \textuparrow              & 94  \\
+    \verb|\textdownarrow|            & \textdownarrow            & 95 \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+    \hlinew{1.2pt}
+     {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textcolonmonetary|        & \textcolonmonetary        & 141 \\
+    \verb|\textwon|                  & \textwon                  & 142 \\
+    \verb|\textlira|                 & \textlira                 & 146 \\
+    \verb|\textdong|                 & \textdong                 & 150 \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{4}\ 及更高版本中不可用的符号}
+  \label{tab:ts1-subset-4-disable}
+\end{table}
+
+
+\begin{table}[!tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textnumero|               & \textnumero               & 155 \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textestimated|            & \textestimated            & 157 \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{5}\ 及更高版本中不可用的符号}
+  \label{tab:ts1-subset-5-disable}
+\end{table}
+
+
+
+\begin{table}[!tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+  \hlinew{1.2pt}
+  {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textflorin|               & \textflorin               & 140 \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textcurrency|             & \textcurrency             & 164 \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{6}\ 及更高版本中不可用的符号}
+  \label{tab:ts1-subset-6-disable}
+\end{table}
+
+
+
+\begin{table}[!tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textfractionsolidus|      & \textfractionsolidus      & 47 \\
+    \verb|\textminus|                & \textminus                & 61 \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textohm|                  & \textohm                  & 87 \\
+    \verb|\textmu|                   & \textmu                   & 181 \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{7}\ 及更高版本中不可用的符号}
+  \label{tab:ts1-subset-7-disable}
+\end{table}
+
+
+
+\begin{table}[!tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textblank|                & \textblank                & 32 \\
+    \verb|\textinterrobang|          & \textinterrobang          & 148 \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+  \hlinew{1.2pt}
+  {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\textinterrobangdown|      & \textinterrobangdown      & 149 \\
+    \null \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{8}\ 及更高版本中不可用的符号}
+  \label{tab:ts1-subset-8-disable}
+\end{table}
+
+
+\begin{table}[!tbp]
+  \centering\footnotesize
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+   \hlinew{1.2pt}
+   {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\texttwelveudash|          & \texttwelveudash          & 21  \\
+    \verb|\textthreequartersemdash|  & \textthreequartersemdash  & 22  \\
+    \verb|\textbardbl|               & \textbardbl               & 134 \\
+    \verb|\textcelsius|              & \textcelsius              & 137 \\
+    \hlinew{1.2pt}
+  \end{tabular}\qquad
+  \begin{tabular}[t]{@{}rp{2em}l@{}}
+  \hlinew{1.2pt}
+  {\heiti 命令} &{\heiti 符号} &{\heiti 槽号} \\ \hlinew{0.7pt}
+    \verb|\texttwosuperior|          & \texttwosuperior          & 178 \\
+    \verb|\textthreesuperior|        & \textthreesuperior        & 179 \\
+    \verb|\textonesuperior|          & \textonesuperior          & 185 \\
+    \null \\
+    \hlinew{1.2pt}
+  \end{tabular}
+  \caption{\texttt{TS1}\ 子编码 \texttt{9}\ 中不可用的符}
+  \label{tab:ts1-subset-9-disable}
+\end{table}
+
+
+
+举个例子，
+%\begin{verbatim}
+   \verb=\DeclareEncodingSubset{TS1}{foo}{5}=
+%\end{verbatim}
+表示字体族(font family) |foo| 包含始终可用的符号(表~\vref{tab:ts1-subset-always})和在子编码 6--9 中禁用的符号，即表~\vrefrange{tab:ts1-subset-6-disable}{tab:ts1-subset-9-disable}。
+
+现在很多字体族都以 |-LF|(lining figures，衬里数字)、|-OsF|(旧式数字)结尾，等等。声明支持快捷方式：如果 \m{font family}\ 名称以 |-*| 结尾，那么星号被这些常用的结尾(common ending)替换，例如：
+\begin{verbatim}
+   \DeclareEncodingSubset{TS1}{Alegreya-*}{2}
+\end{verbatim}
+和下面的写法是一样的
+\begin{verbatim}
+   \DeclareEncodingSubset{TS1}{Alegreya-LF}  {2}
+   \DeclareEncodingSubset{TS1}{Alegreya-OsF} {2}
+   \DeclareEncodingSubset{TS1}{Alegreya-TLF} {2}
+   \DeclareEncodingSubset{TS1}{Alegreya-TOsF}{2}
+\end{verbatim}
+如果只需要其中一些，那么可以单独定义它们，但在许多情况下，这四个都是需要的，所以才走捷径(hence the shortcut)。
+
+
+
+
+\section{\heiti 如果您想知道更多 \ldots}
+
+\NEWdescription{1996/06/01}
+|tracefnt| 包提供了跟踪(tracing)与加载(loading)、替换substituting)和使用(using)字体有关的操作。该软件包接受以下选项：
+\begin{description}
+\item[错误显示(errorshow)] 将有关字体更改等的所有信息写入记录文件(transcript file)中，除非发生错误。这意味着有关字体替换(font substitution)的信息不会在终端(terminal)上显示。
+
+\item[警告显示(warningshow)] 显示终端上的所有字体警告(font warnings)。此设置对应于{\kaiti 未}使用此 \texttt{tracefnt}\ 包时的默认行为！
+
+\item[信息显示(infoshow)] 在终端上显示所有字体警告(font warnings)和所有字体信息(font info)等消息(通常只写入记录文本文件)。这是加载此 \texttt{tracefnt}\ 包时的默认值。
+
+\item[调试显示(debugshow)] 除了信息显示(infoshow)显示的内容之外，还要显示数学字体的更改(尽可能)：当心，这个选项可能会产生大量输出(output)。
+
+\item[加载(loading)] 加载外部字体文件(external font files)时显示其名称。此选项仅显示“新加载(newly loaded)”字体，而不显示在此 \texttt{tracefnt}\ 包激活之前已在格式(format)或类(class)文件中预加载的(preloaded)字体。
+
+\item[暂停(pausing)] 将所有字体警告(font warnings)转为错误，以便 \LaTeX{}\ 停止。
+\end{description}
+
+{\kaiti 警告}：此宏包的操作(actions)可能会改变文档的布局(layout)，甚至在极少数情况下，产生明显错误的输出(wrong output)，因此不应该用于“真实文档(real documents)”的最终格式化(final formatting)。
+
+\begin{thebibliography}{1}
+
+\bibitem{A-W:MG2004}
+Frank Mittelbach and Michel Goossens.
+\newblock {\em The {\LaTeX} Companion second edition}.
+\newblock With Johannes Braams, David Carlisle, and Chris Rowley.
+\newblock Addison-Wesley, Reading, Massachusetts, 2004.
+
+\bibitem{tub:DKn89}
+Donald~E. Knuth.
+\newblock Typesetting concrete mathematics.
+\newblock {\em {TUG}boat}, 10(1):31--36, April 1989.
+
+\bibitem{A-W:LLa94}
+Leslie Lamport.
+\newblock {\em {\LaTeX:} A Document Preparation System}.
+\newblock Addison-Wesley, Reading, Massachusetts, second edition, 1994.
+
+\end{thebibliography}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% fill-column: 72
+%%% End:
