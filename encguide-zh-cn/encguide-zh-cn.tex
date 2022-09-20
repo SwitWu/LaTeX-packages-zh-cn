@@ -1,0 +1,1164 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 1993-2022
+% The LaTeX Project and any individual authors listed elsewhere
+% in this file.
+%
+% This file is part of the LaTeX base system.
+% -------------------------------------------
+%
+% It may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3c
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%    http://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2008 or later.
+%
+% This file has the LPPL maintenance status "maintained".
+%
+% The list of all files belonging to the LaTeX base distribution is
+% given in the file `manifest.txt'. See also `legal.txt' for additional
+% information.
+%
+% The list of derived (unpacked) files belonging to the distribution
+% and covered by LPPL is defined by the unpacking scripts (with
+% extension .ins) which are part of the distribution.
+%
+% \fi
+%
+
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+
+\documentclass{ltxguide}[1994/11/20]
+\usepackage{ctex}
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
+\usepackage{longtable} %%%做长表格
+\usepackage{booktabs} %%%提供了\toprule，\midrule 这样用来画表格横线的指令（感觉比\hline好用一点）
+\usepackage[T1]{fontenc}
+\IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
+\usepackage{textcomp}
+\usepackage{url}
+\usepackage{mflogo}
+\usepackage[colorlinks,linkcolor=red]{hyperref}
+
+\addtolength\textheight{6\baselineskip}
+\addtolength\topmargin{-2\baselineskip}
+
+
+\newcommand\ttverb[1]{\texttt{\string#1}}
+
+
+% for encodings
+\providecommand{\Enc}[1]{\texttt{#1}}
+
+% for packages
+\providecommand{\Pkg}[1]{%
+  \textsf{#1}}
+
+% for files
+\providecommand{\File}[1]{%
+  \texttt{#1}}
+
+% let's have meta values too
+\providecommand{\meta}[1]{%
+  \ensuremath{\langle}\emph{#1}\ensuremath{\rangle}}
+
+\usepackage{tabularx}
+
+% eine Umgebung zur Darstellung von Kodierungen
+%
+% Argumente:
+%  #1: Name in LaTeX (z.B. OT1)
+%  #2: Name der Kodierung (z.B. TeX text)
+%  #3: Name des Autors (z.B. Don Knuth)
+%  #4: Bereich der benützten Glyphindizes
+%  #5: variable Positionen
+%  #6: Beispielzeichensatz
+%  #7: Referenz
+%
+% XXX add code to handle more than a single font example (e.g., larm1000,
+% lbrm1000, and lcrm1000).
+%
+\newenvironment{encodinginfo}[7]%
+  {\noindent
+%   \begin{tabularx}{\textwidth}{l@{}l>{\raggedright\let\\\tabularnewline}X}%
+   \begin{tabularx}{1.11\textwidth}{|rX|lX|}%
+     \hline
+     \LaTeX{}\ 名称(\LaTeX{} name)：          & \texttt{#1}\\\hline%
+     公共名称(Public name)：          & #2\\\hline%
+     作者(Author)：                   & #3\\\hline%
+     使用的字形槽(Glyph slots)：& #4\\\hline%
+     变量槽(Variable slots)：& #5\\\hline%
+     字体示例(Font example)：& \def\@tempa{#6}\ifx\@tempa\@empty---%
+                            \else\texttt{#6}\referenceftable{#6}\fi\\\hline%
+     进一步参考(Further reference)： & #7\\\hline%
+   \end{tabularx}%
+   \par\nobreak
+   \vspace*{3pt}%
+   \quote
+  }%
+  {\endquote
+   \vspace{6pt}}
+
+\makeatletter
+\def\referenceftable#1{
+  \@ifundefined{r@fonttable:#1}%
+  \relax
+  {；\space 编码表(encoding table)在第~\pageref{fonttable:#1}~页}%
+}
+
+% font table macros mainly lifted from manmac.tex
+\def\oct#1{\hbox{\rm\'{}\kern-.2em\it#1\/\kern.05em}}
+\def\hex#1{\hbox{\rm\H{}\tt#1}}
+
+\def\oddline#1{\cr\noalign{\nointerlineskip}
+  \multispan{19}\hrulefill&
+  \setbox0=\hbox{\lower 2.3pt\hbox{\hex{#1x}}}\smash{\box0}\cr
+  \noalign{\nointerlineskip}}
+\def\evenline{\cr\noalign{\hrule}}
+\def\chartstrut{\lower4.5pt\vbox to14pt{}}
+\def\beginchart#1#2{$$\global\count@=0 #1
+  \halign to\hsize\bgroup
+    \chartstrut##\tabskip0pt plus10pt&
+    &\hfil##\hfil&\vrule##\cr
+    \lower6.5pt\null
+  &#2&&\oct0&&\oct1&&\oct2&&\oct3&&\oct4&&\oct5&&\oct6&&\oct7&\evenline}
+\def\endchart{\raise11.5pt\null&&&\hex 8&&\hex 9&&\hex A&&\hex B&
+  &\hex C&&\hex D&&\hex E&&\hex F&\cr\egroup$$}
+\def\:{\setbox0=\hbox{\noboundary\char\count@\noboundary}%
+  \ifdim\ht0>7.5pt\reposition
+  \else\ifdim\dp0>2.5pt\reposition\fi\fi
+  \box0\global\advance\count@ by1 }
+\def\reposition{\setbox0=\hbox{$\vcenter{\kern2pt\box0\kern2pt}$}}
+\def\normalchart{%
+  &\oct{00x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline0
+  &\oct{01x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{02x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline1
+  &\oct{03x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{04x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline2
+  &\oct{05x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{06x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline3
+  &\oct{07x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{10x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline4
+  &\oct{11x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{12x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline5
+  &\oct{13x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{14x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline6
+  &\oct{15x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{16x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline7
+  &\oct{17x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  \top}
+
+\def\notophalf{}
+\def\tophalf{%
+%\noalign{\vskip 5pt\hrule}
+  &\oct{20x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline8
+  &\oct{21x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{22x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline9
+  &\oct{23x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{24x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline A
+  &\oct{25x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{26x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline B
+  &\oct{27x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{30x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline C
+  &\oct{31x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{32x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline D
+  &\oct{33x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{34x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline E
+  &\oct{35x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+  &\oct{36x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline F
+  &\oct{37x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline}
+
+\def\ftable#1#2{%
+     \batchmode
+     \font\X=#1%
+     \errorstopmode
+     \ifx\X\nullfont
+       \@warning{Font #1 not found, table omitted}
+     \else
+       \count@="80
+       \setbox0=\hbox{\X
+        \loop\char\count@\advance\count@ by1 \ifnum\count@<"100
+        \repeat}%
+  \ifdim\wd0>0pt \let\top\tophalf\else\let\top\notophalf\fi
+     \beginchart\X{\hfill\llap{\textbf{#1, \large#2}\label{fonttable:#1}}}\normalchart
+     \endchart\par\vfill
+    \fi}
+\makeatother
+
+
+\setcounter{tocdepth}{3}
+
+
+\title{\heiti {\Huge \textbf{\LaTeX{}}\ 的字体编码}}
+
+\author{Frank Mittelbach (弗兰克·米特巴赫) \and Robin Fairbairns (罗宾·费尔贝恩斯) \and Werner Lemberg (沃纳·莱姆伯格)\\[5pt] \LaTeX\ 项目团队\\[5pt] \ \ 赣医一附院神经科\ \ 黄旭华\ \ \ \ 译}
+
+\date{\copyright~Copyright 1995--2016 \\[5pt] 2016 年 2 月 18 日}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{介绍}
+
+本文档解释了支持 \LaTeX{}\,字体编码(font encodings)的思想以及定义新编码时应用的约束(constraints)；它还列出了已经定义的编码。
+
+\subsection{\TeX{}\ 中的编码}
+
+\TeX{}(程序)隐含地识别出三种编码方式，在某种意义上，它们都在 \TeX{}book~\cite{A-W:DKn86}\ 中讨论过：
+\begin{itemize}
+\item[1.] 输入编码(input encoding)。指定提交给 \TeX{}\ 处理的文件中字符(charac-ters)的含义(meanings)。\TeX{}book\ 建议“您的 \TeX{}\ 版本将识别您在键盘上键入的字符”(\TeX{}\ 程序提供输入字符的静态翻译[static translations])
+\end{itemize}
+这样直接使用 \TeX{}\ 的设施(facilities)并不是现代 \LaTeX{}\,(或任何其他 \TeX{}\ 宏包)处理输入编码的方式。本文件不涉及输入编码的主题；感兴趣的读者应该查看 \LaTeX{}\ 基础包(base package)\,\Pkg{inputenc}\ \cite[第~7.5.2~节，第~357~页]{A-W:MG2004}。
+\begin{itemize}
+\item[2.] \TeX{}\ 内部处理(processes internally)的令牌流(token stream)。该令牌流在 \TeX{}book\ 中进行了详细讨论。
+\end{itemize}
+同样，本文档没有涉及这个主题。\LaTeX{}\ 的内部字符表示(internal character representation)(\textsc{licr})在 \cite[第~7.11.2~节，第~442~页]{A-W:MG2004}\ 中进行了充分的讨论。
+\begin{itemize}
+\item[3.] 字体编码(font encoding)。即字符代码(character codes)到字体(fonts)中字形(glyphs)(用于 \TeX{}\ 排版输出)的映射(mapping)。同样，\TeX{}book\ 中列举了一组字体编码，但事实证明这组编码不足以满足现代多语言使用 \LaTeX\ 的需求。
+\end{itemize}
+本文档解释了\emph{为什么} Knuth(高纳德)的原始编码集(original set of encodings)不适合现代条件(modern conditions)，并讨论了围绕新字体编码(new font encodings)的设计和定义的问题。
+
+字体编码的\emph{重要性}不仅仅体现在映射用于排版的字体的字形上：它们的字形表(glyph tables)也是 \TeX{}\ 断字算法(hyphenation algorithm)运行的上下文(context)。\TeX{}\ 施加的限制(constraints)会影响在多语言环境中使用的新字体编码的结构化方式(详见第~\ref{sec:restrictions}\ 节)。
+
+\subsection{\TeX{}\ 字体编码的历史}
+
+在 \TeX{}\,3\ 到来之前，很少注意字体编码。在那个时候，人们使用 Donald Knuth(高纳德)的字体(计算机现代家族[Computer Modern family]，使用我们现在称为 \Enc{OT1}\ 和 \Enc{OM}\ 系列的编码)，或者使用自已的字体。
+
+计算机现代文本编码(Computer Modern text encoding)在未修改的 \TeX{}\ 中产生问题，因为连字符(hyphenation)不能打断包含 \verb"\accent"\ (放置重音符号)命令的单词。即使在 \Enc{OT1}\ 编码具有必要的基于 \verb"\accent" 的符号的西欧语言中，这一缺陷也会破坏正在运行的文本的排版。
+
+随着 \TeX{}\,3\ 的出现，它能在连字符模式集(hyphenation pattern sets)之间切换，很明显上述情况不会继续。因此，在爱尔兰(Ireland)科克(Cork)举行的 TUG\ 年度大会(Annual General Meeting)上，一个小组为 256 种字形字体(glyph fonts)指定了统一的编码(uniform encoding)，其中包含重音字母(accented letters)和非 \textsc{ascii}\ 字母，这些字母是表达大多数西欧语言(以及一些东欧语言)所必需的，无需依靠 \verb"\accent"\ 命令。
+
+这种“Cork(科克)”编码已经在一系列用 Metafont 设计的字体中实现，至少有一个字体系列(font series)可以在 Adobe Type 1 格式和 OpenType 格式中使用，并且在其他字体系列的许多虚拟字体映射(virtual-font mappings)中使用。
+
+自从科克会议(Cork meeting)以来，人们一直致力于为 \TeX{}\ 使用的文本字体(text fonts)设计编码，而科克编码(Cork encoding)影响了许多此类编码的设计。
+
+相比之下，自 Knuth 的贡献以来，数学字体(mathematical fonts)的编码几乎没有变化。在科克会议上成立了一个 TUG 技术工作组(Technical Working Group)，其目的是定义一组 256 字形编码(glyph encodings)，以规范和扩展 Knuth 的原始字体、使用自那时以来出现的其他几种字体的想法、以及数学和数学科研人员的已知需求。
+
+独立地，贾斯汀·齐格勒(Justin Ziegler)与弗兰克·米特巴赫(Frank Mittelbach)和 \LaTeX\ 项目团队~\cite{ziegler}~的其他成员共同制定了第一个提案(pro-posal)(所谓的阿斯顿提案[\emph{Aston proposal}])。马蒂亚斯·克拉森(Matthias Clasen)和乌尔里克·维思(Ulrik Vieth)~\cite{clasen,clasen-vieth}~首次实现了该提案。
+
+然而，这些数学编码(Mathematical encodings)的缓慢进展已经被(在过去十年左右)大量数学符号(mathematical symbols)添加到 Unicode~\cite{beeton}~中所超越；人们可以期待进一步的变化，因此新的公共数学字体编码(public mathematical font encodings)很可能会被进一步推迟。
+
+
+
+\subsection{更多的信息}
+
+对于 \LaTeX\ 的一般性的介绍(general introduction)，包括 \LaTeXe\ 的新特性，您应该阅读 \emph{\LaTeXbook}, Leslie Lamport, Addison Wesley, 2nd~ed, 1994\ (《\emph{\LaTeX}：一个文档准备系统》，莱斯利·兰伯特，艾迪生·卫斯理，第2版，1994)
+
+有关 \LaTeX\ 新功能的更详细描述，包括 200 多个宏包(packages)和近 1000 个现成运行示例(run examples)的概述，请参见 Frank Mittelbach (弗兰克·米特尔巴赫)和 Michel Goossens (米歇尔·古森斯)的~\cite{A-W:MG2004} \emph{\LaTeXcomp{} second edition}\ (《\LaTeX\ 指南》第二版)。
+
+\LaTeX{}\ 项目赞助了一份关于数学字体编码的报告，该报告值得一读，因为它深入了解了定义数学使用方式的问题：参见~\cite{ziegler,clasen,clasen-vieth}。
+
+\LaTeX{}\ 字体选择方案(font selection scheme)是基于 \TeX\ 的，其开发者 Donald E.~Knuth (高德纳) 和 Addison Wesley (艾迪生·卫斯理)于 1986 年在 \emph{The \TeX book}\ 中对其进行了描述，并于1991年修订，以包括 \TeX~3\ 的功能。
+
+如欲了解更多关于 \TeX{}\ 和  \LaTeX\ 的信息，请联系您当地的 \TeX{} 用户组\,(Users Group)\,或国际 \TeX{}\ 用户组 (\url{http://www.tug.org})。
+
+
+
+\section{现有的字体编码}
+
+本节列出了当前分配的(currently assigned)编码；对于每种编码，我们列出了已注册的(\LaTeX{})名称、分配的编码目的(purpose)和作者。进一步的细节可能会列出编码中使用的代码位置(code positions)、变量槽(\emph{variable slots})(见下文)、示例字体(example font)(如果有相关字体，文档稍后将提供相关清单)以及供进一步参考的源代码(source)。
+
+虽然一种编码的特点(feature)是，根据该编码编码的每种字体应该具有相同的字形集(glyph set)，但也有一些编码(特别是 \Enc{OT1}\ 及其派生物)，其中一些字形代码槽(glyph code slots)在不同字体的内容(contents)上有所不同。
+
+\subsection{命名规范(Naming conventions)}
+
+编码方案(encoding schemes)的名称是最多三个字母(均为大写)加数字的字符串(strings)。
+
+\LaTeX\ 项目保留使用以下字母开头的编码名称(encoding names)：|T|(标准 256 长文本编码[long text encodings])，|TS|(旨在扩展相应 |T| 编码的符号)，|X|(不符合 |T| 编码严格要求的文本编码)，|M|(标准 256 长数学编码[long mathematical encodings])，|S|(其他符号编码[symbol encodings])，|A|(其他特殊应用[special applications])，|OT|(标准 128 长文本编码)和 |OM|(标准 128 长数学编码)。
+
+请不要将上述开头字母(starting letters)用于非便携式编码(non-portable encodings)。如果出现新的标准编码(standard encodings)，我们将在 \LaTeX\ 的后续版本中添加它们。
+
+网站(site)或系统(system)的局部编码方案(encoding schemes)应以 |L| 开头，用于广泛分发的实验性编码(experimental encodings)将以 |E| 开头，而 |U| 表示未知(Unknown)或未分类(Unclassified)编码。
+
+\begin{quote}
+  \itshape 我们建议不要引入新的编码名称，除非用户社区(user community)仔细考虑和讨论确认了编码的必要性。如果编码必须从一种字体更改为另一种字体，就会出现许多问题，因此最好开发能够与大量字体并行使用的编码。这允许文档使用不同的字体排版，而不会出现问题。
+
+  \Enc{TS1}\ 编码是\emph{糟糕(bad)}编码的一个很好的例子(尽管它的开发出发点是好的)，因为大量的字体只能实现其中的一部分。类似地，少数可用的数学字体集(mathematical fonts sets)(除了计算机现代数学[Computer Modern Math])几乎都实现了略微不同的编码，这是问题的一个巨大来源。如果可能的话，不要再添乱了！
+\end{quote}
+
+
+\subsection{128$^+$ 字形编码(文本)}
+
+“OT”系列(series)字体编码始于 Donald Knuth 的原始文本编码(original text encoding)，用于 \TeX{}\ 最早版本中的文本字体(text fonts)。编码指示符(encoding designator)的“O”可被视为表示“原始的(original)”或“旧的(old)”。
+
+\begin{encodinginfo}{OT1}
+        {\TeX{} text\ (\TeX{}\,文本)}
+        {Donald Ervin Knuth}
+        {0x00--0x7F}
+        {0x0B--0x0F, 0x24, 0x3C, 0x3E, 0x5C, 0x7B--0x7D}
+% {0X--'177}
+% {'13--'17, '44, '74, '76, '134, '173--'175}
+        {cmr10}
+        {\cite[第 427 页]{A-W:DKn86}}
+
+  Donald Knuth (高德纳)设计字体编码(以及字体)的环境与现在 \TeX{}\ 世界的环境完全不同：他的(主机)计算机内存很小，对多语言技术排版的经验(或需求)很少，因此牺牲一致性(appropriate)来提高效率(efficiency)是合适的。
+
+  因此，Knuth 的原始字体(original fonts)在一些编码槽(encoded slots)中略有不同：例如，字形(glyphs) \texttt{\string<}、\texttt{\string>}、\verb=\=、\verb={= 和 \verb=}= 仅在打字机字体(typewriter fonts)中可用，而 \textdollar{} 和 \textsterling{} 符号共享相同的位置(在不同的字体形状[font shapes]中)。
+
+  这意味着直接选择这些插槽(slots)可能会产生不可预测的结果，例如，在文档中键入 \texttt{\string<} 或 \verb=\symbol{'74}= 可能会生成“\textquestiondown”。
+\end{encodinginfo}
+
+
+\begin{encodinginfo}{OT2}
+        {UW cyrillic encoding (UW cyrillic 编码)}
+        {华盛顿大学(University of Washington)}
+        {0x00--0x7F}
+        {---}
+        {wnr10}
+        {\cite{Beeton:TB6-3-124}}
+  尽管出于所有实际目的(practical purposes)，最好使用 \Enc{T2}\ 编码之一，但是西里尔语包(Cyrillic bundle)中提供了对这种编码的支持。
+\end{encodinginfo}
+
+
+\begin{encodinginfo}{OT3}
+        {UW IPA encoding (UW IPA 编码)}
+        {华盛顿大学(University of Washington)}
+        {0x00--0x7f}
+        {---}
+        {wsuipa10}
+        {\cite[第 149 页]{CorkGW:91}}
+  在引入 TIPA 系统(TIPA system，[译者注]一种处理语音符号的系统)后，\Enc{OT3}\ 编码从未真正用于 \LaTeXe{}，TIPA 系统为 IPA 提供了更好的支持。特别是，还没有生成 \File{ot3enc.def} 文件。
+\end{encodinginfo}
+
+
+\begin{encodinginfo}{OT4}
+        {Polish text encoding (波兰语文本编码)}
+        {B.~Jackowski (B·杰科夫斯基) 和 M.~Ry\'cko (M·里科)} %% ?  Marcin Woli\'nski
+  {0x00--0x7F, 0x81, 0x82, 0x86, 0x8A, 0x8B, 0x91, 0x99, 0x9B, 0xA1,
+   0xA2,0xA6, 0xAA, 0xAB, 0xAE, 0xAF, 0xB1, 0xB9, 0xBB, 0xD3, 0xF3,
+   0xFF}
+  {0x0B--0x0F, 0x24, 0x3C, 0x3E, 0x5C, 0x7B--0x7D}
+        {plr10}
+        {---}
+
+  虽然 Knuth 在其 \Enc{OT1}\ 编码中包括了排版“lost L”(\L)的方法，但他省略了 (\,\,\k{})，这是波兰语文本(Polish text)中也需要的变音符号(diacritic mark)；因此，早在 \Enc{T1}\ 编码之前，就出现了使用这种编码的字体。
+\end{encodinginfo}
+
+\begin{encodinginfo}{OT5}
+        {Not currently allocated (当前未分配)}
+        {---}
+        {---}
+        {---}
+        {}
+        {---}
+
+\end{encodinginfo}
+
+
+
+\begin{encodinginfo}{OT6}
+        {Armenian text encoding (亚美尼亚语文本编码)}
+        {Serguei Dachian (塞尔吉·达奇安)}
+        {0x03--0x0F, 0x13--0x7F}
+        {---}
+        {artmr10}
+        {---}
+
+  分配这种编码是为了允许在标准 \LaTeX{}\ 环境中使用Dachian(达奇安)的亚美尼亚字体(Armenian fonts)。
+
+  由于许可证问题(license issues)，\texttt{artmr}\ 字体不一定包含在分发的 \TeX{}\ 安装中(因此，下面未显示相应的编码表[encoding table])。但是，字体和支持宏(support macros)可以在 CTAN 档案中找到(请查找 \texttt{armtex})。
+
+\end{encodinginfo}
+
+
+
+\subsection{256 字形编码(文本)}
+
+\begin{encodinginfo}{T1}
+        {Cork encoding (科克编码)}
+        {科克(Cork)欧洲 \TeX{}\ 会议}
+        {0x00--0xFF}
+        {---}
+        {ecrm1000}
+        {\cite[第 514 页]{tub:MFe90}，\cite[第 99 页]{Knappen:TB17-2-96}}
+
+  科克编码(Cork encoding)的开发是为了利用 \TeX{}\,3(当时)的新功能，允许在未修改版的(unmodified version)\TeX{}\ 中使用大多数西欧(和一些东欧)语言中的连字符(hyphenation)。
+
+  除了使用 Metafont (“EC”字体)编写的实例(instances)，以及最近可用的相同字体的 Adobe Type 1 实例外，编码(encoding)是在没有任何现有的字体设计(font design)的情况下开发的。
+
+  还开发了大量(但不完整)使用虚拟字体(virtual fonts)的实例。这些后面的实例映射 Knuth 的原始(OT1 编码的)字体，或者包含 Adobe“标准(standard)”224 字形(glyphs)集的商业字体(com-mercial fonts)。
+\end{encodinginfo}
+
+\begin{encodinginfo}
+  {T2A, T2B, T2C}
+  {Cyrillic encodings (西里尔语编码)}
+  {CyrTUG 字体团队(font team)}
+  {0x00--0xFF}
+  {--- (在每个编码)}
+  {larm1000}
+  {\cite{Berdnikov:eurotex-98}}
+
+  在完整的西里尔语补码(Cyrillic complement of languages)中，有太多的字形(glyphs)，以至于所有的字形不能被单一的 \LaTeX{}\ 兼容编码(compliant encoding)所覆盖(每个~\Enc{T2}~编码的下半部分与~\Enc{T1}~编码的下半部分相同，以便每个都应该是一个兼容的 \LaTeX{}\ 编码~--- 见第~\ref{sec:restrictions}~节)。因此，采取的方法是开发一个单一编码 \Enc{X2} (见~\ref{sec:extendedenc})，该单一编码包含全套语言(full set of languages)所需的所有字形，然后使用 \Enc{X2}\ 集和 \Enc{T1}\ 集导出(derive)三个 \LaTeX{}\ 兼容的 \Enc{T2}\ 族编码(family encodings)。
+
+\end{encodinginfo}
+
+
+
+\begin{encodinginfo}{T3}
+        {IPA encoding (IPA 编码)}
+        {FUKUI Rei (福井丽)，东京大学}
+        {0x00--0xFF}
+        {---}
+        {tipa10}
+        {\cite[第 102 页]{Rei:TB17-2-102}}
+
+
+  根据当前的国际语音协会(International Phonetic Association，IPA)建议 \cite{ipa}，\Enc{T3}\ 编码(以及相关的宏)提供了语音描述(phonetic description)所需的字形(glyphs)。
+
+  \Enc{T3}\ 编码\emph{不符合} \Enc{T}\ 编码的要求---名称是一个历史意外。正确的名称应该是 \Enc{X3}，但是由于这个字体族(font family)已经在其当前编码名称(current encoding name)下使用了很长时间，因此名称不会因兼容性原因(compatibility reasons)而更改。
+
+\end{encodinginfo}
+
+
+
+\begin{encodinginfo}{T4}
+        {African Latin (fc) (非洲拉丁语)}              % public name
+        {J\"org Knappen (约尔格·克纳彭)}              % author name
+        {0x00--0xFF}              % range(s) of slots used for glyphs
+        {0x24}         % range(s) of slots with variable glyphs if any
+        {fcr10}              % name of an example font
+        {\cite{tub:JKn93}}
+
+非洲拉丁字体(African Latin fonts)的下半部分(0--127)包含与欧洲拉丁字体(European Latin Fonts)(T1 编码)相同的字符，而上半部分(128--255)包含使用扩展拉丁字母表(extended Latin alphabets)的非洲语言的字母(letters)和符号(symbols)。由于空间(space)不足，J\"org(约尔格)不得不玩了一个不幸的把戏，将 \verb=\textdollar= 和 \verb=\textsterling= 分配到同一位置；如果需要，用户应该从文本配套字体(text companion font)中提取这些字符(characters)。与为单个字母(single letters)定义许多新的控制序列(control sequences)不同，有三个通用的类似重音的(accent-like)控制序列：\verb=\m= (Modified-1)、\verb=\M= (Modified-2) 和 \verb=\B= (Barred)。大多数标准的 \LaTeX{}\ 编码依赖命令(encoding-dependent commands)都可以工作。然而，冰岛特殊字母(Icelandic special letters)不可用，因此使用了“最佳替代(best replacements)”来代替 \verb=\Th=、 \verb=\th= 和 \verb=\dh= (分别禁止 T 和 d)。
+\end{encodinginfo}
+
+
+\begin{encodinginfo}{T5}
+        {Vietnamese encoding (越南语编码)}
+        {沃纳·莱姆伯格 (Werner Lemberg) 和弗拉基米尔·沃洛维奇 (Vladimir Volovich)}
+        {0x00--0xFF}
+        {---}
+        {vnr10}
+        {\cite{vnr}}
+
+  \Enc{T5}\ 编码是为越南语(Vietnamese)开发的。同样，这种编码\emph{不}符合 \Enc{T}\ 编码的要求，因为其大量重音字母(accented letters)阻止了 \Enc{T}\ 编码的 \verb=\lccode= 和 \verb=\uccode= 映射要求(mapping requirements)。然而，由于越南语在排版中不使用分词(word division)，因此这一要求对这种特定语言实际上并不重要。由于越南语文本中使用的每个字形(glyph)在内部都表示为 \textsc{licr}\ 宏，因此命令 \verb=\MakeUppercase= 和 \verb=\MakeLowercase= 仍按预期工作(因为它们更改了 \textsc{licr}\ 定义中 \textsc{ascii}\ 字符的大小写[case])。
+
+\end{encodinginfo}
+
+\begin{encodinginfo}
+  {T6}
+  {Armenian (亚美尼亚文)}
+  {---}
+  {---}
+  {---}
+  {}
+  {---}
+
+  保留这种编码，以便将来亚美尼亚 \TeX{}\ 的扩展能使用 256 字符(256-character)(连字符)字体。
+\end{encodinginfo}
+
+\begin{encodinginfo}{T7}
+        {Greek encoding (希腊文编码)}
+   {---}
+   {---}
+   {---}
+   {}
+   {---}
+
+该名称已为 256 字形希腊文编码(greek encoding)而保留。编码本身至今尚未定义。
+
+\end{encodinginfo}
+
+
+
+\subsection{256$^-$ 字形编码 (文本符号)}
+
+\begin{encodinginfo}{TS1}
+        {Text Companion encoding (Cork) [文本配套编码(科克)]}
+        {J\"org Knappen (约尔格·克纳彭)}
+  {0x00--0x0D, 0x12, 0x15, 0x16, 0x18--0x1D, 0x20, 0x24, 0x27, 0x2A,
+   0x2C--0x3A, 0x3C--0x3E, 0x4D, 0x4F, 0x57, 0x5B, 0x5D--0x60,
+   0x62--0x64, 0x6C--0x6E, 0x7E--0xBF, 0xD6, 0xF6}
+  {---}
+        {tcrm1000}
+        {\cite{Knappen:TB17-2-96}}
+
+  文本符号编码(text symbol encoding)提供了对文本中常用的符号字形(symbolic glyphs)的访问(由于各种原因)，符号字形的样式(style)随着它们周围的文本而变化。
+
+  不幸的是，\Enc{TS1}\ 编码是在没有参考现有商业字体(commercial fonts)中可用的字形(glyphs)的情况下开发的。因此，只有为 \TeX{}\ 显式开发的(explicitly developed)字体族(font families)(即，通常源于 \MF{})实际上才包含 \Enc{TS1}\ 编码所需的所有字形。大多数其他字体族(无论是免费的还是商业的)通常只提供一半的字体。
+%%
+%% don't show the comment if the tables are not generated
+%%
+\expandafter\ifx\csname r@fonttable:tcrm1000\endcsname\relax
+\else
+  \expandafter\ifx\csname r@fonttable:ptmr8c\endcsname\relax
+  \else
+    \space (比较第~\pageref{fonttable:tcrm1000}~页和第~\pageref{fonttable:ptmr8c}~页 \Enc{TS1}\ 的两个表格)%
+  \fi
+\fi。
+  为了在一定程度上改进这种情况，NFSS 提供了一种在 \Pkg{textcomp}\ 宏包(该宏包提供对 \Enc{TS1}\ 编码的支持)中基于每个字体族定义编码子集(define encoding subsets)的方法。
+\end{encodinginfo}
+
+
+\begin{encodinginfo}{TS3}
+        {IPA symbol encoding (IPA 符号编码)}
+        {FUKUI Rei (福井丽)，东京大学}
+        {0x00--0x0A, 0x20--0x49, 0x50--0x56, 0x70--0x7B}
+        {---}
+        {tipx10}
+        {\cite{Rei:TB17-2-102}}
+
+  \Enc{TS3}\ 编码(连同 \Enc{T3}\ 编码)根据国际语音协会(International Phonetic Association，IPA) \cite{ipa}\ 的指引提供字形(glyphs)，以排版语音转录(phonetic transcriptions)。通过 \Pkg{tipa}\ 宏包提供支持。
+\end{encodinginfo}
+
+
+
+
+\subsection{256 字形编码 (文本扩展)}
+\label{sec:extendedenc}
+
+\begin{encodinginfo}
+  {X2}
+  {Cyrillic glyph container (西里尔文字形容器)}
+  {The CyrTUG font team (CyrTUG 字体团队)}
+  {0x00--0xFF}
+  {---}
+  {rxrm1000}
+  {\cite{Berdnikov:eurotex-98}}
+
+  此编码指定西里尔字符的字形容器(glyph container)，用于指定 \Enc{T2A}、\Enc{T2B} 和 \Enc{T2C}\ 编码。
+\end{encodinginfo}
+
+
+
+
+\subsection{128$^+$ 字形编码 (数学)}
+
+
+\begin{encodinginfo}{OML}
+        {\TeX{} math italic (\TeX{}\ 数学斜体)}
+        {Donald Ervin Knuth (高德纳)}
+        {0x00--0x7F}
+        {---}
+        {cmmi10}
+        {\cite[p.430]{A-W:DKn86}}
+
+  \Enc{OML}\ 编码包含用于数学公式(mathematical formulas)(通常用于变量)的斜体拉丁字母(italic Latin letters)和希腊字母(Greek letters)以及一些符号(symbols)。
+
+\end{encodinginfo}
+
+\begin{encodinginfo}{OMS}
+        {\TeX{} math symbol (\TeX{}\ 数学符号)}
+        {Donald Ervin Knuth (高德纳)}
+        {0x00--0x7F}
+        {---}
+        {cmsy10}
+        {\cite[p.431]{A-W:DKn86}}
+
+  \Enc{OMS}\ 编码包含基本的数学符号(basic mathematical symbols)，以及大写的(uppercase)“书法(calligraphic)”拉丁字母(Latin alphabet)。
+\end{encodinginfo}
+
+
+\begin{encodinginfo}{OMX}
+        {\TeX{} math extension (\TeX{}\ 数学扩展)}
+        {Donald Ervin Knuth (高德纳)}
+        {0x00--0x7F}
+        {---}
+        {cmex10}
+        {\cite[p.432]{A-W:DKn86}}
+
+  \Enc{OMS}\ 用可变尺寸(variable sizes)编码数学符号(mathematical symbols)，比如 $\sum$ 符号(sign)，如果显示在公式中，它的尺寸就会发生变化，还有括号(brackets)、大括号(braces)和根号(radicals)等的构造部分，它们可以伸展以适应它们所包含的东西。
+
+\end{encodinginfo}
+
+
+
+
+\subsection{256 字形编码 (数学)}
+
+到目前为止，还没有 256 种字形数学编码(glyph mathematical encodings)。\cite{ziegler}\ 中给出了一个建议。
+
+\subsection{其它编码}
+
+\begin{encodinginfo}
+  {C..}
+  {CJK encodings (CJK 编码)}
+  {Werner Lemberg (沃纳·莱姆伯格)}
+  {0x00--0xFF}
+  {---}
+  {} % no font, of course
+  {\cite{CJK}}
+
+  \Pkg{CJK}\ 宏包定义了多种可访问中文(Chinese)、日文(Japanese)和韩文(Korean)字体的编码。
+
+\end{encodinginfo}
+
+\begin{encodinginfo}
+  {E..}
+  {Experimental encodings (实验性编码)}
+  {---}
+  {0x00--0xFF}
+  {all (全部)}
+  {}
+  {\cite[第 416 页]{A-W:MG2004}}
+
+  顾名思义，以字母 \Enc{E}\ 开头的编码用于实验性编码(experimental encodings)，它有可能发生变化。
+\end{encodinginfo}
+
+\begin{encodinginfo}{L..}
+        {Local encoding (site dependent) [局部编码(网站依赖)]}
+        {---}
+        {0x00--0xFF}
+        {all (全部)}
+        {}
+        {\cite[p.416]{A-W:MG2004}}
+
+        “局部(Local)”编码提供了开发适合特定 \TeX{}\ 环境的表示技术的手段。虽然开发人员可以随心所欲地指定自己的编码方式，但他们有强烈的动机(strong incentive)去遵守编码的 \LaTeX{}\ 规则(rules)，因为不这样做，他们很难使用编码方式编写文本(compose text)。
+
+        至少它的意图是 \Enc{L..}\ 编码是局部的(local)和网站相关的(site dependent)。然而，许多这样的编码在没有分配不同名称的情况下被广泛使用。
+
+\end{encodinginfo}
+
+
+
+\begin{encodinginfo}{LY1}
+        {Y\&Y 256 glyph encoding (Y\&Y 256 字形编码)}
+        {Berthold Horn (伯索尔德·霍恩)}
+        {0x00--0x08, 0x0C, 0x10, 0x12--0xFF}
+        {\emph{不相信}}
+        {ptmr8y}
+        {\cite[p.416]{A-W:MG2004}}
+
+        这是 Y\&Y 开发的 \Enc{T1}\ 编码的一种替代方案，用于商业  \TeX{}\ 实现(implementation)。
+
+\end{encodinginfo}
+
+
+\begin{encodinginfo}{LV1}
+        {MicroPress encoding (MicroPress 编码)}
+        {Michael Vulis (迈克尔·瓦利斯)}
+        {\emph{未知}}
+        {\emph{未知}}
+        {}
+        {\cite[第 416 页]{A-W:MG2004}}
+
+        这是 MicroPress 开发的一种编码，用于他们的一些字体。
+
+\end{encodinginfo}
+
+
+\begin{encodinginfo}{LGR}
+        {Greek 256 glyph encoding (希腊 256 字形编码)}
+        {\emph{未知}}
+        {0x00--0xFF}
+        {\emph{不相信}}
+        {grmn1000}
+        {\cite[第 575 页]{A-W:MG2004}}
+
+        目前主要用于希腊语的编码。
+
+        这种编码不符合第~\pageref{sec:restrictions}~页第~\ref{sec:restrictions}~节描述的 \Enc{T}\ 编码的限制(restrictions)，因为它根本没有任何 \textsc{ascii}\ 字形。
+
+\end{encodinginfo}
+
+
+\begin{encodinginfo}
+  {PD1}
+  {PDF DocEncoding (PDF 文档编码)}
+  {Adobe (奥多比)}
+  {0x08--0x0A, 0x0C, 0x0D, 0x18--0x7E, 0x80--0x9E, 0xA0--0xAE, 0xB0--0xFF}
+  {---}
+  {}
+  {\cite{Adobe:PDF-1.6}，\cite{hyperref}}
+
+  \Enc{PD1}\ 编码是一种虚拟编码(virtual encoding)，具有 256 个字形，用于通过 pdf\LaTeX\ 生成 PDF 文档中的书签(bookmarks)和类似文本。编码是“虚拟的(virtual)”，因为根据设计，不存在覆盖 \Enc{PD1}\ 的 \TeX{}\ 字体。详情见~\cite{Adobe:PDF-1.6}~中的附录 D.1。
+\end{encodinginfo}
+
+\begin{encodinginfo}
+  {PU}
+  {PDF Unicode Encoding (PDF Unicode 编码)}
+  {Adobe (奥多比)}
+  {---}
+  {---}
+  {}
+  {\cite{Adobe:PDF-1.6}，\cite{hyperref}}
+
+  PDF 文档中 Unicode 编码书签的另一种虚拟编码(virtual encoding)(超过 600 个字符)。
+\end{encodinginfo}
+
+\begin{encodinginfo}{U}
+        {Unknown encoding (未知编码)}
+        {---}
+        {可能是 0x00-0xFF}
+        {all (全部)}
+        {wasy10}
+        {\cite[第 416 页]{A-W:MG2004}}
+
+  这种编码应用于抵抗分类(resist classification)的字体，例如，当很明显不会有多个字体使用相同编码时。
+
+\end{encodinginfo}
+
+
+
+\section{限制 (Restrictions)}
+\label{sec:restrictions}
+
+
+\subsection{通用文本编码所需的字形}
+
+应该与 \LaTeX{}\ 一起用于“通用文本字体(general purpose text font)”的编码需要在特定的编码槽(encoding slots)中具有特定的固定字形(fixed glyphs)。“通用文本字体(general purpose text font)”是一种用于任意自然语言文本(natural language text)的字体，而不仅仅用于特殊环境(如语音字母表[phonetic alphabet])或用于排版单个符号(individual symbols)(例如，带有编码 \Enc{TS1}\ 的文本配套字体[text companion font])。
+
+对于下面的字形(glyphs)，它们必须处于通用文本编码的 \textsc{ascii}\ 位置：
+\begin{center}
+\begin{tabular}[t]{cc}
+  字形 & 位置 \\ \hline
+  !     & \number`\!    \\
+  '     & \number`\'    \\
+  (     & \number`\(    \\
+  )     & \number`\)    \\
+  \relax*       & \number`\*    \\
+  +     & \number`\+    \\
+  ,     & \number`\,    \\
+  -     & \number`\-    \\
+  .     & \number`\.    \\
+  /     & \number`\/    \\
+  0 \ldots\ 9   & \number`\0\ to \number`\9     \\
+  \end{tabular}
+  \quad
+  \begin{tabular}[t]{cc}
+  字形 & 位置 \\ \hline
+  :     & \number`\:    \\
+  ;     & \number`\;    \\
+  =     & \number`\=    \\
+  ?     & \number`\?    \\
+  @     & \number`\@    \\
+  A \ldots\ Z   & \number`\A\ to \number`\Z     \\
+  \relax[       & \number`\[    \\
+  ]     & \number`\]    \\
+  `     & \number`\`    \\
+  a \ldots\ z   & \number`\a\ to \number`\z     \\
+\end{tabular}
+\quad
+\begin{tabular}[t]{cc}
+字形\footnotemark      & 位置 \\ \hline
+<       & \number`\<    \\
+>       & \number`\>    \\
+\string|        & \number`\|    \\
+\end{tabular}\footnotetext{拉丁字母表(Latin alphabet) \Enc{OT}\ 编码违反了这三个字形的要求。}
+\end{center}
+此外，以下字形(glyphs)必须出现在编码中的某个位置\footnote{在这种情况下，位置并不重要，因为它们是由连字程序(ligature programs)生成的。}，并与相应的连字程序(ligature programs)一起生成这些字形：
+\begin{center}
+\begin{tabular}[t]{cc}
+字形   & 连字程序 \\ \hline
+ ``     & \texttt{`\/`} \\
+ ''     & \texttt{'\/'} \\
+ --     & \texttt{-\/-} \\
+ ---    & \texttt{-\/-\/-} \\
+\end{tabular}
+\end{center}
+
+这是 $33 + 2 * 26 = 85$ 个“必需(required)”位置，其中 171 个位置空闲(free)。
+
+如果有空闲的位置(free slots)，那么添加全部或部分变音符(diacritics)将是填充它们的最佳方式。
+
+如果没有足够的插槽(insufficient slots)容纳所需的字符(characters)，一种可能的技术是创建一个子编码(subsidiary encoding)，并将非字母字符(non-letter characters)移动到该子编码中。由于只有“字母(letters)”参与连字符算法(hyphenation algorithm)，这种技术不影响排版结果的外观。
+
+\subsection{大写表或小写表中的约束}
+
+由于 \TeX{}\ 的一些与连字符(hyphenation)有关的技术限制(technical restrictions)，在 \LaTeX{}\ 中不可能使用一个以上的 \verb=\lccode= 或 \verb=\uccode= 表。因此，所有编码都需要共享这两个表，这两个表被定义为 \Enc{T1}\ 编码的表。
+
+\Enc{T1}\ 编码有一些令人讨厌的特性，如果要遵守这个限制，那么某些槽位(slot positions)或多或少不能用于其他编码。这是不幸的，但是因为 \Enc{T1}\ 已经很好地建立起来了，而且作为大量语言(languages)的基础，似乎更好地适应这种情况，而不是试图用一个稍微好一点的标准来取代 \Enc{T1} (结果是，在很长一段时间内，不同的 \LaTeX{}\ 安装[installations]因为不兼容的字体集[incompatible font sets]而无法相互通信)。
+
+有问题的位置(positions)如下：
+\begin{center}
+\begin{tabular}{|rp{0.8\linewidth}X|}
+\hline
+25 (\char 25) & 奇怪的大写映射(uppercase maps)(和 105, \char 105\ 一样)\\\hline
+26 (\char 26) & 奇怪的大写映射(uppercase maps)(和 106, \char 106\ 一样)\\\hline
+27 (\char 27) & 小写字母(lowercase)映射到它自己，这使得这个槽受到连字符(用于支持 \Enc{OT1}\ 编码)的限制\\\hline
+157 (\char 157) & 奇怪的大写映射(lowercase maps)(和 73, \char 73\ 一样)\\\hline
+158 (\char 158) & 奇怪的大写映射(uppercase maps)(和 240, \char 240\ 一样)\\\hline
+\end{tabular}
+\end{center}
+使用这种插槽(slots)的一种方法是用连字字形(ligature glyphs)填充它们，因为 \TeX{}\ 不会查阅(consult)通过连字程序(ligatures programs)构建的字形表(tables for glyphs)，而是使用用于生成连字的单个字形(individual glyphs)的条目(entries)。
+
+大/小写映射表(uppercase/lowercase mapping tables)的完整清单见第~\ref{sec:uclc-tab}~节(第~\pageref{sec:uclc-tab}~页)。
+
+\newcount\temp \newcount\tempL \newcount\tempU
+
+\def\nextstep{\global\tempL=\lccode\temp
+              \global\tempU=\uccode\temp
+              \lctablenumbersize\the\temp &
+              \the\tempL&
+              \the\tempU&\printlowerupper{\the\temp}{\the\tempL}{\the\tempU}\\
+               \global\advance\temp by 1
+               \stepprint}
+
+\def\printlowerupper#1#2#3{\char#1\relax
+   (\ifnum#2=0\relax--\else\char#2\fi
+   /\ifnum#3=0\relax--\else\char#3\fi)}
+
+\def\stepprint{\relax\ifnum\temp<\endval
+                    \let\next=\nextstep
+               \else
+                     \let\next=\relax
+               \fi
+               \next}
+
+\def\dolctable#1#2{{\temp=#1\relax
+\def\endval{#2}%
+\setlength\tabcolsep{1.5pt}%
+\begin{tabular}[t]{@{}cccc@{}}
+pos&lc&uc&glyphs\\\hline
+\stepprint
+\end{tabular}}}
+
+\iffalse
+\begin{center}
+\tiny\let\lctablenumbersize\tiny
+\mbox{\dolctable{0}{52}\vrule
+\dolctable{52}{104}\vrule
+\dolctable{104}{156}\vrule
+\dolctable{156}{208}\vrule
+\dolctable{208}{256}}
+\end{center}
+\fi
+
+\iffalse
+\begin{center}\tiny
+\mbox{\dolctable{0}{65}\vrule
+\dolctable{65}{128}\vrule
+\dolctable{128}{193}\vrule
+\dolctable{193}{256}}
+\end{center}
+\fi
+
+
+
+\section{特定编码的(encoding specific)命令}
+
+特定编码的命令(encoding specific command)能生成一个或多个字形(glyph)，以产生可能在不同编码中实现不同的图形效果(graphic effect)。当编码在文档过程(course of the document)中发生变化时，特定编码的命令会自动更改实现(implementation)。特定编码的命令出现在 \LaTeX\ 的内部字符表示(internal character representation)(\textsc{licr})中，在\cite[第~7.11.2~节， 第~442~页]{A-W:MG2004}这里会进行讨论。
+
+下表仅涵盖了 \Enc{OT1}\ 和 \Enc{T1}\ 编码的编码特定命令(encoding specific commands)。其他编码可以指定特定命令的附加编码(additional encoding)。在表中，前 15 个命令是“类似重音(accent-like)”的，并且需要将要重音字符作为参数。例如，|\v{c}| 是“\v{c}”的 \LaTeX{}\ 的内部字符表示(internal character representation)(\textsc{licr})。
+%\vspace{-1em}
+\begin{center}
+\begin{longtable}{|l|l|c|l|}
+\hline
+\ttverb\`{}               &OT1,T1&   \a`{}& grave  (重音符、抑音符、沉音符)      \\ \hline
+\ttverb\'{}               &OT1,T1&   \a'{}& acute  (尖重音、尖音符)      \\ \hline
+\ttverb\^{}               &OT1,T1&   \^{}&  circumflex  (音调符号、长音符号) \\ \hline
+\ttverb\~{}               &OT1,T1&   \~{}&  tilde  (波浪号)      \\ \hline
+\ttverb\"{}               &OT1,T1&   \"{}&  umlaut  (曲音符号)     \\ \hline
+\ttverb\H{}               &OT1,T1&   \H{}&  Hungarian umlaut  (匈牙利元音符号) \\ \hline
+\ttverb\r{}               &OT1,T1&   \r{}&  ring  (环形记号)       \\ \hline
+\ttverb\v{}               &OT1,T1&   \v{}&  ha\v{c}ek  (小钩)  \\ \hline
+\ttverb\u{}               &OT1,T1&   \u{}&  breve  (短音符号、二全音符、弱读音节符号)      \\ \hline
+\ttverb\t{}               &OT1,T1&   \t{}&  tie  (连结符号、连结线、连音符)        \\ \hline
+\ttverb\={}               &OT1,T1&   \a={}& macron  (长音符、平调符)     \\ \hline
+\ttverb\.{}               &OT1,T1&   \.{}&  dot  (附点、顿音记号、断奏符)        \\ \hline
+\ttverb\b{}               &OT1,T1&   \b{}&  underbar  (下划线)   \\ \hline
+\ttverb\c{}               &OT1,T1&   \c{}&  cedilla  (变音符号)    \\ \hline
+\ttverb\d{}               &OT1,T1&   \d{}&  dot under  (下划点)  \\ \hline
+\ttverb\k{}               &T1    &   \k{}&  ogonek  (鼻音化符号)     \\ \hline
+\ttverb\AE                &OT1,T1&   \AE &               \\ \hline
+\ttverb\DH                &T1    &   \DH &               \\ \hline
+\ttverb\DJ                &T1    &   \DJ &               \\ \hline
+\ttverb\L                 &OT1,T1&   \L  &               \\ \hline
+\ttverb\NG                &T1    &   \NG &               \\ \hline
+\ttverb\OE                &OT1,T1&   \OE &               \\ \hline
+\ttverb\O                 &OT1,T1&   \O  &               \\ \hline
+\ttverb\SS                &OT1,T1&   \SS &               \\ \hline
+\ttverb\TH                &T1    &   \TH &               \\ \hline
+% \ttverb\aa              &OT1,T1&   \aa &               \\ \hline  no-longer
+\ttverb\ae                &OT1,T1&   \ae &               \\ \hline
+\ttverb\dh                &T1    &   \dh &               \\ \hline
+\ttverb\dj                &T1    &   \dj &               \\ \hline
+\ttverb\guillemotleft     &T1    &   \guillemotleft  & guillemet  (吉约梅标记、书名号) \\ \hline
+\ttverb\guillemotright    &T1    &   \guillemotright & guillemet  (吉约梅标记、书名号) \\ \hline
+\ttverb\guilsinglleft     &T1    &   \guilsinglleft  & guillemet  (吉约梅标记、书名号) \\ \hline
+\ttverb\guilsinglright    &T1    &   \guilsinglright & guillemet  (吉约梅标记、书名号) \\ \hline
+\ttverb\i                 &OT1,T1&   \i  &               \\ \hline
+\ttverb\j                 &OT1,T1&   \j  &               \\ \hline
+\ttverb\l                 &OT1,T1&   \l  &               \\ \hline
+\ttverb\ng                &T1    &   \ng &               \\ \hline
+\ttverb\oe                &OT1,T1&   \oe &               \\ \hline
+\ttverb\o                 &OT1,T1&   \o  &               \\ \hline
+\ttverb\quotedblbase      &T1    &   \quotedblbase   &   \\ \hline
+\ttverb\quotesinglbase    &T1    &   \quotesinglbase &   \\ \hline
+\ttverb\ss                &OT1,T1&   \ss &               \\ \hline
+\ttverb\textasciicircum   &OT1,T1&   \textasciicircum &  \\ \hline
+\ttverb\textasciitilde    &OT1,T1&   \textasciitilde  &  \\ \hline
+\ttverb\textbackslash     &OT1,T1&   \textbackslash   &  \\ \hline
+\ttverb\textbar           &OT1,T1&   \textbar         &  \\ \hline
+\ttverb\textbraceleft     &OT1,T1&   \textbraceleft   &  \\ \hline
+\ttverb\textbraceright    &OT1,T1&   \textbraceright  &  \\ \hline
+\ttverb\textcompwordmark  &OT1,T1&   \textcompwordmark& 不可见 \\ \hline
+\ttverb\textdollar        &OT1,T1&   \textdollar      &  \\ \hline
+\ttverb\textemdash        &OT1,T1&   \textemdash      &  \\ \hline
+\ttverb\textendash        &OT1,T1&   \textendash      &  \\ \hline
+\ttverb\textexclamdown    &OT1,T1&   \textexclamdown  &  \\ \hline
+\ttverb\textgreater       &OT1,T1&   \textgreater     &  \\ \hline
+\ttverb\textless          &OT1,T1&   \textless        &  \\ \hline
+\ttverb\textquestiondown  &OT1,T1&   \textquestiondown&  \\ \hline
+\ttverb\textquotedbl      &T1    &   \textquotedbl    &  \\ \hline
+\ttverb\textquotedblleft  &OT1,T1&   \textquotedblleft&  \\ \hline
+\ttverb\textquotedblright &OT1,T1&   \textquotedblright& \\ \hline
+\ttverb\textquoteleft     &OT1,T1&   \textquoteleft   &  \\ \hline
+\ttverb\textquoteright    &OT1,T1&   \textquoteright  &  \\ \hline
+\ttverb\textregistered    &OT1,T1&   \textregistered  &  \\ \hline
+\ttverb\textsection       &OT1,T1&   \textsection     &  \\ \hline
+\ttverb\textsterling      &OT1,T1&   \textsterling    &  \\ \hline
+\ttverb\texttrademark     &OT1,T1&   \texttrademark   &  \\ \hline
+\ttverb\textunderscore    &OT1,T1&   \textunderscore  &  \\ \hline
+\ttverb\textvisiblespace  &OT1,T1&   \textvisiblespace&  \\ \hline
+\ttverb\th                &T1    &   \th              & \\ \hline
+\end{longtable}
+\end{center}
+
+
+\section{基于 \TeX\ 系统的 Unicode 编码}
+\label{sec:unicode}
+
+前面的文本(text)假定了一个经典的 TeX 系统，该系统仅限于使用最多 256 个字符(characters)的字体。为了容纳不同语言(languages)和数学(mathematics)所需的所有字符(characters)，有必要像上面描述的那样使用多种编码(multiple encodings)，并且 \LaTeX\ 需要了解每种字体所使用的编码。
+
+Unicode 的目标是提供一种单一的编码(single encoding)，除了非常专业地使用非标准字符(non-standard characters)之外，这种编码可以消除大部分切换编码(switch encodings)的需要。尽管由于技术原因，并不是所有的插槽(slots)都可用于不同的字符，但是 0--256 (十六进制 FF)的 Unicode 代码在 0--1，114，111(十六进制 FFFF)范围内。Unicode 为所有文档提供了使用单一输入编码(single input encoding)(通常为 UTF-8)的可能性，并为所有字体提供了基本相同的 Unicode 编码，因此无需在不同上下文中切换编码。
+
+Omega 可能是第一个广泛使用的支持 Unicode 的 \TeX\ 扩展。目前，在大多数现代 \TeX\ 发行版(distributions)中存在的两个积极支持的系统是 Xe\TeX\ 和 Lua\TeX。
+
+当与这些扩展的 \TeX\ 引擎一起使用时，\LaTeX\ 的字体系统可以调用 Unicode 字体(通常是在操作系统上安装的 OpenType 字体，而不是专门为 \TeX\ 编码/安装的字体)。目前访问这些字体的常用方法是通过贡献的(contributed) \Pkg{fontspec}\ 宏包。这使用了编码 \Enc{TU}：“\TeX{} Unicode”(历史上使用了两种实验性编码 \Enc{EU1}\ 和 \Enc{EU2}，具体取决于引擎，但不推荐使用)。Unicode 引擎的 \LaTeX\ 编码的确切规则(exact rules)尚未最终确定，因为(通常)要求每个槽(slot)都应定义。(这对于 Unicode 字体来说是不现实的，因为几乎所有字体都会处理整个范围的子集。)很少需要指定 \Enc{TU}\ 编码文档，因为 \Pkg{fontspec}\ 宏包在加载时设置了正确的编码。
+
+第~\ref{sec:restrictions}~节描述的限制(restrictions)不适用，或者需要在基于 Unicode 的引擎中进行修改。显然，小写表(lowercase table)(和连字符模式[hyphenation patterns])不能局限于用于 \Enc{T1}\ 的值，并且只涉及前 256 个字符(characters)。
+
+如果使用的是经典的 \TeX\ 或 pdf\TeX，则使用 \LaTeX\ 格式时， \LaTeX\ 会设置小写表(lowercase table)并根据 \Enc{T1}\ 将字符(characters)分类为字母或非字母。如果检测到基于 Unicode 的 \TeX，那么这些值将基于 Unicode 字符数据库(Unicode Character Database) \cite{ucd} 提供的分类(classification)和小写映射(lower-case mappings)。\LaTeX{}\ 团队已经编写了一个通用的加载程序包(generic loader bundle) 即 \Pkg{unicode-data}，它提供了一种机制来直接从 Unicode 字符数据库(Unicode Character Database)数据文件(data files)加载这些信息，并在格式构建(format-building)过程中检测到一个与 Unicode 兼容的(Unicode-compliant)引擎时读取这些信息。
+
+类似地，在现代 \TeX\ 发行版(distribution)使用的默认配置文件(default configuration files)中，每种受支持语言的连字符文件(hyphenation files)都是用 UTF-8 编码编写的，对所有字母都使用 Unicode 代码点(Unicode code points)，然后，如果检测到一个经典的 \TeX\ 系统，就会加载一些额外的宏(additional macros)，以便在可能的情况下将这些文件转换为 256 个字符的编码(256-character encodings)，并假设为 \Enc{T1}\ 小写表(lowercase table)。对于 Unicode 引擎，不进行转换。(少数语言的连字符模式[hyphenation patterns]要求某些标点符号[punctuation characters]具有非零 c 值。这是在模式读取期间设置的，将来可能会在某个阶段使用 e-\TeX{} \verb=\savinghyphcodes= 机制，以避免操作文档中的 \verb=\lccode=。)
+
+
+\begin{thebibliography}{99}
+\addcontentsline{toc}{section}{\numberline{\relax}\refname}
+
+
+\bibitem{Adobe:PDF-1.6} \emph{\textsc{PDF} reference}:
+    Adobe portable document format version~1.6.  Adobe Systems
+    Incorporated, 2005. % why \textsuperscript{3}?
+  \url{http://partners.adobe.com/public/developer/en/pdf/PDFReference16.pdf}.
+
+\bibitem{Beeton:TB6-3-124} Barbara Beeton:
+  \emph{Mathematical symbols and cyrillic fonts ready for
+      distribution}.  In: TUGBoat, 6\#3), 1985.
+  \url{http://tug.org/TUGboat/Articles/tb06-3/tb13beetcyr.pdf}.
+
+\bibitem{beeton} Barbara Beeton: \emph{Unicode
+      and math, a combination whose time has come -- Finally!}.  In:
+  TUGBoat, 21\#3, 2000.
+  \url{http://www.tug.org/TUGboat/Articles/tb21-3/tb68beet.pdf}.
+
+
+\bibitem{Berdnikov:eurotex-98} A.\@ Berdnikov, O.\@
+  Lapko, M.\@ Kolodin, A.\@ Janishevsky and
+  A.\@ Burykin: \emph{The Encoding Paradigm in
+      \LaTeXe{} and the Projected X2 Encoding for Cyrillic Texts}.
+  Euro\TeX~98.
+  \url{http://www.gutenberg.eu.org/pub/GUTenberg/publicationsPDF/28-29-berdnikova.pdf}.
+
+\bibitem{CJK} \emph{The \Pkg{CJK} package}:
+  \url{http://cjk.ffii.org}.
+
+\bibitem{clasen} Matthias Clasen: \emph{A new
+      implementation of \LaTeX{} math}, 1997-98.
+  \url{http://www.tug.org/twg/mfg/papers/current/newmath.ps.gz}.
+
+\bibitem{clasen-vieth} Matthias Clasen and Ulrik
+  Vieth: \emph{Towards a new Math Font Encoding
+      for (La)\TeX}.  March 1998,
+  \url{http://www.tug.org/twg/mfg/papers/current/mfg-euro-all.ps.gz}.
+
+\bibitem{CorkGW:91}
+Dean Guenther and Janene Winter.
+\newblock An international phonetic alphabet.
+\newblock In Guenther \cite{proc:MGu91}, pages 149--156.
+\newblock Published as {TUG}boat 12\#1.
+
+\bibitem{proc:MGu91}
+Mary Guenther, editor.
+\newblock {\em {\TeX} 90 Conference Proceedings}, March 1991.
+\newblock Published as {TUG}boat 12\#1.
+
+\bibitem{tub:MFe90}
+Michael~J. Ferguson.
+\newblock Report on multilingual activities.
+\newblock {\em {TUG}boat}, 11(4):514--516, 1990.
+
+\bibitem{fontinst} \emph{The \Pkg{fontinst} package}:
+  \textlangle CTAN\textrangle\url{/fonts/utilities/fontinst}.
+
+\bibitem{Rei:TB17-2-102} Fukui Rei:
+  \emph{\textsl{TIPA}: A system for processing phonetic
+      symbols in \LaTeX}.  In: TUGBoat, 17\#, 1996.
+  \url{http://www.tug.org/TUGboat/Articles/tb17-2/tb51rei.pdf}.
+
+\bibitem{hyperref} \emph{The \Pkg{hyperref} package}:
+  \url{http://www.tug.org/applications/hyperref}.
+
+\bibitem{tub:JKn93}
+J\"org Knappen.
+\newblock Fonts for Africa: The fc Fonts.
+\newblock {\em {TUG}boat}, 14(2):104, 1993.
+
+\bibitem{Knappen:TB17-2-96} J\"org Knappen:
+  \emph{The \Pkg{dc} fonts~1.3: Move towards stability
+      and completeness}.  In: TUGBoat 17\#2, 1996.
+  \url{http://www.tug.org/TUGboat/Articles/tb17-2/tb51knap.pdf}.
+
+\bibitem{A-W:DKn86}
+Donald~E. Knuth.
+\newblock {\em The {\TeX}book}.
+\newblock Volume~A of {\em Computers \& {T}ypesetting\/},
+  May 1989.
+\newblock Eight printing.
+
+\bibitem{vnr} \emph{The \Pkg{vnr} font family}, developed by
+   the author of pdf\TeX, {H\`an Th\^e\protect\llap{\raise 0.5ex\hbox{\'{\relax}}} Th\`anh}.
+   \url{http://vntex.org/download/vntex}.
+
+ \bibitem{ipa} Home page of the International Phonetic Association.
+   \url{http://www.arts.gla.ac.uk/IPA/ipa.html}
+
+\bibitem{A-W:LLa94}
+Leslie Lamport.
+\newblock {\em {\LaTeX:} A Document Preparation System}.
+\newblock Addison-Wesley, Reading, Massachusetts, second edition, 1994.
+
+\bibitem{LH-Fonts} \emph{The \Pkg{lh}-Fonts for Cyrillic}:
+  \textlangle CTAN\textrangle\url{/fonts/cyrillic/lh}.
+
+\bibitem{A-W:MG2004}
+Frank Mittelbach and Michel Goossens.
+\newblock {\em The {\LaTeX} Companion second edition}.
+\newblock With Johannes Braams, David Carlisle, and Chris Rowley.
+\newblock Addison-Wesley, Reading, Massachusetts, 2004.
+
+\bibitem{Unicode} \emph{The Unicode Standard}.
+  \url{http://unicode.org}.
+
+\bibitem{ucd} \emph{The Unicode Character Database}.
+  \url{http://unicode.org/ucd}.
+
+\bibitem{ziegler} Justin Ziegler, \emph{Technical
+    Report on Math Font Encodings}, June 1994,
+  \url{http://www.tug.org/twg/mfg/papers/ltx3pub/l3d007.ps.gz}.
+
+\end{thebibliography}
+
+\clearpage\appendix
+\begin{center}
+  \Large\bfseries 附录
+\end{center}
+
+\section{代码表(code tables)示例}
+
+这个附录(appendix)包含上面提到的“示例(example)”字体的每种字体的表格(table)，规定在使用 \LaTeX{}\ 处理文档时该字体是可用的。(\LaTeX{}\ 会为找不到的每种字体生成一条警告消息。)
+
+\subsection{文本编码(Text encodings)}
+
+\ftable{cmr10}{OT1}
+
+\ftable{wnr10}{OT2}
+
+\ftable{wsuipa10}{OT3}
+
+\ftable{plr10}{OT4}
+
+%\ftable{artmr10}{OT6}
+
+\ftable{ecrm1000}{T1}
+
+\ftable{larm1000}{T2A}
+
+\ftable{lbrm1000}{T2B}
+
+\ftable{lcrm1000}{T2C}
+
+\ftable{tipa10}{T3}
+
+\ftable{fcr10}{T4}
+
+\ftable{vnr10}{T5}
+
+
+\subsection{文本符号(text symbol)编码}
+
+欧洲计算机现代家族(European Computer Modern family)提供的 \Enc{TS1}\ 完整表：
+\ftable{tcrm1000}{TS1}
+
+\pagebreak
+
+相比之下，典型的 Postscript 字体通常不完全实现(incomplete implementations) \Enc{TS1}，有时缺少一半以上的字形(glyphs)：
+
+\ftable{ptmr8c}{TS1}
+
+\ftable{tipx10}{TS3}
+
+
+
+\subsection{扩展文本(extended text)编码}
+
+\ftable{rxrm1000}{X2}
+
+
+\subsection{数学编码}
+
+\ftable{cmmi10}{OML}
+
+\ftable{cmsy10}{OMS}
+
+\ftable{cmex10}{OMX}
+
+
+\subsection{其他编码}
+
+\ftable{ptmr8y}{LY1}
+
+%%\ftable{????}{LV1}
+
+\ftable{grmn1000}{LGR}
+
+\ftable{wasy10}{U}
+\ftable{logo10}{U}
+
+\clearpage
+\section{大小写表}
+\label{sec:uclc-tab}
+
+下面的两组表列出了 \LaTeX{}\ 标准256字符表(standard 256-character tables)中每个位置的 \verb"\uppercase" 和
+\verb"\lowercase" 的值。
+
+每个表的每一行列出：
+\begin{quote}
+\begin{center}
+  \begin{tabular}{|r|p{0.8\textwidth}|}
+    \hline
+    pos & 在表(0-255)中的槽位(position) \\ \hline
+    lc  & 槽位(position)处的 \verb"\lowercase" 表中的值 \\ 
+        & (注意，此处的值 0 表示 \verb"\lowercase" 对该字符无效，并且连字符不适用于此字符)\\  \hline
+    uc  & 槽位(position)处的 \verb"\uppercase" 表中的值 \\ 
+        & (注意，此处的值 0 表示 \verb"\uppercase" 对该字符无效) \\ \hline
+    glyphs & 为该槽位的 T1 编码指定的字形\\
+           &布局为 \meta{字形}\textbf{(}\meta{小写字形}\textbf{/}\meta{大写字形}\textbf{)}\\ \hline
+  \end{tabular}
+\end{center}
+\end{quote}
+
+\begin{center}
+  \let\lctablenumbersize\footnotesize
+  \makebox[\textwidth]{\hss
+    \dolctable{0}{32}\quad\dolctable{32}{64}\quad
+    \dolctable{64}{96}\quad\dolctable{96}{128}%
+  \hss}
+
+  \makebox[\textwidth]{\hss
+    \dolctable{128}{160}\quad\dolctable{160}{192}\quad
+    \dolctable{192}{224}\quad\dolctable{224}{256}%
+  \hss}
+\end{center}
+\end{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
