@@ -15,7 +15,7 @@
 +  `enumitem`
 +  `expl3`
 +  `fancyvrb`
-+  `fntguide`
++  [`fntguide`](https://www.latexstudio.net/index/details/index/mid/2926.html)(Finished)
 +  `fontspec`
 +  `footmisc`
 +  `graphicx`
