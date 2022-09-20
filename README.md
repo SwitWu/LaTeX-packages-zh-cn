@@ -9,6 +9,7 @@
 +  [`amsthm`](https://github.com/sikouhjw/amsthm-zh)(Finished)
 +  `beamer`(Finished)
 +  [`biblatex`](https://github.com/hushidong/biblatex-zh-cn)(Finished)
++  [`bookmark`](https://www.latexstudio.net/index/details/index/mid/2912.html)(Finished)
 +  `booktabs`
 +  `caption`
 +  [`clsguide`](https://github.com/CTeX-org/ctex-doc/tree/master/clsguide-zh-cn)(Finished)
