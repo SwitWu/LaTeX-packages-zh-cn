@@ -7,16 +7,16 @@
 +  `algorithm2e`
 +  [`amsmath`](https://github.com/yuxtech/translation-of-amsmath-package)(Finished)
 +  [`amsthm`](https://github.com/sikouhjw/amsthm-zh)(Finished)
-+  `beamer`(Finished, Huang Xuhua)
++  `beamer`(Finished)
 +  [`biblatex`](https://github.com/hushidong/biblatex-zh-cn)(Finished)
 +  `booktabs`
 +  `caption`
 +  [`clsguide`](https://github.com/CTeX-org/ctex-doc/tree/master/clsguide-zh-cn)(Finished)
-+  [`encguide`](https://www.latexstudio.net/index/details/index/mid/2911.html)(Finished, Huang Xuhua)
++  [`encguide`](https://www.latexstudio.net/index/details/index/mid/2911.html)(Finished)
 +  `enumitem`
 +  `expl3`
 +  `fancyvrb`
-+  [`fntguide`](https://www.latexstudio.net/index/details/index/mid/2926.html)(Finished, Huang Xuhua)
++  [`fntguide`](https://www.latexstudio.net/index/details/index/mid/2926.html)(Finished)
 +  `fontspec`
 +  `footmisc`
 +  `graphicx`
