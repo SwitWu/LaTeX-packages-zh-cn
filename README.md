@@ -15,7 +15,7 @@
 +  [`clsguide`](https://github.com/CTeX-org/ctex-doc/tree/master/clsguide-zh-cn)(Finished)
 +  [`encguide`](https://www.latexstudio.net/index/details/index/mid/2911.html)(Finished)
 +  `enumitem`
-+  [`expl3`](https://www.latexstudio.net/index/details/index/mid/2988.html){Finished)
++  [`expl3`](https://www.latexstudio.net/index/details/index/mid/2988.html)(Finished)
 +  `fancyvrb`
 +  [`fntguide`](https://www.latexstudio.net/index/details/index/mid/2926.html)(Finished)
 +  `fontspec`
