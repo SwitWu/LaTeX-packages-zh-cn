@@ -16,6 +16,7 @@
 +  [`encguide`](https://www.latexstudio.net/index/details/index/mid/2911.html)(Finished)
 +  `enumitem`
 +  [`expl3`](https://www.latexstudio.net/index/details/index/mid/2988.html)(Finished)
++  [`fancyhdr`](https://www.latexstudio.net/index/details/index/mid/3086.html)(Finished)
 +  `fancyvrb`
 +  [`fntguide`](https://www.latexstudio.net/index/details/index/mid/2926.html)(Finished)
 +  `fontspec`
