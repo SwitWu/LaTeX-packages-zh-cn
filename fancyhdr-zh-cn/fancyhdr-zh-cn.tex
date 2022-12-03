@@ -1,0 +1,4427 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 1994-2022 by Pieter van Oostrum <pieter@vanoostrum.org>
+% -------------------------------------------------------
+%
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in:
+%
+%    http://www.latex-project.org/lppl.txt
+%
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{\jobname.dtx}
+%</driver>
+%
+%    \begin{macrocode}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+%<fancyhdr>\ProvidesPackage{fancyhdr}%
+%<fancyheadings>\ProvidesPackage{fancyheadings}
+%<extramarks>\ProvidesPackage{extramarks}
+%<fancyhdr|fancyheadings|extramarks>           [2022/05/18 v4.0.3
+%<fancyhdr>                  Extensive control of page headers and footers]%
+%<fancyheadings>                  Legacy package to call fancyhdr]
+%<extramarks>                  Extra marks for LaTeX]
+%<fancyhdr|extramarks>% Copyright (C) 1994-2022 by Pieter van Oostrum <pieter@vanoostrum.org>
+%<fancyheadings>% Public domain
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    \end{macrocode}
+%
+%<*driver>
+\documentclass[a4paper]{ltxdoc}
+%%%%\usepackage[fontset=none]{ctex}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{makeidx}
+\usepackage{layout}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{boxedminipage}
+\usepackage{fourier-orns}
+\usepackage[T1]{fontenc}
+\usepackage[fit]{truncate}
+
+\usepackage{fontspec}
+
+\usepackage{ifthen}
+\usepackage{fancyhdr}
+\GetFileInfo{fancyhdr.sty}
+\def\latex/{\protect\LaTeX{}}
+\def\tex/{\TeX}
+\def\ams/{\protect\pAmS}
+\def\pAmS{{\the\textfont2
+        A\kern-.1667em\lower.5ex\hbox{M}\kern-.125emS}}
+\def\amslatex/{\ams/-\latex/}
+
+\usepackage{float} %%%% 防止表格等浮动
+%%%%%%%%%%%%% 以下设置中文字体 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xeCJK}  %%
+
+\setCJKfamilyfont{Heiti}{Source Han Sans Regular} %%%% 自定义\Heiti命令，显示思源黑体，用于标题页标题的中文部分
+\newcommand{\Heiti}{\CJKfamily{Heiti}} %%%% 自定义\Heiti命令，显示思源黑体，用于标题页标题的中文部分
+
+\setCJKfamilyfont{heiti}{Source Han Sans Light} %%自定义\heiti命令，显示思源黑体，用于正文的章节标题
+\newcommand{\heiti}{\CJKfamily{heiti}} %%自定义\heiti命令，显示思源黑体，用于正文的章节标题
+
+\setCJKfamilyfont{songti}{思源宋体 CN Light}  %%%% 自定义\songti命令，显示思源宋体，用于正文
+\newcommand{\songti}{\CJKfamily{songti}} %%%% 自定义\songti命令，显示思源宋体，用于正文
+
+\setCJKfamilyfont{heitixt}{思源黑体_CN_LightItalic.otf}  %%%% 自定义\heitixt命令，显示思源黑体斜体
+\newcommand{\heitixt}{\CJKfamily{heitixt}} %%%% 自定义\heitixt命令，显示思源黑体斜体
+
+\setCJKmainfont{思源宋体 CN Light} %%%% 设置中文的主字体为思源宋体 CN Light
+\setmainfont{Source Serif Pro} %%%% 设置英文的主字体为Source Serif Pro，最好看
+%%%%\setmainfont{Source Han Serif SC} %%%% 设置英文的主字体为Source Han Serif SC
+%%%%%%\setmainfont{Times New Roman} %%%% 设置英文的主字体为Times New Roman
+
+\setCJKfamilyfont{kaiti}{KaiTi} %%设置中文字体楷体，用于强调
+\newcommand{\kaiti}{\CJKfamily{kaiti}} %%设置中文字体楷体，用于强调
+%%%%%%%%%%%%% 以上设置中文字体 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% 以下输入带圈的数字，调用时的命令：如 \char"2469 生成 ⑩ %%%%
+%%详参目录中的“latex 如何添加圆圈数字？ - Tsingke - 博客园.mhtml”%%%%
+\xeCJKDeclareCharClass{CJK}{%
+  "24EA,        % ⓪
+  "2460->"2473, % ①–⑳
+  "3251->"32BF, % ㉑–㊿
+  "24FF,        % ⓿
+  "2776->"277F, % ❶–❿
+  "24EB->"24F4  % ⓫–⓴
+}
+%%% 以上输入带圈的数字，调用时的命令：如 \char"2469 生成 ⑩ %%%%
+
+%%%%%%%%%%%%% 以下设置中文版式 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{indentfirst} %%% 首行缩进
+\setlength{\parindent}{2em} %%% 缩进2个字符（中文为2个字）
+\linespread{1.5} %%% 设置行间距
+%%%%%%%%%%%%% 以上设置中文版式 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{changepage} %%%用于整体缩进,\begin{adjustwidth}{2cm}{1cm}
+
+%%%%%%% 以下在 tabular 表格中定制 横线如\hlinew{1.2pt} %%%%%%
+\makeatletter
+\def\hlinew#1{%
+\noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
+\reserved@a\@xhline}
+\makeatother%
+%%%%%%% 以上在 tabular 表格中定制 横线如\hlinew{1.2pt} %%%%%%
+
+%%%%%%% 以下自定义脚注 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\footnotesep}{0.5cm} %%%设置几第脚注之间的距离
+\setlength{\skip\footins}{2.0em} %%%设置脚注与正文之间的距离
+%%\renewcommand\footnoterule{} %%%定义脚注线为空
+\renewcommand\footnoterule{
+     \kern -3pt                         % This -3 is negative
+     \hrule width 0.6\textwidth height 0.6pt % of the sum of this 1
+     \kern 2pt} %%%
+%%%%%%% 以上自定义脚注 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\contentsname}{\centerline{\heiti {\Large 目\ \ \ 录}}}   %%% 在{document}后面加入该命令，将"contents"变成“目  录”
+%%%\renewcommand{\thepart}{第{\Roman{part}}部分}
+\renewcommand{\refname}{\heiti 参考文献}
+\renewcommand{\figurename}{\Heiti 图}
+\renewcommand{\tablename}{\Heiti 表}
+\renewcommand{\abstractname}{\heiti {\Large 摘\ 要}}
+\renewcommand{\listfigurename}{\centerline{\heiti {\large 图形目录}}}
+\renewcommand{\listtablename}{\centerline{\heiti {\large 表格目录}}}
+\renewcommand{\indexname}{\heiti 索引} %%%%让最后生成的PDF文件的书签的索引显示“索引”而不是“Index”
+
+%%%%%%%%%% 以下将正文中的“Part Ⅰ ”中文化成“第Ⅰ部分” %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%\usepackage[center]{titlesec}  %%标题居中
+\usepackage{titlesec}
+\titleformat{\part}{\centering\Large\bfseries}{{\heiti 第} \thepart {\heiti 部分}}{1.2em}{}
+%%%%%%%%%% 以上将正文中的“Part Ⅰ ”中文化成“第Ⅰ部分” %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%% 以下调整目录条目之间的间距 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tocloft}
+\setlength{\cftbeforetoctitleskip}{20pt} %%% “目录”二字的段前间距为20pt
+\setlength{\cftaftertoctitleskip}{50pt}  %%% “目录”二字的段后间距为50pt
+\setlength{\cftbeforepartskip}{25pt} %%% 部分(part)之前的空白为25pt
+\renewcommand{\cftpartafterpnum}{\vspace{6pt}} %%% 部分(part)之后的空白为6pt
+\setlength{\cftbeforesecskip}{14pt} %%% 节(sec)之前的空白为14pt
+\renewcommand{\cftsecafterpnum}{\vspace{3pt}} %%% 节(sec)之后的空白为3pt
+\renewcommand{\cftsubsecafterpnum}{\vspace{3pt}} %%% 小节(subsec)之后的空白为3pt
+%%%%%%% 以上调整目录条目之间的间距 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%% 以下设置书签和目录的颜色、链接%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[svgnames]{xcolor}
+\definecolor{myurlcolor}{rgb}{0,0,0.7}
+\definecolor{mylinkcolor}{rgb}{0.7,0,0}
+\definecolor{codecolor}{rgb}{0,0.4,0.2}
+\definecolor{overviewcolor}{rgb}{0,0.2,0.4}
+\usepackage[xetex,bookmarks=true,hidelinks,%
+colorlinks,linkcolor=mylinkcolor,urlcolor=myurlcolor,%
+pageanchor=true,hyperindex=true,
+]{hyperref}
+%%%%%%%%%%%% 以上设置书签和目录的颜色、链接%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%% 以下设置网址太长自动换行 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{url}
+\def\UrlBreaks{\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J
+\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V
+\do\W\do\X\do\Y\do\Z\do\[\do\\\do\]\do\^\do\_\do\`\do\a\do\b
+\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n
+\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z
+\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]\do\)\do\,
+\do\?\do\'\do+\do\=\do\#}
+%%%%%%%%%%%% 以上设置网址太长自动换行 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\usepackage{tcolorbox}
+
+
+\newcommand{\PSNFSS}{{\sf
+    PSNFSS}}
+\newcommand{\bs}{\symbol{'134}}
+\newcommand{\env}[1]{\texttt{#1}}
+\newcommand{\Package}[1]{\textsf{#1}}
+\renewcommand{\partname}{Part}
+\DisableCrossrefs
+\CodelineIndex
+\RecordChanges
+\newcommand\bsbs{\cs{\char`\\}}
+\newcommand{\Cmd}[1]{\texttt{\def\{{\char`\{}\def\}{\char`\}}\bs#1}}
+\newcommand{\CmdIndex}[1]{\index{#1=\string\texttt{\bs#1}}}
+\newcommand{\TTindex}[1]{\index{#1=\string\texttt{#1}}}
+\newcommand{\PSindex}[1]{\index{page style>#1=\string\texttt{#1}}}
+\newcommand{\OPTindex}[1]{\index{option>#1=\string\texttt{#1}}}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\setlength{\emergencystretch}{4em}
+\addtolength{\textheight}{-0.5in} % make it print better on US letter paper
+\makeatletter
+\renewcommand\l@section      {\@dottedtocline{1}{1.5em}{2.3em}}
+\makeatother
+\newenvironment{block}{\vspace{8pt}\noindent\begin{minipage}{\textwidth}}{\end{minipage}\vspace{8pt}}
+\newenvironment{fblock}{\vspace{8pt}\noindent\begin{boxedminipage}{\textwidth}}{\end{boxedminipage}\vspace{8pt}}
+\newcommand{\showrule}{\\[-1.5ex]\noindent\makebox[\textwidth]{\hrulefill}\\[\baselineskip]}
+\newenvironment{xvspace}{\vspace{1ex}}{{\vspace{1ex}}}
+\setcounter{tocdepth}{1}
+
+% Compare section numbers in references
+\usepackage{refcount}
+\newcounter{secnum}
+% #1=current section label #2=ref section label
+\newcommand{\smartref}[2]{%
+  \setcounterref{secnum}{#1}%
+  \addtocounter{secnum}{-1}%
+  \ifnum\value{secnum}=\getrefnumber{#2}
+    the previous section%
+  \else
+    \addtocounter{secnum}{2}%
+    \ifnum\value{secnum}=\getrefnumber{#2}
+      the next section%
+    \else
+      section~\ref{#2}%
+    \fi
+  \fi
+}
+
+% Our own page style:
+\pagestyle{fancy}
+\addtolength{\headwidth}{\marginparsep}
+\addtolength{\headwidth}{0.5\marginparwidth}
+\fancyhf{}
+\fancyhead[L]{\rightmark}
+\fancyhead[R]{\textbf{\thepage}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\quad#1}}
+
+% Page style for demonstrating struts, \headruleskip and \footruleskip.
+
+\newcommand{\strutheader}{%
+  \texttt{\textbackslash strut}:
+  \rule[-0.3\normalbaselineskip]{10pt}{0.3\normalbaselineskip}%
+  \rule{10pt}{0.7\normalbaselineskip}
+  \texttt{\textbackslash headruleskip}$\searrow$
+  \raisebox{-0.3\normalbaselineskip}[0pt][0pt]%
+    {\ifdim \headruleskip>0pt
+      \rule[-\headruleskip]{10pt}{\headruleskip}
+      \else
+      \rule{10pt}{-\headruleskip}
+     \fi}
+}
+\newcommand{\strutfooter}{%
+  \raisebox{0pt}[0pt][0pt]{%
+    \texttt{\textbackslash strut}:
+    \rule[-0.3\normalbaselineskip]{10pt}{0.3\normalbaselineskip}%
+    \rule{10pt}{0.7\normalbaselineskip}
+    \texttt{\textbackslash footruleskip} $\nearrow$
+    \rule[0.7\normalbaselineskip]{10pt}{\footruleskip}}%
+}
+\fancypagestyle{showstruts}{%
+  \fancyhead[L]{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\strutheader}%
+      {\rightmark}%
+  }
+  \fancyfoot[L]{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\strutfooter}%
+      {}%
+  }
+  \fancyheadinit{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\renewcommand{\headruleskip}{4pt}}%
+      {\renewcommand{\headruleskip}{0pt}}%
+  }
+  \fancyfootinit{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\renewcommand{\footrulewidth}{0.4pt}}%
+      {\renewcommand{\footrulewidth}{0pt}}%
+  }
+}
+% Change \MacroFont to have verbatim in normal size
+\renewcommand{\MacroFont}%
+  {\fontencoding\encodingdefault
+    \fontfamily\ttdefault
+    \fontseries\mddefault
+    \fontshape\shapedefault
+    \normalsize}
+
+\newcounter{example}
+\newcommand{\Example}{%
+  \refstepcounter{example}%
+  \marginpar{\vspace{\baselineskip}\hfill Example \theexample\quad\quad}%
+}
+\newcommand{\FExample}{%
+  \refstepcounter{example}%
+  \makebox[0pt][r]{{Example \theexample}\quad\quad}%
+}
+
+\begin{document}
+  \DeleteShortVerb{\|}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{0}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \DoNotIndex{\#,\$,\%,\&,\@,\\,\{,\},\^,\_,\~,\ }
+% \DoNotIndex{\@ne}
+% \DoNotIndex{\advance,\begingroup,\catcode,\closein}
+% \DoNotIndex{\closeout,\day,\def,\edef,\else,\empty,\endgroup}
+%
+% \title{{\Huge\Package{fancyhdr}}\ {\huge \Heiti 宏包和} {\Huge\Package{extramarks}}\ {\huge \Heiti 宏包}\\{\normalsize 版本：\fileversion}}
+% \author{Pieter van Oostrum (彼得·范·奥斯特鲁姆)\ \thanks{该文档的相当一部分是由 George Gr\"atzer (乔治·格里策)(Manitoba [曼尼托巴]大学)在\\ \emph{Notices Amer. Math. Soc.}\ (美国数学学会通告)中撰写的。感谢乔治！}\\
+%     Utrecht\ (乌德勒支)大学，计算机科学系\ \thanks{这是我开发这个宏包时的雇主。我现在退休了。}\\[8pt]
+%   赣医一附院神经内科\ \ \ \ 黄旭华\ \thanks{一名业余 \latex/ 爱好者。}\ \ \ \ \ \ \ 翻译}
+% \date{2022\,/\,11\,/\,27}
+% \maketitle
+% \vspace{3.3cm}
+% \begin{abstract}
+% \vspace{1.5em}
+%   本文档描述了如何自定义 LaTeX 文档的页面布局(page layout)，即如何更改页面边距(page margings)及其大小、
+%   页眉(headers)和页脚(footers)，以及如何在页面上正确放置图形(figures)和表格(tables)(统称为浮动体[floats])。
+%
+% 本文档描述了 \Package{fancyhdr}\ 和 \Package{extramarks}\ 宏包的 4.0 或更高版本。
+% 用户文档(user documentation)适用于 \Package{fancyhdr}\ 宏包的 3.8 或更高版本
+% (第~\ref{sec:version-4}~节提到的更改[changes]除外)，本文档也适应于 \Package{extramarks}\ 宏包的 2.1 或更高版。
+%
+% \end{abstract}
+% \phantomsection  ^^A 将“摘要”添加到目录
+% \addcontentsline{toc}{part}{\large \heiti \textbf{摘要}} ^^A 将“摘要”添加到目录
+%
+% \clearpage
+% \thispagestyle{empty}
+% \tableofcontents
+% \markright{\heiti 目录}  ^^A 页眉中的“目录”
+%
+% \clearpage
+% \thispagestyle{empty}
+%\part{\heiti 介绍}
+%
+% 本文档包含四个部分：
+%
+% 第I部分是关于 \Package{fancyhdr}\ 和 \Package{extramarks}\ 宏包的用户命令的简短文档。
+%
+% 第II部分包含关于 \latex/ 页面布局(page layout)的详细文档。这曾经是几年来 \Package{fancyhdr}\ 和 \Package{extramarks}\ 的完整文档。
+%
+% 第III部分包含问题和解答。
+%
+% 第IV部分包含带注释的实现(implementation)。
+%
+% 本文件描述了 \Package{fancyhdr}\ 的版本 4。这个版本也在即将出版的 \textit{The \latex/ Companion}\ 【{\color{blue}{《特可爱原本》}}】第3版
+% 中有所描述，而之前的版本则描述了 \Package{fancyhdr}\ 的版本 3。这些版本之间存在一些显著差异。
+% 第~\pageref{sec:version-4}~页中的第~\ref{sec:version-4}~节对这些内容进行了总结。
+% 在本文档中，当特定功能仅在版本 4 中可用时，或当版本 3 和版本 4 之间存在差异时，都会提到这些内容。
+%
+% \section[安装]{\heiti 安装}
+% \label{sec:installation}
+%
+% 安装此宏包的首选方法是使用宏包安装程序(package installer)。如果您想手动安装它，
+% 那么首先运行命令 \verb+tex fancyhdr.ins+，然后将文件 \texttt{fancyhdr.sty}、
+% \texttt{extramarks.sty}\ 和 \texttt{fancyheadings.sty}\ 移动到一个 \latex/ 可以找到它的地方，
+% 最好是在 \tex/ 目录树(directory tree)中类似于 \texttt{.../texmf/tex/latex/fancyhdr/}\ 的目录中。
+%
+% \section[使用 \Package{fancyhdr}]{{\heiti 使用} \Package{fancyhdr}}
+%
+% \Package{fancyhdr}\ 宏包提供了几个命令来定义 \latex/ 文档中页面的页眉(headers)和页脚(footers)。
+% 在前言(preamble)中用以下命令来加载该宏包：
+% \begin{quote}
+% {\large \color{blue}{\verb|\usepackage|\oarg{options}\verb|{fancyhdr}|}}
+% \end{quote}
+% (options 自 4.0 版起可用)
+% 支持以下选项 (options)：
+% \begin{center}
+% \begin{tabular}{ r l }
+% \hlinew{1.2pt}
+% {\Heiti 选项} & {\Heiti 含义} \\
+% \hlinew{0.7pt}
+% \texttt{nocheck} & 不要检查页眉和页脚的高度(heights)(参第~\pageref{page:warning}~页中的第~\ref{sec:warning}~节)\\
+% \texttt{compatV3} & 保留版本3中的某些行为(现在认为是不可取的)\\
+%          & (参第~\pageref{page:warning}~页中的第~\ref{sec:options}~节和第~\ref{sec:warning}~节)\\
+% \texttt{headings} & 重新定义 \texttt{headings}\ 页面样式为基于 fancy 的(fancy-based) \\
+% \texttt{myheadings} & 重新定义 \texttt{myheadings}\ 页面样式为基于 fancy 的(fancy-based) \\
+% \hlinew{1.2pt}
+% \end{tabular}
+% \end{center}
+% \vspace{2em}
+% \OPTindex{nocheck}
+% \OPTindex{compatV3}
+% \OPTindex{headings}
+% \OPTindex{myheadings}
+% \DescribeMacro{\fancyhead}
+% \DescribeMacro{\fancyfoot}
+% \DescribeMacro{\fancyhf}
+\begin{verbatim}
+\fancyhead[places]{field}
+\fancyfoot[places]{field}
+\fancyhf[places]{field}
+\end{verbatim}
+% 上面的 \texttt{places}\ (位置)是一个逗号分隔的(comma-separated)位置列表(list of places)，
+% \texttt{field}\ 的内容将被放置在前述的位置列表所示的位置处。定义了12个places(位置)：左(Left)、中(Center)、右(Right)页眉(Headers)和页脚(Footers)，
+% 它们都可以位于偶数(Even)或奇数(Odd)页面上。因此，每个places(位置)有3个坐标，
+% 它们是上述描述的首字母：(1) \texttt{E}\ 或 \texttt{O}，(2) \texttt{L}、\texttt{C}\ 或 \texttt{R}，
+% (3) \texttt{H}\ 或 \texttt{F}。所以一个places(位置)被赋予3个字母，如\texttt{EOH}。一个缺失的坐标(missing coordinate)意味着：
+% 所有的可能性，除了 \cs{fancyhead}\ (其中隐含 \texttt{H})和 \cs{fancyfoot}\ (其中隐含 \texttt{F})。
+\begin{tcolorbox}[boxrule={0.5pt}]
+{\Heiti 【译者注】}一个示例语句：\\
+{\small \color{orange}{\verb|\fancyhead[RO,LE]{大括号中的这些内容放在奇数页右边和偶数页左边的页眉上}|}}
+\end{tcolorbox}
+\vspace{0.5em}
+% \DescribeMacro{\fancyheadoffset}
+% \DescribeMacro{\fancyfootoffset}
+% \DescribeMacro{\fancyhfoffset}
+\begin{verbatim}
+\fancyheadoffset[places]{field}
+\fancyfootoffset[places]{field}
+\fancyhfoffset[places]{field}
+\end{verbatim}
+% 这些命令定义了偏移量(offsets)，以使页眉(headers)插入版口(margin)里面(如果偏移量为负值，
+% 则插入版口外面)。位置(places)不能包含 \texttt{C}\ 说明符(specifier)。
+% 详见第~\ref{sec:book-examples}~节。
+\begin{tcolorbox}[boxrule={0.5pt}]
+{\Heiti 【译者注】}设置页眉处的页码对齐边沿：{\small \color{orange}{\verb|\fancyheadoffset[LO,LE]{0cm}|}}
+\end{tcolorbox}
+\vspace{0.5em}
+%
+% \DescribeMacro{\headrulewidth}
+% \cs{headrulewidth}\ 这个宏用于定义页眉下方的线条(line)的粗细(thickness)，
+% \DescribeMacro{\footrulewidth}
+% 而 \cs{footrulewidth}\ 这个宏用于定义页脚上方的线条(line)的粗细(thickness)。
+% \DescribeMacro{\headruleskip}
+% \cs{headruleskip}\ 这个宏用于定义页眉下方线条与文本之间的距离，
+% \DescribeMacro{\footruleskip}
+% 而 \cs{footruleskip}\ 这
+% 个宏用于定义页脚上方线条与文本之间的距离。但 \cs{headruleskip}\ 仅在4.0版及之后的版本才可用。
+% \DescribeMacro{\headrule}
+% \cs{headrule}\ 这个宏完全重新定义页眉下方的线条(line)，
+% \DescribeMacro{\footrule}
+% 而 \cs{footrule}\ 这个宏则完全重新定义页脚上方的线条。
+% \DescribeMacro{\headwidth}
+% \cs{headwidth}\ 这个宏定义页眉和页脚总宽度(total width)的长度参数(length parameter)。
+% 详见第~\ref{sec:book-examples}~节。
+\begin{tcolorbox}[boxrule={0.5pt}]
+{\Heiti 【译者注】}上述命令的示例：\\
+{\small {\color{orange}{\verb|\renewcommand{\headrulewidth}{0.0mm}|}} \verb| %设页眉线宽为0从而去除页眉线|}
+
+{\small {\color{orange}{\verb|\setlength{\headwidth}{19cm}|}} \verb|         %设页眉总宽度为19cm|}
+\end{tcolorbox}
+\vspace{0.5em}
+%
+% \DescribeMacro{\fancyheadinit}
+% \cs{fancyheadinit}\ 这个宏用于定义页眉的初始化代码(initialisation code)，
+% \DescribeMacro{\fancyfootinit}
+% 而 \cs{fancyfootinit}\ 这个宏用于定义页脚的初始化代码(initialisation code)。
+% \cs{fancyhfinit}\ 这个宏则定义了上述的两个代码。
+% \DescribeMacro{\fancyhfinit}
+% 这些命令仅在 fancyhdr 4.0及更高版本中可用。见第~\ref{sec:change}~节。
+%\vspace{0.5em}
+%
+% \DescribeMacro{\fancycenter}
+% (仅适用于4.0及更高版本。) \cs{fancycenter}\ 命令将3个页眉字段(header fields)打包
+% 为全宽页眉(full-width header)。参见第~\ref{sec:fancycenter}~节。
+%\vspace{1em}
+%
+% \DescribeMacro{\iftopfloat}
+% \cs{iftopfloat}\ 这个宏用于检测页面的顶部(top of the page)是否有浮动体(float)。
+% \DescribeMacro{\ifbotfloat}
+% \cs{ifbotfloat}\ 这个宏用于检测页面的底部(bottom of the page)是否有浮动体(float)。
+% \DescribeMacro{\iffloatpage}
+% \cs{iffloatpage}\ 这个宏用于检测页面是否是浮动页面(float page)。
+% 而 \cs{iffootnote}\ 这些宏用于检测页面底部是否有脚注(footnote)。
+% \DescribeMacro{\iffootnote}
+% 如果满足这些条件，可以使用这些宏来选择不同的页眉和/或页脚。
+% 详见第~\ref{sec:float}~节。
+%\vspace{1em}
+% \begin{quote}
+% \DescribeMacro{\fancypagestyle}
+% {\large \color{blue}{\verb|\fancypagestyle|\marg{style-name}\oarg{base-style}\marg{definitions}}}
+% \end{quote}
+% 此命令允许您(重新)定义页面样式(page styles)，以便在特殊情况下使用。详见第~\ref{sec:fancypagestyle}~节。
+%
+% \section[使用 \Package{extramarks}]{{\heiti 使用} \Package{extramarks}}
+% \label{sec:using-extramarks}
+%
+% 除了普通的(normal) \cs{leftmark}\ 和 \cs{rightmark}\ 之外，在 \latex/ 中 \Package{extramarks}\ 宏包为您提供了
+% 一些额外的标记(extra marks)，这些标记由 \cs{markboth}\ 和 \cs{markright}\ 命令定义。
+% \vspace{2em}
+% \DescribeMacro{\firstleftmark}
+% \DescribeMacro{\lastrightmark}
+% \DescribeMacro{\firstrightmark}
+% \DescribeMacro{\lastleftmark}
+\begin{verbatim}
+\firstleftmark
+\lastrightmark
+\firstrightmark
+\lastleftmark
+\end{verbatim}
+%
+% 标准 \latex/ 有两个标记(marks)：左标记和右标记。标准命令 \cs{leftmark}\ 为页面上的
+% 最后一个左标记(left mark)，\cs{rightmark}\ 为您提供第一个右标记(right mark)。
+% 这些宏还提供了其他组合(combinations)，其中 \cs{firstrightmark} = \cs{rightmark}\ 和 \cs{lastleftmark} = \cs{leftmark}。
+% 与标准标记(standard marks)一样，这些标记用于页眉(headers)和页脚(footers)。在其他地方，它们将无法正常工作。
+\begin{verbatim}
+\extramarks{aa}{bb}
+\firstleftxmark
+\firstrightxmark
+\topleftxmark
+\toprightxmark
+\lastleftxmark
+\lastrightxmark
+\firstxmark
+\lastxmark
+\topxmark
+\end{verbatim}
+% \Cmd{extramarks\{aa\}\{bb\}}\ 命令定义了两个额外的标记(extra marks)，类似于 \latex/ 的标准标记，
+% 其中 \texttt{aa}\ 是左标记(left mark)，\texttt{bb}\ 是右标记(right mark)。其他命令是在
+% 页眉和页脚中提取这些内容，类似于没有 \texttt{x}\ 的内容。有关详细信息，请参阅
+% 第~\ref{sec:scoop}~和第~\ref{sec:xmarks}~节。
+%
+% \clearpage
+% \thispagestyle{empty}
+% \part{\LaTeX\ {\heiti 中的页面布局}}
+%
+% \section[介绍]{\heiti 介绍}
+% \label{sec:intro}
+%
+% \LaTeX{}\ 文档中的页面(page)由各种元素(elements)构建，如图~\ref{fig:layout}~所示。
+% \begin{figure}[htbp]
+%   \begin{center}
+%     \leavevmode
+%     \layout
+%     \vspace{2.0cm}
+%     \caption{页面元素(page elements)。显示的值是当前文档中有效的值，而非默认值。}
+%     \label{fig:layout}
+%   \end{center}
+% \end{figure}
+% \thispagestyle{plain}
+% 正文(body)包含文档的主文本(main text)以及所谓的浮动体(floats)即表格(tables)和图形(figures)。
+%
+% 这些页面是由 \LaTeX 的输出例程(output routine)构建的，该例程非常复杂，因此不应修改。
+% 本文中描述的一些宏包包含对输出例程的小修改(small modifications)，以完成其他方式无法完成的事情。
+% 您应该使用这些宏包来获得所需的结果，而不是自己处理输出例程。
+%
+% 您必须注意以下几点：
+% \begin{enumerate}
+% \item 特别注意，左边的版口(margins)并不是称为 \cs{leftmargin}，而是称为 \cs{evensidemargin}\ (在偶数页码页面[even-numbered pages]中)
+%   和 \cs{oddsidemargin}\ (在奇数页码页面[odd-numbered pages]中)。在单开面文档(one-sided documents)中，
+%   \cs{oddsidemargin}\ 用于其中之一。\cs{leftmargin}\ 也是一个有效的 \latex/ 参数(parameters)，
+%   但它有不同的用途即列表的缩进(indentation of lists)。
+% \item 大多数参数不应在文档中间(middle)更改。一些更改可能在分页符(pagebreak)中起作用。
+%   如果要更改单个页面的高度(height of a single page)，可以使用 \cs{enlargethispage}\ 命令。
+% \end{enumerate}
+%
+% 版口注释区域(margin notes area)包含由 \cs{marginpar}\ 命令创建的小块信息(small pieces of information)。
+% 在双开面文档(twosided documents)中，版口注释(margin notes)交替出现在左侧和右侧。
+% 版口注释(margin notes)相对于纸张不在固定位置，但与它们出现的段落高度大致相同。
+% 不幸的是，在双开面文档中，由于用于决定页边空白注释的位置(placement)的算法(algorithm)，
+% 如果页边空白注释靠近分页符(page break)，则版口注释可能会出现在错误的一侧。
+% 如果您想把信息放在版口处的固定位置，您可以使用第~\ref{sec:movie}~节和
+% 第~\ref{sec:thumb}~节中描述的技术。
+%
+% 本文的第一部分描述了如何更改页眉和页脚区域。最后一部分描述了如何将浮动体(floats)放在所需的位置。
+%
+% \section[页眉和页脚]{\heiti 页眉和页脚}
+%
+% \LaTeX{}中的页眉(page headers)和页脚(page footers)由 \cs{pagestyle}\ 和 \cs{pagenumbering}\ 命令定义。
+% \cs{pagestyle}\ 定义页眉和页脚的一般内容(general contents)(例如页码显示的位置)，而 \cs{pagenumbering}\ 定义
+% 页码(page number)的格式。\LaTeX{}有四种标准页面样式(standard page styles)，如下表所示：
+%
+% \begin{center}
+% \noindent
+%   \begin{tabular}{>{\tt}rp{0.68\linewidth}}
+%   \hlinew{1.2pt}
+%    {\Heiti \LaTeX\,的标准页面样式} & {\Heiti 含义} \\ \hlinew{0.7pt}
+%     empty & 没有页眉，没用页脚 \\
+%     plain & 没有页眉，页脚包含居中的页码 \\
+%     headings & 没有页脚，页眉包含章/节和/或小节的名称和页码\\
+%     myheadings & 没有页脚，页眉包含页码和用户提供的信息\\
+%     \hlinew{1.2pt}
+% \end{tabular}
+% \end{center}
+%
+% 虽然这些是有用的样式，但它们非常有限。可以通过定义 \cs{ps@xxx}\ 这种形式的命令来
+% 定义其他页面样式(additional page styles)。当文档中给出 \Cmd{pagestyle\{xxx\}}\ 时，
+% 将执行 \cs{ps@xxx}\ 命令。\cs{ps@xxx}\ 命令应为页眉和页脚的内容定义下表所示的命令：
+%
+% \begin{center}
+%   \noindent
+%   \begin{tabular}{rp{0.78\linewidth}}
+%   \hlinew{1.2pt}
+% {\Heiti 命令} & {\Heiti 含义} \\ \hlinew{0.7pt}
+% \cs{@oddhead} & 双开面文档中奇数页码页的页眉(单开面文档中所有页的页眉)\\
+% \cs{@evenhead} & 双开面文档中偶数页码页的页眉\\
+% \cs{@oddfoot} & 双开面文档中奇数页码页的页脚(单开面文档中所有页的页脚)\\
+% \cs{@evenfoot} & 双开面文档中偶数页码页的页脚 \\
+% \hlinew{1.2pt}
+% \end{tabular}
+% \end{center}
+%
+% 这些不是用户命令(user commands)，而是 \latex/ 输出例程(output routine)使用的“变量(variables)”。
+% 由于命令名包含字符“\texttt{@}”，因此应在宏包文件中定义它们，否则应夹在 \cs{makeatletter}\ 命令
+% 和 \cs{makeatother}\ 命令之间。
+%
+% \cs{pagenumbering}\ 命令定义页码的布局(layout of the page number)。它具有下面表格罗列的参数：
+%
+% \begin{center}
+%   \begin{tabular}{>{\tt}rp{0.63\linewidth}}
+%   \hlinew{1.2pt}
+% {\Heiti \cs{pagenumbering}\,的参数} & {\Heiti 含义} \\ \hlinew{0.7pt}
+% arabic & 阿拉伯数字(arabic numerals) \\
+% roman & 小写罗马数字(lower case roman numerals) \\
+% Roman & 大写罗马数字(upper case roman numerals) \\
+% alph & 小写字母(lower case letter) \\
+% Alph & 大写字母(upper case letter) \\
+%   \hlinew{1.2pt}
+% \end{tabular}
+% \end{center}
+%
+% \Cmd{pagenumbering\{xxx\}}\ 将 \cs{thepage}\ 命令定义为以给定符号 \texttt{xxx}\ 展开的页码。
+% 然后，pagestyle 命令将在适当的位置包含 \cs{thepage}。此外，\cs{pagenumbering}\ 命令将页码重置为 1。
+% \cs{pagestyle}\ 和 \cs{pagenumbering}\ 适用于正在构建的页面(page that is being constructed)，
+% 因此应该在它们应用于所在页面的位置上使用它们(参见第~\ref{sec:change}~节)。
+%
+%
+% \section[\Package{fancyhdr}\ 是干什么的]{\Package{fancyhdr}\ {\heiti 是干什么的}}
+%
+% \Package{fancyhdr}\ 宏包允许您在 \latex/ 中以一种简单的方式自定义页眉和页脚。您可以定义：
+% \begin{itemize}
+% \item 三部分(three-part)页眉和页脚
+% \item 页眉和页脚中的装饰线(decorative lines)
+% \item 页眉和页脚宽度大于文本宽度
+% \item 多行(multi-line)页眉和页脚
+% \item 偶数页和奇数页的页眉和页脚分开
+% \item 章页(chapter pages)的页眉和页脚不同
+% \item 带有浮动体(floats)的页面上的页眉和页脚不同
+% \end{itemize}
+%
+% 当然，您还可以完全控制字体(fonts)、大写显示(uppercase displays)和小写显示(lowercase displays)等。
+%
+% \section[\Package{fancyhdr}\ 的简单应用]{\Package{fancyhdr}\ {\heiti 的简单应用}}
+% 要使用此宏包，请在 \latex/ 可以找到它的地方安装
+% (参见第~\ref{sec:installation}~节)\ \footnote{在大多数现代 \tex/ 安装包中已经包含了该宏包。}，
+% 并在文档的前言(preamble)中使用以下命令：
+\PSindex{fancy}
+% \begin{quote}
+% {\large \color{blue}{\verb|\usepackage{fancyhdr}|}} \\
+% {\large \color{blue}{\verb|\pagestyle{fancy}|}}
+% \end{quote}
+%
+% 我们可以用 \Package{fancyhdr}\ 创建如下页面布局(page layout)：
+%
+% \begin{fblock}
+% \noindent\makebox[\textwidth]{左页眉(LeftHeader)\hfill
+% 中间页眉(CenteredHeader)\hfill 右页眉(RightHeader)}\showrule
+% \noindent\makebox[\textwidth]{\hfill 页面正文(page body)\hfill}\\[\baselineskip]
+% \noindent\makebox[\textwidth]{\hrulefill}
+% \noindent\makebox[\textwidth]{左页脚(LeftFooter)\hfill
+% 中间页脚(CenteredFooter)\hfill 右页脚(RightFooter)}
+% \end{fblock}
+%
+% 左页眉(LeftHeader)和左页脚(LeftFooter)左对齐，中间页眉(CenteredHeader)和
+% 中间页脚(CenteredFooter)居中，右页眉(RightHeader)和右页脚(RightFooter)右对齐。
+%
+% 我们分别定义六个“字段(fields)”和两条装饰线(decorative lines)。
+%
+% \section[一个简单的示例]{\heiti 一个简单的示例}
+% \label{sec:simple}
+%
+% K.Grant (K.格兰特)正在向 Dean A.Smith (迪恩·a·史密斯)撰写一份关
+% 于“The performance of new graduates (应届毕业生的表现)”的报告，页面布局如下：
+%
+% \begin{fblock}
+% \noindent\makebox[\textwidth]{\hfill {\Heiti 应届毕业生的表现}}\showrule
+% \noindent\makebox[\textwidth]{\hfill page body\hfill}\\[\baselineskip]
+% \noindent\makebox[\textwidth]{\rule{\textwidth}{2pt}}
+% \noindent\makebox[\textwidth]{From: K. Grant\phantom{3}\hfill
+% To: Dean A. Smith\hfill \phantom{From: K. Grant}3}
+% \end{fblock}
+%
+% 其中的“3”是页码(page number)。标题：“应届毕业生的表现”用粗体(bold)。
+% 页脚上方的铅线(rule)有点粗(2pt)。
+%
+% 这是通过 \Cmd{pagestyle\{fancy\}}\ \footnote{请注意，版本 1 的 fancyheadings 使
+% 用 \cs{setlength}\ 命令来更改 \texttt{\bs...rulewidth}\ 参数。}\ 命令来完成的：
+% \CmdIndex{fancyhead}
+% \CmdIndex{fancyfoot}
+% \CmdIndex{headrulewidth}
+% \CmdIndex{footrulewidth}
+\begin{verbatim}
+\fancyhead[L,C]{}
+\fancyhead[R]{\textbf{应届毕业生的表现}}
+\fancyfoot[L]{From: K. Grant}
+\fancyfoot[C]{To: Dean A. Smith}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{2pt}
+\end{verbatim}
+% (\cs{thepage}\ 宏显示当前页码。\cs{textbf}\ 以粗体显示。)
+%
+% 现在这样已经很好了，只是首页(first page)不需要所有这些页眉和页脚。若要删除除居
+% 中页码(centered page number)以外的所有页码，请在 \Cmd{begin\{document\}}\ 和 \CmdIndex{maketitle}\cs{maketitle}\ 命令之后使用命令：
+% \CmdIndex{thispagestyle}
+% \begin{quote}
+% {\large \color{blue}{\verb|\thispagestyle{plain}|}}
+% \end{quote}
+%
+% 如果您不需要任何页眉或页脚，则可以使用命令：
+% \begin{quote}
+% {\large \color{blue}{\verb|\thispagestyle{empty}|}}
+% \end{quote}
+%
+% 事实上，标准的 \latex/ 类定义了 \cs{maketitle}\ 命令，从而自动发出(automatically issue) \Cmd{thispagestyle\{plain\}}。
+% 因此，如果您{\kaiti 确实}(\emph{do})希望在包含 \cs{maketitle}\ 的页面上使用 fancy 布局(fancy layout)，
+% 则必须在 \cs{maketitle}\ 之后使用 \Cmd{thispagestyle\{fancy\}}。
+%
+% \section[Fancy 居中]{Fancy {\heiti 居中}}
+% \label{sec:fancycenter}
+%
+% {\color{orange}{\Heiti 注意}}:本节仅适用于 \Package{fancyhdr} 4.0 版和更高版
+% 本\ \footnote{这来自亚历山大·I·罗振科的 \Package{nccfancyhdr}\ 宏包。}。
+%
+% fancy 页眉和页脚中的字段(fields)是使用 \cs{parbox}\ 命令准备的。因此，您可以使用多行字段(multiline fields)。
+% 在页眉中，它们与底行(bottom line)对齐，但在页脚中，它们则与顶行(top line)对齐。
+% 每个字段的最大宽度等于 \cs{headwidth}。这可能导致相邻字段(neighbouring fields)重叠。
+%
+% \CmdIndex{fancycenter}
+% 如果要以更传统的方式(traditional way)在不超过 \cs{headwidth}\ 的行中准备页眉/页脚，
+% 可以在任何页眉/页脚命令中使用以下命令：
+% \begin{quote}
+% \hspace{-2.2em}{\color{blue}{\cs{fancycenter}\oarg{distance}\oarg{stretch}\marg{left-field}\marg{center-field}\marg{right-field}}}
+% \end{quote}
+% \CmdIndex{fancycenter}
+% 上面的命令的工作原理类似于下面的命令：
+% % \begin{quote}
+% \hspace{-2.2em}{\verb|\hbox to\linewidth{|\marg{left-field}\cs{hfil}\marg{center-field}\cs{hfil}\marg{right-field}\verb|}|}
+% \end{quote}
+% 但如果可能的话，要更仔细地尝试将文本的中心部分(central part of the text)精确居中(exact centering)。当“\meta{center-field}”的宽度小于
+% \begin{quote}
+% \hspace{-2.5em}{\small \verb|\linewidth - 2*(|\meta{stretch}\verb|*|\meta{distance}\verb| + |\verb|max(width(|\meta{left-field}\verb|), width(|\meta{right-field}\verb|)))|}
+% \end{quote}
+% 时，采用了精确居中的方法(solution for exact centering)。
+% 否则，“\meta{center-field}”将略微偏移(migrate)到较短的项(item)(“\meta{left-field}”或“\meta{right-field}”) ，
+% 但至少提供了一行的各部分(all parts of line)之间的间距(space)。\meta{distance}\ 和 \meta{stretch}\ 的默认值分别为 1em 和 3。
+%
+% 如果 \meta{center-field}\ 为空(empty)，则 \cs{fancycenter}\ 等效于以下命令：
+% \begin{center}
+% \hspace{-9.9em} \verb|\hbox to\linewidth {|\marg{left-field}\verb|\hfil |\marg{right-field}\verb|}|
+% \end{center}
+%
+% 您可以在页眉中使用这个，例如
+% \begin{quote}
+% \hspace{-2.4em}{\footnotesize \color{blue}{\verb|\fancyhead[C]{|\cs{fancycenter}\oarg{distance}\oarg{stretch}\marg{left-field}\marg{center-field}\marg{right-field}\verb|}|}}
+% \end{quote}
+% 并将 \texttt{[L,R]}\ 部分保留为空。
+%
+% {\color{orange}{\Heiti 注意 1\,}}:
+% 当在页眉或页脚中使用 \cs{fancycenter}\ 时，
+% \CmdIndex{linewidth}%
+% \CmdIndex{headwidth}%
+% \cs{linewidth}\ 通常与 \cs{headwidth}\ 相同。只有在不同宽度(width)的盒子(box)中
+% 使用 \cs{fancycenter}\ 时，\cs{linewidth}\ 才是该盒子的宽度。
+%
+% {\color{orange}{\Heiti 注意 2\,}}:
+% 如果整个 \cs{fancycenter}\ 的宽度大于 \cs{linewidth}，它就会在右边突出来。
+% 有关可能的解决方案，请参阅第~\ref{sec:longtitles}~节。
+%
+% {\color{orange}{\Heiti 注意 3\,}}:
+% \cs{fancycenter}\ 命令的用法不限于页眉/页脚的参数。您可以在文档中的任何位置使用它。
+% 然后 \cs{linewidth}\ 将是使用它的盒子(box)或文本(text)的宽度。
+%
+% \section[双开面显示示例]{\heiti 双开面显示示例}\label{two-sided}
+%
+% \TTindex{twoside}
+% 一些文档类(document classes)，如 \verb|book.cls|，默认双开面(two-sided)显示：偶数页
+% 和奇数页具有不同的布局；其他文档类使用 \verb|twoside| 选项进行双开面显示。
+%
+% 现在让我们双开面显示报告(report)。让上述页面布局用于奇数(右侧)页面，
+% 以下页面布局用于偶数(左侧)页面：
+%
+% \begin{fblock}
+%
+% \noindent\makebox[\textwidth]{{\Heiti 应届毕业生的表现}\hfill}\showrule
+% \noindent\makebox[\textwidth]{\hfill page body\hfill}\\[\baselineskip]
+% \noindent\makebox[\textwidth]{\hrulefill}
+% \noindent\makebox[\textwidth]{4\phantom{To: Dean A. Smith}\hfill
+%  From: K. Grant\hfill \phantom{4}To: Dean A. Smith}
+%
+% \end{fblock}
+% \noindent 这里的“4”是页码(page number)。
+%
+% 以下是命令：
+%
+\begin{verbatim}
+\fancyhead{}   % 清除所有页眉字段(header fields)
+\fancyhead[RO,LE]{\textbf{应届毕业生的表现}}
+\fancyfoot{}   % 清除所有页脚字段(footer fields)
+\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[LO,CE]{From: K. Grant}
+\fancyfoot[CO,RE]{To: Dean A. Smith}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\end{verbatim}
+%
+% \CmdIndex{fancyhead}
+% \CmdIndex{fancyfoot}
+% \cs{fancyhead}\ 和 \cs{fancyfoot}\ 命令在方括号(square brackets)之间有一个附加参数(additional parameter)，
+% 用于指定它们应用于哪些页面和/或页眉/页脚的某些部分。上面的第一个 \cs{fancyhead}\ 命令省略了这个参数，
+% 因此适用于所有页眉字段(header fields)。一般来说，这只对去除默认值或以前的定义有用，就像这里所做的那样。
+% 类似地，不带方括号的 \cs{fancyfoot}\ 命令将清除所有页脚字段(footer fields)。在这个特殊的例子中，
+% 它可以被省略，因为所有的页脚字段都有一个指定的值。图~\ref{fig:sel}~给出了可以在方括号之间使用的选择符(selectors)。
+% 选择符可以组合在一起，这样 \Cmd{fancyhead[LE,RO]\{text\}}\ 将为偶数页(even pages)上的
+% 左页眉(left header)和奇数页(even pages)上的右页眉(right header)定义字段(field)。
+% 如果您不给出一个 \texttt{E}\ 或 \texttt{O}，则定义适用于这两个。\texttt{LRC}\ 亦是如此。
+% 选择符(selectors)可以是大写字母(uppercase letters)也可以是小写字母(lowercase letters)。
+% \begin{figure}[htb]
+%   \begin{center}
+%     \leavevmode
+%   \begin{tabular}{!{\vrule width1.2pt}r!{\vrule width0.7pt}l!{\vrule width1.2pt}} ^^AA 表格第一条和最后一条竖线宽度为1.2pt，即!{\vrule width1.2pt}
+%       \hlinew{1.2pt}
+%       {\Heiti 字段} &  {\Heiti 含义} \\
+%       \hlinew{0.7pt}
+%       E & 偶数页(even pages，E)         \\
+%       O & 奇数页(even pages，O)          \\
+%       \hlinew{0.5pt}
+%       L & 左字段(Left field，L)        \\
+%       C & 中间字段(Center field，C)      \\
+%       R & 右字段(Right field，R)       \\
+%       \hlinew{0.5pt}
+%       H & 页眉(Header，H)            \\
+%       F & 页脚(Footer，F)            \\
+%       \hlinew{1.2pt}
+%     \end{tabular}
+%   \end{center}
+%   \vspace{-1em}
+%   \caption{选择符(selectors)}
+%   \label{fig:sel}
+% \end{figure}
+%
+% \CmdIndex{fancyhf}
+% 还有一个更通用的命令(general command) \cs{fancyhf}，可以用来组合页眉和页脚的规范(specifications)。
+% 这允许附加选择符 \texttt{H} (页眉)和\texttt{F} (页脚)。事实上，\cs{fancyhead}\ 和 \cs{fancyfoot}\ 只
+% 是分别预先指定(pre-specified)了 \texttt{H}\ 和 \texttt{F}\ 的 \cs{fancyhf}。
+%
+% 同样，您可以使用 \Cmd{thispagestyle\{plain\}}\ 作为第~1~页(即首页)的简单页面布局(simple page layout)。
+%
+% \section[重新定义 \texttt{plain}\ 页面样式]{{\heiti 重新定义} \texttt{plain}\ {\heiti 页面样式}}
+% \label{sec:pagestyle-plain}
+%
+% 一些 \latex/ 命令，如 \cs{chapter}，使用 \cs{thispagestyle}\ 命令时会自动切换
+% 到 \texttt{plain}\ 页面样式，从而忽略当前有效的页面样式(page style)。
+%
+% 它们通过发出 \verb+\thispagestyle{plain}+\ 命令来做到这一点，最常见的可能发生这种情况的地方是:
+% \begin{itemize}
+% \item \texttt{book}\ 和 \texttt{report}\ 类的章(chapters)的第一页
+% \item 使用 \cs{maketitle}\ 时，\texttt{article}\ 类的文档的第一页
+% \item 索引(index)的第一页
+% \end{itemize}
+% 但这也可能发生在其他地方，具体取决于所使用的类(class)和包(packages)。
+%
+% 要自定义这样的页面，您必须重新定义 \texttt{plain}\ 页面样式。正如我们在前面指出的，
+% 可以通过定义 \cs{ps@plain}\ 命令来完成此操作，但 \Package{fancyhdr}\ 宏为您提供了
+% 使用 \cs{fancypagestyle}\ 命令的更简单的方法。这个命令可以用来重新定义现有的
+% 页面样式(比如 \texttt{plain})或者定义新的页面样式，例如，如果文档的一部分需要不同的页面样式。
+% 此命令有两个强制参数(mandatory parameters)：第一个是要定义的页面样式的名称，
+% 第二个包含更改页眉和/或页脚的命令，例如 \verb|fancyhead| 等。还允许更
+% 改 \cs{headrulewidth}\ 和 \cs{footrulewidth}，甚至 \cs{headrule}\ 和 \cs{footrule}。
+% (重新)定义的页面样式使用标准的 \texttt{fancy}\ 定义，由第二个参数中的定义修改(amend)。
+% 换句话说，那些没有在第二个参数中重新定义的部分(parts)从当前的 \texttt{fancy}\ 定义中
+% 获得它们的值(value)。特别是，如果第二个参数为空(empty)，即给定为 \verb+{}+，
+% 则新页面样式(new page style)等于 \texttt{fancy}\ 页面样式。
+%
+% 例如，让我们重新定义 \texttt{plain}\ 样式，使其与 \texttt{fancy}\ 页面样式相同：
+% \begin{quote}
+% {\large \color{blue}{\verb|\fancypagestyle{plain}{}|}}
+% \end{quote}
+% 现在，当这些特殊页面(special pages)使用 \texttt{plain}\ 页面样式时，它们使用您重新定义的版本。
+%
+% 作为另一个例子，让我们重新定义第~\ref{two-sided}~节中的报告(report)的 \texttt{plain}\ 样式，
+% 方法是将页码(page number)加粗并用连接号(en-dashes，短划线)括起来，不带任何 rules。
+% \PSindex{plain}
+%
+\begin{verbatim}
+\fancypagestyle{plain}{ %
+   \fancyhf{} % 清除所有页眉和页脚字段(fields)
+   \fancyfoot[C]{\textbf{--~\thepage~--}}  % 除外 center
+   \renewcommand{\headrulewidth}{0pt} %
+   \renewcommand{\footrulewidth}{0pt} %
+ }
+\end{verbatim}
+%
+%
+% \section[定义其它页面样式]{\heiti 定义其它页面样式}
+% \label{sec:fancypagestyle}
+%
+% 就像在上一节中重新定义 \texttt{plain}\ 页面样式一样，您可以根据 \texttt{fancy}\ 页面样式
+% 定义或重新定义其他页面样式。这也可以使用 \cs{fancypagestyle}\ 命令来完成。
+% 此命令的一般形式(general form)为：
+\begin{quote}
+\CmdIndex{fancypagestyle}
+{\large \color{blue}{\verb|\fancypagestyle|\marg{style-name}\oarg{base-style}\marg{definitions}}}
+\end{quote}
+% 如您所见，两个强制参数(mandatory arguments)之间有一个可选参数(optional argument)。
+%
+% 例如：
+\begin{verbatim}
+\fancypagestyle{toc}{ %
+  \fancyhf{} %
+   \fancyhead[RO]{\thepage} %
+   \fancyhead[RO]{\textsl{TABLE OF CONTENTS}} %
+   \fancyfoot[C]{\thepage}
+ }
+ \end{verbatim}
+% 这定义了一个特殊的页面样式 \texttt{toc}，用于带有 \Cmd{pagestyle\{toc\}}\ 的目录(table of contents)。
+% 在该定义中，您可以定义页眉和/或页脚，更改页眉和页脚的铅线(rules)，并重新定义诸如 \cs{chaptermark}\ 之类
+% 的命令(示例请参见第~\ref{sec:options}~节)。未在 \cs{fancypagestyle}\ 定义中重新定义的
+% 页眉、页脚和标记(marks)取自全局页面样式(global page style) \texttt{fancy}\ 的值。
+%
+% 您还可以为 \cs{fancypagestyle}\ 命令提供可选的基本页面样式(base page style)。然后，
+% 新页面样式(new page style)将基于基本页面样式。此基本页面样式必须是 \texttt{fancyhdr}\ 定义的样式。
+% 此外，还应注意不要创建循环依赖关系(circular dependencies)。在这种情况下，获取定义(页眉、页脚、标记)
+% 的顺序(order)为：
+% \begin{enumerate}
+% \item 采用基本样式(base style)的定义
+% \item \cs{fancypagestyle}\ 命令给出的定义覆盖(override)和/或扩充(augment)了这些定义。
+% \item 上面两个没有给出的任何定义都是从使用新页面样式(new page style)时的环境(environment)中获取的。
+% \end{enumerate}
+% 只有前两部分(first two parts)嵌入到页面样式中。如果没有给定基本样式(base style)，则第1部分为空。
+%
+% 可选的基本样式参数(base style argument)仅在~4.0~版之后可用。在这个版本中，也可以用这种方式
+% 重新定义页面样式 \texttt{fancy}。在~3.x~和更早版本中，这是不可能的。
+%
+% 如果您想从页面样式 \texttt{fancy}\ 恢复到原始默认定义(original default definitions)，如
+% 第~\ref{sec:default}~节所述，则可以使用
+ \begin{verbatim}
+ \fancypagestyle{myfancy}[fancydefault]{
+   . . . override some here
+ }
+ \end{verbatim}
+% \PSindex{fancydefault}
+% 页面样式 \texttt{fancydefault}\ 是嵌入了所有初始化(all the initialisation)的
+% 页面样式 \texttt{fancy}\ 的版本。与此相反，在宏包中定义的页面样式 \texttt{fancy}\ 使用相同的默认值，
+% 但没有嵌入它们。从环境中提取。因此，如果环境发生变化，因为您重新定义了页眉、页脚、标记命令(mark commands)等，
+% 页面样式 \texttt{fancy}\ 的功能(functioning)也会随之发生变化。但是，页面样式 \texttt{fancydefault}\ 不会改变。
+% 但是，\texttt{fancydefault}\ 只能在 fancyhdr 版本~4.0~之后使用。
+%
+% \section[宏包选项]{\heiti 宏包选项}
+% \label{sec:options}
+%
+% {\color{orange}{\Heiti 注意}}:本节适用于 fancyhdr 4.0 及更高版本。
+%
+% 您可以为 \cs{usepackage}\ 命令提供选项：
+% \begin{quote}
+% {\large \color{blue}{\verb|\usepackage|\oarg{options}\verb|{fancyhdr}|}}
+% \end{quote}
+% 支持下列选项：
+% \begin{center}
+% \OPTindex{nocheck}\OPTindex{compatV3}\OPTindex{headings}\OPTindex{myheadings}
+% \begin{tabular}{rp{0.78\linewidth}}
+% \hlinew{1.2pt}
+% {\Heiti 选项} & {\Heiti 含义} \\
+% \hlinew{0.7pt}
+% \texttt{nocheck} & 不检查页眉和页脚的高度(heights) \\
+% \texttt{compatV3} & 保留某些行为(现在被认为是不可取的)，如版本~3~所示\\
+% \texttt{headings} & 将 \texttt{headings}\ 页面样式重新定义为基于fancy的(fancy-based)\\
+% \texttt{myheadings} & 将 \texttt{myheadings}\ 页面样式重新定义为基于fancy的(fancy-based)\\
+% \hlinew{1.2pt}
+% \end{tabular}
+% \end{center}
+% \vspace{0.2em}
+% \begin{itemize}
+% \item \OPTindex{nocheck}第~\pageref{page:warning}~页第~\ref{sec:warning}~节描述了 \texttt{nocheck}\ 选项。
+%
+% \item \OPTindex{compatV3}\texttt{compatV3}\ 选项保留了两个 fancyhdr 版本~3.x(或更早版本)的特性，
+% 这些特性现在被认为是不可取的(undesirable)。
+%   \begin{enumerate}
+%   \item \cs{headheight}\ 或 \cs{footskip}\ 过小时自动调整(automatic adjustment)。
+%   这会导致页面布局不一致。见第~\pageref{page:warning}~页第~\ref{sec:warning}~节。
+%   \item 在这些早期版本中，对 \Package{fancyhdr}\ 页眉和页脚的更改
+%     (包括 \cs{fancyhead}、\cs{fancyheadoffset}\ 和类似命令所做的更改)是全局性的，
+%     但在 \cs{fancypagestyle}\ 定义的页面样式中除外。也就是说，当这些命令在 \LaTeX{}\ 组(group)中
+%     发出时，它们会影响整个文档，而不仅仅是组。如果您的文档依赖于此行为(behaviour)，
+%     则可以提供 \texttt{compatV3}\ 包选项。然而，这只是一个短期解决方案(short-time solution)。
+%     您应该尽快更改文档以解决此问题。在版本~4.0~及更高版本中，如果没有此选项，更改始终是局部的(local)。
+%   \end{enumerate}
+%   计划在 \Package{fancyhdr}\ 的第~5~版中让该选项消失。
+%
+% \item \PSindex{headings}\PSindex{myheadings}\OPTindex{headings}\OPTindex{myheadings}
+%   \texttt{headings}\ 和 \texttt{myheadings}\ 选项使用 fancyhdr 命令
+%   (包括页眉下的装饰线)重新定义了相应的页面样式，以便您以后可以选择此页面样式作为
+%   (部分)文档\ \footnote{这些选项是从 \texttt{nccfancyhdr}\ 宏包中复制的，但与该包相反，
+%   它们不会被自动选择。}\ 的页面样式。
+% \end{itemize}
+%
+% \PSindex{headings}
+% \texttt{headings}\ 页面样式在某些方面类似于默认的页面样式 \texttt{fancy}\ 的设置。
+% 在 \texttt{fancy}\ 页面样式中，页码位于页脚，而在 \texttt{headings}\ 页面样式中则位于页眉。
+% 然而，页眉字段(header fields)看起来类似。
+%
+% 请注意，这些页面样式与标准 \latex/ 页面样式一样，重新定义了 \cs{chaptermark}\ 和/或 \cs{[sub]sectionmark}\ 命令
+% (请参阅第~\ref{sec:scoop}~节)。结果是，如果选择例如 \Cmd{pagestyle\{headings\}}，则会
+% 覆盖 \Cmd{pagestyle\{fancy\}}\ 的定义。此外，当您在这样的页面样式生效时更改页眉和/或页脚，
+% 然后切换回此页面样式(例如 \verb|\pagestyle{headings}|)时，它们将恢复为内置设置(built-in settings)。
+% 因此，不建议以这种方式更改页眉或页脚，而是定义自己的页面样式，如第~\ref{sec:fancypagestyle}~节所述。
+%
+% \section[默认布局]{\heiti 默认布局}
+% \label{sec:default}
+% 让我们使用 \verb|book.cls| 文档类(documentclass)和 \Package{fancyhdr}\ 的默认设置，
+% 这样我们就不会使用 \Cmd{usepackage\{fancyhdr\}}\ 命令中的任何页面样式选项(page style options)，
+% 也不会重新定义任何页眉或页脚。所以：
+\begin{verbatim}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\end{verbatim}
+% 并让 \Package{fancyhdr}\ 来处理一切。如前所述，我们得到的布局非常类似于 \texttt{headings}\ 页面样式。
+%
+% 在新章(new chapters)开始的页面上，我们在页脚中得到一个居中的页码；没有页眉，也没有装饰线(decorative lines)。
+%
+% 在偶数页(even page)上，我们得到布局：
+%
+% \begin{fblock}
+% \noindent\makebox[\textwidth]{\textsl{1.2}\ \ {\heitixt 评价}\textsl{(EVALUATION)}\hfill{\heitixt 第}\textsl{1}{\heitixt 章\ \ \ 介绍}\textsl{(INTRODUCTION)}}\showrule
+% \noindent\makebox[\textwidth]{\hfill 偶数页页面正文(page body)\hfill}\\[2\baselineskip]
+% \noindent\makebox[\textwidth]{\hfill2\hfill}
+% \end{fblock}
+%
+% 在奇数页(odd page)上，我们得到布局：
+%
+% \begin{fblock}
+% \noindent\makebox[\textwidth]{{\heitixt 第}\textsl{1}{\heitixt 章\ \ \ 介绍}\textsl{(INTRODUCTION)}\hfill\textsl{1.2}\ \ {\heitixt 评价}\textsl{(EVALUATION)}}\showrule
+% \noindent\makebox[\textwidth]{\hfill 奇数页页面正文(page body)\hfill}\\[2\baselineskip]
+% \noindent\makebox[\textwidth]{\hfill
+% 3\hfill }
+% \end{fblock}
+%
+% \noindent 其中的页眉文本(header text)是倾斜的大写。
+%
+% 此默认布局(default layout)由以下命令生成：
+% \CmdIndex{rightmark}
+% \CmdIndex{leftmark}
+\begin{verbatim}
+ \fancyhead[LE,RO]{\textsl{\rightmark}}
+ \fancyhead[LO,RE]{\textsl{\leftmark}}
+ \fancyfoot[C]{\thepage}
+\end{verbatim}
+%
+% 以下设置用于装饰线(decorative lines)：
+%
+% \begin{tabbing}
+% \CmdIndex{headrulewidth}
+% \noindent \cs{headrulewidth}\qquad \qquad \qquad \=0.4\=pt\\
+% \CmdIndex{footrulewidth}
+% \Cmd{footrulewidth}\>0\>pt
+% \end{tabbing}
+%
+% 页眉文本(header text)由 \verb|book.cls| 中的标准 \LaTeX{}\ 代码转换为全大写。
+%
+% \section[\latex/ 标记中的 scoop]{\latex/ {\heiti 标记中的} scoop}
+% \label{sec:scoop}
+%
+% 通常，对于 \verb|book| 和 \verb|report| 类的文档，您可能希望在页眉中放置章(chapter)和节(section)的信息
+% (章仅适用于单开面显示[one-sided printing])，对于 \verb|article| 类的文档，则放置小节(section)和
+% 小小节(subsection)的信息(节仅适用于单开面显示)。\latex/ 使用标记机制(marker mechanism)来记住页面的
+% 章和节(节和小节)信息；这在\ {\color{blue}{\textit{The \latex/ Companion}}}【{\color{blue}{《\LaTeX{}\ 指南》}}】第4.3.1节
+% 或\ {\color{blue}{\textit{The \latex/ Companion, Second Edition}}}【{\color{blue}{《\LaTeX{}\ 指南》第2版}}】第4.3.4节中均有详细讨论。
+%
+% 有两种方法可以使用和更改可用的较高级别和较低级别的分节信息(sectioning information)。
+% \CmdIndex{rightmark}
+% \CmdIndex{leftmark}
+% \cs{leftmark}\ (较高级别)和 \cs{rightmark}\ (较低级别)这两个宏包含了\latex/ 处理的信息，
+% 您可以直接使用它们，如第~\ref{sec:default}~节所示。
+%
+% 由 \Cmd{markboth\{leftmark\}\{rightmark\}}\ 和 \Cmd{markright\{rightmark\}}\ 命令来设置这些标记(marks)。
+% 这些命令通常在诸如 \cs{chaptermark}\ 和 \cs{sectionmark}\ 这样的命令中使用，但也可以直接在文档中提供，
+% 尽管这不是很常见。
+%
+% \cs{leftmark}\ 包含页面中 \emph{\textbf{L}ast} \cs{markboth}\ 的 \textbf{L}eft\ 参数，
+% \cs{rightmark}\ 包含页面中 \emph{fi\textbf{R}st} \cs{markboth}\ 的 \textbf{R}ight\ 参数
+% 或 \emph{fi\textbf{R}st} \cs{markright}\ 的唯一参数。如果页面中没有标记(marks)，则会从前一页“继承(inherited)”。
+%
+% 通过重新定义
+% \CmdIndex{chaptermark}
+% \cs{chaptermark}、
+% \CmdIndex{sectionmark}
+% \CmdIndex{subsectionmark}
+% \cs{sectionmark}\ 和 \cs{subsectionmark}\ 命令\ \footnote{\texttt{paragraph}\ 和 \texttt{subparagraph}\ 有
+% 类似的命令，但很少使用。}，您可以影响章、节和小节的信息(只有两个！)是如何显示的。
+% 您必须将重定义(redefinition)放在 \Cmd{pagestyle\{fancy\}}\ 的第一次调用(first call)之后，
+% 因为这将设置默认值。
+%
+% 让我们用章信息(chapter info)来说明这一点。它由三部分组成：
+% \begin{itemize}
+% \CmdIndex{thechapter}
+% \item  由 \cs{thechapter}\ 宏显示的数字(例如，2)
+% \item  由 \CmdIndex{chaptername}\cs{chaptername}\ 宏显示的名称(英文，Chapter)
+% \item  标题(title)，包含在 \cs{chapter}\ 的参数中。
+% \end{itemize}
+% 我们将以下内容与 \cs{chaptermark}\ 中的 \cs{markboth}\ 结合起来。
+%
+% 对于较低级别的(lower-level)分节信息(sectioning information)，我们对 \cs{sectionmark}\ 中
+% 的 \cs{markright}\ 执行相同的操作。
+%
+% 因此，如果“2. Implementation”是当前章(current chapter)，“2.1.\ First steps”是
+% 当前节(current section)，那么
+%
+% ^^A \Example
+\begin{verbatim}
+ \renewcommand{\chaptermark}[1]{%
+   \markboth{\chaptername\ \thechapter.\ #1}{}}
+ \renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\end{verbatim}
+% 将生成“Chapter 2. Implementation”和“2.1.\ First steps”
+%
+% 重新定义 \cs{chaptermark}\ 和 \cs{sectionmark}\ 命令可能无法消除所有大写字母(uppercaseness)。
+% 例如，参考文献(bibliography)在页眉中
+% \CmdIndex{uppercase}
+% \index{BIBLIOGRAPHY}
+% 有一个 \textsc{bibliography}\ 标题(title)，因为在 \cs{thebibliography}\ 的定义中明确
+% 给出了 \cs{MakeUppercase}。
+% \textsc{index}\ (索引)等。
+% \index{INDEX}
+% 也类似。如果不想重新定义这些命令，可以使用 \Package{fancyhdr}\ 在页眉和页脚字段中
+% 提供的 \cs{nouppercase}\ 命令。请注意，这可能会影响其他内容，如页眉中的大写罗马数字，
+% 因此应谨慎使用。本质上，此命令在一个环境中排版(typesets)其参数，在这个环境
+% 中 \cs{MakeUppercase}\ 和 \cs{uppercase}\ 被更改为不执行任何操作。
+%
+% ^^A \Example
+\begin{verbatim}
+ \fancyhead[L]{\nouppercase{\rightmark}}
+ \fancyhead[R]{\nouppercase{\leftmark}}
+\end{verbatim}
+%
+% 图~\ref{fig:markers}~显示了“Chapter 2.\ Implementation”的一些变体(最后一个示例
+% 适用于一些非英语语言)。行末尾的 \texttt{\%}\ 符号用于防止多余的空格(unwanted space)。
+% 通常情况下，您会继续行(continue the lines)并删除这些 \texttt{\%}\ 符号\ \footnote{\texttt{\bs MakeUppercase}\ 命令
+% 在 \latex/ 中用于生成大写文本(uppercase text)，而 \cs{uppercase}\ 是用于此(即生成大写文本)的 plain \TeX{}\ 命令。
+% 不同之处在于 \cs{MakeUppercase}\ 还处理非 ASCII 字母(non-ASCII letters)。}。
+%
+% \begin{figure}[tb]
+% \CmdIndex{chaptermark}
+% \CmdIndex{uppercase}
+% \CmdIndex{MakeUppercase}
+% \setlength{\columnsep}{20pt}\small
+% \begin{multicols}{2}
+% \noindent {\Heiti 代码}(code)：\\
+% \mbox{}\\
+% \verb|\renewcommand{\chaptermark}[1]{%|\\
+% \verb| \markboth{\chaptername|\\
+% \verb| \ \thechapter.\ #1}{}}|\\
+% \mbox{}\\
+% \verb|\renewcommand{\chaptermark}[1]{%|\\
+% \verb| \markboth{\MakeUppercase{%|\\
+% \verb| \chaptername}\ \thechapter.%|\\
+% \verb| \ #1}{}}|\\
+% \mbox{}\\
+% \verb|\renewcommand{\chaptermark}[1]{%|\\
+% \verb| \markboth{\MakeUppercase{%|\\
+% \verb| \chaptername\ \thechapter.%|\\
+% \verb| \ #1}}{}}|\\
+% \mbox{}\\
+% \verb|\renewcommand{\chaptermark}[1]{%|\\
+% \verb| \markboth{#1}{}}|\\
+% \mbox{}\\
+% \verb|\renewcommand{\chaptermark}[1]{%|\\
+% \verb| \markboth{\thechapter.\ #1}{}}|\\
+% \mbox{}\\
+% \verb|\renewcommand{\chaptermark}[1]{%|\\
+% \verb| \markboth{\thechapter.%|\\
+% \verb| \ \chaptername.\ #1}{}}|\\
+% {\Heiti 显示}(prints)：\\
+% \mbox{}\\
+% Chapter 2.\ Implementation\\
+% \mbox{}\\
+% \mbox{}\\
+% \mbox{}\\
+% CHAPTER 2.\ Implementation\\
+% \mbox{}\\
+% \mbox{}\\
+% \mbox{}\\
+% \mbox{}\\
+% CHAPTER 2.\ IMPLEMENTATION\\
+% \mbox{}\\
+% \mbox{}\\
+% \mbox{}\\
+% \mbox{}\\
+% Implementation\\
+% \mbox{}\\
+% \mbox{}\\
+% 2.\ Implementation\\
+% \mbox{}\\
+% \mbox{}\\
+% 2.\ Chapter.\ Implementation\\
+% \mbox{}\\
+% \end{multicols}
+% \vspace{-1em}
+% \caption{标记的变体(marker variants)}\label{fig:markers}
+% \end{figure}
+%
+% 需要注意的是，\latex/ 标记机制(marking mechanism)对于章(chapters)(总是从新页面开始)和节(sections)(相当长)都能很好地工作。
+% 但它不能很好地处理短节(short sections)和小节(subsections)。这是 \latex/ 的问题，而不是 \Package{fancyhdr}\ 的问题。
+%
+% 作为一个示例，让我们以一个页面布局(page layout)为例，其中左标记(leftmarks)由节(sections)生成，
+% 右标记(rightmarks)由小节(subsections)生成(这在 \texttt{article}\ 类中是默认的)。用一短节(short sections)做一页，例如：
+%
+% \begin{samepage}
+% \noindent Section 1.\\
+% subsection 1.1\\
+% subsection 1.2\\
+% Section 2.
+% \end{samepage}
+%
+% 由于左标记(leftmark)包含页面的{\kaiti 最后一个}标记，因此它将是“Section 2.”，
+% 而右标记(rightmark)将是“subsection 1.1”，因为它将是页面的{\kaiti 第一个}标记。
+% 因此，页眉信息(page header info)将 section 2 与 subsection 1.1 结合起来，这不是很好。
+% 在这些情况下，您可以做的一件事是只使用 \cs{rightmark}s\ 并相应地重新定义 \cs{sectionmark}。
+%
+% 然而，第~\ref{sec:xmarks}~节中描述的 \Package{extramarks}\ 宏包包含一个命令
+% \CmdIndex{firstleftmark}
+% \cs{firstleftmark}，该命令可用于获取该页面页眉中的第一个左标记(leftmark)。
+% 在这种情况下，这可能是最好的解决方案。在上述情况下，页眉将包含“Section 1.”。
+% \vspace{3em}
+% ^^A \Example
+\begin{verbatim}
+ \usepackage{extramarks}
+  . . .
+ \fancyhead[R]{\firstleftmark}
+\end{verbatim}
+%
+% 标准 \latex/ 类(marks)中标记的另一个问题是，更高级别的分节命令(sectioning commands)(例如 \cs{chapter})
+% 使用空的右参数(right argument)调用 \cs{markboth}。这意味着在章(或 article 样式的 section)的第一页，
+% \cs{rightmark}\ 将为空。根本问题是 \tex/ 机制(machinery)只有一个 \cs{mark}。
+% 所有的标记(marks)都必须包装在这个 \cs{mark}\ 中。所以没有独立的左或右标记。
+% 这也适用于第~\ref{sec:xmarks}~节中所述的额外标记(extra marks)。如果这是一个问题，
+% 您必须手动插入额外的 \cs{markright}\ 命令或重新定义 \cs{chaptermark}\ (\cs{sectionmark})\ 命令，
+% 以发出带有两个适当参数的 \cs{markboth}\ 命令。
+%
+% 最后一点，您还应该注意到 \cs{chapter}\ 等命令的 \verb|*| 形式{\kaiti 不会}调用标记命令(mark commands)。
+% 因此，如果您希望在前言中设置页眉信息，但不编号，也不放在目录中，则必须自己发出 \cs{markboth}\ 命令，例如。
+%
+\begin{verbatim}
+ \chapter*{Preface}
+ \markboth{Preface}{}
+\end{verbatim}
+%
+% 或者在没有章的文档类中：
+\begin{verbatim}
+ \section*{Preface}
+ \markboth{Preface}{}
+\end{verbatim}
+%
+% \section[字典样式页眉]{\heiti 字典样式页眉}
+%
+% \index{dictionary}
+% \index{concordance}
+% 字典(dictionaries)和索引(concordances)通常有一个页眉(header)，该页眉包含页面上定义的
+% 第一个单词或第一个和最后一个单词。这可以通过 \Package{fancyhdr}\ 和 \latex/ 的 \texttt{mark}\ 机制轻松实现。
+% 当然，如果您将这些标记用于字典样式的页眉(dictionary style headers)，则不能将它们用于章和节信息，
+% 因此，如果还存在章和节，则必须重新定义 \cs{chaptermark}\ 和 \cs{sectionmark}，以使它们变得无害：
+%
+\begin{verbatim}
+ \renewcommand{\chaptermark}[1]{}
+ \renewcommand{\sectionmark}[1]{}
+\end{verbatim}
+%
+% 现在，您为每个字典或索引条目 \verb|#1| 执行 \Cmd{markboth\{\#1\}\{\#1\}}，并为
+% 页面上定义的第一个条目(entry)使用 \cs{rightmark}，为最后一个条目使用 \cs{leftmark}。
+%
+% 如果您想使用 \textsf{firstword--lastword}\ 格式的页眉条目(header entry)，
+% 如果两者都相同，最好将其简化为 \textsf{firstword}\ 格式。如果页面上只有一个条目，
+% 则可能发生上述这种情况。在这种情况下，必须进行测试以检查标记(marks)是否相同。
+% 然而，\tex/ 的标记是个怪物，无法与 plain \tex/ \cs{if}\ 命令
+% \TTindex{ifthen}
+% 进行开箱比较(compared out of the box)。幸运的是，\Package{ifthen}\ 宏包运行良好：
+%
+\begin{verbatim}
+ \newcommand{\mymarks}{
+   \ifthenelse{\equal{\leftmark}{\rightmark}}
+     {\rightmark}   % 如果相等(if equal)
+     {\rightmark--\leftmark}}   % 如果不相等(if not equal)
+ \fancyhead[LE,RO]{\mymarks}
+ \fancyhead[LO,RE]{\thepage}
+\end{verbatim}
+%
+% \section[别致的布局]{\heiti 别致的布局}
+% \label{sec:fancy}\label{sec:warning}
+%
+% \index{multi-line}
+% 可以使用 \bsbs{}\ 命令创建多行字段(multi-line field)。还可以使用 \cs{vspace}\ 命令
+% 在字段中添加额外的空间(extra space)。请注意，如果您这样做，您
+% \CmdIndex{headheight}
+% \CmdIndex{footskip}
+% 可能需要增加页眉(\cs{headheight})和/或页脚(\cs{footskip})的高度，
+% \index{Overfull \verb+\vbox+ \ldots}
+% 否则您可能会收到错误消息“Overfull \cs{vbox} \ldots has occurred while \cs{output} is active”\footnote{如果
+% 您使用 \texttt{11pt}\ 或 \texttt{12pt}，您可能也必须这样做，因为 \LaTeX 的默认值非常小。}，
+% 即“当 \cs{output}\ 处于活动状态时，\cs{vbox} \ldots 已过满”。请参阅下面的警告。
+% 有关详细信息，请参阅\ {\color{blue}{the \latex/ \emph{Companion}}}\ 【{\color{blue}{《\LaTeX{}\ 指南》}}】的第 4.1 节。
+%
+% 例如，以下代码将在右上角(upper right hand corner)的两行中放置文章(article)的
+% 节标题(section title)和小节标题(subsection title)：
+%
+\begin{verbatim}
+ \documentclass{article}
+ \usepackage{fancyhdr}
+ \pagestyle{fancy}
+ \addtolength{\headheight}{\baselineskip}
+ \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+ \renewcommand{\subsectionmark}[1]{\markright{#1}}
+ \fancyhead[R]{\leftmark\\\rightmark}
+\end{verbatim}
+%
+% 您还可以自定义装饰线(decorative lines)。应用下面的代码您可以使页眉中的装饰线相当粗：
+%
+% \CmdIndex{headrulewidth}
+\begin{verbatim}
+ \renewcommand{\headrulewidth}{0.6pt}
+ \end{verbatim}
+% 或者，应用下面的代码您可以让页脚中的装饰线消失：
+% \CmdIndex{footrulewidth}
+\begin{verbatim}
+ \renewcommand{\footrulewidth}{0pt}
+\end{verbatim}
+%
+% 装饰线(decorative lines)本身在两个宏 \cs{headrule}\ 和 \cs{footrule}\ 中定义。
+% 例如，如果要在标题中使用虚线(dotted line)而不是实线(solid line)，请重新定义命令 \cs{headrule}：
+%
+\begin{verbatim}
+ \renewcommand{\headrule}{\vbox to 0pt
+     {\makebox[\headwidth]{\dotfill}\vss}}
+\end{verbatim}
+%
+% 重新定义的 \cs{headrule}\ 最好不占用垂直空间(vertical space)，如上面的示例和
+% 标准定义(standard definition)所示。如果它确实占用了垂直空间，则页眉可能太靠近文本，
+% 甚至会侵入(intrude in)文本。在这种情况下，\Package{fancyhdr}\ 会给您一个警告，
+% 提示您 \cs{headheight}\ 太小。该警告信息如下：
+\begin{verbatim}
+ Package fancyhdr Warning: \headheight is too small (12.0pt):
+ (fancyhdr)   Make it at least 14.0pt, for example:
+ (fancyhdr)   \setlength{\headheight}{14.0pt}.
+ (fancyhdr)   You might also make \topmargin smaller to compensate:
+ (fancyhdr)   \addtolength{\topmargin}{-2.0pt}.
+\end{verbatim}
+% \label{page:warning}\index{Warning}
+即：
+\begin{verbatim}
+ fancyhdr 宏包警告： \headheight 太小 (12.0pt):
+ (fancyhdr)   使它最小为 14.0pt，例如：
+ (fancyhdr)   \setlength{\headheight}{14.0pt}.
+ (fancyhdr)   您还可以将 \topmargin 缩小以进行补偿：
+ (fancyhdr)   \addtolength{\topmargin}{-2.0pt}.
+\end{verbatim}
+% 您可能会在每一页上都看到这个警告。{\color{orange}{\Heiti 注意}}:在~4.0~版之前，
+% \Package{fancyhdr}\ 会更改 \cs{headheight}\ 本身，导致随后页面(following pages)上
+% 的文本显示低于此页面。这似乎令人困惑，因此从~4.0~版开始，这不再是一个问题
+% (除非您提供了
+% \OPTindex{compatV3}
+% \texttt{compatV3}\ 宏包选项。但是，您不应该将此作为永久解决方案[permanent solution]，
+% 而是应该去解决该问题)。因此，强烈建议您在前言中重新定义\cs{headheight} ，如下所示：
+\begin{verbatim}
+ \setlength{\headheight}{14pt}
+\end{verbatim}
+% 这将导致主文本(main text)在页面上降低 2pt，这可能是不可取的。您可以通过
+% 使 \cs{topmargin}\ 相应地变小来对此进行补偿，例如：
+\begin{verbatim}
+ \addtolength{\topmargin}{-2pt}
+\end{verbatim}
+% 如果页脚(footer)太高，则需要对 \cs{footskip}\ 进行类似的更改。
+%
+% 您还可以使用宏包
+% \OPTindex{nocheck}
+% 的 \texttt{nocheck}\ 选项来完全消除此检查(check)。但这可能会导致页眉或页脚与
+% 其他文本发生不必要的冲突。因此，这通常不鼓励这样做。最好更
+% 改 \cs{headheight}、\cs{footskip}\ 和/或 \cs{topmargin}。但如果您自动生成 \latex/ 代码，
+% 而软件(software)不知道页眉或页脚的高度，这可能很方便。
+%
+% 除了将 \cs{headrulewidth}\ 更改为 0 以使横线(rule)消失之外，您还可以使用
+\begin{verbatim}
+ \renewcommand{\headrule}{}
+\end{verbatim}
+% 将 \cs{headrulewidth}\ 更改为空(empty)。这两种做法在视觉上没有什么区别，
+% 但是在以后将其恢复为默认值会更加困难。
+%
+% 最后，让我们制作一条真正的“装饰(decorative)”线条\ \footnote{基于 Wayne Chan (陈韦恩) 的想法。}。
+\begin{verbatim}
+ \usepackage{fourier-orns}
+ ...
+ \renewcommand\headrule{%
+       \hrulefill
+       \raisebox{-2.1pt}
+           {\quad\decofourleft\decotwo\decofourright\quad}%
+       \hrulefill}
+\end{verbatim}
+% 这将生成下面的页眉线(headrule)：
+%
+% \noindent\makebox[\textwidth]{\hrulefill
+% \raisebox{-2.1pt}[10pt][10pt]{\quad\decofourleft\decotwo\decofourright\quad}\hrulefill}
+%
+% 请注意，我们没有照顾到使这条装饰线(decorative line)占据零垂直空间(zero vertical space)。
+% 其结果是，它将向文本延伸，并且我们将得到关于 \cs{headheight}\ 太小的警告。因此，
+% 我们应该按照上面给出的方式改变 \cs{headheight}。另一个问题是横线(line)和页眉文本(header text)
+% 之间的距离相当大。我们可以在上面加一个负 \cs{vspace}\ 来减少该过大的距离，比如：
+\begin{verbatim}
+ \renewcommand\headrule{%
+       \vspace{-6pt}
+       \hrulefill
+       \raisebox{-2.1pt}
+           {\quad\decofourleft\decotwo\decofourright\quad} %
+       \hrulefill}
+\end{verbatim}
+%
+% 我们可以对 \cs{footrule}\ 使用相同的代码，但不需要 \cs{vspace}。如果要更改
+% 装饰线(decorative line)与页脚文本(footer text)之间的距离，则需要调整
+% \CmdIndex{footruleskip}
+% \DescribeMacro{\footruleskip}
+% \cs{footruleskip}\ 参数。它定义页脚中的装饰线与页脚文本行顶部(top of the footer text line)之间的距离。
+% 默认情况下，它设置为正常行距(normal line distance)的 30\%。如果在页脚中使用不常用的大字体或小字体，
+% 则可能需要对其进行调整。可以使用 \cs{renewcommand}\ 来更改它。
+%
+% 您还可以更改页眉文本(header text)的基线(baseline)与页眉中的装饰线(decorative line)之间的距离。
+% 通常，该距离由文本中可能的下伸部分(descenders)的最大深度决定，即正常行距(normal line distance)的 30\%。
+% 您可以通过定义 \cs{headruleskip}\ 宏来增加或减少此距离，
+% \CmdIndex{headruleskip}
+% \DescribeMacro{\headruleskip}
+% 类似于 \cs{footruleskip}\ \footnote{(但 \cs{headruleskip}\ 仅
+% 在~4.0~版之后可用。)}。这定义了额外的距离(extra distance)。默认值为 0pt，正值使距离变大，负值使距离变短。
+% 请注意，这不会改变装饰线相对于页面的位置，但会移动页眉文本(header text)。如果要保持页眉文本固定，只移动装饰线，
+% 则还必须更改参数 \cs{headsep}\ (见图~\ref{fig:layout})。\strut
+%
+% \pagestyle{showstruts}
+% \noindent\begin{minipage}{\textwidth}
+% \phantomsection\label{showstruts}
+% \indent 本页面中的页眉和页脚显示{\kaiti 支架}(\emph{strut})(基准线上方和下方文本区域中的空间量)，
+% 以及 \cs{headruleskip}\ 和 \cs{footruleskip}。对于本页，\cs{headruleskip}\ 为 4pt。
+% \end{minipage}
+%
+% \section[两本书的示例]{\heiti 两本书的示例}
+% \label{sec:book-examples}
+%
+% 以下定义近似于 L.Lamport (L·兰波特)的\ {\color{blue}{\latex/ book}}【{\color{blue}{《\latex/ 手册》}}】中使用的样式(style)。
+%
+% Lamport 的页眉悬在版口(margin)的外面。这是这样做的：
+%
+% 页眉和页脚的宽度为 \cs{headwidth}，默认情况下等于文本(text)的宽度即 \cs{textwidth}。
+% 通过 \cs{setlength}\ 和 \cs{addtolength}\ 命令
+% \CmdIndex{headwidth}
+% 重新定义 \cs{headwidth}，可以使宽度更宽(或更窄)。要在版口(margin)的外面显示边注(marginal notes)，
+% \CmdIndex{marginparsep}
+% \CmdIndex{marginparwidth}
+% 请使用以下命令将 \cs{marginparsep}\ 和 \cs{marginparwidth}\ 添加到 \cs{headwidth}：
+%
+\begin{verbatim}
+ \addtolength{\headwidth}{\marginparsep}
+ \addtolength{\headwidth}{\marginparwidth}
+\end{verbatim}
+%
+% \begin{flushleft}
+% 在第一个 \Cmd{pagestyle\{fancy\}}\ 命令{\kaiti 之后}发出这些命令是最安全的。
+% \end{flushleft}
+%
+% 现在对 Lamport 的手册(Lamport's book)样式有了一个完整的定义。页眉具有文本宽度(width of the text)
+% 加上 marginpar 区域(marginpar area)。偶数页的页眉左侧有页码(page number)，右侧有章标题(chapter title)。
+% 在奇数页上，它的节标题(section title)前面有左侧的节编号(section number)和右侧的页码。全部为粗体(boldface)。
+% 没有页脚。\texttt{plain}\ 样式被重新定义为没有页眉和页脚。(在 \latex/ book 中，这是有意义的，
+% 因为每一章的第一页均只包含一张素描画(drawing)。在大多数其他情况下，您可能希望页面上有页码。)
+%
+\begin{verbatim}
+ \documentclass{book}
+ \usepackage{fancyhdr}
+ \pagestyle{fancy}
+ \addtolength{\headwidth}{\marginparsep}
+ \addtolength{\headwidth}{\marginparwidth}
+ \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+ \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+ \fancyhf{}
+ \fancyhead[LE,RO]{\textbf{\thepage}}
+ \fancyhead[LO]{\textbf{\rightmark}}
+ \fancyhead[RE]{\textbf{\leftmark}}
+ \fancypagestyle{plain}{%
+    \fancyhead{}                        % 去掉页眉(headers)
+    \renewcommand{\headrulewidth}{0pt}  % 去掉页眉线(headrule)
+ }
+\end{verbatim}
+% \PSindex{plain}
+%
+% 请注意，\cs{chaptermark}\ 和 \cs{sectionmark}\ 命令已被重新定义，以消除
+% 章编号(chapter numbers)和大写字母(uppercaseness)。
+%
+% 为了更好地控制页眉和/或页脚的水平位置(horizontal position)，\Package{fancyhdr}\ 有
+% 额外的命令(additional commands)来指定页眉和/或者页脚元素的偏移量(offset)。
+% 使用 \Cmd{fancyhfoffset[place]\{length\}}\ 偏移一个或多个元素。
+% \CmdIndex{fancyhfoffset}
+% \texttt{place}\ 参数与 \cs{fancyhf}\ 的可选参数类似，与 \texttt{L R E O}\ 类似，
+% 但不能使用 \texttt{C}。它指定应为哪些元素应用偏移量。\texttt{length}\ 参数指定
+% 实际偏移量(actual offset)。正值将元素向外移动(进入版口[margin])，而负值将向内移动。
+% 还有专门的 \cs{fancyheadoffset}\ 和 \cs{fancyfootoffset}\ 命令，它们分别预先应用
+% 了 \texttt{H}\ 和 \texttt{F}\ 参数。
+% \CmdIndex{fancyheadoffset}
+% \CmdIndex{fancyfootoffset}
+%
+% 使用这些命令时，\latex/ 将根据给定的参数重新计算 \cs{headwidth}。
+%
+% 因此，上面的示例也可以用(注意：如果使用 \Package{calc}\ 宏包，则只能使用这样的表达式作为长度参数)：
+%
+\begin{verbatim}
+ \fancyheadoffset[LE,RO]{\marginparsep+\marginparwidth}
+\end{verbatim}
+%
+% \vspace{2em}
+% 第二个例子是\ {\color{blue}{\amslatex/ book}}【{\color{blue}{《\amslatex/ 手册》}}】\footnote{George Gratzer (乔治·格拉茨)，
+% \textit{Math into LaTeX} 【《LaTeX 中的数学》】，\textit{\LaTeX{}}\ 和 \textit{\amslatex/}简介，Birkhauser 公司，波士顿。}
+%
+% 章页(chapter pages)没有页眉或页脚。所以我们为每一个章页声明(declare)：
+%
+\begin{verbatim}
+ \thispagestyle{empty}
+\end{verbatim}
+% 而且我们不需要重新定义 plain。
+%
+% 章(chapter)和节(section)标题的外观是这样的：2.\ IMPLEMENTATION，因此我们必须重新定
+% 义 \cs{chaptermark}\ 和 \cs{sectionmark}\ 如下(见第~\ref{sec:scoop}~节)：
+%
+\begin{verbatim}
+ \renewcommand{\chaptermark}[1]%
+    {\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
+ \renewcommand{\sectionmark}[1]%
+    {\markright{\MakeUppercase{\thesection.\ #1}}}
+\end{verbatim}
+%
+% 在偶数页上，页码显示为左页眉(left header)，章信息(chapter info)显示为右页眉(right header)；
+% 在奇数页上，节信息(section info)显示为左页眉(left header)，页码显示为右页眉(right header)。
+% 中间页眉(center headers)为空(empty)。没有页脚。
+%
+% 页眉有一条装饰线(decorative line)，宽度 0.5 pt，所以我们需要下面的命令：
+%
+\begin{verbatim}
+ \renewcommand{\headrulewidth}{0.5pt}
+ \renewcommand{\footrulewidth}{0pt}
+\end{verbatim}
+%
+% 页眉中使用的字体为 9 pt bold Helvetica。Sebastian Rahtz (塞巴斯蒂安 · 拉赫兹)的 \PSNFSS\ 系统
+% 使用 Helvetica 的缩写(Karl Berry) \verb|phv|，因此使用以下命令选择此字体：
+\begin{verbatim}
+ \fontfamily{phv}\fontseries{b}\fontsize{9}{11}\selectfont
+\end{verbatim}
+% 参见\ {\color{blue}{\emph{The \latex/ Companion}}}【{\color{blue}{《\LaTeX{}\ 指南》}}】第 7.6.1 节和第 11.9.1 节
+% 或\ {\color{blue}{\emph{The \latex/ Companion, Second Edition}}}【{\color{blue}{《\LaTeX{}\ 指南》，第二版}}】第 7.6 和第 7.9.1 节。
+% 让我们定义一个缩写：
+\begin{verbatim}
+ \newcommand{\helv}{%
+    \fontfamily{phv}\fontseries{b}\fontsize{9}{11}\selectfont}
+\end{verbatim}
+%
+% 现在我们已经为页面布局做好了准备：
+%
+\begin{verbatim}
+ \documentclass{book}
+ \usepackage{fancyhdr}
+ \pagestyle{fancy}
+ \renewcommand{\chaptermark}[1]%
+    {\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
+ \renewcommand{\sectionmark}[1]%
+    {\markright{\MakeUppercase{\thesection.\ #1}}}
+ \renewcommand{\headrulewidth}{0.5pt}
+ \renewcommand{\footrulewidth}{0pt}
+ \newcommand{\helv}{%
+    \fontfamily{phv}\fontseries{b}\fontsize{9}{11}\selectfont}
+ \fancyhf{}
+ \fancyhead[LE,RO]{\helv \thepage}
+ \fancyhead[LO]{\helv \rightmark}
+ \fancyhead[RE]{\helv \leftmark}
+\end{verbatim}
+%
+%
+% \section[浮动页面的特殊页面布局]{\heiti 浮动页面的特殊页面布局}
+% \label{sec:float}
+%
+% \index{float page}
+% 有些人希望为浮动页面(float pages)(仅包含浮动体的页面)提供特殊的布局。由于这些页面
+% 是由 \latex/ 自动生成的，用户无法控制它们。浮动页没有 \cs{thispagestyle} ，页面样式(page style)
+% 的任何更改至少也会影响浮动页之前的页面。然而，使用 \Package{fancyhdr}，您可以在每个页眉或页脚字段中指定。
+%
+% \medskip
+% {\large \color{blue}{\Cmd{iffloatpage\{}\meta{value for float page}\verb|}{|\meta{value for other pages}\verb|}|}}
+% \medskip
+%
+% 您甚至可以通过定义以下内容来消除浮动页上的装饰线(decorative line)：
+%
+\begin{verbatim}
+ \renewcommand{\headrulewidth}{\iffloatpage{0pt}{0.4pt}}
+\end{verbatim}
+%
+% 有时，您可能还需要更改页面的布局，这些页面包含页面顶部的浮动体、页面底部的浮动体或页面底部的脚注(footnote)。
+%
+% \Package{fancyhdr}\ 为您提供类似于 \cs{iffloatpage}\ 的命令 \cs{iftopfloat}、\cs{ifbotfloat}\ 和 \cs{iffootnote}。例如：
+\begin{verbatim}
+ \fancyhead[R]{\iftopfloat{This page has a topfloat}
+                          {There is no topfloat here}}
+\end{verbatim}
+%
+% {\color{orange}{\Heiti 注意}}:浮动体中的标记(marks)在 \latex/ 的输出例程(output routine)中不可见，
+% 故将标记放在浮动体中是无用的。因此，目前没有办法让浮动体(例如，图形标题[figure caption])影响页眉或页脚。
+%
+% \section[那些空白页]{\heiti 那些空白页}
+% \label{sec:blank}
+%
+% 在没有给定 \texttt{openany}\ 选项的 \texttt{book}\ 类中，或者在给定 \texttt{openright}\ 选项
+% 的 \texttt{report}\ 类中，章(chapters)从奇数页开始，一半时间会插入空白页(blank page)。
+% 有些人喜欢此页面完全为空(completely empty)，即没有页眉和页脚。无法使用 \cs{thispagestyle}\ 来完成此操作，
+% 因为必须在{\kaiti 前一页}中发出此命令。然而，要做到这一点并不需要魔法(magic)：
+%
+% \PSindex{empty}
+% \CmdIndex{clearpage}
+% \CmdIndex{cleardoublepage}
+{\color{blue}{
+\begin{verbatim}
+ \clearpage\begingroup\pagestyle{empty}\cleardoublepage\endgroup
+\end{verbatim}
+}}
+%
+% 由于 \Cmd{pagestyle\{empty\}}\ 包含在一个组(group)中，它只影响可能由 \cs{cleardoublepage}\ 生成的页面。
+% 当然，您可以将上述内容放在专用命令(private command)中。如果您希望在每一章开始时自动完成此操作，
+% 或者希望页面上有其他文本，则必须重新定义 \cs{cleardoublepage}\ 命令。
+% \index{blank page}
+\begin{verbatim}
+ \makeatletter
+ \def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+  \begingroup
+   \mbox{}
+   \vspace*{\fill}
+   \begin{center}
+     这一页故意只包含这一句。
+   \end{center}
+   \vspace{\fill}
+   \thispagestyle{empty}
+   \newpage
+   \if@twocolumn\mbox{}\newpage\fi
+  \endgroup\fi\fi}
+ \makeatother
+\end{verbatim}
+%
+% \section[\textsf{N} of \textsf{M}\ 的页码样式]{\textsf{N} of \textsf{M}\ {\heiti 的页码样式}}
+% \label{sec:nofm}
+%
+% 有些文档编写者喜欢将页面编号为 \textsf{n} of \textsf{m}\ (第 \textsf{n}\ 页，共 \textsf{m}\ 页)，
+% 其中 \textsf{m}\ 是文档中的总页面数。有一个可用的宏包 \Package{lastpage}，您可以在 \Package{fancyhdr}\ 中使用它，如下所示:
+%
+\begin{verbatim}
+ \usepackage{lastpage}
+ ...
+ \fancyfoot[C]{\thepage\ of \pageref{LastPage}}
+\end{verbatim}
+% 因为您希望页面样式(pagestyle)为 \texttt{plain}\ 的页面包含相同样式的页码，
+% 所以您也必须重新定义此页面样式。
+{\color{blue}{
+\begin{verbatim}
+ \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
+\end{verbatim}
+}}
+% 我们清除所有的页眉(headers)，包括它的页眉线(rule)。页脚将从页面样式 \texttt{fancy}\ 中“继承(inherited)”。
+%
+% \texttt{LastPage}\ 标签(label)的值可用于在文档的最后一页中制作不同的页眉或页脚。
+% 例如，如果您希望每个奇数页的页脚(除非是最后一页)都包含“请翻过来”(please turn over)的文字，可以这样做:
+%
+\begin{verbatim}
+ \usepackage{lastpage}
+ \usepackage{ifthen}
+ ...
+ \fancyfoot[R]{\ifthenelse{\isodd{\value{page}} \and \not
+      \(\value{page}=\pageref{LastPage}\)}{请翻过来}{}}
+\end{verbatim}
+%
+% 为了获得正确使用的页数(number of pages)，通常需要额外运行一次 \LaTeX{}。
+%
+%
+% \section[与章和节相关的页码]{\heiti 与章和节相关的页码}
+%
+% 在技术文档(technical documentation)中，页码通常采用 2-10 的形式，其中第一个数字
+% 是章编号(chapter number)，第二个数字是章的页码(pagenumber)。有时使用节(section)而
+% 不是章(chapter)。\Package{chappg}\ 宏包可用于获取此格式。
+%
+% 基本上，这个宏包将 \cs{thepage}\ 重新定义为\\ \cs{thechapter}\cs{chappgsep}\Cmd{arabic\{page\}}，
+% 其中默认的 \cs{chappgsep}\ 为“-”。如果要使用不同的分隔符(separator)，
+% 则必须重新定义 \cs{chappgsep}，例如使用连接号(en-dashes，短划线)：
+%
+\begin{verbatim}
+ \renewcommand{\chappgsep}{--}
+\end{verbatim}
+%
+% 要使用不同的前缀(prefix)，例如节号(section number)，请使用 \Cmd{pagenumbering\{bychapter\}}\ 命令
+% 和指定前缀的可选参数。
+% \CmdIndex{pagenumbering}
+%
+\begin{verbatim}
+ \pagenumbering[\thesection]{bychapter}
+\end{verbatim}
+%
+% 该宏包还将在每一章(chapter)的开头将页码(page number)重置为 1。
+%
+% 在文档的正文前材料(frontmatter)(例如目录)中将没有章编号(chapter numbers)。因此，
+% 这里将使用一个简单的页码。这可能会造成混淆，因此您可能更愿意在正文前材料(frontmatter)中使用罗马页码(roman pagenumbers)。
+% 通过在文档的开头使用 \verb+\pagenumbering{roman}+\ 和在第一个 \cs{chapter}\ 命令后面
+% 使用 \verb+pagenumbering{bychapter}+\ 来实现这一点。如果您想要在 \cs{chapter}\ 命令之前来实现这一点，
+% 则必须在它之前添加 \cs{newpage}\ 命令(参见下一节)。
+\begin{verbatim}
+ \pagenumbering{roman}
+ \tableofcontents
+ \newpage
+ \pagenumbering{bychapter}
+ \chapter{Introduction}
+\end{verbatim}
+%
+% 当您的文档中有附录(appendices)时，需要注意一点。在 \cs{appendix}\ 命令之前，应该
+% 给出一个 \cs{clearpage}\ 或 \cs{cleardoublepage}。有关详细信息，请参阅 \Package{chappg}\ 文档。
+%
+% 上一节中所述的样式“\emph{m} of \emph{n}”的页码与当前样式的页码有根本区别。
+% \emph{m} of \emph{n}\ 样式仅用于页眉或页脚，而不用于目录(table of contents)、
+% 索引(index)或引用(references)(如“{\kaiti 参见第} \emph{xx}\ {\kaiti 页}”)。因此，
+% 它不会更改 \cs{thepage}\ 命令。然而，页码样式(page numbering style)“2-10”应用于
+% 页码的所有引用(all references to the page number)，因此必须重新定义 \cs{thepage}。
+%
+% \section[切换页面样式]{\heiti 切换页面样式}
+% \label{sec:switching}
+%
+% 如果不重新定义页面样式(page style) \texttt{fancy}，则不会内置(built-in)页眉和页脚的定义，
+% 但它们是在文档中、全局或组(group)中局部定义的。这也适用于 \cs{chaptermark}\ 和/或 \cs{[sub]sectionmark}\ 命令的定义。
+% 因此，如果您想在文档中稍后从另一种页面样式切换到 \texttt{fancy}\ 页面样式，并且那个另一种页面样式已更改，
+% 例如 \cs{chaptermark}\ 和/或 \cs{[sub]sectionmark}\ 命令，则此时您必须自己重新定义这些样式，
+% 可能还需要重新定义页眉和页脚的定义。例如：
+\begin{verbatim}
+ \pagestyle{fancy}
+ \renewcommand{\chaptermark}[1]{\markboth{Chapter \thechapter. #1}{}}
+ \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\end{verbatim}
+%
+% 如果以前的页面样式(previous page style)是标准的 \LaTeX{}\ 页面样式之一，
+% 或者是某些不基于 \Package{fancyhdr}\ 的页面样式，那么 \cs{fancyhead}\ 或 \cs{fancyfoot}\ 的
+% 定义不受影响。所以严格来说，您不必把它们包括在内。但是，如果它是基于 \Package{fancyhdr}\ 的，
+% 并且有不同的定义，那么当您切换回到页面样式 \texttt{fancy}\ 时，您将得到错误的页眉和/或页脚。
+% 因此，无论如何，将它们包括在内更为安全。
+%
+% 更好的方法是定义自己的页面样式，并将这些定义包含在该页面样式中：
+\begin{verbatim}
+ \fancypagestyle{myfancy}{
+   \renewcommand{\chaptermark}[1]{\markboth{Chapter \thechapter. ##1}{}}
+   \renewcommand{\sectionmark}[1]{\markright{\thesection\ ##1}}
+   \fancyhead{...}
+ }
+ ...
+ \pagestyle{myfancy}
+\end{verbatim}
+% 请注意，现在必须将 \verb|#| 符号(signs)加倍，因为定义位于宏内部。
+%
+% 通常，当您在文档中仅使用一种页面样式 \texttt{fancy}\ 时，偶尔会将 \cs{thispagestyle}\ 转换
+% 为 \texttt{plain}\ 或 \texttt{empty}，您只需要在您的文档中保持全局定义，
+% 但是一旦您使用了多种页面样式，并在它们之间切换，最好使用 \cs{fancypagestyle}\ 来
+% 定义它们(包括页面样式 \texttt{fancy}) ，并把所有相关的定义都放在里面。
+%
+% 在切换页面样式时，如果 \texttt{book}\ 或 \texttt{report}\ 文档类(document class)或类似的类中
+% 对 \cs{chaptermark}\ 有不同的定义，则会有一个警告(caveat)。当您将 \cs{pagestyle}\ 命令放
+% 在 \cs{chapter}\ 命令{\kaiti 之后}时，\cs{chapter}\ 命令将调用前一页页面样
+% 式(previous page style)的 \cs{chaptermark}，这可能不是您想要的。因此，必须在 \cs{chapter}\ 命
+% 令{\kaiti 之前}先发出 \cs{pagestyle}\ 命令。但这可能会改变前一页的页面样式，这还为时过早。
+% 因此，您必须在 \cs{pagestyle}\ 命令之前给出 \cs{newpage}、\cs{clearpage}\ 或 \cs{cleardoublepage}\ 命令，
+% 这样最后一页将以前一页页面样式完成。也就是说，正确的顺序是：
+\begin{verbatim}
+ \newpage  % (或 \clearpage 或 \cleardoublepage)
+ \pagestyle{newstyle}
+ \chapter{My New Chapter}
+\end{verbatim}
+%
+% \section[何时更改页眉和页脚？]{\heiti 何时更改页眉和页脚？}
+% \label{sec:change}
+%
+% 在上一节(\smartref{sec:change}{sec:switching})中，我们在有明确分页符(clear page break)的
+% 位置(一章的开头)切换了页面样式。有时您希望只更改页眉或页脚而不更改整个页面样式。
+%
+% 需要注意的是，虽然 \Package{fancyhdr}\ 命令(如 \cs{fancyhead})会立即生效，
+% 但这并不意味着这些命令中使用的任何“变量(variables)”都会在给出这些命令的地方获得它们的值。
+% 例如，如果 \Cmd{fancyfoot[C]\{}\Cmd{thepage\}}\ 被赋予了页码(该页码会插入到页脚中)，
+% 那么该页码就不是给出这个命令的页面的页码，而是构建页脚的实际页面的页码。当然，
+% 对于页码，这是您所期望的，但对于其他命令也是如此。然而，这两者是有区别的。
+% 在构建页面{\kaiti 之后}，页码是递增的。然而，当我们有自己的“变量(variables)”时，
+% 这些变量通常会在文本的中间(middle of our text)被修改。
+%
+% 我们以一本(book)书为例，其中每一章(chapter)都由不同的作者撰写。如果我们想在
+% 章标题(chapter title)对面的页眉中显示作者的姓名，可以使用以下命令：
+%
+\begin{verbatim}
+ \newcommand{\TheAuthor}{}
+ \newcommand{\Author}[1]{\renewcommand{\TheAuthor}{#1}}
+ \fancyhead[LE,RO]{\TheAuthor}
+\end{verbatim}
+%
+% \noindent 并以 \Cmd{Author\{Real Name\}}\ 命令开始每一章。但是，如果作者姓名在页面完成之前被更改，
+% 则错误的作者可能出现在页眉中。如果您在 \cs{chapter}\ 命令{\kaiti 之前}而不是之后给出上面的命令，
+% 就会出现这种情况。因此，我们将 \cs{Author}\ 命令放在 \cs{chapter}\ 命令之后：
+\begin{verbatim}
+ \chapter{Chapter Title}
+ \Author{Author Name}
+\end{verbatim}
+% 在新页面上开始一章时，我们可以确保 \cs{Author}\ 命令与
+% 章开始(chapter start)出现在同一页面。
+%
+% 问题的另一个来源是 \tex/ 的输出例程(output routine)提前处理命令，因此它可能已经
+% 处理了一些生成文本的命令，这些文本将出现在下一页中。因此，如果我们的书(book)没有
+% 分成章(chapters)，而是分成节(sections)，我们就不能使用类似的系统(similar system)：
+\begin{verbatim}
+%%% 注意：这可能不起作用 %%%%
+ \section{Chapter Title}
+ \Author{Author Name}
+\end{verbatim}
+% 因为在这种情况下，当该命令出现在页面末尾时，可以在该页面设置“变量(variable)”\cs{TheAuthor}，
+% 但是 \TeX{}可以决定将节标题(section title)移动到下一页。然后作者的名字就会提前一页出现。
+% 这个问题可以用标记(marks)来解决。事实上，这就是 \TeX\ 开发标记机制(mark mechanism)的全部原因。
+% 参见第~\ref{sec:xmarks}~节。
+%
+% 这同样适用于页面中间的其他更改，例如将页码从罗马(roman)改为阿拉伯(使用 \cs{pagenumbering})。
+% 出于同样的原因，\Cmd{thispagestyle\{mystyle\}}\ 不总是在页面的中间起作用。
+%
+% 如第~\smartref{sec:change}{sec:scoop}~和下一节(\smartref{sec:change}{sec:xmarks})所示，
+% 可以通过使用标记机制(mark mechanism)来完成其中的一些更改。
+%
+% 在本节的其余部分中，我们将查看更改页面中间的页面样式的两种不同情况：
+% 更改当前页面的页面样式和更改下一页面的页面样式。
+%
+% \subsection[更改当前页面的页面样式]{\heiti 更改当前页面的页面样式}
+%
+% 现在我们给出一个示例，如何仅更改当前页面(current page)的页眉和页脚。在某些情况下，
+% 这可以通
+% \CmdIndex{thispagestyle}%
+% 过 \cs{thispagestyle}\ 命令完成。这将仅更改“当前(current)”页面的页面样式。
+% 但是，我们可能会受到上述问题的打击(hit)。\LaTeX{}对“当前(current)”页面的想法(idea)可能与您不同。
+% 如果可以确定执行 \cs{thispagestyle}\ 命令的文本与周围文本(surrounding text)出现的页面相同，
+% 则可以使用 \cs{thispagestyle}。例如直接在 \cs{chapter}\ 命令之后，或者在 \cs{newpage}\ 之后。
+% 但是，当在页面末尾附近给出命令时，\LaTeX{}\ 可能会执行该命令，然后确定页面已满，
+% 并将包含该命令的文本移动到下一页。因此，现在页面样式在一个页面上的更改时间早于预期。
+%
+% 解决此问题的一个好方法是在文本(在这个文本中您想要不同的页面样式)中放置一个标签(label)，
+% 如 \Cmd{label\{otherpagestyle\}}，然后在页眉和/或页脚定义中比较页码(page number)与
+% 标签页码(label page number)，并选择适当的值。例如，如果我们想用“MYFANCY SECTION”替换
+% 特殊页面中的节标题(section title)，如：
+\begin{verbatim}
+ \fancypagestyle{myfancy}{
+   \fancyhead[LE,RO]{MYFANCY SECTION}
+ }
+\end{verbatim}
+% ^^A\Example
+% 我们定义了一个新的页面样式让它来做出选择：
+\begin{verbatim}
+ \usepackage{ifthen}
+ . . .
+ \fancypagestyle{switch}{
+   \fancyhead[LE,RO]{%
+     \ifthenelse{\value{page}=\pageref{otherpagestyle}}
+       {MYFANCY SECTION}
+       {\textsl{\rightmark}}}
+ }
+\end{verbatim}
+% \CmdIndex{ifthenelse}
+% 其中 \verb|\textsl{\rightmark}| 是 \Cmd{pagestyle\{fancy\}}\ 中页眉字段(header field)
+% 的正常值(normal value)。现在，我们在文本之前甚至在整个文档之前选择 \Cmd{pagestyle\{switch\}}。
+%
+% 在哪个页面获得不同的页眉上仍然存在一些歧义。例如，如果文本显示：
+% \begin{quote}
+%   This page gets a different header than the surrounding pages.(此页面的页眉与周围页面的页眉不同。)
+% \end{quote}
+% 您把 \cs{label}\ 放在哪里？\LaTeX{}可以在“This”和“page”之间断开页面，然后您希望
+% 在“This”出现的页面上或在“page”出现的页上设置特殊页眉(special heading)。这取决
+% 于 \cs{label}\ 命令的位置。也许更安全的做法是确保句子没有被打断。这可以通过将文本
+% 放在 \cs{parbox}\ 或 \texttt{minipage}\ 环境中来完成。
+\begin{verbatim}
+ \noindent
+ \begin{minipage}{\textwidth}
+   此页面应具有与周围页面不同的页眉。
+   \label{otherpagestyle}
+   这是用 \verb|\pagestyle{switch}| 命令来完成的，该命令在页眉字段定
+   义(header field)中有测试。这将根据页码选择实际页眉(actual header)。
+ \end{minipage}
+\end{verbatim}
+% \cs{noindent}\ (缩进)是必需的，否则整个 \texttt{minipage}\ 将被段落缩进(paragraph indentation)向右移动。
+%
+% 请注意，不能在该代码之后立即重置页面样式(reset the page style)，因为这仍可能影响
+% 当前页面(current page)。如果要将其重置，例如重置为 \Cmd{pagestyle\{fancy\}}，
+% 则必须确保它发生在下一页。但在这种情况下，它甚至没有必要，因为特殊页面样式(special page style)
+% 在除特殊页面(special page)之外的所有页面上都是默认样式。
+%
+% 第~\pageref{showstruts}~页中显示支架(struts)的特殊页眉和页脚是以类似的方式完成的，
+% 尽管页眉和页脚在这里更加详细。此外，还有另一个复杂之处，因为我们还希望
+% 使 \cs{headruleskip}\ 或 \cs{footrulewidth}\ 都取决于页码(page number)。不幸的是，
+% 这不能用一个简单的 \cs{ifthenelse}\ 命令
+% \CmdIndex{ifthenelse}
+% 来完成。\cs{headruleskip}\ 和 \cs{footrulewidth}\ 最终都用作长度参数(length parameters)，
+% 这要求它们是{\kaiti 可展开的}(\emph{expandable})。然而， \cs{ifthenelse}\ 构造(construct)
+% 是不可展开的，因此如果您使用类似于
+\begin{verbatim}
+%%% 注意：这可能不起作用 %%%%
+ \renewcommand{\footrulewidth}{%
+   \ifthenelse{\value{page}=\pageref{otherpagestyle}}{0.4pt}{0pt}%
+ }
+\end{verbatim}
+% 对于像 \Package{fancyhdr}~4.0~版和更高版本这样的情况，
+% 有一些新命令 \cs{fancyheadinit}、\cs{fancyfootinit}\ 和 \cs{fancyhfinit}。
+% \DescribeMacro{\fancyheadinit}
+% 带 \Cmd{fancyheadinit\{\meta{code}\}}\ 您可以定义一些将在构建页眉(construction of the header)之前执行的代码。
+% 当它在页眉中执行时，它可以测试正确的页码(page number)，因为确保计数器 \texttt{page}\ 在页眉和页脚中具有正确的值。
+% 类似地，
+% \DescribeMacro{\fancyfootinit}
+% \Cmd{fancyfootinit\{\meta{code}\}}\ 中的代码在
+% 页脚中执行。\Cmd{fancyhfinit\{\meta{code}\}}\ 同时为页眉和页脚设置代码。
+% \DescribeMacro{\fancyhfinit}
+% 现在，我们可以根据页码设置例如 \cs{headruleskip}\ 或 \cs{footrulewidth}。
+% 因此，我们不需要将测试放在 \cs{headruleskip}\ 的定义中，我们可以将它放在外部，然后使用命令 \cs{ifthenelse}。
+% 因此，我们将以下内容放入 \Cmd{pagestyle\{switch\}}\ 中：
+\begin{verbatim}
+   \fancyheadinit{%
+     \ifthenelse{\value{page}=\pageref{otherpagestyle}}
+       {\renewcommand{\headruleskip}{4pt}}
+       {\renewcommand{\headruleskip}{0pt}}
+   }
+   \fancyfootinit{%
+     \ifthenelse{\value{page}=\pageref{otherpagestyle}}
+       {\renewcommand{\footrulewidth}{0.4pt}}
+       {\renewcommand{\footrulewidth}{0pt}}
+   }
+\end{verbatim}
+% 下面是第~\pageref{showstruts}~页使用的页面样式的定义：
+\begin{verbatim}
+ \fancypagestyle{showstruts}{%
+   \fancyhead[L]{%
+     \ifthenelse{\value{page}=\pageref{showstruts}}%
+       {\strutheader}%
+       {\rightmark}%
+   }
+   \fancyfoot[L]{%
+     \ifthenelse{\value{page}=\pageref{showstruts}}%
+       {\strutfooter}%
+       {}%
+   }
+   \fancyheadinit{%
+     \ifthenelse{\value{page}=\pageref{showstruts}}%
+       {\renewcommand{\headruleskip}{4pt}}%
+       {\renewcommand{\headruleskip}{0pt}}%
+   }
+   \fancyfootinit{%
+     \ifthenelse{\value{page}=\pageref{showstruts}}%
+       {\renewcommand{\footrulewidth}{0.4pt}}%
+       {\renewcommand{\footrulewidth}{0pt}}%
+   }
+ }
+\end{verbatim}
+% 该页面上使用的标签(label)是 \texttt{showstruts}。\cs{strutheader}\ 和 \cs{strutfooter}\ 是
+% 包含绘制这些图形(pictures)的代码的宏。在此示例中，\emph{else}\ 情况下
+% 的 \cs{headruleskip}\ 和 \cs{footrulewidth} 的值与全局值(global values)相同。
+% 所以我们可以让这些 \emph{else}\ 部分为空(empty)。然后他们将保持全局值。然而，
+% 显式(explicit)通常优于隐式(implicit)。
+%
+% 这些初始化命令(initialisation commands)不能用于对页面进行全局更改(global changes)，
+% 例如 \cs{headheight}。您也不能使用它们来更改 \cs{fancyhead}\ 或 \cs{fancyfoot}，
+% 因为它们已经设置好了。但您可以使用它来设置页眉和/或页脚的颜色和字体，例如，
+% 在特定页面(specific page)的页眉和页脚中获取大的红色文本：
+\begin{verbatim}
+   \fancyhfinit{%
+     \ifthenelse{\value{page}=\pageref{otherpagestyle}}
+       {\color{red}\Large}
+       {}
+     }
+\end{verbatim}
+%
+% \subsection[更改下一页的页面样式]{\heiti 更改下一页的页面样式}
+%
+% 如果希望页面样式的更改在下一页生效，则必须确保当前页面已完成。在大多数情况下，
+% 这可以通过在任何更改之前发
+% \CmdIndex{clearpage}\CmdIndex{newpage}%
+% 出 \cs{newpage}\ 或 \cs{clearpage}\ 命令来完成。然而，这将立即结束当前页面，
+% 可能会留下一个半空页面(half-empty page)，这可能是不可取的。
+%
+% 如果这不是您想要的，
+% \TTindex{afterpage.sty}%
+% 您可以使用 \Package{afterpage}\ 宏包：\\[1ex]
+% \CmdIndex{afterpage}\Cmd{afterpage\{}\Cmd{fancyhead[L]\{new value\}\}} 或\\
+% \CmdIndex{pagenumbering}\Cmd{afterpage\{}\Cmd{pagenumbering\{roman\}\}}.
+% \\[1ex]
+% 您不能使用 \cs{afterpage}\ 来更改 \cs{pagestyle}，因为 \cs{afterpage}\ 发出的命令
+% 是组中的局部(local in a group)命令，并且 \cs{pagestyle}\ 命令只进行局部更改(local changes)。
+% \cs{pagenumbering}\ 和 \cs{thispagestyle}\ 命令进行全局更改(global changes)，
+% 以及对 \LaTeX 计数器(counters)的更改，如 \cs{setcounter}\ 和 \cs{addtocounter}。
+% 因此可以使用这些\ \footnote{在 \Package{fancyhdr}\ 版本~3~和更早版本中，
+% \cs{fancyhead}\ 和 \cs{fancyfoot}\ 等命令也进行了全局更改(global changes)。4.0~及更高版本中不再是这种情况。}。
+% 下面是一个示例，可以使用 \cs{afterpage}\ 更改下一页的页面样式：
+% ^^A \Example
+\begin{verbatim}
+ \usepackage{afterpage}
+ \usepackage{fancyhdr}
+ \fancypagestyle{myfancy}{
+   \fancyhead[LE,RO]{\textbf{MYFANCY SECTION}}
+   \fancyhead[LO,RE]{\textbf{MYFANCY CHAPTER}}
+   \fancyfoot[C]{\textbf{--~\thepage~--}}
+ }
+ . . .
+ \afterpage{\thispagestyle{myfancy}}
+\end{verbatim}
+% 然后，该代码后面的页面将具有页面样式 \texttt{myfancy}。
+%
+% \section[由文本产生的页眉和页脚]{\heiti 由文本产生的页眉和页脚}
+% \label{sec:xmarks}
+%
+% 我们已经了解了如何使用 \LaTeX\ 的标记(marks)从文档内容(document contents)中提取信息到页眉和页脚。
+% 标记机制(marks mechanism)是唯一可靠的机制，您可以使用该机制将更改的
+% 信息(changing information)传递给页眉或页脚。这是因为在决定断开页面之前，\latex/ 可能会提前处理您的文档。
+%
+% 有时，\latex/ 提供的两个标记是不够的。示例如下：
+% \begin{quote}
+%  If a solution to an exercise goes across a page break, then I would like
+%  to have ``(Continued on next page\ldots)'' at the bottom of the
+% \index{Continued\ldots}
+%  first page and ``(Continued\ldots)'' at the top in the margin of the next page.\\
+%  {\Heiti 即}：\\
+%  {\kaiti 如果一个练习的解答跨越了分页符(page break)，那么我希望在第一页}
+%  \index{Continued\ldots}
+%  {\kaiti 的底部有“(下一页继续 \ldots)”，在下一页的版口处有“(续 \ldots)”。}
+% \end{quote}
+%
+% 如果您还想使用章(chapter)和节(section)信息，则不能使用 \latex/ 的标记机制(mark mechanisms)。
+%
+% \Package{extramarks}\ 宏包为您提供了两个可用于这种情况的额外标记(extra marks)。
+% 以下是使用此宏包的方法：
+%
+\begin{verbatim}
+ \usepackage{extramarks}
+ ...
+ \pagestyle{fancy}
+ \fancyhead[L]{\firstxmark}
+ \fancyfoot[R]{\lastxmark}
+ \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
+ ...
+ \extramarks{}{}% 1
+ \extramarks{Continued\ldots}{Continued on next page\ldots}% 2
+ ...
+ 一些可能跨页边界或不跨页边界的文本...
+ ...
+ \extramarks{Continued\ldots}{}% 3
+ \extramarks{}{}% 4
+\end{verbatim}
+%
+% \CmdIndex{extramarks}
+% 请注意，我们重新定义了 \texttt{plain}\ 页面样式，因此在章的第一页上，如果需要，也会给出页脚。
+% 我们假设“Continued”块(block)不会跨越章边界(chapter boundaries)，因此这些页面上不需要页眉。
+% 此外，\cs{extramarks}\ 命令必须靠近文本(text)，即不应插入空行(empty lines)(段落边界[paragraph boundaries])。
+% 否则，页面可能会在该边界处断开，并且额外标记会出现在错误的页面上。
+% 最后一个 \verb+\extramarks{}{}+ 是为了防止“Continued\ldots”页脚显示在紧随其后的页面中。
+%
+% 说明：此宏包的页面布局(page layout)中可以使用两个新标记：如果给出了 \verb|\extramarks{|$m_1$\verb|}{|$m_2$\verb|}| 形式的命令，
+% \CmdIndex{firstxmark}
+% \CmdIndex{lastxmark}
+% \cs{firstxmark}\ 将为您提供当前页面的第一个 $m_1$ 值，\cs{lastxmark}\ 则为您提供最后一个 $m_2$ 值。
+% 在上面的示例中，当整个块(complete block)落在同一页上时，\cs{firstxmark}\ 将是
+% 第一个 \cs{extramarks}\ 命令(由\ \texttt{\%~1}\ 指示)的空参数(empty parameter)，
+% 而 \cs{lastxmark}\ 则是最后一个 \cs{extramarks}\ 命令(由\ \texttt{\%~4}\ 指示)的空参数。
+%
+% 但是，当分页符(page break)落在块(block)内时，\texttt{\%~2}\ 生成的标记(mark)将是
+% 第一页上的最后一个。因此，在该页 \cs{lastxmark}\ 将为“Continued on next page\ldots”。
+% 在随后的页面中，有两种可能：(1)当块在该页面上结束时，第一个标记将为\ \texttt{\%~3}，
+% 因此 \cs{firstxmark}\ 将为“Continued\ldots”；(2)该块在后一页(later page)结束，
+% 因此它不会为该页提供任何标记，标记是从前一页的最后一个值“继承(inherited)”的，
+% 即来自\ \texttt{\%~2}\ 的值。在该块之后的所有页上，将使用\ \texttt{\%~4}\ 的值，即空值。
+% 这最后一个 \verb+\extramarks{}{}+ 是为了防止“Continued\ldots”页眉溢出到随后的页面。
+% 当然，在现实生活中，您会忽略数字(numbers)。
+%
+% 如果需要最后一个 $m_1$ 值或第一个 $m_2$ 值，可以分别使用 \cs{lastleftxmark}\ 或 \cs{firstrightxmark}。
+% 由于对称性原因，还有 \cs{firstleftxmark} (=\cs{firstxmark})、\cs{lastrightxmark} (=\cs{lastxmark})、
+% \cs{topleftxmark} (=\cs{topxmark})\ 等命令以及 \cs{toprightxmark}\ 命令。
+% 最上面的标记(top-marks)基本上是前一页的最后标记(last-marks)。
+% \CmdIndex{lastleftxmark}
+% \CmdIndex{firstrightxmark}
+% \CmdIndex{firstleftxmark}
+% \CmdIndex{lastrightxmark}
+% \CmdIndex{topleftxmark}
+% \CmdIndex{toprightxmark}
+%
+% 该包还提供了 \cs{firstleftmark}\ 和 \cs{lastrightmark}命令，以补充标准的 \latex/ 标记(marks)。
+% \CmdIndex{firstleftmark}
+% \CmdIndex{lastrightmark}
+%
+% 为强调标记是正确的做法，我给您一个行不通的“解决方案(solution)”\footnote{实际上还有另外一种方法，
+% 但是它需要两次 \latex/ 传递(passes)：您可以在文本前后放置 \cs{label}\ 命令，并比较\cs{pageref}s。}：
+%
+\begin{verbatim}
+ \fancyhead[L]{Continued}
+ \fancyfoot[R]{Continued on next page\ldots}
+ 可能跨越或不跨越页面边界的某些文本...
+ \fancyhead[L]{}
+ \fancyfoot[R]{}
+\end{verbatim}
+%
+% 您可能会想，当 \tex/ 在文本中间(middle of the text)断开页面时，第一个 \cs{fancyhead}\ 和 \cs{fancyfoot}\ 将生效，
+% 当页面在文本之后断开时，最后一个 \cs{fancyhead}\ 和 \cs{fancyfoot}\ 将生效。这是不正确的，
+% 因为整个段落(包括最后的定义)将在 \tex/ 考虑分页符(page break)之前进行处理，
+% \index{page break}
+% 所以在分页时，最后的定义(last definitions)是有效的，无论分页符发生在文本内部还是外部。
+% 在文本和最后一个定义之间设置段落边界(paragraph boundary)也不起作用，因为当 \tex/ 决定
+% 在该边界处断开页面时，您不希望第一个定义生效。事实上，标记机制(marks mechanism)是
+% 为了解决这些问题而发明的。
+%
+% 在上面的示例中，文本“Continued”显示在页眉中。
+% \index{margin}
+% 把它放在版口处(margin)可能会更好。这可以通过将其定位在相对于页眉(page header)的固定位置来轻松实现。
+% 在 plain \tex/ 中，您可以使用 \Cmd{hbox to 0pt}、\Cmd{vbox to 0pt}、\cs{hskip}、\cs{vskip}、\cs{hss}\ 和 \cs{vss}\ 的混合体(concoction)，
+% 但幸运的是，\latex/ 的 \texttt{picture}\ 环境提供了一种更干净的(cleaner)方法来做到这一点。
+% 为了不干扰正常的页眉布局，我们将文本放在零大小的(zero-sized) \texttt{picture}\ 中。通常，
+% 这是在页面上固定位置放置内容(things)的最佳方式。然后，您还可以使用普通标题(normal headings)。
+% 另见第~\ref{sec:thumb}~节，了解该技术的另一个示例。
+%
+% \TTindex{picture}
+\begin{verbatim}
+ \fancyhead[L]{\setlength{\unitlength}{\baselineskip}%
+ \begin{picture}(0,0)
+   \put(-2,-3){\makebox(0,0)[r]{\firstxmark}}
+ \end{picture}\rightmark} % \rightmark = section title
+\end{verbatim}
+%
+% 这个解决方案(solution)当然也可以用于页脚。确保您将 \texttt{picture}\ 放在
+% 左手边条目(left-handside entries)的第一项，右手边条目的最后一项。
+%
+% 最后，您可能希望将“(Continued\ldots)”放在{\kaiti 文本}(\emph{text})中，而不是放在
+% 页眉或版口处(margin)。
+% \TTindex{afterpage.sty}
+% 然后您必须使用 \Package{afterpage}\ 宏包。我们还决定为它创建一个单独的环境(environment)。
+%
+\begin{verbatim}
+ \newenvironment{continued}{\par
+   \extramarks{}{}%
+   \extramarks{(Continued\ldots)}{Continued on next page\ldots}%
+   \afterpage{\noindent\firstxmark\vspace{1ex}}%
+   }{\extramarks{(Continued\ldots)}{}%
+   \extramarks{}{}\par
+ }
+\end{verbatim}
+%
+% 在页面布局例程(page layout routine)之外使用 \cs{firstxmark}\ 有点危险，但显然在
+% 使用 \cs{afterpage}\ 时这是可行的。如果您需要页面中进一步的信息，您必须记住自己
+% 变量(variable)中标记(marks)的状态(state)。您可以在其中一个 \Package{fancyhdr}\ 字段(fields)中设置此项。
+% 例如，如果要在断开的文本{\kaiti 后面}添加内容，可以使用以下命令：
+%
+\begin{verbatim}
+ \newcommand{\mysaved}{}
+ \newenvironment{continued}{\par
+   \extramarks{}{}%
+   \extramarks{(Continued\ldots)}{Continued on next page\ldots}%
+   }{\extramarks{(Continued\ldots)}{}%
+   \extramarks{}{}\par\vspace{1ex}\mysaved}%
+ }
+ \fancyhead[L]{\leftmark}
+ \fancyhead[C]{\ifthenelse{\equal{\lastxmark}{}}
+   {\gdef\mysaved{}}
+   {\gdef\mysaved{\noindent[Continued from previous page]}}}
+\end{verbatim}
+%
+% 如果要在保存的文本中包含其中一个标记或其他不同的信息，则必须使用 \cs{xdef}\ 而不是 \cs{gdef}。
+%
+%
+% \section[一部电影]{\heiti 一部电影}
+% \label{sec:movie}
+%
+% \index{movie}
+% \TTindex{picture}
+% 如果您在每一页在同一个地方放置一张图片，而每一页中的这张图片都有细微的变化，那么
+% 您就可以通过翻页来获得类似电影(movie-like effect)的效果。您可以用 fancyhdr 轻松地
+% 创建这样一部电影。为了简单起见，假设我们使用一个生成 PDF 的 \LaTeX{}\ (例如 \texttt{pdflatex})，
+% 每个图片都是一个名为 \texttt{pic}$\langle n\rangle$.\texttt{png}\ \footnote{对于 \texttt{pdflatex}，
+% 我们也可以使用 PDF 或 JPG 图片。对于基于 \texttt{latex}\ 的 DVI，我们可以使用 PS 或 EPS 图片。
+% 或任何其他受支持的图像格式。}\ 的 PNG 文件，这里的 $\langle n\rangle$ 是页码(page number)，
+% 而且假设我们使用 \Package{graphics}\ 或 \Package{graphicx}\ 宏包。
+% \TTindex{graphics}
+% \TTindex{graphicx}
+% 执行以下代码可以将电影(movie)放在右下角(righthandside bottom corner)：
+%
+\begin{verbatim}
+ \fancyfoot[R]{\setlength{\unitlength}{1mm}
+   \begin{picture}(0,0)
+     \put(5,-20){\includegraphics[width=1cm]{pic\thepage}}
+   \end{picture}}
+\end{verbatim}
+%
+% 如果文档是双开面的(two-sided)，最好是通过指定 \verb|\fancyfoot[RO]| 来将它们仅放在奇数页上。
+%
+% 请注意， \cs{unitlength}\ 参数应在 fancyhdr 字段中局部设置(set locally)，
+% 以避免不必要地干扰它在文本中的值(value in the text)。
+%
+% \section{\heiti 拇指页标}
+% \label{sec:thumb}
+%
+% \index{bible}
+% 一些铁路指南(railroad guides)和昂贵的圣经(bibles)都有所谓的
+% \index{thumb-index}
+% {\kaiti 拇指页标}(\emph{thumb-indexes})，即在书页的侧面有标记(marks)，以标明章的位置。
+% 您可以通过在版口处(margin)打印黑色斑块(black blobs)来创建这些拇指页标。
+% 垂直位置(vertical position)应由章编号(chapter number)或其他计数器确定。由于位置与页面内容无关，
+% 我们将这些斑块作为页眉的一部分打印在一张零大小的(zero-sized) \texttt{picture}\ 中，如前一节所述。
+%
+% 当然，我们必须注意双开面打印(two-sided printing)，并且我们可能希望有一个索引页(index page)，
+% 所有斑块都在正确的位置。解决方案(solution)需要一些手动调整，以使斑块在垂直方向上均匀分布。
+% 对于我最初为其设计的应用程序，共有 12 节(sections)，因此我将斑块间隔~18mm，即~9mm~的斑块
+% 被~9mm~的空白(whitespace)隔开。为了避免计算，将它们放在在 \texttt{picture}\ 环境中，
+% \cs{unitlength}\ 设置为~18mm。页码(page numbers)放在外侧的页眉中，并将斑块附加到这些页眉上。
+% 在本例中，节编号(section numbers)用于定位斑块，但可以用任何数值(numeric value)替换。
+% 生成的概述页面(overview page)见图~\ref{fig:overview}，代码见图~\ref{fig:thumb}。
+% \vspace{3em}
+% \begin{figure}[H]
+% \setlength{\unitlength}{9mm}
+% \newcommand{\blob}{\rule[-.2\unitlength]{1\unitlength}{.5\unitlength}}
+% \newcounter{line}
+% \newcommand{\secname}[1]{\addtocounter{line}{1}%
+%   \put(1,-\value{line}){\blob}
+%   \put(-7.5,-\value{line}){\arabic{line}}
+%   \put(-7,-\value{line}){#1}}
+%
+% \newcommand{\overview}{1
+%   \begin{picture}(0,0)
+%     \secname{介绍}
+%     \secname{第一年}
+%     \secname{专业化}
+%   \end{picture}}
+%
+%   \begin{center}
+%     \leavevmode
+%     \begin{picture}(11.3,5)
+%       \put(0,0){\framebox(11.3,5)[tr]{}}
+%       \put(9,4.5){\overview}
+%     \end{picture}
+%   \end{center}
+%   \caption{拇指页标概述页面(Thumb-index overview page)}
+%   \label{fig:overview}
+% \end{figure}
+\begin{figure}[H]\small
+ \begin{verbatim}
+ \setlength{\unitlength}{18mm}
+ \newcommand{\blob}{\rule[-.2\unitlength]{2\unitlength}{.5\unitlength}}
+ \newcommand\rblob{\thepage
+   \begin{picture}(0,0)
+     \put(1,-\value{section}){\blob}
+   \end{picture}}
+ \newcommand\lblob{%
+   \begin{picture}(0,0)
+     \put(-3,-\value{section}){\blob}
+   \end{picture}%
+   \thepage}
+ \pagestyle{fancy}
+ \fancyfoot[C]{}
+ \newcounter{line}
+ \newcommand{\secname}[1]{\addtocounter{line}{1}%
+   \put(1,-\value{line}){\blob}
+   \put(-7.5,-\value{line}){\Large \arabic{line}}
+   \put(-7,-\value{line}){\Large #1}}
+ \newcommand{\overview}{\thepage
+   \begin{picture}(0,0)
+     \secname{介绍}
+     \secname{第一年}
+     \secname{专业化}
+ ...等等...
+   \end{picture}}
+ \begin{document}
+ \fancyhead[R]{\overview}\mbox{}\newpage   % 这将生成概述页面
+ \fancyhead[R]{}                           % Front matter 可以跟在这里
+ \clearpage
+ \fancyhead[RE]{\rightmark}
+ \fancyhead[RO]{\rblob}
+ \fancyhead[LE]{\lblob}
+ \fancyhead[LO]{{\leftmark}
+ ...
+\end{verbatim}
+   \caption{拇指页标的代码(Thumb-index code)}
+   \label{fig:thumb}
+\end{figure}
+
+% \section[放置浮动体]{\heiti 放置浮动体}
+%
+% {\color{orange}{\Heiti 注意}}:本节不是关于 \Package{fancyhdr}\ 的，而是关于页面布局，
+% 特别是关于浮动体(floats)的放置的。
+%
+% 浮动体是相对于文档其余部分浮动的页面元素(page elements)。标准的浮动体是表格(tables)和图形(figures)，
+% \TTindex{float}%
+% 但使用 \Package{float}\ 宏包，您可以很容易地创建新的浮动体，比如算法(algorithms)。
+% 大多数时候浮动工作(floats work)令人满意，但有时 \LaTeX{} 似乎太固执，无法做您想做的事。
+% 本节介绍如何影响LATEX，使其在大多数时间都能满足您的需求。然而，在某些无法控制的情况下，
+% 可能无法说服 \LaTeX{} 按照自己的方式做事。在下文中，我们将使用图形(figures)作为示例，
+% 但所有内容也适用于其他浮动体。
+%
+% 浮动体最常见的问题是：
+% \begin{enumerate}
+% \item 您希望在文本中的某个位置放置浮动体，但是 \LaTeX{}\ 会将其移动到下一页。
+% \item 从一个特定的点(certain point)，\LaTeX{}\ 移动您的所有浮动体到文档的结尾或一章的结尾。
+% \item \index{Too many floats}%
+%   \LaTeX{}\ 抱怨“浮动体多”。
+% \end{enumerate}
+%
+% 在前两种情况下，您必须首先检查您是否为浮动体指定了正确的“placement(放置)”参数，例如，
+% \Cmd{begin\{figure\}[htp]}\ 指定您的图形可以放置在以下位置：此处(Here，在发出命令的文本位置)、
+% 页面顶部(Top，可能是您放置命令的页面)或单独的浮动页面(separate Page of floats)上。
+% 您还可以为页面底部(Bottom of the page)指定“\texttt{b}”。这几个字母(h、t、p、b)的顺序无关紧要，
+% 不能通过指定 \texttt{[bt]}\ 强制 \LaTeX{}\ 先尝试 Bottom，然后尝试 Top。
+%
+% 如果 \LaTeX{}\ 没有将浮动体放在您预期的位置，通常是由以下原因造成的：
+% \begin{enumerate}
+% \item 浮动体不适合页面。在这种情况下，它必须移动到下一页，甚至更远。如果您没有
+% 在 position 参数中指定 \texttt{[t]}\ 或 \texttt{[b]}，则 \latex/ 必须保存它，直到
+% 它足以容纳一页浮动体。所以不要只指定 \texttt{[h]}。如果您想让 \latex/ 有机会将浮动体
+% 放在一页浮动页上，还必须指定“\texttt{p}”。
+% \item 该放置(placement)将违反 \latex/ 的浮动体位置参数(float placement parameters)所施加的约束。
+% 这是最常见的原因之一，可以通过更改参数轻松纠正。以下是它们的默认值列表：
+% \end{enumerate}
+% \begin{center}
+% \CmdIndex{topfraction}
+% \CmdIndex{bottomfraction}
+% \CmdIndex{textfraction}
+% \CmdIndex{floatpagefraction}
+% \TTindex{topnumber}
+% \TTindex{bottomnumber}
+% \TTindex{totalnumber}
+%   \begin{tabular}{>{\tt}rlp{10pt}cp{30pt}c}
+%     \hlinew{1.2pt}
+%     \multicolumn{4}{c}{{\Heiti 计数器}(counters) -- {\Heiti 用} \cs{setcounter}\ {\Heiti 更改}}\\
+%     \hlinew{0.7pt}
+%     topnumber & 页面顶部的最大浮动体数目& & 2 \\
+%     bottomnumber & 页面底部的最大浮动体数目& & 1 \\
+%     totalnumber &  一个页面中的最大浮动体数目& & 3\\
+%     \hlinew{1.2pt}
+%      &&&\\
+%     \hlinew{1.2pt}
+%     \multicolumn{4}{c}{{\Heiti 其它}(other) -- {\Heiti 用} \cs{renewcommand}\ {\Heiti 更改}}\\
+%     \hlinew{0.7pt}
+%     \bs topfraction & 页面顶部可以用来放置浮动体的高度& & 0.7 \\
+%                     & 与整个页面高度的最大比例      & & \\
+%     \bs bottomfraction & 页面底部可以用来放置浮动体的高度& & 0.3 \\
+%                     & 与整个页面高度的最大比例      & & \\
+%     \bs textfraction & 页面中用于排放文本的最小比例 && 0.2 \\
+%     \bs floatpagefraction & 浮动页面中必须由浮动体占用的最小比例 & & 0.5 \\
+%     \hlinew{1.2pt}
+%   \end{tabular}
+% \end{center}
+%
+% 在两栏(two-column)文档中还有一些用于双栏(double column)浮动体的方法。
+%
+% 右栏(righthand column)中的值是标准 \latex/ 类的默认值。其他类可以使用不同的默认值。
+% 正如您使用默认值所看到的，如果浮动体的高度超过页面高度(page height)的 30\%，则不会将其放置在页面底部。
+% 因此，如果您为一个更高的浮动体指定 \texttt{[hb]}，那么它必须移动到浮动页面(float page)。
+% 但是，如果它的高度小于页面高度的 50\%，则必须等到给出更多的浮动体之后，才能填充浮动页面
+% 以满足 \cs{floatpagefraction}\ 参数。如果有这种行为，您可以很容易地调整参数，例如:
+\begin{verbatim}
+ \renewcommand{\textfraction}{0.05}
+ \renewcommand{\topfraction}{0.95}
+ \renewcommand{\bottomfraction}{0.95}
+ \renewcommand{\floatpagefraction}{0.35}
+ \setcounter{totalnumber}{5}
+\end{verbatim}
+% 您需要注意不要使 \cs{floatpagefraction}\ 太小，否则可能会得到太多小的浮动页面(floatpages)。
+%
+% 通过在位置参数(placement parameters)中包含感叹号(!)，您可以强制 \latex/ 忽略一个
+% 特定浮动体出现的大多数参数，例如：
+\begin{verbatim}
+ \begin{figure}[!htb]
+\end{verbatim}
+%
+% 位置参数(position parameter)中包含“\texttt{t}”的浮动体可以放在引用它们的位置之前(但在同一页上)。
+% 这是 \latex/ 的正常行为(normal behaviour)，但有些人就是不喜欢。有许多方法可以防止这种情况：
+% \begin{enumerate}
+% \item 当然，删除“\texttt{t}”会有帮助，但一般来说，这是不可取的，因为您可能希望将浮动体放在下一页的顶部。
+% \item 使用 \Package{flafter}\ 宏包，这会导致浮动体永远不会“向后(backwards)”放置。
+% \item 使用命令 \cs{suppressfloats[t]}。此命令将导致{\kaiti 此页面}顶部位置的浮动体移动到下一页。
+%   对于此页面上的所有浮动体，也可以使用 \texttt{[b]}\ 或不使用参数来完成此操作。
+% \end{enumerate}
+%
+% 如果不管您做了多少尝试，\latex/ 仍然将浮动体移动到文档末尾或章末尾，您可以插入一个 \cs{clearpage}\ 命令。
+% 这将启动一个新页面，并插入所有挂起的浮动体。如果不需要分页(pagebreak)，可以使
+% 用 \Package{afterpage}\ 宏包和以下命令：
+% \TTindex{afterpage}\CmdIndex{afterpage}\CmdIndex{clearpage}%
+\begin{verbatim}
+ \afterpage{\clearpage}
+\end{verbatim}
+%
+% 这将等待当前页面完成，然后刷新所有未完成的浮动体。然而，在某些病理情况(pathological circumstances)下，
+% \Package{afterpage}\ 可能会产生奇怪的结果(strange results)。
+%
+% 最后，如果您希望浮动体只出现在您定义它的位置，而不需要 \latex/ 移动它，那么您可以使
+% 用 \Package{float}\ 宏包并在导言区(preamble)给出以下命令：
+% \TTindex{float}\CmdIndex{restylefloat}%
+\begin{verbatim}
+ \restylefloat{figure}
+\end{verbatim}
+% 现在，您将能够指定 \texttt{[H]}\ 作为位置参数(position parameter)，这意味
+% 着“此处且仅此处(HERE and only HERE)”。然而，这可能会导致不需要的分页(page break)。
+% 如果您想避免不需要的分页，即仅当浮动体不适合(fit)页面时，才允许 \LaTeX{}\ 移动浮动体，那么
+% 可以使用 \Package{afterpage}\ 宏包：
+% \TTindex{afterpage}\CmdIndex{afterpage}\CmdIndex{clearpage}%
+\begin{verbatim}
+ \afterpage{\clearpage \begin{figure}[H] ... \end{figure}}
+\end{verbatim}
+%
+% \latex/ 对“浮动体太多”的抱怨通常是由上述问题之一引起的：浮动体无法放置， \latex/ 收集了太多浮动体。
+% 上面给出的解决方案，尤其是那些带有 \cs{clearpage}\ 的解决方案通常会有所帮助。在某些情况下，
+% 确实有太多的浮动体，因为 \latex/ 只有有限数量的“盒子(boxes)”来存储浮动体。
+% \TTindex{morefloats}%
+% \Package{morefloats}\ 宏可用于增加这些盒子的数量。如果您还需要更多，则必须编辑此文件的私人副本(private copy)，
+% 但即使如此，仍有一些限制无法通过。然后，您唯一的办法就是更改您的文档(document)。
+%
+% 2014 年，Frank Mittelbach (弗兰克·米特尔巴赫)在 TUGboat 上发表了一篇更为详尽的关于浮动体放置的文章，
+% 即：如何影响LATEX中图形(figure)和表格(table)等浮动环境(float environments)的位置？\footnote{Frank Mittelbach,
+% How to influence the position of float environments like figure and table in LATEX?,TUGboat, Volume 35 (2014), No.3,pp.248–254.
+% \url{https://www.latex-project.org/publications/2014-FMi-TUB-tb111mitt-float-placement.pdf}\\
+% 也在 Stackexchange 上：\url{https://tex.stackexchange.com/questions/39017/how-to-influence-the-position-of-float-environments-like-figure-and-table-in-lat}}
+%
+% \section[多页浮动]{\heiti 多页浮动}
+%
+% \LaTeX\ 的浮动体不能跨页面拆分(split across pages)。然而，有时，您希望有一张不适合一页的表格或图形。
+% 最简单的方法是将这些环境拆分为多个表格环境或图形环境，但这会产生许多不良影响：
+% \begin{itemize}
+% \item 在哪里把它拆分？对于表格来说，这通常是一个比图形更困难的决定。
+% \item 又是如何让他们在一起呢?
+% \item 您不希望在图形目录/表格目录中有多个条目(entry)。
+% \end{itemize}
+%
+% 尽管这些问题并非在所有情况下都能完全解决，但这里有几个建议：
+%
+% \subsection[表格]{\heiti 表格}
+%
+% 对于大于一页的表格，可以使用 \Package{longtable}\ 宏包。
+% \TTindex{longtable}
+% 这个包定义了一个 \texttt{longtable}\ 环境，该环境是一种 \texttt{table}\ 和 \texttt{tabular}\ 的结合。
+% 它的语法与 \texttt{tabular}\ 环境大致相同，但它增加了 \texttt{table}\ 的一些特性，如标题(captions)。
+% 当长表格(longtables)不适合页面时，它们将自动拆分。当给出标题时，它们将被输入到表格目录(list of tables)中。
+% 但是，它们不会浮动，并且不能在浮动环境(float environment)中使用。这可能意味着在 \texttt{longtable}\ 之前定义的
+% 另一个 \texttt{table}\ 环境将在它的前面浮动并超过它，因此编号(numbers)可能会失去顺序。另一个问题可能是，
+% \texttt{longtable}\ 开始时离页面较远，这令人不愉快。如果希望 \texttt{longtable}\ 从页面顶部开始，
+% 最好的做法是将其放在 \cs{afterpage}\ 命令中(使用 \Package{afterpage}\ 宏包)。由
+% 于 \texttt{longtable}\ 的定义很大(large)，最好将其放在一个单独的文件中，然后
+% 在 \cs{afterpage}\ 命令中 \cs{input}\ 它：
+% \CmdIndex{afterpage}\TTindex{afterpage}\CmdIndex{clearpage}%
+\begin{verbatim}
+ \afterpage{\input{mytable}}
+\end{verbatim}
+\begin{verbatim}
+ \afterpage{\clearpage\input{mytable}}
+\end{verbatim}
+% 后一种形式还有一个额外的优点，即大多数未解决的浮动体(outstanding floats)将会先显示(print)。
+%
+%
+% \subsection[图形]{\heiti 图形}
+%
+% 没有一个等效的“\texttt{longfigure}”解决方案(solution)，因此对于图形，您必须自行拆分。总的来说，这不是什么问题。
+% 然而，您现在遇到的问题是如何将它们保持在一起(keep them together)，即如何在
+% 后续页面(subsequent pages)上获取这些部分，以及如何在图形目录(list of figures)中获取单个条目(single entry)。
+%
+% 您必须将图形分割为多个部分，并将每个部分放在单独的 \texttt{figure}\ 环境中。为了将它们放在一起，
+% 最好只使用 \texttt{[p]}\ 位置(placement)，这样它们就会放在浮动页面(floatpages)上。
+% 因为它们比一页大，所以这是合适的。然后，第一部分将得到一个 \cs{caption}，而随后的部分(subsequent parts)在使用时
+% 没有标题(caption)，或者在使用时有标题但该标题不会出现在图形目录(list of figures)中。
+% 如果要添加类似标题的文本(caption-like text)，请将其输入为普通文本(normal text)，而不是 \cs{caption}，
+% 这样就不会进入到图形目录中。也可能需要首先发出一个 \cs{clearpage}，就像我们对 \texttt{longtable}\ 所做的那样，
+% 并将其封装(encapsulate)在 \cs{afterpage}\ 命令中，例如：
+\begin{verbatim}
+ \afterpage{\clearpage\input{myfigure}}
+\end{verbatim}
+% 这里的 \texttt{myfigure.tex}\ 包含：
+\begin{verbatim}
+ \begin{figure}[p]
+   \includegraphics{myfig1.eps}
+   \caption{这是一个多页图形(multipage figure)}
+   \label{fig:xxx}
+ \end{figure}
+ \begin{figure}[p]
+   \includegraphics{myfig2.eps}
+   \begin{center}
+     图~\ref{fig:xxx} (continued)
+   \end{center}
+ \end{figure}
+\end{verbatim}
+%
+% 您必须确保最后一部分(last part)足够大，否则 \LaTeX{}\ 可能会决定推迟它，直到它收集到更多的浮动体。
+% 这可以通过使图形(figure)足够大(例如，添加一些 \cs{vspace})或
+% \CmdIndex{floatpagefraction}
+% 调整 \cs{floatpagefraction}\ 参数来实现。
+%
+% 如果希望多页图形(multipage figure)从左侧(偶数页码页)开始，可以在 \cs{afterpage}\ 命令中
+% 进行测试(test)(使用 \Package{ifthen}\ 宏包)：
+% \CmdIndex{afterpage}
+% \CmdIndex{ifthenelse}
+\begin{verbatim}
+ \afterpage{\clearpage
+ \ifthenelse{\isodd{\value{page}}{\afterpage{\input{myfigure}}} % 奇数页
+     {\input{myfigure}}}}                                       % 偶数页
+\end{verbatim}
+% 但是，如果跳过的页面(skipped page)上有太多的浮动体，这可能仍然无法
+% 在偶数页(even page)上启动多页图形(multipage figure)。
+%
+% \section[已弃用的命令]{\heiti 已弃用的命令}
+% \label{sec:depr}
+%
+% 本节包含不推荐使用的命令的说明(description)。这些是最初实现 \Package{fancyheadings}\ 的一部分。
+% 出于兼容性的原因，它们继续工作，但建议不要再使用它们。给出此说明是为了让您了解它们的含义以及
+% 如何将它们转换为标准命令。老实说，我有时会在快速示例(quick examples)中使用这些，
+% 因为 \cs{lhead}\ 比 \Cmd{fancyhead[L]}\ 打字更少。
+%
+% 表~\ref{tab:depr}~给出了用于指定页眉或页脚字段的这些已弃用的命令以及它们到现代命令(modern commands)的转换。
+%
+% \begin{table}[h!t]
+% \CmdIndex{lhead}
+% \CmdIndex{chead}
+% \CmdIndex{rhead}
+% \CmdIndex{lfoot}
+% \CmdIndex{cfoot}
+% \CmdIndex{rfoot}
+^^AA \renewcommand\arraystretch{2}   ^^AA 设置表格行宽
+\tabcolsep=0.45cm   ^^AA 设置表格列间距
+\begin{tabular*}{\linewidth}{p{10pt}rp{200pt}lp{1000pt}l}
+   \hlinew{1.2pt}
+  & {\Heiti 已弃用的命令} &   {\Heiti 转换后的现代命令} \\
+   \hlinew{0.7pt}
+   页 & \Cmd{lhead\{xx\}} & \Cmd{fancyhead[L]\{xx\}} \\
+   眉 & \Cmd{lhead[xx]\{yy\}} & \Cmd{fancyhead[LE]\{xx\}} \Cmd{fancyhead[LO]\{yy\}} \\
+   字 & \Cmd{chead\{xx\}} & \Cmd{fancyhead[C]\{xx\}} \\
+   段 & \Cmd{chead[xx]\{yy\}} & \Cmd{fancyhead[CE]\{xx\}} \Cmd{fancyhead[CO]\{yy\}} \\
+   命 & \Cmd{rhead\{xx\}} & \Cmd{fancyhead[R]\{xx\}} \\
+   令 & \Cmd{rhead[xx]\{yy\}} &\Cmd{fancyhead[RE]\{xx\}} \Cmd{fancyhead[RO]\{yy\}} \\
+   \hlinew{0.7pt}
+   页 & \Cmd{lfoot\{xx\}} & \Cmd{fancyfoot[L]\{xx\}} \\
+   脚 & \Cmd{lfoot[xx]\{yy\}} & \Cmd{fancyfoot[LE]\{xx\}} \Cmd{fancyfoot[LO]\{yy\}} \\
+   字 & \Cmd{cfoot\{xx\}} & \Cmd{fancyfoot[C]\{xx\}} \\
+   段 & \Cmd{cfoot[xx]\{yy\}} & \Cmd{fancyfoot[CE]\{xx\}} \Cmd{fancyfoot[CO]\{yy\}} \\
+   命 & \Cmd{rfoot\{xx\}} & \Cmd{fancyfoot[R]\{xx\}} \\
+   令 & \Cmd{rfoot[xx]\{yy\}} & \Cmd{fancyfoot[RE]\{xx\}} \Cmd{fancyfoot[RO]\{yy\}} \\
+   \hlinew{1.2pt}
+ \end{tabular*}
+ \caption{{\Heiti 已弃用的命令及其转换后的现代命令}\label{tab:depr}}
+ \end{table}
+%
+% 如您所见，如果有可选参数(optional parameter)，则此参数适用于偶数页(even pages)，
+% 而必需参数(required parameter)适用于奇数页(odd pages)。当然，这仅在文档类(documentclass)
+% 中提供了 \texttt{twoside}\ 选项时才有效。如果没有可选参数，则必需参数适用于偶数页和奇数页。
+%
+% \CmdIndex{fancyplain}
+% \PSindex{fancyplain}
+% 还有一种特殊的页面样式(special pagestyle) \texttt{fancyplain}，可以用它来定义
+% 页面样式 \texttt{fancy}\ 并同时重新定义页面样式 \texttt{plain}。要实现上述功能，您可以：
+\begin{verbatim}
+ \pagestyle{fancyplain}
+\end{verbatim}
+然后在页眉/页脚中使用，例如：
+\begin{verbatim}
+ \fancyhead[L]{\fancyplain{用于“plain”页面的值}{用于其它页面的值}}
+\end{verbatim}
+%
+% \cs{fancyplain}\ 命令仅在 \texttt{fancyplain}\ 页面样式(pagestyle)中有用。现在，您只需使
+% 用 \Cmd{fancypagestyle\{plain\}\{xxxx\}}\ 命令重新定义 \texttt{plain}\ 页面样式
+% (请参阅第~\ref{sec:pagestyle-plain}~节)。
+%
+% \CmdIndex{plainheadrulewidth}
+% \CmdIndex{plainfootrulewidth}
+% 还有 \cs{plainheadrulewidth}\ 和 \cs{plainfootrulewidth}\ 命令用于定义要
+% 在“\texttt{plain}”页面上使用的 \cs{headrulewidth}\ 的值和 \cs{footrulewidth}\ 的值。
+% 这也仅适用于 \texttt{fancyplain}\ 页面样式，而不是在使用 \cs{fancypagestyle}\ 命令
+% 重新定义 \texttt{plain}\ 页面样式的时候。
+%
+% \section[联系信息]{\heiti 联系信息}
+%
+% \noindent Pieter van Oostrum  (彼得·范·奥斯特鲁姆)\\
+% E-mail: pieter@vanoostrum.org \\
+% WWW: http://pieter.vanoostrum.org
+% \\[1ex]
+% 源代码可以在 Github 上找到：\url{https://github.com/pietvo/fancyhdr}\\
+% 在这里提供错误和改进建议：\url{https://github.com/pietvo/fancyhdr/issues}\\
+% 示例文件位于：\url{https://github.com/pietvo/fancyhdr-examples}
+%
+% \section[版本信息]{\heiti 版本信息}
+% \begin{itemize}
+% \item  Version 1.0，2003年3月11日。这是在 CTAN 上长期发布的版本。在此之前的版本历史记录已丢失。
+% \item Version 2.0，2016年8月27日：
+%   \begin{itemize}
+%   \item 删除了对 fixmarks.sty 的引用，因为已经不再使用它了。
+%   \item 删除了对早期 \LaTeX{}\ 版本的引用。
+%   \item 删除了 \Package{extramarks.sty}\ 的过时源代码。
+%   \item 将字体命令更改为 \cs{textbf}\ 和 \cs{textsl}。
+%   \item 添加了对 \Cmd{fancy\ldots offset}\ 命令的描述。
+%   \item 添加了来自 \Package{extramarks.sty}\ 的各种 \Cmd{\ldots xmark}\ 命令。
+%   \item 应用了各种修正。
+%   \item 更新了联系信息。
+%   \item 添加了版本信息。 :)
+%   \end{itemize}
+% \item Version 2.1，2016年8月28日：
+%   \begin{itemize}
+%   \item 解释顶部标记(top-marks)是什么。
+%   \end{itemize}
+% \item Version 2.1，2016年9月6日：
+%   \begin{itemize}
+%   \item 将 \verb|\string| 添加到特殊索引命令中以获得更整洁的索引文件。
+%   \item 添加了一个页眉装饰线(decorative headrule)的示例。
+%   \end{itemize}
+% \item Version 3.9，2016年10月13日：
+%   \begin{itemize}
+%   \item 在 \texttt{fancyhdr.dtx}\ 中集成文档。
+%   \item 统一版本号与 \Package{fancyhdr.sty}。
+%   \item 所有过时的命令都移到了单独的一节(第~\ref{sec:depr}~节)。
+%   \item 展开的文档。
+%   \end{itemize}
+% \item Version 3.9a，2017年6月30日：
+%   \begin{itemize}
+%   \item 更新了联系信息。
+%   \item 恢复了 \cs{newtoks}\cs{@temptokenb}。
+%   \end{itemize}
+% \item Version 3.10，2019年1月25日：
+%   \begin{itemize}
+%   \item 基于 fancydhr.dtx 的分发。
+%   \item 使用 \cs{f@nch@ifundefined}\ 而不是 \cs{ifx}\ 或 \cs{@ifundefined}。
+%   \item 在几个地方用 \cs{newcommand}\ 替换 \cs{def}。
+%   \item 不要使用 \cs{global}\cs{setlength}。
+%   \item 将 \cs{footrule}\ 放入一个 \cs{vbox}\ 中，以适应灵活的页脚线(footbule)，
+%   然后将其 \cs{unvbox}。将 \cs{footruleskip}\ 垂直空间(vertical space)移动到 \cs{footrule}\ 定义之外。
+%   \end{itemize}
+% \end{itemize}
+% \subsection{version 4 中的更改}
+% \label{sec:version-4}
+% 版本 4 是对宏包的一次重大重写。它还引入了许多新功能(new features)。
+% \begin{itemize}
+% \item Version 4.0，2019年3月15 -- 2021年6月4日：
+%   \begin{itemize}
+%   \item 引入了 \cs{usepackage}\ 命令中介绍的选项。
+%   \item 检查页眉或页脚是否分别适合 \cs{headheight}\ 和 \cs{footskip}，不再调随后页面的这些值。
+%   这似乎太令人困惑了。然而，当提供了宏包选项 \texttt{compatV3}\ 时，将保留旧的行为。 \\
+%     \texttt{nocheck}\ 选项现在完全消除了这些检查，风险自负。(见第~\pageref{page:warning}~页第~\ref{sec:warning}~节)
+%   \item 消除了全局定义。所有定义现在都是局部的。\cs{global}\ 案例(case)最初是为了让您
+%   可以在一个组(group)中进行定义，并将其应用于全局。这是一个错误。如果您在局部定义，这些定义应该留在局部。
+%   这导致了切换页面样式的问题，因为这样会更改全局样式，这通常是您不希望的。\\
+%     然而，当提供了宏包选项 \texttt{compatV3}\ 时，将保留旧的行为。(见第~\ref{sec:options}~节)
+%   \item 页面样式 \texttt{fancydefault}。
+%   \item \cs{headruleskip}\ 参数。
+%   \item \cs{fancyheadinit}、\cs{fancyfootinit}\ 和 \cs{fancyhfinit}\ 命令。
+%   \item[] {\color{orange}{\Heiti 注意}}:以下更改主要是 Alexander I. Rozhenko (亚历山大·I·罗振科)从 \texttt{nccfancyhdr}\ 宏包中复制的。
+%   \item \cs{fancycenter}\ 命令(第~\ref{sec:fancycenter}~节)。
+%   \item \texttt{headings}\ 和 \texttt{myheadings}\ 宏包选项(参见第~\ref{sec:options}~节)。
+%   \item \cs{fancypagestyle}\ 命令有一个可选参数 \oarg{base-style}。
+%
+%   \end{itemize}
+%
+% \item Version 4.0.1，2021年1月28日：
+%   \begin{itemize}
+%   \item 一些文档更正，特别是在第~\ref{sec:xmarks}~节和第~\ref{sec:movie}~节中。
+%   \end{itemize}
+% \item Version 4.0.2，2022年3月9日：
+%   \begin{itemize}
+% \item 为每个页眉/页脚字段添加了 \cs{leavevmode}\cs{ignorespaces}。当字段以 \cs{color}\ 命令开头时，
+% \cs{leavevmode}\ 可防止出现错误。为了向后兼容，\cs{ignorespaces}\ 跳过参数中的初始空格(skips initial spaces)，
+% 就像 \cs{parbox}\ 中通常的那样。然而，在一些罕见的情况下，页眉/页脚字段中仍然会出现虚假空格(spurious spaces)。
+% 在这种情况下，用户必须消除这些。
+% \item 清理 \cs{fancycenter}\ 命令的文档。
+% \item 杂项小文档更改。
+% \item 使 \cs{fancyhead}\ 等 \cs{long}。
+%   \end{itemize}
+% \item Version 4.0.3，2022年5月18日：
+%   \begin{itemize}
+%   \item 在 \texttt{extramarks.sty}\ 中初始化 \cs{@mkboth}，以便它能够接收对 \cs{markboth}\ 的更改。
+%   \end{itemize}
+% \end{itemize}
+%
+%
+% \StopEventually{%
+% \PrintChanges
+% \PrintIndex}
+%
+% \clearpage
+% \thispagestyle{empty}
+% \part{{\heiti 问} \& {\heiti 答}}
+%
+% 这一部分包含了一些问题的答案，这些问题已经通过电子邮件发送给我，或者已经在各种互联网论坛上被问到，
+% 而且在其他文档中没有合乎逻辑的位置。预计它将逐渐增长。
+%
+%
+% \section[长的章/节标题]{\heiti 长的章/节标题}
+% \label{sec:longtitles}
+%
+% \index{long titles}
+% 有时章或节标题太长，无法放入页眉或页脚中。页眉/页脚中可能包含多行，也可能覆盖其他部分。
+% 如何在不更改实际标题(actual title)的情况下缩短页眉/页脚中的标题？
+%
+% 下面是一个示例：
+\begin{verbatim}
+ \fancyhead[LE,RO]{\nouppercase{\rightmark}}  % 节标题(Section title)
+ \fancyhead[LO,RE]{\nouppercase{\leftmark}}   % 章标题(Chapter title)
+ \fancyfoot[C]{\thepage}
+  . . .
+ \chapter{This is a very long chapter title}
+  . . .
+ \section{This is a very long section title that will not fit in the header}
+  . . .
+\end{verbatim}
+% 通过上述设置，页眉(header)将显示为：
+%
+% \medskip
+% {\noindent\hbox to \textwidth{^^A
+%    \rlap{\parbox[b]{\textwidth}{\raggedright Chapter 1. This is a very long chapter title}}^^A
+%    \hfill
+%    \llap{\parbox[b]{\textwidth}{\raggedleft 1.2. This is a very long
+%                   section title that will not fit in the header}}^^A
+%  }
+%  \hrule height\headrulewidth width\textwidth}
+% \bigskip
+% \noindent 这很难看，解决这个问题基本上有如下三种方法可选。
+%
+% \subsection[使用可选参数]{\heiti 使用可选参数}
+%
+% 正如我们在第~\ref{sec:scoop}~节中看到的，页眉信息来自标记(marks)。因此，如果希望页眉中的文本(text)更短，
+% 我们就必须提供更短的标记(shorter marks)。这可以通过在 \cs{chapter}\ 和 \cs{section}\ 命令中将这些作为
+% 可选参数来实现。\footnote{至少在 \texttt{book}\ 和 \texttt{report}\ 文档类中是这样的。
+% 在 \texttt{article}\ 类中，这就是 \cs{section}\ 和 \cs{subsection}\ 命令。}
+\begin{verbatim}
+ \chapter[Short chapter title]{This is a very long chapter title}
+  . . .
+ \section[Short section title]{
+  This is a very long section title that will not fit in the header
+ }
+\end{verbatim}
+% 短标题(short titles)现在将显示在页眉(header)中。然而，这些短标题也将出现在目录(table of contents)中。
+% 如果这是您想要的，那么您已经准备好了。但是如果您想使用目录中的长标题，您就必须使用一些技巧(trickery)。
+% 特别是您必须提供自己的标记(marks)。
+%
+% \subsection[使用显式标记]{\heiti 使用显式标记}
+%
+% 首先，我们展示如何为页眉中的章标题(chapter title)提供不同的值，因为这是最简单的。
+% 从第~\ref{sec:scoop}~节中的内容可知，此标记是通过调用 \cs{chaptermark}\CmdIndex{chaptermark}\ 来定义的。
+% 此外，因为它用作 \cs{leftmark}，所以使用页面上该标记的最后一个值(last value)。因此，
+% 我们可以通过在 \cs{chapter}\ 命令之后提供一个额外的 \cs{chaptermark}\ 命令，
+% 轻松地推翻(overrule) \cs{chapter}\ 命令提供的值，如下所示：
+\begin{verbatim}
+ \chapter{
+   This is a very long chapter title that does not fit in the header
+  }
+ \chaptermark{This is a not so long chapter title}
+\end{verbatim}
+% 对于节标题(section titles)，情况更为复杂。这里我们使用 \cs{rightmark}，它使用页面上同类的第一个标记。
+% 因此，您可能会认为在 \cs{section}\ 命令之前放置 \cs{sectionmark}\CmdIndex{sectionmark}\ 是解决方案(solution)。
+% 不幸的是，这并不是那么简单。在许多情况下，这会起作用，但在节标题前面有分页符(page break)时就不行了，
+% 因为在这种情况下，\cs{sectionmark}\ 会留在前一页后面(behind)。但是，我们可以将 \cs{sectionmark}\ 放
+% 在 \cs{section}\ 命令的参数内。因为 \LaTeX{}\ 首先排版标题(title)(它将执行包含在内的 \cs{sectionmark}\ 命令)，
+% 然后执行自己的 \cs{sectionmark}，所以我们的 \cs{sectionmark}\ 将是第一个。但有一种情况是失败的：
+% 如果后一页没有任何 \cs{sectionmark}\ 命令，它将继承前一页的{\kaiti 最后一个}标记，即长标题(long title)。
+% 要更正此问题，我们还必须在 \cs{section}\ 命令{\kaiti 之后}添加一个额外的带有短标题(short title)的 \cs{sectionmark}。
+%
+% 似乎这还不够，这个设置仍然存在问题。我们的节标题(section title)不仅用于排版文本中的标题，节标题还包括在目录中。
+% 但目录不接受标题(title)中的 \cs{sectionmark} 。它将生成一个难看的错误消息(ugly error message)。为了防止这种情况，
+% 我们必须将长标题(long title)(我们希望该长标题出现在目录中)也作为 \cs{section}\ 命令的可选参数。当然，
+% 这也将为页眉(header)生成标记(mark)，但这将被我们包含的 \cs{sectionmark}\ 命令所推翻(overrule)。
+%
+% 因此，完整的代码如下：
+\begin{verbatim}
+ \section[Long title]{Long title\sectionmark{Short title}}
+ \sectionmark{Short title}
+\end{verbatim}
+% 为了避免重复，最好制作一个宏(macro)：
+\begin{verbatim}
+ \newcommand{\Section}[2]{%
+    \section[#1]{#1\sectionmark{#2}}\sectionmark{#2}
+    }
+  . . .
+ \Section{Text title}{Header title}
+\end{verbatim}
+% 如果您想在目录(table of contents)中使用不同的文本，可以使用三个参数创建一个宏。
+% 第三个参数是要放入目录中的文本。我们将此参数用作 \cs{section}\ 命令的可选参数。
+\begin{verbatim}
+ \newcommand{\Sectioniii}[3]{%
+    \section[#3]{#1\sectionmark{#2}}\sectionmark{#2}
+    }
+  . . .
+ \Sectioniii{Text title}{Header title}{TOC title}
+\end{verbatim}
+% 请注意，如果您使用 \texttt{article}\ 类，而不是 \cs{chaptermark}\ 和 \cs{sectionmark}，
+% 您可能会使用 \cs{sectionmark}\ 和 \cs{subsectionmark}。
+%
+% \subsection[使用自动截断]{\heiti 使用自动截断}
+%
+% 对于这个解决方案，我们使用 Donald Arseneau (唐纳德·阿瑟诺)的 \Package{truncate}\ 宏包。
+% 这有一个 \cs{truncate}\CmdIndex{truncate}\ 命令，当文本超过最大大小时，它会将文本截断(truncates)到最大大小。
+% 我们将两个页眉(headers)都放在 \cs{truncate}\ 中，以将其限制为 \cs{headwidth}\ 的一半。
+% 当然，也可以进行不对称布置(asymmetric arrangements)。
+\begin{verbatim}
+ \usepackage[fit]{truncate}
+ \fancyhead[LE,RO]{\nouppercase{\truncate{0.5\headwidth}{\rightmark}}}
+ \fancyhead[LO,RE]{\nouppercase{\truncate{0.5\headwidth}{\leftmark}}}
+\end{verbatim}
+% 我们不必对前导符(chaper)和节标题(section titles)进行任何更改，因为 \cs{truncate}\ 将处理这一点。
+% 当两个标题都太大(too big)时，这种布置(arrangement)会给出以下页眉(arrangement)，如上面的示例所示：
+%
+% \medskip
+% {\noindent\hbox to \textwidth{^^A
+%    \truncate{0.5\textwidth}{Chapter 1. This is a very long chapter title that does not fit in the header}^^A
+%    \hfill
+%    \truncate{0.5\textwidth}{1.2. This is a very long section title that will not fit in the header}^^A
+%  }
+%  \hrule height\headrulewidth width\textwidth}
+% \bigskip
+%
+% 注意，我们使用了 \Package{truncate}\ 宏包的 \texttt{[fit]}\ 选项。否则，
+% 右页眉(right header)将不会右对齐(right aligned)，但它将从页眉的一半开始。
+% 还要注意，由于每个部分可以占据可用宽度的一半，理论上它们可以彼此接触。
+% 这可以通过稍微缩小宽度(width)来避免。当页眉中只有一个标题(title)时，
+% 可以使宽度等于或略小于 \cs{headwidth}。一个更复杂的解决方案(solution)是
+% 检查其中一个页眉部分是否足够小，然后截断另一个以获得剩余空间(remaining space)。
+%
+% \section[我的章节标题丢了]{\heiti 我的章节标题丢了}
+%
+% 前段时间，我遇到了一个这样的问题(经过编辑得到了要点)：
+%
+% “我重新定义了 \Cmd{pagestyle\{fancy\}}，以获得我自己的标题类型(kind of headings)。
+% 此外，我还重新定义了 \cs{chaptermark}。我需要从第1章开始(mainmatter 部分)的 \texttt{fancy}\ 样式，
+% 但是，直到介绍(Introduction)这一章(该章 I 包含在 frontmatter 部分中)我需
+% 要 \texttt{myheadings}\PSindex{myheadings}\ 样式。
+%
+% 当我将 \texttt{myheadings}\ 样式设置为 frontmatter 时，\texttt{fancy}\ 样式不再显示章标题(chapter title)。
+%
+% 我该怎么做才能重建这种 \texttt{fancy}\ 样式的正确行为呢?”
+%
+% 解决这个问题的方法其实很简单。\texttt{myheadings}\ 页面样式(以及 \texttt{headings}\PSindex{headings})
+% 重新定义了 \cs{chaptermark}\ 和 \cs{sectionmark}，因此当您返回 \texttt{fancy}\ 页面样式时，
+% 之前给出的定义(或 \Package{fancyhdr}\ 提供的定义)将丢失。您只需要在切换回 \texttt{fancy}\ 页面样式时重复它们。
+%
+\begin{verbatim}
+ \begin{document}
+ \frontmatter
+ \pagestyle{myheadings}
+  . . .
+ \mainmatter
+ \pagestyle{fancy}
+ \renewcommand{\chaptermark}[1]{....}
+\end{verbatim}
+%
+%
+% \clearpage
+% \thispagestyle{empty}
+% \part{\heiti 实现}
+%
+% \section{fancyhdr.sty}
+%
+%<*fancyhdr>
+% \changes{fancyhdr v1.4}{1994/09/16}{Correction for use with \cs{reversemarginpar}}
+%
+% \changes{fancyhdr v1.5}{1994/09/29}{Added the \cs{iftopfloat},
+% \cs{ifbotfloat} and \cs{iffloatpage} commands}
+%
+% \changes{fancyhdr v1.6}{1994/10/04}{Reset single spacing in headers/footers for use with
+% \Package{setspace.sty} or \Package{doublespace.sty}}
+%
+% \changes{fancyhdr v1.7}{1994/10/04}{Changed \cs{let}\cs{@mkboth}\cs{markboth} to
+% \texttt{\cs{def}\cs{@mkboth}\{\cs{protect}\cs{markboth}\}} to make it more robust.}
+%
+% \changes{fancyhdr v1.8}{1994/12/05}{corrections for
+% \Package{amsbook}/\Package{amsart}: define \cs{@chapapp} and (more
+% importantly) use the \cs{chapter/sectionmark} definitions from \texttt{ps@headings} if
+% they exist (which should be true for all standard classes).}
+%
+% \changes{fancyhdr v1.9}{1995/03/31}{The proposed
+% \texttt{\cs{renewcommand}\{\cs{headrulewidth}\}} \texttt{\{\cs{iffloatpage}\ldots}
+% construction in the doc did not work properly with the \texttt{fancyplain} style.}
+%
+% \changes{fancyhdr v1.91}{1995/06/01}{The definition of \cs{@mkboth} wasn't
+% restored on subsequent \texttt{\cs{pagestyle}\{fancy\}}'s.}
+%
+% \changes{fancyhdr v1.92}{1995/06/01}{The sequence
+% \texttt{\cs{pagestyle}\{fancyplain\} \cs{pagestyle}\{plain\}
+% \cs{pagestyle}\{fancy\}} would erroneously select the plain version.}
+%
+% \changes{fancyhdr v1.93}{1995/06/01}{\cs{fancypagestyle} command added.}
+%
+% \changes{fancyhdr v1.94}{1995/12/11}{(suggested by Conrad Hughes
+% \texttt{<chughes@maths.tcd.ie!>}): added \cs{footruleskip} to allow control over footrule
+% position (old hardcoded value of .3\cs{normalbaselineskip} is far too high
+% when used with very small footer fonts).}
+%
+% \changes{fancyhdr v1.95}{1996/01/31}{call \cs{@normalsize} in the reset code if that is defined,
+% otherwise \cs{normalsize}. This is to solve a problem with
+% \Package{ucthesis.cls}, as this doesn't define \cs{@currsize}.
+% Unfortunately for latex209 calling \cs{normalsize} doesn't
+% work as this is optimized to do very little, so there \cs{@normalsize} should
+% be called. Hopefully this code works for all versions of LaTeX known to
+% mankind.}
+%
+% \changes{fancyhdr v1.96}{1996/04/25}{Initialise \cs{headwidth} to a
+% magic (negative) value to catch most common cases that people change
+% it before calling \texttt{\cs{pagestyle}\{fancy\}}.
+% Note it can't be initialised when reading in this file, because
+% \cs{textwidth} could be changed afterwards. This is quite probable.
+% We also switch to \cs{MakeUppercase} rather than \cs{uppercase} and introduce a
+% \cs{nouppercase} command for use in headers. and footers.}
+%
+% \changes{fancyhdr v1.97}{1996/05/03}{Two changes: \\
+% 1. Undo the change in version 1.8
+% (using the \texttt{\cs{pagestyle}\{headings\}} defaults
+% for the chapter and section marks). The current version of amsbook and
+% amsart classes don't seem to need them anymore. Moreover the standard
+% \LaTeX{} classes don't use \cs{markboth} if twoside isn't selected, and this is
+% confusing as \cs{leftmark} doesn't work as expected.\\
+% 2. Include a call to \cs{ps@empty}
+% in \cs{ps@@fancy}. This is to solve a problem
+% in the amsbook and amsart classes, that make global changes to \cs{topskip},
+% which are reset in \cs{ps@empty}. Hopefully this doesn't break other things.}
+%
+% \changes{fancyhdr v1.98}{1996/05/07}{Added \% after the line  \cs{def}\cs{nouppercase}}
+%
+% \changes{fancyhdr v1.99}{1996/05/07}{This is the alpha version of fancyhdr 2.0\\
+% Introduced the new commands \cs{fancyhead}, \cs{fancyfoot}, and \cs{fancyhf}.
+% Changed \cs{headrulewidth}, \cs{footrulewidth}, \cs{footruleskip} to
+% macros rather than length parameters, In this way they can be
+% conditionalized and they don't consume length registers. There is no need
+% to have them as length registers unless you want to do calculations with
+% them, which is unlikely. Note that this may make some uses of them
+% incompatible (i.e. if you have a file that uses \cs{setlength} or \cs{xxxx}!=)}
+%
+% \changes{fancyhdr v1.99a}{1996/05/10}{Added a few more \% signs.}
+%
+% \changes{fancyhdr v1.99b}{1996/05/10}{Changed the syntax of
+% \cs{f@nch@for} to be resistent to catcode changes of \texttt{:!=}.\protect\\
+% Removed the \texttt{[1]} from the defs of \cs{lhead} etc. because the parameter is
+% consumed by the \cs{@[xy]lhead} etc. macros.}
+%
+% \changes{fancyhdr v1.99c}{1997/06/24}{Corrected \cs{nouppercase} to
+% also include the protected form of \cs{MakeUppercase}.\\
+% \cs{global} added to manipulation of \cs{headwidth}.\\
+% \cs{iffootnote} command added.\\
+% Some comments added about \cs{f@nch@head} and \cs{f@nch@foot}.}
+%
+% \changes{fancyhdr v1.99d}{1998/08/24}{Changed the default
+% \cs{ps@empty} to \cs{ps@@empty} in order to allow
+% \texttt{\cs{fancypagestyle}\{empty\}} redefinition.}
+%
+% \changes{fancyhdr v2.0}{2000/10/11}{Added LPPL license clause.\\
+% A check for \cs{headheight} is added. An errormessage is given (once) if the
+% header is too large. Empty headers don't generate the error even if
+% \cs{headheight} is very small or even 0pt. \\
+% Warning added for the use of '\texttt{E}' option when twoside option is not used.
+% In this case the '\texttt{E}' fields will never be used.}
+%
+% \changes{fancyhdr v2.1beta}{2002/03/10}{New command:
+% \texttt{\cs{fancyhfoffset}[place]\{length\}} defines offsets to be applied to
+% the header/footer to let it stick into the margins (if length $!>$ 0).
+% \texttt{place} is like in \cs{fancyhead}, except that only \texttt{E,O,L,R} can be used.
+% This replaces the old calculation based on \cs{headwidth} and the marginpar
+% area.
+% \cs{headwidth} will be dynamically calculated in the headers/footers when
+% this is used.}
+%
+% \changes{fancyhdr v2.1beta2}{2002/03/26}{\cs{fancyhfoffset} now also
+% takes \texttt{H,F} as possible letters in the argument to
+% allow the header and footer widths to be different.\\
+% New commands \cs{fancyheadoffset} and \cs{fancyfootoffset} added comparable to
+% \cs{fancyhead} and \cs{fancyfoot}.\\
+% Errormessages and warnings have been made more informative.}
+%
+% \changes{fancyhdr v2.1x=fancyhdr v2.1}{2002/12/09}{The defaults for
+% \cs{footrulewidth}, \cs{plainheadrulewidth} and
+% \cs{plainfootrulewidth} are changed from \cs{z@skip} to 0pt. In this
+% way when someone inadvertantly uses \cs{setlength} to change any of these, the value
+% of \cs{z@skip} will not be changed, rather an errormessage will be given.}
+%
+% \changes{fancyhdr v3.0}{2004/03/03}{Release of version 3.0.}
+%
+% \changes{fancyhdr v3.1}{2004/10/07}{Added '\texttt{\cs{endlinechar}!=13}' to
+% \cs{f@nch@reset} to prevent problems with \cs{includegraphics} in
+% header/footer when \env{verbatiminput} is active.}
+%
+% \changes{fancyhdr v3.2}{2005/03/22}{Reset \cs{everypar} (the real one)
+% in \cs{f@nch@reset} because spanish.ldf does strange things with
+% \cs{everypar} between \guillemotleft\ and \guillemotright.}
+%
+% \changes{fancyhdr v3.3}{2016/08/20}{Replace
+% `\texttt{\cs{@ifundefined}\{chapter\}}' with `\cs{ifx}\cs{chapter}\cs{@undefined}'
+% because the former subtly makes \cs{chapter} equal to \cs{relax}, which may be
+% undesirable in some cases.}
+%
+% \changes{fancyhdr v3.4}{2016/08/21}{Replace \cs{rm} by
+% \cs{normalfont}\cs{rmfamily} and \cs{sl} by \cs{normalfont}\cs{slshape}.}
+%
+% \changes{fancyhdr v3.5}{2016/08/21}{Don't define \cs{footruleskip} if it is already defined.}
+%
+% \changes{fancyhdr v3.6}{2016/08/27}{Added a \cs{ProvidesPackage} line.\\
+% Updated contact information.}
+%
+% \changes{fancyhdr v3.7}{2016/08/28}{Removed \cs{normalfont} from default values, as every field
+% is already initialised with \cs{normalfont}.\\
+% Set \cs{hsize} to \cs{headwidth} in header/footer.}
+%
+% \changes{fancyhdr v3.8}{2016/09/06}{Reset \bsbs, \cs{raggedleft},
+% \cs{raggedright} and \cs{centering} to their default values to avoid a
+% clash with the tabu package.\\
+% Move the redefinition of \cs{@makecol} to \texttt{\cs{begin}\{document\}} to
+% avoid a clash with the \Package{footmisc} package (and maybe others).\\
+% Define a working \cs{iffootnote} command.}
+%
+% \changes{fancyhdr v3.9}{2016/10/11}{Put everything in a \texttt{.dtx} file.}
+% \changes{fancyhdr v3.9}{2016/10/12}{Rename some macros to have 'f@nch@'
+% in their names, to get a more uniform naming scheme for internal macros.}
+%
+% \begin{macro}{\if@nch@mpty}
+% 此宏测试其参数是否为空。
+%    \begin{macrocode}
+\newcommand\if@nch@mpty[1]{\def\temp@a{#1}\ifx\temp@a\@empty}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\iff@nch@check}
+% \texttt{nocheck}\ 选项的布尔值。
+% \changes{fancyhdr v4.0}{2019/03/15}{Implement the \texttt{nocheck} option}
+% \OPTindex{nocheck}
+%    \begin{macrocode}
+\newif\iff@nch@check
+\f@nch@checktrue
+\DeclareOption{nocheck}{%
+  \f@nch@checkfalse
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\iff@nch@compatViii}
+% 定义 \cs{iff@nch@compatViii}\ 以跟踪 \texttt{compatV3}\ 选项。
+%    \begin{macrocode}
+\newif\iff@nch@compatViii
+%    \end{macrocode}
+% \begin{macro}{\f@nch@gbl}
+% 将 \cs{f@nch@gbl}\ 初始化为不做任何事情(\texttt{compatV3}\ 选项除外)。
+% \changes{fancyhdr v4.0}{2019/03/19}{Remove the \cs{global} in definitions}
+% \changes{fancyhdr v4.0}{2019/03/16}{Implement the \texttt{compatV3} option}
+%    \begin{macrocode}
+\let\f@nch@gbl\relax
+\DeclareOption{compatV3}{%
+  \let\f@nch@gbl\global
+  \f@nch@compatViiitrue
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@def}
+% 此宏定义另一个宏(通常是页眉字段或页脚字段)。根据 \cs{f@nch@gbl}\ 的值，定义将是全局的或局部的。
+% 默认情况下，它总是局部的。但是对于 \texttt{compatV3}\ 选项，它在正常定义(normal definitions)中
+% 是 \cs{global}\ 的，在 \cs{fancypagestyle}\ 中是局部的。\cs{global}\ 情况现在被认为是一个 bug (或者至少是不受欢迎的)。
+%
+% 如果值(参数 2)为空，则将替换为 \cs{leavevmode}。如果它不是空的，则将添加一个 \cs{strut}。
+%
+%    \begin{macrocode}
+\newcommand\f@nch@def[2]{
+           \if@nch@mpty{#2}\f@nch@gbl\def#1{\leavevmode}\else
+           \f@nch@gbl\def#1{#2\strut}\fi
+                     }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@ifundefined}
+% 此宏测试命令是否未定义。旧版本的 fancyhdr 使用了 \cs{@ifundefined}，但这在最初
+% 的 \LaTeX{}\ 中产生了一个不希望的副作用(如果未定义，则该命令等于 \cs{relax})。
+% 另一种方法是\\
+% \verb+\ifx\thecommand\undefined ...+ 或 \verb+\ifx\thecommand\@undefined ...+，
+% 但这可能与使用 \cs{@ifundefined}\ 方法的宏包冲突。2018年以后的 \LaTeX{}\ 版本
+% 有一个 \cs{@ifundefined}\ 的定义，可以避免这些问题，但并非每个人都安装了这样的版本。
+% 因此，我们定义了自己的 \cs{f@nch@ifundefined}\ 版本。
+% 这个定义是从 Peter Wilson (彼得·威尔逊)和 Will Robertson (威尔·罗伯逊)
+% 的 \Package{tocloft}\ 宏包中复制而来的。
+% \begin{macrocode}
+\newcommand{\f@nch@ifundefined}[1]{%
+  \begingroup\expandafter\expandafter\expandafter\endgroup
+  \expandafter\ifx\csname #1\endcsname\relax
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+    \fi}
+% \end{macrocode}
+% \end{macro}
+%
+% \changes{fancyhdr v4.0}{2019/03/17}{Added \texttt{headings} and
+% \texttt{myheadings} options.}
+% 可以选择重新定义标准样式(standard styles)。这些定义是从
+% Alexander I.Rozhenko (亚历山大·I·罗振科)的 \Package{nccfancyhdr}
+% 宏包中借用的。
+%
+% \begin{macro}{\ps@myheadings}
+% \texttt{myheadings} 样式的重新定义是有条件的。
+% 我们测试 \cs{chapter} 命令是否存在，并相应地重新定义样式。
+%
+% \OPTindex{myheadings}\PSindex{myheadings}
+%    \begin{macrocode}
+\DeclareOption{myheadings}{%
+  \f@nch@ifundefined{chapter}{%
+%    \end{macrocode}
+% 一个没有章(chapters)的类似 article 的类(article-like class)：
+%    \begin{macrocode}
+    \def\ps@myheadings{\ps@f@nch@fancyproto \let\@mkboth\@gobbletwo
+      \fancyhf{}
+      \fancyhead[LE,RO]{\thepage}%
+      \fancyhead[RE]{\slshape\leftmark}%
+      \fancyhead[LO]{\slshape\rightmark}%
+      \let\sectionmark\@gobble
+      \let\subsectionmark\@gobble
+    }%
+  }%
+%    \end{macrocode}
+% 一个有章(chapters)的类似 book/report 的类(book/report-like class)：
+%    \begin{macrocode}
+  {\def\ps@myheadings{\ps@f@nch@fancyproto \let\@mkboth\@gobbletwo
+      \fancyhf{}
+      \fancyhead[LE,RO]{\thepage}%
+      \fancyhead[RE]{\slshape\leftmark}%
+      \fancyhead[LO]{\slshape\rightmark}%
+      \let\chaptermark\@gobble
+      \let\sectionmark\@gobble
+    }%
+  }%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ps@headings}
+%  \texttt{headings} 样式的重新定义(redefinition)对于类似 book (book-like)和类
+%  似 article (article-like) 的类(classes)也有所不同。对于单开面(one-side)模式和
+%  双开面模式(two-side modes)，它也有所不同。
+% \changes{fancyhdr v4.0.3}{2022/05/18}{Changed definition of
+% \cs{@mkboth} from \cs{let}\cs{@mkboth}\cs{markboth} to
+% \cs{def}\Cmd{@mkboth\{\cs{protect}\cs{markboth}\}} so that it will pick up changes
+% to \cs{markboth}}
+%    \begin{macrocode}
+\DeclareOption{headings}{%
+  \f@nch@ifundefined{chapter}{%
+    \if@twoside
+%    \end{macrocode}
+% 双开面模式(two-side mode)的 article：
+%    \begin{macrocode}
+      \def\ps@headings{\ps@f@nch@fancyproto \def\@mkboth{\protect\markboth}
+        \fancyhf{}
+        \fancyhead[LE,RO]{\thepage}%
+        \fancyhead[RE]{\slshape\leftmark}%
+        \fancyhead[LO]{\slshape\rightmark}%
+        \def\sectionmark##1{%
+          \markboth{\MakeUppercase{%
+            \ifnum \c@secnumdepth >\z@ \thesection\quad \fi##1}}{}}%
+        \def\subsectionmark##1{%
+          \markright{%
+            \ifnum \c@secnumdepth >\@ne \thesubsection\quad \fi##1}}%
+      }%
+    \else
+%    \end{macrocode}
+% 单开面模式(one-side mode)的 article：
+%    \begin{macrocode}
+      \def\ps@headings{\ps@f@nch@fancyproto \def\@mkboth{\protect\markboth}
+        \fancyhf{}
+        \fancyhead[LE,RO]{\thepage}%
+        \fancyhead[RE]{\slshape\leftmark}%
+        \fancyhead[LO]{\slshape\rightmark}%
+        \def\sectionmark##1{%
+          \markright {\MakeUppercase{%
+            \ifnum \c@secnumdepth >\z@ \thesection\quad \fi##1}}}%
+        \let\subsectionmark\@gobble % Not needed but inserted for safety
+      }%
+    \fi
+  }{\if@twoside
+%    \end{macrocode}
+% 双开面模式(two-side mode)的 book：
+%    \begin{macrocode}
+      \def\ps@headings{\ps@f@nch@fancyproto \def\@mkboth{\protect\markboth}
+        \fancyhf{}
+        \fancyhead[LE,RO]{\thepage}%
+        \fancyhead[RE]{\slshape\leftmark}%
+        \fancyhead[LO]{\slshape\rightmark}%
+        \def\chaptermark##1{%
+          \markboth{\MakeUppercase{%
+            \ifnum \c@secnumdepth >\m@ne \if@mainmatter
+              \@chapapp\ \thechapter. \ \fi\fi##1}}{}}%
+        \def\sectionmark##1{%
+          \markright {\MakeUppercase{%
+            \ifnum \c@secnumdepth >\z@ \thesection. \ \fi##1}}}%
+      }%
+    \else
+%    \end{macrocode}
+% 单开面模式(one-side mode)的 book：
+%    \begin{macrocode}
+      \def\ps@headings{\ps@f@nch@fancyproto \def\@mkboth{\protect\markboth}
+        \fancyhf{}
+        \fancyhead[LE,RO]{\thepage}%
+        \fancyhead[RE]{\slshape\leftmark}%
+        \fancyhead[LO]{\slshape\rightmark}%
+        \def\chaptermark##1{%
+          \markright{\MakeUppercase{%
+            \ifnum \c@secnumdepth >\m@ne \if@mainmatter
+              \@chapapp\ \thechapter. \ \fi\fi##1}}}%
+        \let\sectionmark\@gobble % Not needed but inserted for safety
+      }%
+    \fi
+  }%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% 处理选项。
+% \changes{fancyhdr v4.0}{2019/03/15}{Process package options.}
+% \SpecialUsageIndex{\ProcessOptions}
+%    \begin{macrocode}
+\ProcessOptions*
+%    \end{macrocode}
+%
+% \begin{macro}{\f@nch@errmsg}
+%   此宏生成错误消息(error message)。
+% \changes{fancyhdr v3.10}{2019/01/25}{Use \cs{f@nch@ifundefined} instead of \cs{ifx}.}
+% \changes{fancyhdr v3.10}{2019/01/25}{Use \cs{newcommand} instead of \cs{def}.}
+%    \begin{macrocode}
+\newcommand\f@nch@errmsg[1]{%
+  \f@nch@ifundefined{PackageError}{\errmessage{#1}}{
+           \PackageError{fancyhdr}{#1}{}
+         }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@warning}
+% 此宏生成一个警告(warning)。
+% \changes{fancyhdr v3.10}{2019/01/25}{Use \cs{f@nch@ifundefined} instead of \cs{ifx}.}
+% \changes{fancyhdr v3.10}{2019/01/25}{Use \cs{newcommand} instead of \cs{def}.}
+%    \begin{macrocode}
+\newcommand\f@nch@warning[1]{%
+  \f@nch@ifundefined{PackageWarning}{\errmessage{#1}}{
+        \PackageWarning{fancyhdr}{#1}{}
+        }
+   }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@forc}
+%   使用：\cs{f@nch@forc} \cs{var} \texttt{\{charstring\}\{body\}}.\\
+%   执行绑定到 \cs{var} 的 \texttt{charstring} 中的每个字符的正文(body)。
+%   这类似于 \LaTeX 的 \cs{@tfor}，但它展开了 \texttt{charstring}。
+%    \begin{macrocode}
+% \changes{fancyhdr v3.10}{2019/01/25}{用 \cs{newcommand} 代替 \cs{def}.}
+% \changes{fancyhdr v4.0.2}{2022/05/10}{生成 \cs{f@nch@rc} \cs{long}.}
+\newcommand{\f@nch@forc}[3]{
+    \expandafter\f@nchf@rc\expandafter#1\expandafter{#2}{#3}
+    }
+\newcommand{\f@nchf@rc}[3]{\def\temp@ty{#2}\ifx\@empty\temp@ty\else
+                                    \f@nch@rc#1#2\f@nch@rc{#3}\fi}
+\long\def\f@nch@rc#1#2#3\f@nch@rc#4{\def#1{#2}#4\f@nchf@rc#1{#3}{#4}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\f@nch@for}
+%   使用：\cs{f@nch@for}\cs{var}\texttt{\{list\}}\texttt{\{body\}} \\
+%   执行绑定到 \cs{var} 的列表中每个元素的正文(body)。列表元素由逗号(commas)分隔。
+%   这类似于 \LaTeX 的 \cs{@for}，但是空列表(empty list)被视为带有空元素(empty element)的列表。
+%
+%    \begin{macrocode}
+\newcommand{\f@nch@for}[3]{\edef\@fortmp{#2}%
+  \expandafter\@forloop#2,\@nil,\@nil\@@#1{#3}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\f@nch@default}
+%   使用：\cs{f@nch@default} \cs{var}\texttt{\{defaults\}\{argument\}} \\
+%   将 \cs{var} 设置为 \texttt{argument} 中出现的 \texttt{defaults} 中的字符，如果为空(empty)，
+%   则设置为 \texttt{defaults}。所有字符都先小写(lowercased)。
+%
+%    \begin{macrocode}
+\newcommand\f@nch@default[3]{%
+  \edef\temp@a{\lowercase{\edef\noexpand\temp@a{#3}}}\temp@a \def#1{}%
+  \f@nch@forc\tmpf@ra{#2}%
+  {\expandafter\f@nch@ifin\tmpf@ra\temp@a{\edef#1{#1\tmpf@ra}}{}}%
+  \ifx\@empty#1\def#1{#2}\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@ifin}
+%   使用：\cs{f@nch@ifin} \meta{char} \meta{set} \meta{truecase} \meta{falsecase} \\
+% 如果 \meta{char} 在 \meta{set} 中，则 \meta{truecase}，否侧 \meta{falsecase}。
+%    \begin{macrocode}
+\newcommand{\f@nch@ifin}[4]{%
+  \edef\temp@a{#2}\def\temp@b##1#1##2\temp@b{\def\temp@b{##1}}%
+  \expandafter\temp@b#2#1\temp@b\ifx\temp@a\temp@b #4\else #3\fi}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\fancyhead}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\fancyfoot}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\fancyhf}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% 这些是最重要的用户宏(principal user macros)。选择参数，并提供一个“h”(\cs{fancyhead})或“f”(\cs{fancyfoot})。
+%    \begin{macrocode}
+\newcommand{\fancyhead}[2][]{
+    \f@nch@fancyhf\fancyhead h[#1]{#2}
+    }%
+\newcommand{\fancyfoot}[2][]{
+    \f@nch@fancyhf\fancyfoot f[#1]{#2}
+    }%
+\newcommand{\fancyhf}[2][]{
+    \f@nch@fancyhf\fancyhf {}[#1]{#2}
+    }%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\fancyheadoffset}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\fancyfootoffset}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\fancyhfoffset}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% 偏移量(offsets)的命令。选择参数，并提供一个“h”(\cs{fancyheadoffset})或“f”(\cs{fancyfootoffset})。
+%    \begin{macrocode}
+\newcommand{\fancyheadoffset}[2][]{
+    \f@nch@fancyhfoffs\fancyheadoffset h[#1]{#2}
+    }%
+\newcommand{\fancyfootoffset}[2][]{
+    \f@nch@fancyhfoffs\fancyfootoffset f[#1]{#2}
+    }%
+\newcommand{\fancyhfoffset}[2][]{
+    \f@nch@fancyhfoffs\fancyhfoffset {}[#1]{#2}
+    }%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@fancyhf}
+% \changes{fancyhdr v4.0.2}{2022/05/10}{Make \cs{f@nch@fancyhf} \cs{long}.}
+% 此宏解释页眉和页脚的参数。\\
+% 参数：\\
+% (1) 已使用的用户命令(如 \cs{fancyhead})。这用于错误/警告。\\
+% (2) \texttt{h}(表示 \cs{fancyhead})、\texttt{f}(表示 \cs{fancyfoot})或 \texttt{\{\}}(表示 \cs{fancyhf})。\\
+% (3) 给这些命令的可选参数(默认 \texttt{[]})。\\
+% (4) 为这些命令提供的必需参数。\\
+%   页眉和页脚字段存储在具有以下形式名称的命令序列(command sequences)中：
+%   \cs{f@nch@}\meta{x}\meta{y}\meta{z} 和 \meta{x} 来自 \texttt{[eo]}，
+%   \meta{y} 来自 \texttt{[lcr]}，\meta{z} 来自 \texttt{[hf]}。
+%
+%    \begin{macrocode}
+\long\def\f@nch@fancyhf#1#2[#3]#4{%
+  \def\temp@c{}%
+  \f@nch@forc\tmpf@ra{#3}%
+  {\expandafter\f@nch@ifin\tmpf@ra{eolcrhf,EOLCRHF}%
+    {}{\edef\temp@c{\temp@c\tmpf@ra}}}%
+  \ifx\@empty\temp@c\else \f@nch@errmsg{Illegal char `\temp@c' in
+    \string#1 argument: [#3]}%
+  \fi \f@nch@for\temp@c{#3}%
+  {\f@nch@default\f@nch@@eo{eo}\temp@c \if@twoside\else \if\f@nch@@eo
+    e\f@nch@warning {\string#1's `E' option without twoside option is
+      useless}\fi\fi \f@nch@default\f@nch@@lcr{lcr}\temp@c
+    \f@nch@default\f@nch@@hf{hf}{#2\temp@c}%
+    \f@nch@forc\f@nch@eo\f@nch@@eo
+        {\f@nch@forc\f@nch@lcr\f@nch@@lcr
+          {\f@nch@forc\f@nch@hf\f@nch@@hf
+            {\expandafter\f@nch@def\csname
+              f@nch@\f@nch@eo\f@nch@lcr\f@nch@hf\endcsname {#4}}}}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@fancyhfoffs}
+% 此宏解释页眉和页脚偏移量(offsets)的参数。\\
+% 参数：\\
+% (1) 已使用的用户命令(如 \cs{fancyheadoffset})。这用于错误/警告。\\
+% (2) \texttt{h} (表示 \cs{fancyheadoffset})、\texttt{f} (表示 \cs{fancyfootoffset}) 或 \texttt{\{\}} (表示 \cs{fancyhfoffset})。\\
+% (3) 给这些命令的可选参数(默认值 \texttt{[]})。\\
+% (4) 为这些命令提供的必需参数。\\
+%   页眉和页脚偏移量(offsets)存储在具有以下形式名称的命令序列(command sequences)中：
+%   \cs{f@nch@O@}\meta{x}\meta{y}\meta{z} 和 \meta{x} 来自 \texttt{[eo]}，
+%   \meta{y} 来自 \texttt{[lr]}，\meta{z} 来自 \texttt{[hf]}。
+%
+%    \begin{macrocode}
+\def\f@nch@fancyhfoffs#1#2[#3]#4{%
+  \def\temp@c{}%
+  \f@nch@forc\tmpf@ra{#3}%
+  {\expandafter\f@nch@ifin\tmpf@ra{eolrhf,EOLRHF}%
+    {}{\edef\temp@c{\temp@c\tmpf@ra}}}%
+  \ifx\@empty\temp@c\else \f@nch@errmsg{Illegal char `\temp@c' in
+    \string#1 argument: [#3]}%
+  \fi \f@nch@for\temp@c{#3}%
+  {\f@nch@default\f@nch@@eo{eo}\temp@c \if@twoside\else \if\f@nch@@eo
+    e\f@nch@warning {\string#1's `E' option without twoside option is
+      useless}\fi\fi \f@nch@default\f@nch@@lcr{lr}\temp@c
+    \f@nch@default\f@nch@@hf{hf}{#2\temp@c}%
+    \f@nch@forc\f@nch@eo\f@nch@@eo
+     {\f@nch@forc\f@nch@lcr\f@nch@@lcr
+      {\f@nch@forc\f@nch@hf\f@nch@@hf
+       {\expandafter\setlength\csname
+        f@nch@O@\f@nch@eo\f@nch@lcr\f@nch@hf\endcsname {#4}}}}}%
+  \f@nch@setoffs}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\lhead}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\chead}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\rhead}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\lfoot}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\cfoot}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+% \begin{macro}{\rfoot}
+% \changes{fancyhdr v3.9}{2016/10/12}{Let \cs{newcommand} do the
+% handling of the optional parameter.}
+%   Fancyheadings 版本 1 命令。这些已被弃用，但出于兼容性原因，它们仍在继续工作。
+%   它们有一个可选参数，用作双开面文档中偶数页的值。如果未给出此参数(或者文档不是双开面的)，
+%   则所需参数用于偶数页和奇数页。因此，可选参数的默认值是必需参数。不可能在定义中直接表达这一点。
+%   因此，我们使用了一个技巧。这两个参数都存储在宏中。例如，对于 \cs{lhead}，
+%   偶数页的参数存储在 \cs{f@nch@elh}，而奇数页的参数存储在 \cs{f@nch@olh}。对于其他类似的，
+%   只需将 \texttt{l} 替换为 \texttt{c} 或 \texttt{r}，将 \texttt{h} 替换为 \texttt{f}。
+%   在宏的主体(body)中，我们首先将必需的参数存储在 \cs{f@nch@olh}，
+%   我们使用这个宏作为可选参数的默认值。然后将可选参数存储在 \cs{f@nch@elh}。
+%   因此，作业(assignments)的顺序很重要。
+%
+%    \begin{macrocode}
+\newcommand{\lhead}[2][\f@nch@olh]%
+             {\f@nch@def\f@nch@olh{#2}\f@nch@def\f@nch@elh{#1}}
+\newcommand{\chead}[2][\f@nch@och]%
+             {\f@nch@def\f@nch@och{#2}\f@nch@def\f@nch@ech{#1}}
+\newcommand{\rhead}[2][\f@nch@orh]%
+             {\f@nch@def\f@nch@orh{#2}\f@nch@def\f@nch@erh{#1}}
+\newcommand{\lfoot}[2][\f@nch@olf]%
+             {\f@nch@def\f@nch@olf{#2}\f@nch@def\f@nch@elf{#1}}
+\newcommand{\cfoot}[2][\f@nch@ocf]%
+             {\f@nch@def\f@nch@ocf{#2}\f@nch@def\f@nch@ecf{#1}}
+\newcommand{\rfoot}[2][\f@nch@orf]%
+             {\f@nch@def\f@nch@orf{#2}\f@nch@def\f@nch@erf{#1}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@headwidth}
+% 用于 \cs{headwidth} 的长度参数(length parameter)。我们使用这一点，而不是
+% 直接将 \cs{headwidth} 定义为一个长度参数来保护自己，以免别人声明：\verb+\let\headwidth\textwidth+。
+%    \begin{macrocode}
+\newlength{\f@nch@headwidth} \let\headwidth\f@nch@headwidth
+%    \end{macrocode}
+% \end{macro}
+% \clearpage
+% \begin{macro}{\f@nch@O@elh}
+% \begin{macro}{\f@nch@O@erh}
+% \begin{macro}{\f@nch@O@olh}
+% \begin{macro}{\f@nch@O@orh}
+% \begin{macro}{\f@nch@O@elf}
+% \begin{macro}{\f@nch@O@erf}
+% \begin{macro}{\f@nch@O@olf}
+% \begin{macro}{\f@nch@O@orf}
+% 偏移量的长度参数 (Length parameters for the offsets)。
+%    \begin{macrocode}
+\newlength{\f@nch@O@elh}
+\newlength{\f@nch@O@erh}
+\newlength{\f@nch@O@olh}
+\newlength{\f@nch@O@orh}
+\newlength{\f@nch@O@elf}
+\newlength{\f@nch@O@erf}
+\newlength{\f@nch@O@olf}
+\newlength{\f@nch@O@orf}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\headrulewidth}
+% \begin{macro}{\footrulewidth}
+%    \begin{macrocode}
+\newcommand{\headrulewidth}{0.4pt}
+\newcommand{\footrulewidth}{0pt}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+%  \begin{macro}{\headruleskip}
+%  如果已定义 \cs{headruleskip}，则不要定义它。
+% \changes{fancyhdr v4.0}{2019/03/22}{Parameter \cs{headruleskip}.}
+%    \begin{macrocode}
+\f@nch@ifundefined{headruleskip}%
+      {\newcommand{\headruleskip}{0pt}}{}
+%    \end{macrocode}
+% \end{macro}
+%
+%  \begin{macro}{\footruleskip}
+%  Memoir 还定义了 \cs{footruleskip}。如果已定义 \cs{footruleskip}，则不要定义它。
+%    \begin{macrocode}
+\f@nch@ifundefined{footruleskip}%
+      {\newcommand{\footruleskip}{.3\normalbaselineskip}}{}
+%    \end{macrocode}
+% \end{macro}
+%
+%  \begin{macro}{\plainheadrulewidth}
+%  \begin{macro}{\plainfootrulewidth}
+%   不应该再使用 Fancyplain (而应该使用 \texttt{\cs{fancypagestyle}\{plain\}})，但出于兼容性的原因，我们保留了它。
+%
+%    \begin{macrocode}
+\newcommand{\plainheadrulewidth}{0pt}
+\newcommand{\plainfootrulewidth}{0pt}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\if@fancyplain}
+% 用于实现 \cs{fancyplain} 的布尔值
+%    \begin{macrocode}
+\newif\if@fancyplain \@fancyplainfalse
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fancyplain}
+% 已弃用的宏(deprecated macro)
+%    \begin{macrocode}
+\def\fancyplain#1#2{\if@fancyplain#1\else#2\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\headwidth}
+%   用魔法常数(magic constant)初始化 \cs{headwidth}。
+%    \begin{macrocode}
+\headwidth=-123456789sp
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@raggedleft}
+% \begin{macro}{\f@nch@raggedright}
+% \begin{macro}{\f@nch@centering}
+% \begin{macro}{\f@nch@everypar}
+% 保存 \cs{raggedleft}、\cs{raggedright}、\cs{centering} 和 \cs{everypar} 的标准定义，
+% 以便我们在排版页眉和页脚时重置它们。某些宏包将这些值更改为不兼容的值。
+%    \begin{macrocode}
+\let\f@nch@raggedleft\raggedleft
+\let\f@nch@raggedright\raggedright
+\let\f@nch@centering\centering
+\let\f@nch@everypar\everypar
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@reset}
+%   用于重置页眉中各种内容的命令：a.o.single spacing(取自setspace.sty)
+%   及 \cs{endlinechar}\ 的 catcode (这样，如果抄录[verbatim]跨越页面边界[page boundary]，页眉中的 epsf 文件就可以工作)。
+%   它还定义了一个禁用 \cs{uppercase}\ 和 \cs{Makeuppercase}\ 的 \cs{nouppercase}\ 命令。
+%   它只能用于页眉和页脚。将 \cs{hsize}\ 设置为 \cs{headwidth}(这有助于 multicol)；
+%   将 \bsbs、\cs{raggedleft}、\cs{raggedright}\ 和 \cs{centering}\ 重置为其默认值(对于 tabu)，
+%   并将 \cs{everypar}\ 重置为空。\\
+%   字体重置为 \cs{normalfont}。实际上，这是在 \LaTeX{}\ 输出例程(output routine)中完成的，所以我们不必在这里执行。
+%    \begin{macrocode}
+\def\f@nch@reset{\f@nch@everypar{}\restorecr\endlinechar=13
+  \let\\\@normalcr \let\raggedleft\f@nch@raggedleft
+  \let\raggedright\f@nch@raggedright \let\centering\f@nch@centering
+  \def\baselinestretch{1}%
+  \hsize=\headwidth
+  \def\nouppercase##1{{\let\uppercase\relax\let\MakeUppercase\relax
+      \expandafter\let\csname MakeUppercase \endcsname\relax##1}}%
+  \f@nch@ifundefined{@newbaseline} % NFSS不存在；2.09或2e
+  {\f@nch@ifundefined{@normalsize} {\normalsize} % for ucthesis.cls
+   {\@normalsize}}%
+  {\@newbaseline}% NFSS (2.09) 存在
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fancycenter}
+% \changes{fancyhdr v4.0}{2019/03/15}{Macro \cs{fancycenter} added}
+% \cs{fancycenter}\oarg{dist}\oarg{stretch}\marg{left-mark}\marg{center-mark}\marg{right-mark}
+%    \begin{macrocode}
+\newcommand*{\fancycenter}[1][1em]{%
+  \@ifnextchar[{\f@nch@center{#1}}{\f@nch@center{#1}[3]}%
+}
+\def\f@nch@center#1[#2]#3#4#5{%
+%    \end{macrocode}
+% 首先，我们在 \meta{center-mark}\ 为空\ \footnote{此代码由 Alexander I. Rozhenko (亚历山大·I·罗振科)
+% 从 \Package{nccfancyhdr}\ 中重复使用。}\ 时执行这种情况。
+%    \begin{macrocode}
+  \def\@tempa{#4}\ifx\@tempa\@empty
+    \hbox to\linewidth{%
+        \color@begingroup{#3}\hfil {#5}\color@endgroup
+        }%
+  \else
+%    \end{macrocode}
+% 我们所需要做的就是计算在“\meta{center-mark}”之前和之后插入的间距(skips)。我们将
+% 在 |\@tempskipa| 和 |\@tempskipb| 中计算它们。起初：
+% \begin{quote}
+% \verb|\@tempdima:=|\meta{dist};\\
+% \verb|\@tempdimb:=|\meta{dist}\verb|*|\meta{stretch};\\
+% \verb|\@tempdimc:=|\meta{dist}\verb|*|\meta{stretch}\verb|-|\meta{dist};\\
+% \verb|\@tempskipa:=\@tempskipb:=\@tempdimb + 1fil - \@tempdimc|;
+% \end{quote}
+%    \begin{macrocode}
+    \setlength\@tempdima{#1}%
+    \setlength{\@tempdimb}{#2\@tempdima}%
+    \@tempdimc \@tempdimb \advance\@tempdimc -\@tempdima
+    \setlength\@tempskipa{%
+        \@tempdimb \@plus 1fil \@minus \@tempdimc
+        }%
+    \@tempskipb\@tempskipa
+%    \end{macrocode}
+% 此时，“\cs{@tempskipa}”和“\cs{@tempskipb}”寄存器(registers)具有自然尺寸(natural size)\meta{dist}\verb|*|\meta{stretch}、
+% 无限拉伸性(unlimited stretchability)，最小尺寸(minimum size)\meta{dist}。现在，
+% 如果 \meta{left-mark}\ 为空，我们把 \cs{@tempskipa}\ 的最小尺寸减小到 0：
+%    \begin{macrocode}
+    \def\@tempa{#3}\ifx\@tempa\@empty
+      \addtolength\@tempskipa{\z@ \@minus \@tempdima}%
+    \fi
+%    \end{macrocode}
+% 如果 \meta{right-mark}\ 为空，则对 \cs{@tempskipb}\ 寄存器执行相同的操作：
+%    \begin{macrocode}
+    \def\@tempa{#5}\ifx\@tempa\@empty % empty right
+      \addtolength\@tempskipb{\z@ \@minus \@tempdima}%
+    \fi
+%    \end{macrocode}
+% 最后，考虑到 \meta{left-mark}\ 和 \meta{right-mark}\ 长度的差异，对左右粘连(glues)进行了校正(correct)。
+% 我们计算出哪个标记(mark)更短(shorter)，并通过它们之间的长度差增加相应寄存器的自然尺寸(natural size)。
+%    \begin{macrocode}
+    \settowidth{\@tempdimb}{#3}%
+    \settowidth{\@tempdimc}{#5}%
+    \ifdim\@tempdimb>\@tempdimc
+      \advance\@tempdimb -\@tempdimc
+      \addtolength\@tempskipb{\@tempdimb \@minus \@tempdimb}%
+    \else
+      \advance\@tempdimc -\@tempdimb
+      \addtolength\@tempskipa{\@tempdimc \@minus \@tempdimc}%
+    \fi
+%    \end{macrocode}
+% \cs{@tempskipa}\ 和 \cs{@tempskipb}\ 已经计算好了。把所有东西都放在盒子(box)里。
+%    \begin{macrocode}
+    \hbox to\linewidth{\color@begingroup{#3}\hskip \@tempskipa
+                    {#4}\hskip \@tempskipb {#5}\color@endgroup}%
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fancyheadinit}
+% 这个宏可以用来定义初始化代码(initialisation code)，这些代码将在页眉构造(construction of the header)之前运行。
+% 例如，它可以设置颜色或字体，或者更改 \cs{headrulewidth}\ 或 \cs{headruleskip}。
+% 它不能进行全局更改(global changes)，只能更改页眉。
+% \begin{macro}{\f@nch@headinit}
+%   存储页眉的初始化代码(initialisation code)。
+%    \begin{macrocode}
+\newcommand{\f@nch@headinit}{}
+\newcommand{\fancyheadinit}[1]{%
+  \def\f@nch@headinit{#1}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\fancyfootinit}
+% 这个宏可以用来定义初始化代码(initialisation code)，这些代码将在页脚构造(construction of the footer)之前运行。
+% 例如，它可以设置颜色或字体，或者更改 \cs{footrulewidth}\ 或 \cs{footruleskip}。它不能进行全局更改，只能对页脚进行更改。
+% \begin{macro}{\f@nch@footinit}
+%   存储页脚的初始化代码(initialisation code)。
+%    \begin{macrocode}
+\newcommand{\f@nch@footinit}{}
+\newcommand{\fancyfootinit}[1]{%
+  \def\f@nch@footinit{#1}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\fancyhfinit}
+% 此宏将页眉和页脚初始化代码设置为相同的值。
+%    \begin{macrocode}
+\newcommand{\fancyhfinit}[1]{%
+  \def\f@nch@headinit{#1}%
+  \def\f@nch@footinit{#1}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@vbox}
+% 用页眉或页脚制作一个 \cs{vbox}。检查是否有足够的空间，如果没有，则发出警告。
+% 将盒子 0 用作临时盒子(temp box)，将尺寸 0 用作临时尺寸(temp dimen)。这是可以做到的，
+% 因为此代码将始终在另一个盒子中使用，因此更改是局部的。\\
+%   参数1分别为 \cs{headheight}\ 或 \cs{footskip}。\\
+%   参数2是盒子的内容。
+%
+% \changes{fancyhdr v3.10}{2019/01/25}{Don't use \cs{global}\cs{setlength}.}
+% \changes{fancyhdr v3.10}{2019/01/26}{Use \cs{newcommand} instead of \cs{def}.}
+% \changes{fancyhdr v4.0}{2019/03/15}{Don't adjust the
+% \cs{headheight}/\cs{footskip}, except when the \texttt{compatV3} option is given.}
+% \changes{fancyhdr v4.0}{2019/03/15}{Don't check when the \texttt{nocheck} option is given.}
+%    \begin{macrocode}
+\newcommand\f@nch@vbox[2]{%
+  \setbox0\vbox{#2}%
+  \ifdim\ht0>#1\relax
+%    \end{macrocode}
+% 这个部分的页眉/页脚对于垂直空间(vertical space)来说太高了。
+% 如果没有给出 \texttt{[nocheck]}\ 包选项，我们将给出警告消息(warning message)。
+%    \begin{macrocode}
+    \iff@nch@check
+      \dimen0=#1\advance\dimen0-\ht0
+      \f@nch@warning{%
+        \string#1 is too small (\the#1): \MessageBreak
+        Make it at least \the\ht0, for example:\MessageBreak
+        \string\setlength{\string#1}{\the\ht0}%
+%    \end{macrocode}
+% 如果提供了 \texttt{[compatV3]}\ 选项(而不是 \texttt{[nocheck]})，我们还将在下面全局更改 \cs{headheight}/\cs{footskip}，
+% 并在警告消息中宣布这一点。
+%    \begin{macrocode}
+        \iff@nch@compatViii .\MessageBreak
+        We now make it that large for the rest of the document.\MessageBreak
+        This may cause the page layout to be inconsistent, however
+        \fi
+        \ifx#1\headheight .\MessageBreak
+          You might also make \topmargin smaller to compensate:\MessageBreak
+          \string\addtolength{\string\topmargin}{\the\dimen0}%
+        \fi
+        \@gobble
+      }%
+    \fi
+    \iff@nch@compatViii
+      \dimen0=#1\relax
+      \global#1=\ht0\relax
+      \ht0=\dimen0 %
+    \else
+      \ht0=#1%
+    \fi
+  \fi
+  \box0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@head}
+% \changes{fancyhdr v4.0}{2019/03/22}{Parameter \cs{headruleskip}.}
+% \changes{fancyhdr v4.0}{2019/03/25}{\cs{fancyheadinit} initialisation
+% code added and \cs{f@nch@reset} moved up.}
+% \changes{fancyhdr v4.0.2}{2022/05/09}{Added
+%   \cs{leavevmode}\cs{ignorespaces} to each  header/footer field.
+%   The \cs{leavevmode} prevents a bug when a field starts with a
+%   \cs{color} command. The \cs{ignorespaces} skips initial spaces in
+%   the parameter, as is usual in a \cs{parbox}, for backwards compatibility.}
+%   将左、中、右文本(text)及左、右填充符(fillers)和直线(rule)组成页眉或页脚。
+%   \cs{xlap}\ 命令将文本放入大小为零的 hbox 中，因此重叠的文本(overlapping text)不会生成错误消息。\\
+%   这些宏有5个参数：\\
+%   1. LEFTSIDE BEARING：这决定了页眉将在哪一侧伸出(stick out)。当使用 \cs{fancyhfoffset}\ 时，
+%   这将计算 \cs{headwidth}，否则为 \cs{hss}\ 或 \cs{relax} (展开后)。\\
+%   2. \cs{f@nch@olh}、\cs{f@nch@elh}、\cs{f@nch@olf}\ 或 \cs{f@nch@elf}：这是左侧组件(left component)。\\
+%   3. \cs{f@nch@och}、\cs{f@nch@ech}、\cs{f@nch@ocf}\ 或 \cs{f@nch@ecf}：这是中间组件(center component)。\\
+%   4. \cs{f@nch@orh}、\cs{f@nch@erh}、\cs{f@nch@orf} \ 或 \cs{f@nch@erf}：这是右侧组件(right component)。\\
+%   5. RIGHTSIDE BEARING：这始终是 \cs{relax}\ 或 \cs{hss} (展开后)。
+% 在构造页眉或页脚之前，将环境重置为已知状态(known state)，然后分别
+% 运行 \cs{fancyheadinit}\ 或 \cs{fancyfootinit}\ 中给出的相应初始化代码。
+%    \begin{macrocode}
+\newcommand\f@nch@head[5]{%
+  \f@nch@reset
+  \f@nch@headinit\relax
+  #1%
+  \hbox to\headwidth{%
+    \f@nch@vbox\headheight{%
+      \hbox{%
+        \rlap{\parbox[b]{\headwidth}{%
+              \raggedright\leavevmode\ignorespaces#2}
+             }%
+        \hfill
+        \parbox[b]{\headwidth}{%
+              \centering\leavevmode\ignorespaces#3}%
+        \hfill
+        \llap{\parbox[b]{\headwidth}{%
+              \raggedleft\leavevmode\ignorespaces#4}
+             }%
+      }%
+      \vskip\headruleskip\relax
+      \headrule
+    }%
+  }%
+  #5%
+}
+%    \end{macrocode}
+%
+% \begin{macro}{\f@nch@foot}
+% \changes{fancyhdr v3.10}{2019/01/26}{Put \cs{footrule} in a \cs{vbox}
+% to accommodate for flexible footrules.}
+% \changes{fancyhdr v3.10}{2019/01/28}{Use \cs{unvbox} on the footrule \cs{vbox}
+% to preserve vertical spacing.}
+% \changes{fancyhdr v3.10}{2019/01/28}{Move \cs{footruleskip} outside of the \cs{footrule}
+% definition.}
+% \changes{fancyhdr v4.0}{2019/03/25}{\cs{fancyfootinit} initialisation
+% code added and \cs{f@nch@reset} moved up.}
+% \changes{fancyhdr v4.0.2}{2022/05/09}{Added
+%   \cs{leavevmode}\cs{ignorespaces} to each  header/footer field.
+%   The \cs{leavevmode} prevents a bug when a field starts with a
+%   \cs{color} command. The \cs{ignorespaces} skips initial spaces in
+%   the parameter, as is usual in a \cs{parbox}, for backwards compatibility.}
+% 我们将 \cs{footrule}\ 放在一个 \cs{vbox}\ 中，以适应灵活的页脚线(footbule)(例如，使用 \cs{hrulefill})，
+% 因此 \cs{headwidth}\ 将用作线宽(line width)。但是为了保持垂直间距(vertical spacing)，
+% 我们 \cs{unvbox}\ 了这个盒子。
+%
+%    \begin{macrocode}
+\newcommand\f@nch@foot[5]{%
+  \f@nch@reset
+  \f@nch@footinit\relax
+  #1%
+  \hbox to\headwidth{%
+    \f@nch@vbox\footskip{%
+      \setbox0=\vbox{\footrule}\unvbox0
+      \vskip\footruleskip
+      \hbox{%
+        \rlap{\parbox[t]{\headwidth}{%
+                  \raggedright\leavevmode\ignorespaces#2}
+             }%
+        \hfill
+        \parbox[t]{\headwidth}{%
+                   \centering\leavevmode\ignorespaces#3}%
+        \hfill
+        \llap{\parbox[t]{\headwidth}{%
+                  \raggedleft\leavevmode\ignorespaces#4}
+                 }%
+      }%
+    }%
+  }%
+  #5%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\MakeUppercase}
+%   \MakeUppercase 旧的 \LaTeX{}en\ 的定义。{\color{orange}{\Heiti 注意}}:我们使用的是 \cs{def}，而不是 \cs{let}，
+%   因此 \verb+\let\uppercase\relax+ (来自版本1的文档)仍然有效。
+%
+%    \begin{macrocode}
+\f@nch@ifundefined{MakeUppercase}{%
+          \def\MakeUppercase{\uppercase}}{}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@chapapp}
+% 为没有 \cs{@chapapp}\ 的类(classes)定义 \cs{@chapapp}，例如 amsbook。
+%    \begin{macrocode}
+\f@nch@ifundefined{@chapapp}{\let\@chapapp\chaptername}{}%
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\f@nch@initialise}
+% \changes{fancyhdr v4.0}{2019/03/21}{Put all the initialisation code in
+% \cs{f@nch@initialise}}
+% 此宏初始化页眉和页脚以及 \cs{chaptermark}\ 和/或 \Cmd{[sub]sectionmark}，
+% 以实现 \texttt{fancy}\ 页面样式。
+%    \begin{macrocode}
+\def\f@nch@initialise{%
+%    \end{macrocode}
+%
+% \begin{macro}{\chaptermark}
+% \begin{macro}{\sectionmark}
+% \begin{macro}{\subsectionmark}
+% \cs{chaptermark}、\cs{sectionmark}\ 和 \cs{subsectionmark}\ 的标准定义(standard definitions)。
+%
+%    \begin{macrocode}
+  \f@nch@ifundefined{chapter}%
+   {\def\sectionmark##1{\markboth{\MakeUppercase %
+          {\ifnum \c@secnumdepth>\z@\thesection\hskip 1em\relax
+        \fi ##1}}{}}%
+   \def\subsectionmark##1{\markright {\ifnum \c@secnumdepth >\@ne
+        \thesubsection\hskip 1em\relax \fi ##1}}}%
+   {\def\chaptermark##1{\markboth {\MakeUppercase{\ifnum
+        \c@secnumdepth>\m@ne \@chapapp\ \thechapter. \ \fi ##1}
+             }{}}%
+    \def\sectionmark##1{\markright{\MakeUppercase %
+        {\ifnum \c@secnumdepth >\z@\thesection. \ \fi ##1}}}%
+   }%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\headrule}
+%    \begin{macrocode}
+  \def\headrule{{\if@fancyplain %
+                 \let\headrulewidth\plainheadrulewidth
+                 \fi
+                 \hrule\@height\headrulewidth\@width\headwidth
+      \vskip-\headrulewidth}}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\footrule}
+% \changes{fancyhdr v3.10}{2019/01/28}{Move \cs{footruleskip} outside of the \cs{footrule}
+% definition and remove useless \cs{vskip} at the top.}
+%    \begin{macrocode}
+  \def\footrule{{\if@fancyplain %
+                 \let\footrulewidth\plainfootrulewidth
+                 \fi
+                 \hrule\@width\headwidth\@height\footrulewidth}
+                }%
+%    \end{macrocode}
+% \end{macro}
+%
+% \cs{headrulewidth}、\cs{footrulewidth}、\cs{headruleskip}\ 和 \cs{footruleskip}\ 的默认值。
+%    \begin{macrocode}
+  \def\headrulewidth{0.4pt}%
+  \def\footrulewidth{0pt}%
+  \def\headruleskip{0pt}%
+  \def\footruleskip{0.3\normalbaselineskip}%
+%    \end{macrocode}
+% 页眉和页脚文本的初始化。
+%
+% 为了兼容，默认值仍然包含 \cs{fancyplain}：
+% 在“plain”页面上，左页眉(lefthead)为空(empty)，\cs{rightmark}\ 在偶数页面上，\cs{leftmark}\ 在奇数页面上；
+% 在“plain”页面上，偶数页码页的页眉(evenhead)为空(empty)，\cs{leftmark}\ 在偶数页面上，\cs{rightmark}\ 在奇数页面上。\footnote{译者注：
+% 这段翻译可能有误，这段的原文是：The default values still contain \fancyplain for compatibility: lefthead empty on “plain” pages,
+% \rightmark on even, \leftmark on odd pages; evenhead empty on “plain” pages, \leftmark on even, \rightmark on odd pages.}
+%    \begin{macrocode}
+  \fancyhf{}%
+  \if@twoside
+    \fancyhead[el,or]{\fancyplain{}{\slshape\rightmark}}%
+    \fancyhead[er,ol]{\fancyplain{}{\slshape\leftmark}}%
+  \else
+    \fancyhead[l]{\fancyplain{}{\slshape\rightmark}}%
+    \fancyhead[r]{\fancyplain{}{\slshape\leftmark}}%
+  \fi
+  \fancyfoot[c]{\rmfamily\thepage}% page number
+}
+%    \end{macrocode}
+% 调用初始化(initialisation)
+%    \begin{macrocode}
+\f@nch@initialise
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ps@f@nch@fancyproto}
+% \cs{ps@f@nch@fancyproto}\ 是 \texttt{fancy}\ 页面样式的初始值。
+% 实际页面样式(real page style)为 \cs{ps@f@nch@fancycore}，但是 \cs{ps@f@nch@fancyproto}\ 第一次
+% 使用 \Cmd{pagestyle\{fancy\}}\ 或其任何衍生物(derivatives)。它初始化 \cs{headwidth}，
+% 然后将自身重置为 \cs{ps@f@nch@fancycore}。为了向后兼容，它仍然包含 \cs{@fancyplainfalse}。
+% 我们使用 \cs{ps@f@nch@fancyproto}\ 的原因是为了重新定义 \texttt{fancy}\ 页面样式。
+% \changes{fancyhdr v4.0}{2019/03/21}{Reorganise \cs{ps@fancy}}
+%    \begin{macrocode}
+\def\ps@f@nch@fancyproto{%
+%    \end{macrocode}
+% 如果用户没有初始化 \cs{headwidth}。如果 \cs{headwidth} ${}< 0$，则用户没有对其进行初始化，
+% 或者他们只是在期望将其初始化为 \cs{textwidth}\ 的情况下向其添加了一些内容。
+% 我们现在对此进行补偿。如果用户打算将其乘以一个因子，则这将丢失。
+% 但这种情况更可能是通过像 \verb+\setlength{\headwidth}{1.2\textwidth}+\ 这样的语句来实现的。
+% 文档建议在第一次调用 \verb+\pagestyle{fancy}+\ 后更改 \cs{headwidth}。
+% 这段代码只是为了捕捉最常见的情况，但事实并非如此。
+%    \begin{macrocode}
+  \ifdim\headwidth<0sp
+    \global\advance\headwidth123456789sp
+    \global\advance\headwidth\textwidth
+  \fi
+%    \end{macrocode}
+% 现在我们用 \cs{@fancyplainfalse}\ 将 \cs{ps@f@nch@fancyproto}\ 重置为 \cs{ps@f@nch@fancycore}，并调用该版本。
+%    \begin{macrocode}
+  \gdef\ps@f@nch@fancyproto{\@fancyplainfalse\ps@f@nch@fancycore}%
+  \@fancyplainfalse\ps@f@nch@fancycore
+}%
+%    \end{macrocode}
+% 让系统知道这是一个 \texttt{fancyhdr}\ 页面样式。
+%    \begin{macrocode}
+\@namedef{f@nch@ps@f@nch@fancyproto-is-fancyhdr}{}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{ps@fancy}
+% 定义 \cs{ps@fancy}\ 只是为了调用 \cs{ps@f@nch@fancyproto}。
+%    \begin{macrocode}
+\def\ps@fancy{\ps@f@nch@fancyproto}
+\@namedef{f@nch@ps@fancy-is-fancyhdr}{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ps@fancyplain}
+% 页面样式 \texttt{fancyplain}(已弃用)。通过调用 \cs{ps@f@nch@fancyproto}\ 初始化后
+% 它将页面样式(page style) \texttt{plain}\ 设置为我们的版本 \cs{ps@plain@fancy}，
+% 该版本只设置 \cs{@fancyplaintrue}，然后调用页面样式 fancy 的实现(implementation)。
+%
+%    \begin{macrocode}
+\def\ps@fancyplain{\ps@f@nch@fancyproto \let\ps@plain\ps@plain@fancy}
+\def\ps@plain@fancy{\@fancyplaintrue\ps@f@nch@fancycore}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@ps@empty}
+% 保存 \cs{ps@empty}\ 的定义(页面样式 \texttt{empty})。
+% \changes{fancyhdr v4.0}{2019/03/21}{Rename \cs{ps@@empty} to \cs{f@nch@ps@empty}}
+%
+%    \begin{macrocode}
+\let\f@nch@ps@empty\ps@empty
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ps@f@nch@fancycore}
+% \changes{fancyhdr v4.0}{2019/03/21}{Rename \cs{ps@@fancy} to \cs{ps@f@nch@fancycore}}
+% 页面样式 \texttt{fancy}\ 的实际实现(actual implementation)。对于使用 \cs{topskip}\ 做奇怪事情的 amsbook/amsart，
+% 我们从 \cs{f@nch@ps@empty}\ 开始。我们从收集的所有部分(parts)构造(construct)偶数页和奇数页的页眉和页脚。
+%    \begin{macrocode}
+\def\ps@f@nch@fancycore{%
+  \f@nch@ps@empty
+  \def\@mkboth{\protect\markboth}%
+  \def\@oddhead{\f@nch@head\f@nch@Oolh\f@nch@olh\f@nch@och
+                \f@nch@orh\f@nch@Oorh}%
+  \def\@oddfoot{\f@nch@foot\f@nch@Oolf\f@nch@olf\f@nch@ocf
+                \f@nch@orf\f@nch@Oorf}%
+  \def\@evenhead{\f@nch@head\f@nch@Oelh\f@nch@elh\f@nch@ech
+               \f@nch@erh\f@nch@Oerh}%
+  \def\@evenfoot{\f@nch@foot\f@nch@Oelf\f@nch@elf\f@nch@ecf
+               \f@nch@erf\f@nch@Oerf}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{ps@fancydefault}
+% \changes{fancyhdr v4.0}{2019/03/21}{Added \cs{ps@fancydefault}}
+% 这是页面样式 \texttt{fancydefault}。事实上，这是 \texttt{fancy}\ 页面样式嵌入了所有默认值。
+% 与从环境中获取所有设置的 \texttt{fancy}\ 页面样式不同。它重新运行所有初始化，
+% 然后调用 \cs{ps@f@nch@fancyproto}。
+%    \begin{macrocode}
+\def\ps@fancydefault{%
+  \f@nch@initialise
+  \ps@f@nch@fancyproto
+}
+\@namedef{f@nch@ps@fancydefault-is-fancyhdr}{}
+%    \end{macrocode}
+%
+% \end{macro}
+%
+% \begin{macro}{\f@nch@Oolh}
+% \begin{macro}{\f@nch@Oorh}
+% \begin{macro}{\f@nch@Oelh}
+% \begin{macro}{\f@nch@Oerh}
+% \begin{macro}{\f@nch@Oolf}
+% \begin{macro}{\f@nch@Oorf}
+% \begin{macro}{\f@nch@Oelf}
+% \begin{macro}{\f@nch@Oerf}
+%   兼容模式(compatibility mode)的默认定义：这会导致页眉/页脚将定义的 \cs{headwidth}\ 作为其宽度，
+%   并且如果需要的话将其移动到边缘区域(marginpar area)的方向。
+%
+%    \begin{macrocode}
+\def\f@nch@Oolh{\if@reversemargin\hss\else\relax\fi}
+\def\f@nch@Oorh{\if@reversemargin\relax\else\hss\fi}
+\let\f@nch@Oelh\f@nch@Oorh
+\let\f@nch@Oerh\f@nch@Oolh
+\let\f@nch@Oolf\f@nch@Oolh
+\let\f@nch@Oorf\f@nch@Oorh
+\let\f@nch@Oelf\f@nch@Oelh
+\let\f@nch@Oerf\f@nch@Oerh
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@offsolh}
+% \begin{macro}{\f@nch@offselh}
+%   使用 \cs{fancyhfoffset}、\cs{fancyheadoffset}、\cs{fancyfootoffset}\ 的新定义。
+%   它们根据 \cs{textwidth}\ 和指定的偏移量(offsets)计算 \cs{headwidth}。\\
+%   首先是页眉。
+%
+%    \begin{macrocode}
+\def\f@nch@offsolh{\headwidth=\textwidth
+                \advance\headwidth\f@nch@O@olh
+                \advance\headwidth\f@nch@O@orh\hskip-\f@nch@O@olh}
+\def\f@nch@offselh{\headwidth=\textwidth
+                \advance\headwidth\f@nch@O@elh
+                \advance\headwidth\f@nch@O@erh\hskip-\f@nch@O@elh}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@offsolh}
+% \begin{macro}{\f@nch@offselh}
+% 页脚也是如此。
+%
+%    \begin{macrocode}
+\def\f@nch@offsolf{\headwidth=\textwidth
+                \advance\headwidth\f@nch@O@olf
+                \advance\headwidth\f@nch@O@orf\hskip-\f@nch@O@olf}
+\def\f@nch@offself{\headwidth=\textwidth
+                \advance\headwidth\f@nch@O@elf
+                \advance\headwidth\f@nch@O@erf\hskip-\f@nch@O@elf}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\f@nch@setoffs}
+% 设置页眉和页脚构造中使用的偏移部分(offset parts)。取决于 \cs{f@nch@gbl}\ 它将在全局(对于 \texttt{fancy}\ 页面样式)
+% 或局部(对于 \cs{fancypagestyle})完成。仅在使用了 \verb+\let\headwidth\textwidth+\ 的情况下，
+% 我们将 \cs{headwidth}\ 重置为应该的长度参数(length parameter)。
+%    \begin{macrocode}
+\def\f@nch@setoffs{%
+  \f@nch@gbl\let\headwidth\f@nch@headwidth
+  \f@nch@gbl\let\f@nch@Oolh\f@nch@offsolh
+  \f@nch@gbl\let\f@nch@Oelh\f@nch@offselh
+  \f@nch@gbl\let\f@nch@Oorh\hss
+  \f@nch@gbl\let\f@nch@Oerh\hss
+  \f@nch@gbl\let\f@nch@Oolf\f@nch@offsolf
+  \f@nch@gbl\let\f@nch@Oelf\f@nch@offself
+  \f@nch@gbl\let\f@nch@Oorf\hss
+  \f@nch@gbl\let\f@nch@Oerf\hss
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\iff@nch@footnote}
+% \begin{macro}{\@makecol}
+%   重新定义 \cs{@makecol}，以便我们可以捕获是否有顶部/底部浮动体(top/bottom floats)、
+%   脚注或是否在浮动页上。由于与 footmisc 宏包发生冲突，我们在 \verb+\begin{document}+\ 执行此操作。\\
+%   我们需要一个布尔型的 \cs{iff@nch@footnote}\ 来捕获是否有脚注(footnote)。
+%
+%    \begin{macrocode}
+\newif\iff@nch@footnote
+\AtBeginDocument{%
+  \let\latex@makecol\@makecol
+  \def\@makecol{\ifvoid\footins\f@nch@footnotefalse
+    \else\f@nch@footnotetrue\fi
+    \let\topfloat\@toplist\let\botfloat\@botlist\latex@makecol}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\iftopfloat}
+% \begin{macro}{\ifbotfloat}
+% \begin{macro}{\iffloatpage}
+% \begin{macro}{\iffootnote}
+% 这些可以在页眉/页脚字段中使用，使它们以是否存在浮动体和/或脚注为条件。
+%    \begin{macrocode}
+\newcommand\iftopfloat[2]{\ifx\topfloat\empty #2\else #1\fi}%
+\newcommand\ifbotfloat[2]{\ifx\botfloat\empty #2\else #1\fi}%
+\newcommand\iffloatpage[2]{\if@fcolmade #1\else #2\fi}%
+\newcommand\iffootnote[2]{\iff@nch@footnote #1\else #2\fi}%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\fancypagestyle}
+% 定义新页面样式。可选的第二个参数是基本页样式(base page style)。默认为 \cs{ps@f@nch@fancyproto}。
+% \changes{fancyhdr v4.0}{2019/03/21}{Added optional base style argument.}
+%    \begin{macrocode}
+\newcommand{\fancypagestyle}[1]{%
+  \@ifnextchar{{\f@nch@pagestyle{#1}}{%
+                       \f@nch@pagestyle{#1}[f@nch@fancyproto]
+                       }%
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\f@nch@pagestyle}
+% \cs{fancypagestyle}\ 的实际代码(actual code)。构建页面样式正文(page style body)。
+% 将其声明为基于 fancyhdr 的页面样式(fancyhdr-based page style)。
+% \changes{fancyhdr v4.0}{2019/09/05}{Make the definition of \cs{f@nch@pagestyle} \cs{long}.}
+%    \begin{macrocode}
+\long\def\f@nch@pagestyle#1[#2]#3{%
+  \f@nch@ifundefined{ps@#2}{%
+    \f@nch@errmsg{\string\fancypagestyle:
+                  Unknown base page style `#2'}%
+  }{%
+    \f@nch@ifundefined{f@nch@ps@#2-is-fancyhdr}{%
+      \f@nch@errmsg{\string\fancypagestyle:
+                 Base page style `#2' is not fancyhdr-based}%
+    }%
+    {%
+      \@namedef{ps@#1}{\let\f@nch@gbl
+                       \relax\@nameuse{ps@#2}#3\relax}%
+      \@namedef{f@nch@ps@#1-is-fancyhdr}{}%
+    }%
+  }%
+}%
+%    \end{macrocode}
+% \end{macro}
+%</fancyhdr>
+%
+% \section{extramarks.sty}
+%
+%<*extramarks>
+% \changes{extramarks v1.99e}{2000/10/11}{Added a few \% marks to get rid
+% of unwanted spaces, and \cs{endinput}. \\
+% Added LPPL license clause.}
+% \changes{extramarks v2.0beta}{2002/03/12}{Adapted for the new
+% implementation of marks in \LaTeX{} to solve bug latex/3203. \\
+% Added symmetric commands \cs{firstrightmark}, \cs{lastleftmark}, \cs{firstleftxmark},
+% \cs{firstrightxmark}, \cs{lastrightxmark}, \cs{lastleftxmark}, \cs{topleftxmark} and
+% \cs{toprightxmark}.}
+% \changes{extramarks v2.0x=fancyhdr v 2.0}{2004/03/03}{version 2.0 Release.}
+% \changes{extramarks v2.1}{2016/08/27}{Added a \cs{ProvidesPackage} line.\\
+% Updated contact information.}
+% \changes{extramarks v3.9}{2016/10/12}{Unify version number with \Package{fancyhdr.sty}.}
+%
+% \changes{extramarks v3.9a}{2017/06/30}{Restore \cs{newtoks}\cs{@temptokenb}}
+% \begin{macro}{\@temptokenb}
+% 存储一些标记信息(marks information)的令牌寄存器(token register)
+%    \begin{macrocode}
+\newtoks\@temptokenb
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\unrestored@protected@xdef}
+% 定义这个宏，以防它未被定义(应该是 \LaTeX\ 的一部分)。
+%    \begin{macrocode}
+\providecommand\unrestored@protected@xdef{%
+  \let\protect\@unexpandable@protect \xdef}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\markboth}
+% 我们自己对 \cs{markboth}\ 的定义，主要是因为 \cs{@markboth}\ 获得了更多的参数。
+%    \begin{macrocode}
+\def\markboth#1#2{%
+  \begingroup
+  \let\label\relax \let\index\relax \let\glossary\relax
+  \expandafter\@markboth\@themark{#1}{#2}%
+  \@temptokena \expandafter{\@themark}%
+  \mark{\the\@temptokena}%
+  \endgroup
+  \if@nobreak\ifvmode\nobreak\fi\fi}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@mkboth}
+% 初始化 \cs{@mkboth}，以便它将获取对 \cs{markboth}\ 的更改
+% \changes{extramarks v4.0.3}{2022/05/18}{Initialize definition of
+% \cs{@mkboth} to \cs{def}\Cmd{@mkboth\{\cs{protect}\cs{markboth}\}}
+% if it wasn't equal to \cs{@gobbletwo} so that it will pick up
+% changes to \cs{markboth}}
+%    \begin{macrocode}
+\ifx\@mkboth\@gobbletwo\else\def\@mkboth{\protect\markboth}\fi
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\markright}
+%   我们使用 \cs{markright}\ 的标准定义(standard definition)，在这里复制是没有用的。
+% \end{macro}
+%
+% \begin{macro}{\@markboth}
+%   注意：将 \texttt{\#3\#4}\ 放入 toks 寄存器(toks register)。
+%    \begin{macrocode}
+\def\@markboth#1#2#3#4#5#6{\@temptokena{{#3}{#4}}%
+  \unrestored@protected@xdef\@themark{{#5}{#6}\the\@temptokena}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@markright}
+%   注意：将 \texttt{\#1}\ 和 \texttt{\#3\#4}\ 放入 toks 寄存器(toks register)中。
+%   也许我可以通过分别将 \texttt{\#5}\ 展开到临时值(temp)来消除多余的 \cs{@temptokenb}。
+%   但是，现在寄存器已经够多了。
+%    \begin{macrocode}
+\def\@markright#1#2#3#4#5{\@temptokena{#1}\@temptokenb{{#3}{#4}}%
+  \unrestored@protected@xdef\@themark{
+             {\the\@temptokena}{#5}\the\@temptokenb}
+             }
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\@leftmark}
+% \begin{macro}{\@rightmark}
+% 获取标准标记(standard marks)的内部宏(1nternal macros)。
+%    \begin{macrocode}
+\def\@leftmark#1#2#3#4{#1}
+\def\@rightmark#1#2#3#4{#2}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+
+% \begin{macro}{\leftmark}
+% \begin{macro}{\rightmark}
+% \begin{macro}{\firstleftmark}
+% \begin{macro}{\lastrightmark}
+% \begin{macro}{\firstrightmark}
+% \begin{macro}{\lastleftmark}
+% 标准标记(standard marks) + 新标记(基于标准标记信息)。
+%    \begin{macrocode}
+\def\leftmark{\expandafter\@leftmark
+      \botmark\@empty\@empty\@empty\@empty}
+\def\rightmark{\expandafter\@rightmark
+      \firstmark\@empty\@empty\@empty\@empty}
+\def\firstleftmark{\expandafter\@leftmark
+      \firstmark\@empty\@empty\@empty\@empty}
+\def\lastrightmark{\expandafter\@rightmark
+      \botmark\@empty\@empty\@empty\@empty}
+\let\firstrightmark \rightmark
+\let\lastleftmark \leftmark
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+% \begin{macro}{\@themark}
+% 这是存储标记信息(marks information)的地方。
+%    \begin{macrocode}
+\def\@themark{{}{}{}{}}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\extramarks}
+% 此命令用于定义额外标记(extra marks)。
+%    \begin{macrocode}
+\newcommand\extramarks[2]{%
+  \begingroup
+  \let\label\relax \let\index\relax \let\glossary\relax
+  \expandafter\@markextra\@themark{#1}{#2}%
+  \@temptokena \expandafter{\@themark}%
+  \mark{\the\@temptokena}%
+  \endgroup
+  \if@nobreak\ifvmode\nobreak\fi\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@markextra}
+% 在标记存储(marks storage)中存储额外标记(extra marks)的内部宏(internal macro)。\\
+%   注意：将 \texttt{\#1\#2}\ 放入 toks 寄存器(toks register)。
+%    \begin{macrocode}
+\def\@markextra#1#2#3#4#5#6{\@temptokena {{#1}{#2}}%
+  \unrestored@protected@xdef\@themark{\the\@temptokena{#5}{#6}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\firstleftxmark}
+% \begin{macro}{\firstrightxmark}
+% \begin{macro}{\topleftxmark}
+% \begin{macro}{\toprightxmark}
+% \begin{macro}{\lastleftxmark}
+% \begin{macro}{\lastrightxmark}
+% \begin{macro}{\firstxmark}
+% \begin{macro}{\lastxmark}
+% \begin{macro}{\topxmark}
+% 新的额外标记(new extra marks)。
+%    \begin{macrocode}
+\def\firstleftxmark{\expandafter\@leftxmark
+      \firstmark\@empty\@empty\@empty\@empty}
+\def\firstrightxmark{\expandafter\@rightxmark
+      \firstmark\@empty\@empty\@empty\@empty}
+\def\topleftxmark{\expandafter\@leftxmark
+      \topmark\@empty\@empty\@empty\@empty}
+\def\toprightxmark{\expandafter\@rightxmark
+      \topmark\@empty\@empty\@empty\@empty}
+\def\lastleftxmark{\expandafter\@leftxmark
+      \botmark\@empty\@empty\@empty\@empty}
+\def\lastrightxmark{\expandafter\@rightxmark
+      \botmark\@empty\@empty\@empty\@empty}
+\let\firstxmark\firstleftxmark
+\let\lastxmark\lastrightxmark
+\let\topxmark\topleftxmark
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@tleftxmark}
+% \begin{macro}{\@rightxmark}
+% 从标记存储(marks storage)中提取额外标记(extra marks)的内部宏(internal macros)。
+%    \begin{macrocode}
+\def\@leftxmark#1#2#3#4{#3}
+\def\@rightxmark#1#2#3#4{#4}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+%</extramarks>
+%
+% \section{fancyheadings.sty}
+%
+% Fancyheadings.sty 是在 \LaTeX\ 中实现 fancy 页眉和页脚的原始样式文件(当时称为 sty)。
+% 这是在 MSDOS 仍然是一个占主导地位的“操作系统”的时代。
+% 它有一个令人讨厌的特性(其中包括)：文件名最多包含8个字符 + 3个字符的扩展名。
+% 这意味着“\texttt{fancyheadings.sty}”这个文件名在 MSDOS 中被内部截断为“\texttt{fancyhea.sty}”。
+% 尽管在 \LaTeX 中说“fancyheadings”是完全可以的。然而，有些人开始在 \LaTeX{}\ 文档中写“fancyhea”，
+% 这使得它们无法移植到例如 Unix 这样的系统，除非复制或链接到“fancyhea.sty”。
+% 我觉得这很烦人，于是决定将宏包重命名为“fancyhdr.sty”。这个宏包已经进化到了与
+% 最初的“fancyheadings”不兼容的版本。不应再使用 Fancyheadings，
+% 因此提供了一个发出明确警告然后切换到 fancyhdr 宏包。
+%
+%
+\vspace{1em}
+\noindent <*fancyheadings>
+%    \begin{macrocode}
+\PackageWarningNoLine{fancyheadings}{Please stop using
+ fancyheadings!Use fancyhdr instead.We will call fancyhdr with
+ the very same options you passed to fancyheadings.fancyhdr is 99
+ percent compatible with fancyheadings.The only incompatibility
+ is that \protect\headrulewidth\space and \protect\footrulewidth
+ \space and their \protect\plain...versions are no longer
+ length parameters,but normal macros (to be changed with \protect
+ \renewcommand\space rather than \protect\setlength).}
+\RequirePackage{fancyhdr}
+%    \end{macrocode}
+%</fancyheadings>
+\begin{tcolorbox}[boxrule={0.5pt}]
+{\Heiti 【译者注】}上述警告信息是：\\
+{\footnotesize \color{orange}{\verb|请不要再使用fancyheadings了！改用 fancyhdr 吧。我们调用fancyhdr时使用的选项可以与您传递给 fancyheadings 的选项完全相同。fancyhdr 兼容99% 的 fancyheadings。唯一不兼容的是 \protect\headrulewidth\space 和 \protect\footrulewidth\space 及其 \protect\plain...版本不再是长度参数(length parameters)，而是普通的宏(将使用 \protect\renewcommand\space 而不是 \protect\setlength 进行更改)。|}}
+\end{tcolorbox}
+%
+% \Finale
+% \clearpage
+% \PrintIndex
+\endinput
