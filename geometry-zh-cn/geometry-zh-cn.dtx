@@ -1,0 +1,3818 @@
+% \iffalse meta-comment
+%
+% Copyright 1996-2010 by Hideo Umeki <latexgeometry@gmail.com>
+% Copyright 2018  Hideo Umeki and David Carlisle
+%
+% LaTeX Package: Geometry
+% -----------------------
+%
+% This work may be distributed and/or modified under the conditions of
+% the LaTeX Project Public License, either version 1.3c of this license
+% or (at your option) any later version. The latest version of this
+% license is in
+%    http://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work is "maintained" (as per the LPPL maintenance status)
+% by David Carlisle
+%
+% This work consists of the files geometry.dtx and
+% the derived files: geometry.{sty,ins,drv}, geometry-samples.tex.
+%
+% * Distribution
+%    CTAN: macros/latex/contrib/geometry/README.md
+%    CTAN: macros/latex/contrib/geometry/changes.txt
+%    CTAN: macros/latex/contrib/geometry/geometry.ins
+%    CTAN: macros/latex/contrib/geometry/geometry.dtx
+%    CTAN: macros/latex/contrib/geometry/geometry.pdf
+%    CTAN: macros/latex/contrib/geometry/geometry-de.dtx
+%    CTAN: macros/latex/contrib/geometry/geometry-de.pdf
+%
+% * See README for installation.
+%
+%<*ignore>
+\begingroup
+  \def\x{LaTeX2e}
+\expandafter\endgroup
+\ifcase 0\ifx\install y1\fi\expandafter
+         \ifx\csname processbatchFile\endcsname\relax\else1\fi
+         \ifx\fmtname\x\else 1\fi\relax
+\else\csname fi\endcsname
+%</ignore>
+%<package|driver>\NeedsTeXFormat{LaTeX2e}
+%<package>\ProvidesPackage{geometry}
+%<package>  [2020/01/02 v5.9 Page Geometry]
+%<*install>
+\input docstrip.tex
+\Msg{************************************************************************}
+\Msg{* Installation}
+\Msg{* Package: geometry 2020/01/02 v5.9 Page Geometry}
+\Msg{************************************************************************}
+
+\keepsilent
+\askforoverwritefalse
+\preamble
+
+Copyright (C) 1996-2010
+by Hideo Umeki <latexgeometry@gmail.com>
+Copyright (C) 2018-2020
+by Hideo Umeki and David Carlisle https://github.com/davidcarlisle/geometry
+
+This work may be distributed and/or modified under the conditions of
+the LaTeX Project Public License, either version 1.3c of this license
+or (at your option) any later version. The latest version of this
+license is in
+   http://www.latex-project.org/lppl.txt
+and version 1.3c or later is part of all distributions of LaTeX
+version 2005/12/01 or later.
+
+This work is "maintained" (as per the LPPL maintenance status)
+by David Carlisle.
+
+This work consists of the files geometry.dtx and
+the derived files: geometry.{sty,ins,drv}, geometry-samples.tex.
+
+\endpreamble
+
+\generate{%
+  \file{geometry.ins}{\from{geometry.dtx}{install}}%
+  \file{geometry.drv}{\from{geometry.dtx}{driver}}%
+  \usedir{tex/latex/geometry}%
+  \file{geometry.sty}{\from{geometry.dtx}{package}}%
+  \file{geometry.cfg}{\from{geometry.dtx}{config}}%
+  \file{geometry-samples.tex}{\from{geometry.dtx}{samples}}%
+}
+
+\obeyspaces
+\Msg{************************************************************************}
+\Msg{*}
+\Msg{* To finish the installation you have to move the following}
+\Msg{* file into a directory searched by LaTeX:}
+\Msg{*}
+\Msg{* \space\space geometry.sty}
+\Msg{*}
+\Msg{* To produce the documentation run the file `geometry.drv'}
+\Msg{* through LaTeX.}
+\Msg{*}
+\Msg{* Happy TeXing!}
+\Msg{*}
+\Msg{************************************************************************}
+\endbatchfile
+%</install>
+%<*ignore>
+\fi
+%</ignore>
+%<*driver>
+\ProvidesFile{geometry.drv}
+\documentclass{ltxdoc}
+\usepackage{graphicx}
+\usepackage[a4paper, hmargin=2.5cm, vmargin=1cm,
+        includeheadfoot]{geometry}
+\DeclareRobustCommand\XeTeX{%
+      X\lower.5ex\hbox{\kern-.07em\reflectbox{E}}%
+      \kern-.15em\TeX}
+\DeclareRobustCommand\XeLaTeX{%
+      X\lower.5ex\hbox{\kern-.07em\reflectbox{E}}%
+      \kern-.15em\LaTeX}
+
+
+\usepackage{float} %%%% 防止表格等浮动
+%%%%%%%%%%%%% 以下设置中文字体 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xeCJK}  %%
+
+\setCJKfamilyfont{Heiti}{Source Han Sans Regular} %%%% 自定义\Heiti命令，显示思源黑体，用于标题页标题的中文部分
+\newcommand{\Heiti}{\CJKfamily{Heiti}} %%%% 自定义\Heiti命令，显示思源黑体，用于标题页标题的中文部分
+
+\setCJKfamilyfont{heiti}{Source Han Sans Light} %%自定义\heiti命令，显示思源黑体，用于正文的章节标题
+\newcommand{\heiti}{\CJKfamily{heiti}} %%自定义\heiti命令，显示思源黑体，用于正文的章节标题
+
+\setCJKfamilyfont{songti}{思源宋体 CN Light}  %%%% 自定义\songti命令，显示思源宋体，用于正文
+\newcommand{\songti}{\CJKfamily{songti}} %%%% 自定义\songti命令，显示思源宋体，用于正文
+
+\setCJKfamilyfont{heitixt}{思源黑体_CN_LightItalic.otf}  %%%% 自定义\heitixt命令，显示思源黑体斜体
+\newcommand{\heitixt}{\CJKfamily{heitixt}} %%%% 自定义\heitixt命令，显示思源黑体斜体
+
+\setCJKmainfont{思源宋体 CN Light} %%%% 设置中文的主字体为思源宋体 CN Light
+\setmainfont{Source Serif Pro} %%%% 设置英文的主字体为Source Serif Pro，最好看
+%%%%\setmainfont{Source Han Serif SC} %%%% 设置英文的主字体为Source Han Serif SC
+%%%%%%\setmainfont{Times New Roman} %%%% 设置英文的主字体为Times New Roman
+
+\setCJKfamilyfont{kaiti}{KaiTi} %%设置中文字体楷体，用于强调
+\newcommand{\kaiti}{\CJKfamily{kaiti}} %%设置中文字体楷体，用于强调
+%%%%%%%%%%%%% 以上设置中文字体 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fontspec}
+
+%%% 以下输入带圈的数字，调用时的命令：如 \char"2469 生成 ⑩ %%%%
+%%详参目录中的“latex 如何添加圆圈数字？ - Tsingke - 博客园.mhtml”%%%%
+\xeCJKDeclareCharClass{CJK}{%
+  "24EA,        % ⓪
+  "2460->"2473, % ①–⑳
+  "3251->"32BF, % ㉑–㊿
+  "24FF,        % ⓿
+  "2776->"277F, % ❶–❿
+  "24EB->"24F4  % ⓫–⓴
+}
+%%% 以上输入带圈的数字，调用时的命令：如 \char"2469 生成 ⑩ %%%%
+
+%%%%%%%%%%%%% 以下设置中文版式 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{indentfirst} %%% 首行缩进
+\setlength{\parindent}{2em} %%% 缩进2个字符（中文为2个字）
+\linespread{1.5} %%% 设置行间距
+%%%%%%%%%%%%% 以上设置中文版式 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{changepage} %%%用于整体缩进,\begin{adjustwidth}{2cm}{1cm}
+
+%%%%%%% 以下在 tabular 表格中定制 横线如\hlinew{1.2pt} %%%%%%
+\makeatletter
+\def\hlinew#1{%
+\noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
+\reserved@a\@xhline}
+\makeatother%
+%%%%%%% 以上在 tabular 表格中定制 横线如\hlinew{1.2pt} %%%%%%
+
+%%%%%%% 以下自定义脚注 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\footnotesep}{0.5cm} %%%设置几第脚注之间的距离
+\setlength{\skip\footins}{2.0em} %%%设置脚注与正文之间的距离
+%%\renewcommand\footnoterule{} %%%定义脚注线为空
+\renewcommand\footnoterule{
+     \kern -3pt                         % This -3 is negative
+     \hrule width 0.6\textwidth height 0.6pt % of the sum of this 1
+     \kern 2pt} %%%
+%%%%%%% 以上自定义脚注 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\contentsname}{\centerline{\heiti {\Large 目\ \ \ 录}}}   %%% 在{document}后面加入该命令，将"contents"变成“目  录”
+%%%\renewcommand{\thepart}{第{\Roman{part}}部分}
+\renewcommand{\refname}{\heiti 参考文献}
+\renewcommand{\figurename}{\Heiti 图}
+\renewcommand{\tablename}{\Heiti 表}
+\renewcommand{\abstractname}{\heiti {\Large 摘\ 要}}
+\renewcommand{\listfigurename}{\centerline{\heiti {\large 图形目录}}}
+\renewcommand{\listtablename}{\centerline{\heiti {\large 表格目录}}}
+\renewcommand{\indexname}{\heiti 索引} %%%%让最后生成的PDF文件的书签的索引显示“索引”而不是“Index”
+
+%%%%%%%%%% 以下将正文中的“Part Ⅰ ”中文化成“第Ⅰ部分” %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%\usepackage[center]{titlesec}  %%标题居中
+\usepackage{titlesec}
+\titleformat{\part}{\centering\Large\bfseries}{{\heiti 第} \thepart {\heiti 部分}}{1.2em}{}
+%%%%%%%%%% 以上将正文中的“Part Ⅰ ”中文化成“第Ⅰ部分” %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%% 以下调整目录条目之间的间距 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tocloft}
+\setlength{\cftbeforetoctitleskip}{20pt} %%% “目录”二字的段前间距为20pt
+\setlength{\cftaftertoctitleskip}{50pt}  %%% “目录”二字的段后间距为50pt
+\setlength{\cftbeforepartskip}{25pt} %%% 部分(part)之前的空白为25pt
+\renewcommand{\cftpartafterpnum}{\vspace{6pt}} %%% 部分(part)之后的空白为6pt
+\setlength{\cftbeforesecskip}{14pt} %%% 节(sec)之前的空白为14pt
+\renewcommand{\cftsecafterpnum}{\vspace{3pt}} %%% 节(sec)之后的空白为3pt
+\renewcommand{\cftsubsecafterpnum}{\vspace{3pt}} %%% 小节(subsec)之后的空白为3pt
+%%%%%%% 以上调整目录条目之间的间距 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%% 以下设置书签和目录的颜色、链接%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[svgnames]{xcolor}
+\definecolor{myurlcolor}{rgb}{0,0,0.7}
+%%%%\definecolor{mylinkcolor}{rgb}{0.7,0,0}
+\definecolor{mylinkcolor}{RGB}{178,0,0}
+\definecolor{codecolor}{rgb}{0,0.4,0.2}
+\definecolor{overviewcolor}{rgb}{0,0.2,0.4}
+\definecolor{Mylightgreen}{RGB}{216,233,236} %定义名为Mylightgreen的颜色(RGB分别为216,233,236)
+\usepackage[xetex,bookmarks=true,hidelinks,%
+colorlinks,linkcolor=mylinkcolor,urlcolor=myurlcolor,%
+pageanchor=true,hyperindex=true,
+]{hyperref}
+%%%%%%%%%%%% 以上设置书签和目录的颜色、链接%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%% 以下设置网址太长自动换行 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{url}
+\def\UrlBreaks{\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J
+\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V
+\do\W\do\X\do\Y\do\Z\do\[\do\\\do\]\do\^\do\_\do\`\do\a\do\b
+\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n
+\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z
+\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]\do\)\do\,
+\do\?\do\'\do+\do\=\do\#}
+%%%%%%%%%%%% 以上设置网址太长自动换行 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tcolorbox}
+
+
+\begin{document}
+ \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+%
+% \GetFileInfo{geometry.sty}
+%
+% \title{{\Huge\textsf{geometry}}\ {\huge \Heiti 宏包}}
+% \date{\filedate\ \ \ \ \ \fileversion}
+% \author{Hideo Umeki\ \thanks{Hideo Umeki：梅木秀夫} \hspace{0.1em}【著】 \\ \url{https://github.com/davidcarlisle/geometry}\\[5pt] 黄\ 旭\ 华\ \thanks{一名业余 \LaTeX\ 爱好者。} \hspace{1.0em}【译】}
+%
+% \MakeShortVerb{|}
+%
+% \def\OpenB{{\ttfamily\char`\{}}
+% \def\Comma{{\ttfamily\char`,}}
+% \def\CloseB{{\ttfamily\char`\}}}
+% \def\Gm{\textsf{geometry}}
+% \newcommand\argii[2]{\OpenB\meta{#1}\Comma\meta{#2}\CloseB}
+% \newcommand\argiii[3]{\OpenB\meta{#1}\Comma\meta{#2}\Comma\meta{#3}\CloseB}
+% \newcommand\vargii[2]{\OpenB#1\Comma#2\CloseB}
+% \newcommand\vargiii[3]{\OpenB#1\Comma#2\Comma#3\CloseB}
+% \newcommand\OR{\ \strut\vrule width .4pt\ }
+% \newcommand\gpart[1]{\textsf{\textsl{\color[rgb]{.0,.45,.7}#1}}}%
+% \newcommand\glen[1]{\textsf{#1}}
+% \newenvironment{key}[2]{\expandafter\macro\expandafter{`#2'}}{\endmacro}
+% \newenvironment{Options}%
+%  {\begin{list}{}{%
+%   \renewcommand{\makelabel}[1]{\texttt{##1}\hfil}%
+%   \setlength{\itemsep}{-.5\parsep}
+%   \settowidth{\labelwidth}{\texttt{xxxxxxxxxxx\space}}%
+%   \setlength{\leftmargin}{\labelwidth}%
+%   \addtolength{\leftmargin}{\labelsep}}%
+%   \raggedright}
+%  {\end{list}}
+% \newenvironment{Spec}%
+%  {\begin{list}{}{%
+%   \renewcommand{\makelabel}[1]{\fbox{##1}\hfil}%
+%   \setlength{\itemsep}{-.5\parsep}
+%   \settowidth{\labelwidth}{\texttt{S(x,x)}}%
+%   \setlength{\leftmargin}{\labelwidth}%
+%   \addtolength{\leftmargin}{\labelsep}%
+%   \addtolength{\leftmargin}{2em}%
+%   \setlength{\rightmargin}{2em}}%
+%   \raggedright}
+%  {\end{list}}
+% \def\Ss(#1,#2){\textsf{S(#1,#2)}}%
+% \def\Sp(#1,#2,#3){\mbox{|(#1,#2,#3)|}}%
+% \def\onlypre{\llap{$^{\dagger\:}$}}%
+%
+% \maketitle
+% \vspace{10.3cm}
+% \begin{abstract}
+% \vspace{1.5em}
+% 该宏包提供了一个灵活、方便的页面尺寸接口(interface to page dimensions)。
+% 您可以使用直观的参数更改页面布局(page layout)。例如，如果要将版口(margin)设置为
+% 距离纸张的每个边缘为2cm，只需键入 |\usepackage[margin=2cm]{geometry}|。可以
+% 使用 |\newgeometry| 命令更改文档中间的(middle of the document)页面布局。
+% \end{abstract}
+%
+% \phantomsection  ^^A 将“摘要”添加到目录
+% \addcontentsline{toc}{section}{\large \heiti \textbf{摘要}} ^^A 将“摘要”添加到目录
+%
+% \clearpage
+% \thispagestyle{empty}
+% \tableofcontents
+% \markright{\heiti 目录}  ^^A 页眉中的“目录”
+%
+% \clearpage
+% \thispagestyle{empty}
+%
+% \section{{\heiti 版本}5{\heiti 前言}}
+%
+% \begin{itemize}
+%  \item \textbf{更改文档中间的页面布局。}\par
+%    新命令 \cs{newgeometry}\{$\cdots$\}\ 和 \cs{restoregeometry}\ 允许用户更改文档中间的页面尺寸。
+%    \cs{newgeometry}\ 与 \cs{geometry}\ 几乎相似，只是 \cs{newgeometry}\ 禁用了前言中指定的所有选项，
+%    并跳过了与纸张尺寸相关的选项：|landscape|、|portrait| 和
+%    纸张尺寸选项(如 |papersize|、|paper=a4paper| 等)。
+%  \item \textbf{用于指定布局区域(layout area)的一组新选项。}\par
+%   添加了为计算页面尺寸的区域指定的选项：\textsf{layout}、\textsf{layoutsize}、
+%   \textsf{layoutwidth}、\textsf{layoutheight}\ 等。这些选项将有助于将指定的布局
+%   打印到不同尺寸的纸张上。例如，对于 |a4paper| 和 |layout=a5paper|，\Gm\ 宏包使
+%   用“A5”布局来计算版口(margins)，而纸张尺寸仍然为“A4”。
+%  \item \textbf{新的驱动程序选项 |xetex|。}\par
+%   添加了新的驱动程序(driver)选项 |xetex|。修改了驱动程序自动检测例程(auto-detection routine)，
+%   以避免未定义控制序列的错误。注意 \TeX{} Live\ 中的“geometry.cfg”禁用了自动检测例程并设置了 |pdftex|，
+%   它不再是必需的，即使它仍然存在也没有问题。强烈建议使用 \XeLaTeX{}\ 设置 |xetex|。
+%  \item \textbf{为\  \ JIS B-series\ \ 和\ \ ISO C-series\ \ 预设了新的纸张尺寸。}\par
+%   添加了以下纸张尺寸预设(papersize presets)：JIS\ \footnote{JIS：Japanese Industrial Standards，日本工业标准}\ B-系列的纸张尺寸预设为 |b0j|$\sim$|b6j|，
+%   ISO\ \footnote{ISO：International Organization for Standardization，国际标准化组织}\ C-系列(v5.4$\sim$)的
+%   纸张尺寸预设为 |c0paper|$\sim$|c6paper|。
+%  \item \textbf{更改了没有被设置的版口的默认值}\par
+%   在以前的版本中，如果只指定了一个版口(例如，|bottom=1cm|)，则 \Gm\ 将通过一个比例设置
+%   另一边的版口(margin)(在垂直排版中，该比例默认为 1:1)，即在这种情况下，|top=1cm|。版本5使用
+%   默认 |scale|($=0.7$)设置文本正文尺寸(text-body size)，并以此来确定没有被设置的版口。
+%   (见第~\ref{sec:rules}~节)
+%  \item \textbf{|showframe| 和 |showcrop| 选项适用于每一页。}\par
+%   使用 |showframe| 选项，页面框架(page frames)将显示在每个页面上。此外，一个新的选项 |showcrop| 在
+%   每页布局区域(layout area)的每个角落(corner)打印裁剪标记(crop marks)。请注意，
+%   如果指定的布局尺寸(layout size)不小于纸张尺寸(paper size)，标记(marks)将不可见。
+%   5.4版引入了一个使用 \textsf{atbegshi}\ 宏包的新的 |\shipout| 重载过程(overloading process)，
+%   因此当指定 showframe 或 showcrop 选项时，需要 \textsf{atbegshi}\ 宏包。
+%  \item \textbf{在处理类选项之前加载 geometry.cfg}\par
+%    以前的版本在处理文档类选项(document class options)之后加载 \textsf{geometry.cfg}。
+%    现在，在处理类选项之前已加载子配置文件(config file)，您可以更改在 \textsf{geometry.cfg}\ 中
+%    指定的行为(behavior)，方法是将选项添加到 |\documentclass| 以及 |\usepackage| 和 |\geometry| 中。
+%  \item \textbf{已删除的选项：|compat2| 和 |twosideshift|。}\par
+%    版本5不再与以前的版本兼容。为了简单起见，已删除了 |compat2| 和 |twosideshift| 选项。
+% \end{itemize}
+%
+% \clearpage
+% \section{\heiti 介绍}
+%
+% 在 \LaTeX\ 中为页面布局(page layout)设置尺寸(dimensions)并不简单。您需要调整几个 \LaTeX{}\ 原
+% 始尺寸(native dimensions)，以便将文本区域(text area)放置在所需的位置。例如，
+% 如果您想在所使用的纸张中居中显示文本区域，则必须指定原始尺寸(native dimensions)如下：
+% \begin{quote}
+%    |\usepackage{calc}|\\
+%    |\setlength\textwidth{7in}|\\
+%    |\setlength\textheight{10in}|\\
+%    |\setlength\oddsidemargin{(\paperwidth-\textwidth)/2 - 1in}|\\
+%    |\setlength\topmargin{(\paperheight-\textheight|\\
+%    |                      -\headheight-\headsep-\footskip)/2 - 1in}|.
+% \end{quote}
+% 如果没有 \textsl{calc}\ 宏包，上面的示例将需要更多繁琐的设置。\Gm\ 宏包提供了一种
+% 设置页面布局参数(page layout parameters)的简单方法。在这种情况下，您要做的就是：
+% \begin{quote}
+%    |\usepackage[text={7in,10in},centering]{geometry}|.
+% \end{quote}
+% 除了居中问题(centering problem)，设置纸张每边的版口(margins)也很麻烦。但 \Gm\ 也使其变得容易。
+% 如果要将每个版口设置为1.5in，可以键入：
+% \begin{quote}
+%    |\usepackage[margin=1.5in]{geometry}|
+% \end{quote}
+% 因此， \Gm\ 具有自动完成机制(auto-completion mechanism)，其中未指定的尺寸(unspecified dimensions)将自动确定。
+% 当您必须按照以下严格说明(strict instructions)设置页面布局时，\Gm\ 宏包也会很有用，例如：
+% \begin{quote}\slshape
+%   The total allowable width of the text area is $6.5$ inches wide by $8.75$
+%   inches high. The top margin on each page should be $1.2$ inches from
+%   the top edge of the page. The left margin should be $0.9$ inch from
+%   the left edge. The footer with page number should be at the bottom
+%   of the text area.
+% \end{quote}
+% 在这种情况下，可以使用 \Gm\ 键入：
+% \begin{quote}
+% |\usepackage[total={6.5in,8.75in},|\\
+% |            top=1.2in, left=0.9in, includefoot]{geometry}|.
+% \end{quote}
+%
+% 在文档准备系统(document preparation system)中的纸张上设置文本区域(text area)与
+% 在视窗操作系统(window system)中的背景上放置窗口(placing a window)有一定的相似性。
+% 名称“geometry”来自用于在 X window 系统中指定窗口大小和位置的 |-geometry| 选项。
+%
+% \clearpage
+% \section{{\heiti 页面} geometry}
+%
+% 图~\ref{fig:layout}~显示了 \Gm\ 宏包中定义的页面布局尺寸(page layout dimensions)。
+% 页面布局包含 \gpart{total body}\ (版心，或可打印区)和 \gpart{margins}\ (版口)。
+% \gpart{total body}\ (版心，或可打印区)由 \gpart{body}\ (正文区[text area])和可选的 \gpart{header}\ (页眉)、
+% \gpart{footer}\ (页脚)和 marginal notes (旁注，marginpar)组成。有四个 \gpart{margins}\ (版口)：
+% \gpart{left}\ (订口、里口)、\gpart{right}\ (切口、外口、翻口)、\gpart{top}\ (天头、上边空、上空)、
+% \gpart{bottom}\ (地脚、下边空、下空)。
+% 对于双开面文档(twosided documents)，水平版口(horizontal margins)应称
+% 为 \gpart{inner}\ (订口、里口)和 \gpart{outer}\ (切口、外口、翻口)。
+%
+%
+% \vspace{1em}
+%
+% {\centering
+% \begin{tabular*}{1.0\linewidth}{@{\hspace{0pt}}rl}
+%  \hlinew{1.2pt}
+%  {\Heiti 术语}&{\Heiti 含义}\\ \hlinew{0.7pt}
+%   \gpart{papers}\ (\gpart{纸张})& \gpart{total body}\ (可打印区、版心)\ + \gpart{margins}\ (版口)\\
+%   \gpart{total body}\ (\gpart{可打印区、版心})&\gpart{body}\ (文本区、正文)\ + 可选的 \gpart{head}\ (页眉)\\
+                                              &\hspace{9em} + 可选的 \gpart{foot}\ (页脚)\\
+                                              &\hspace{9em} + 可选的 \gpart{marginpar}\ (旁注与正文之间的间距)\\
+%   \gpart{margins}\ (\gpart{版口})& \gpart{top}\ (天头),\,\gpart{bottom}\ (地脚)，\gpart{left} (订口,\,\gpart{inner}\ [里口]),\,\gpart{right} (切口,\,\gpart{outer}\ [外口])\\ \hlinew{1.2pt}
+%   \end{tabular*}}
+%
+%   \vspace{1em}
+%
+% 每个版口(margin)都是从纸张的相应边缘开始测量的。例如，订口(left margin)即内口(inner margin)是指
+% 纸张的左(内)边缘与版心(total body，可打印区)之间的水平距离(horizontal distance)。
+% 因此， \Gm\ 中定义的订口(left margins，里口)和天头(top margins) 与原始
+% 尺寸(native dimensions)\ \cs{leftmargin}\ 和 \cs{topmargin}\ 是不同。
+% 正文(body，文本区域)的尺寸可以通过 \cs{textwidth}\ 和 \cs{textheight}\ 修改。
+% 纸张(paper)、版心(total body，可打印区)和版口(margin)的尺寸具有以下关系：
+% \begin{eqnarray}
+%  \label{eq:paperwidth}
+%  |paperwidth (纸张宽度)| &=& |left (订口)|+|width (版心宽度)|+|right (切口)| \\
+%  |paperheight (纸张高度)| &=& |top (天头)|+|height (版心高度)|+|bottom (地脚)|
+%  \label{eq:paperheight}
+% \end{eqnarray}
+%
+% \begin{figure}[H]
+%  \centering\small
+%  {\unitlength=.65pt
+%  \begin{picture}(450,250)(0,-10)
+%  \put(20,0){\framebox(170,230){}}
+%  \put(20,235){\makebox(170,230)[br]{\gpart{paper}\ \scriptsize(\gpart{纸张})}}
+%  \begingroup\thicklines
+%  \put(40,30){\framebox(120,170){}}\endgroup
+%  \put(40,30){\makebox(120,165)[tr]{\gpart{total body}~}}
+%  \put(40,15){\makebox(120,165)[tr]{\scriptsize(\gpart{可打印区,版心})~}}
+%  \put(45,30){\makebox(0,170)[l]{|height|}}
+%  \put(45,15){\makebox(0,170)[l]{\scriptsize |(版心高度)|}}
+%  \put(40,35){\makebox(120,0)[bc]{|width|\ \scriptsize (|版心宽度|)}}
+%  \put(50,-20){\makebox(120,0)[bc]{|paperwidth|\ \scriptsize (|纸张宽度|)}}
+%  \put(10,45){\makebox(0,170)[r]{|paperheight|}}
+%  \put(10,30){\makebox(0,170)[r]{\scriptsize |(纸张高度)|}}
+%  \put(90,200){\makebox(0,30)[lc]{|top|\ \tiny (|天头|)}}
+%  \put(90,0){\makebox(0,30)[lc]{|bottom|\ \tiny (|地脚|)}}
+%  \put(10,70){\makebox(0,0)[r]{|left|\ \scriptsize (|订口|)}}
+%  \put(10,55){\makebox(0,0)[r]{\tiny (|inner|,里口)}}
+%  \put(200,70){\makebox(0,0)[l]{|right|\scriptsize (|切口|)}}
+%  \put(200,55){\makebox(0,0)[l]{\tiny (|outer|,外口)}}
+%  \put(80,230){\vector(0,-1){30}}\put(80,30){\vector(0,-1){30}}
+%  \put(80,200){\vector(0,1){30}}\put(80,0){\vector(0,1){30}}
+%  \put(20,70){\vector(1,0){20}}\put(40,70){\vector(-1,0){20}}
+%  \put(160,70){\vector(1,0){30}}\put(190,70){\vector(-1,0){30}}
+%  \multiput(160,30)(5,0){24}{\line(1,0){2}}
+%  \multiput(160,200)(5,0){24}{\line(1,0){2}}
+%  \begingroup\thicklines
+%  \put(280,30){\framebox(120,170){}}\endgroup
+%  \put(283,133){\makebox(0,12)[l]{|textheight|\ \tiny (|正文高度|)}}
+%  \put(295,130){\vector(0,-1){100}}\put(295,150){\vector(0,1){50}}
+%  \multiput(280,220)(5,0){24}{\line(1,0){3}}
+%  \put(280,208){\makebox(120,20)[bc]{\gpart{head}\ \scriptsize(\gpart{页眉})}}
+%  \multiput(280,207)(5,0){24}{\line(1,0){3}}
+%  \put(420,225){\makebox(0,0)[l]{|headheight|\ \scriptsize (|页眉高度|)}}
+%  \put(418,225){\line(-2,-1){20}}
+%  \put(420,213){\makebox(0,0)[l]{|headsep|\ \scriptsize (|页眉底与正文顶的间距|)}}
+%  \put(418,213){\line(-2,-1){20}}
+%  \put(420,12){\makebox(0,0)[l]{|footskip|\ \scriptsize (|正文底与页脚底的间距|)}}
+%  \put(418,12){\line(-2,1){20}}
+%  \put(280,40){\makebox(120,140)[c]{\gpart{body}\ \scriptsize(\gpart{正文})}}
+%  \put(305,45){\vector(-1,0){25}}\put(375,45){\vector(1,0){25}}
+%  \put(80,230){\vector(0,-1){30}}\put(80,30){\vector(0,-1){30}}
+%  \put(280,48){\makebox(120,0)[c]{|textwidth|}}
+%  \put(280,37){\makebox(120,0)[c]{\tiny |(正文宽度)|}}
+%  \put(280,15){\makebox(120,10)[c]{\gpart{foot}\ \scriptsize(\gpart{页脚})}}
+%  \multiput(280,14)(5,0){24}{\line(1,0){2}}
+%  \put(410,30){\dashbox{3}(30,170){}}
+%  \put(415,30){\makebox(30,170)[l]{\gpart{marginal note}\ \scriptsize(\gpart{旁注})}}
+%  \put(425,45){\vector(-1,0){15}}\put(425,45){\vector(1,0){15}}
+%  \put(450,85){\makebox(0,0)[l]{|marginparsep|}}
+%  \put(450,70){\makebox(0,0)[l]{\scriptsize (|旁注与正文的间距|)}}
+%  \put(448,85){\line(-3,-1){43}}
+%  \put(450,45){\makebox(0,0)[l]{|marginparwidth|\ \scriptsize (|旁注宽度|)}}
+%  \end{picture}}
+%  \vspace{1em}
+%  \caption[Dimension names for \Gm]{%
+%  \begin{minipage}[t]{.8\textwidth}\raggedright\small
+%  \Gm\ 宏包中使用的尺寸名称(dimension names)。\\
+%  {\kaiti |width(版心宽度)| $=$ |textwidth(正文宽度)|，
+%  |height(版心高度)| $=$ |textheight(正文高度)|，这是默认情况。|left(订口)|、|right(切口)|、|top(天头)|、|bottom(地脚)|等为版口(margins)。
+%  如果通过 |twoside| (双开面)选项交换了(swapped)反面页(verso pages)的版口，则由 |left| (订口)和 |right| (切口)选项指定的版口
+%  分别用于内侧(inside)和外侧(outside)版口。|inner| (里口)和 |outer| (外口)分别是 |left| (订口)和 |right| (切口)的别名。}
+%  \end{minipage}}
+%  \label{fig:layout}
+% \end{figure}
+%
+% 版心或可打印区(total body)的宽度(|width|)和高度(|height|)的定义如下：
+% \begin{eqnarray}
+%  \label{eq:width}
+%  |width(版心宽度)| &:=& |textwidth(正文宽度)| \quad( +\>  |marginparsep| + |marginparwidth| )\\
+%  |height(版心高度)| &:=& |textheight(正文高度)| \quad(+\> |headheight| + |headsep| + |footskip| )
+%  \label{eq:height}
+% \end{eqnarray}
+% 当 |marginparsep(旁注与正文的间距)| 和 |marginparwidth(旁注宽度)|在 |width(版心宽度)| 的范围之内，
+% 即 |includemp| 这个选项被指定为 |true| 时，等式\ (\ref{eq:width})\ |width:=textwidth| 是在水平方向的默认设置。
+% 而等式\ (\ref{eq:height})\ |height:=textheight| 是在垂直方向的默认设置。如果 |includehead| 这个选项被指定为 |true|，
+% |headheight(页眉高度)| 和 |headsep(页眉底与正文顶的间距)| 则被包含在 |height(版心高度)| 中。
+% 同样，如果 |includefoot| 这个选项被指定为 |true|，|footskip(正文底与页脚底的间距)| 则被包含在 |height(版心高度)| 中。
+% 图~\ref{fig:includes}\ 显示了这些选项在垂直方向(vertical direction)上的工作方式。
+%
+% \vspace{1em}
+%
+% \begin{figure}[H]
+%  \centering\small
+%  {\unitlength=.65pt
+%  \begin{picture}(490,280)(0,-10)
+%  \put(60,250){\makebox(120,0)[bl]{\textbf{(a)}\ \ 默认(\textit{default})}}%
+%  \put(20,0){\framebox(170,230){}}
+%  \put(20,230){\makebox(170,15)[r]{\gpart{paper}\ \scriptsize(\gpart{纸张})}}
+%  \begingroup\thicklines
+%  \put(40,30){\framebox(120,165){}}\endgroup
+%  \put(70,165){\vector(0,1){30}}
+%  \put(55,145){\makebox(0,20)[lc]{|textheight|}}
+%  \put(75,130){\makebox(0,20)[lc]{\scriptsize (|正文高度|)}}
+%  \put(70,145){\vector(0,-1){115}}
+%  \multiput(40,203)(5,0){24}{\line(1,0){3}}
+%  \multiput(40,213)(5,0){24}{\line(1,0){3}}
+%  \multiput(40,10)(5,0){24}{\line(1,0){3}}
+%  \put(40,203){\makebox(120,20)[bc]{\gpart{head}\ \tiny(\gpart{页眉})}}
+%  \put(45,20){\makebox(120,140)[c]{\gpart{body}\ \scriptsize(\gpart{正文})}}
+%  \put(40,11){\makebox(120,10)[c]{\gpart{foot}\ \tiny(\gpart{页脚})}}
+%  \put(150,230){\vector(0,-1){35}}\put(150,30){\vector(0,-1){30}}
+%  \put(150,195){\vector(0,1){35}}\put(150,0){\vector(0,1){30}}
+%  \put(160,197){\makebox(0,30)[lc]{|top|}}
+%  \put(161,186){\makebox(0,30)[lc]{\tiny (|天头|)}}
+%  \put(160,0){\makebox(0,30)[lc]{|bottom|}}
+%  \put(161,-10){\makebox(0,30)[lc]{\tiny (|地脚|)}}
+%  \multiput(160,30)(5,0){24}{\line(1,0){2}}
+%  \multiput(160,195)(5,0){24}{\line(1,0){2}}
+%  \put(255,250){\makebox(120,0)[bl]
+%      {\textbf{(b)}\ \ |includehead| 和 |includefoot|}}%
+%  \put(260,0){\framebox(170,230){}}
+%  \put(260,230){\makebox(170,15)[r]{\gpart{paper}\ \scriptsize(\gpart{纸张})}}
+%  \begingroup\thicklines
+%  \put(280,30){\framebox(120,165){}}\endgroup
+%  \put(310,152){\vector(0,1){25}}
+%  \put(295,130){\makebox(0,20)[lc]{|textheight|}}
+%  \put(315,115){\makebox(0,20)[lc]{\scriptsize (|正文高度|)}}
+%  \put(310,130){\vector(0,-1){80}}
+%  \multiput(280,184)(5,0){24}{\line(1,0){3}}
+%  \multiput(280,177)(5,0){24}{\line(1,0){3}}
+%  \multiput(280,50)(5,0){24}{\line(1,0){3}}
+%  \put(280,184){\makebox(120,10)[c]{\gpart{head}\ \tiny(\gpart{页眉})}}
+%  \put(285,20){\makebox(120,140)[c]{\gpart{body}\ \scriptsize(\gpart{正文})}}
+%  \put(400,140){\line(1,1){45}}
+%  \put(447,187){\makebox(50,10)[l]{\gpart{total body}}}
+%  \put(447,172){\makebox(50,10)[l]{\scriptsize(\gpart{版心、可打印区})}}
+%  \put(280,31){\makebox(120,10)[c]{\gpart{foot}\ \tiny(\gpart{页脚})}}
+%  \put(370,230){\vector(0,-1){35}}\put(370,30){\vector(0,-1){30}}
+%  \put(370,195){\vector(0,1){35}}\put(370,0){\vector(0,1){30}}
+%  \put(380,197){\makebox(0,30)[lc]{|top|\tiny (|天头|)}}
+%  \put(380,0){\makebox(0,30)[lc]{|bottom|}}
+%  \put(380,0){\makebox(0,10)[lc]{\tiny (|地脚|)}}
+%  \end{picture}}
+%  \caption[An effect of \texttt{includehead} and \texttt{includefoot}.]{%
+%  \begin{minipage}[t]{.8\textwidth}\raggedright\small
+%    |includehead| 和 |includefoot| 分别将页眉和页脚包含在版心(即可打印区，\gpart{total body})中。\\
+%    {\kaiti \textbf{(a)} |height| $=$ |textheight| (默认)。
+%    如果 |includehead| 和 |includefoot| 均为 |true|，则 \textbf{(b)} |height| $=$ |textheight| $+$ |headheight| $+$ |headsep| $+$ |footskip|。
+%    如果指定了天头(top margins)和地脚(bottom margins)，则 |includehead| 和 |includefoot| 会导致更短的 |textheight|。}
+%  \end{minipage}}
+%  \label{fig:includes}
+% \end{figure}
+%
+% \vspace{1em}
+%
+% 因此，页面布局由每个方向的三个部分(长度)组成：一个正文(body)和两个版口(margins)。
+% 如果明确指定了其中两个，则另一个长度是确定的而无需指定。图~\ref{fig:Labc}~显示了
+% 页面尺寸(page dimensions)的简单模型。当给定长度 |L| 并将其划分为正文(body) |b|、
+% 版口(margins) |a| 和 |c| 时，很明显：
+% \begin{equation}
+%   |L|=|a|+|b|+|c|  \label{eq:Labc}
+% \end{equation}
+% 该等式表明，当三个(|a|、|b| 和 |c|)中的两个确定之后，另外一个就可以解出来。
+% 如果有两个或两个以上没有被确定，则等式~(\ref{eq:Labc})~不可能在它们之间没有任何
+% 其他关系的情况下被解出来。如果它们都是确定的，那么需要检查它们是否能满足等式~(\ref{eq:Labc})，
+% 这是确定过多或“过度确定(overspecified)”。
+% \begin{figure}[H]
+%  \centering
+%  {\unitlength=0.8pt
+%  \begin{picture}(300,60)(0,-5)
+%  \begingroup\linethickness{5pt}
+%  \put(0,5){\textcolor{green}{\line(1,0){60}}}
+%  \put(60,5){\textcolor{black}{\line(1,0){160}}}
+%  \put(220,5){\textcolor{green}{\line(1,0){80}}}
+%  \endgroup
+%  \put(0,15){\makebox(60,10)[b]{|a|}}
+%  \put(60,0){\line(0,1){20}}
+%  \put(60,15){\makebox(160,10)[b]{|b|}}
+%  \put(220,0){\line(0,1){20}}
+%  \put(220,15){\makebox(80,10)[b]{|c|}}
+%  \put(0,0){\line(0,1){50}}
+%  \put(150,35){\vector(-1,0){150}}
+%  \put(0,40){\makebox(300,10){|L|}}
+%  \put(150,35){\vector(1,0){150}}
+%  \put(300,0){\line(0,1){50}}
+%  \end{picture}}
+%  \caption{页面尺寸(page dimensions)的简单模型。}
+%  \label{fig:Labc}
+% \end{figure}
+%
+% \Gm\ 宏包的自动完成机制(auto-completion mechanism)省去了确定页面布局尺寸的麻烦。例如，
+% 您可以为 A4 纸设置如下：
+% \begin{quote}
+%  |\usepackage[width=14cm, left=3cm]{geometry}|
+% \end{quote}
+% 在这种情况下，您不必设置切口(即外口，right margin)。有关自动完成(auto-completion)的
+% 详细信息请参阅第~\ref{sec:rules}~节。
+%
+% \clearpage
+% \section{\heiti 用户接口}
+%
+% \subsection[命令]{\heiti 命令}
+%
+% \Gm\ 宏包提供了以下命令：
+% \begin{itemize}\setlength{\itemsep}{-.5\parsep}
+%  \item {\large \color{blue}{|\geometry{|\meta{options}|}|}}
+%  \item {\large \color{blue}{|\newgeometry{|\meta{options}|}|}}\ 和\ {\large \color{blue}{|\restoregeometry|}}
+%  \item {\large \color{blue}{|\savegeometry{|\meta{name}|}|}}\ 和\ {\large \color{blue}{|\loadgeometry{|\meta{name}|}|}}
+% \end{itemize}
+%
+% |\geometry{|\meta{options}|}| 根据参数中指定的选项更改页面布局。
+% 此命令(如果有的话)应该只放在前言中(在 |\begin{document}| 之前)。
+%
+% \Gm\ 宏包可以作为类(class)的一部分来使用，也可以作为文档中使用的另一个包的一部分来使用。
+% \cs{geometry}\ 命令可以覆盖前言部分中的一些设置。允许多次使用 \cs{geometry}，
+% 然后相关的设置(options concatenated)都会起作用。如果尚未加载 \Gm\ 宏包，
+% 则只能使用 |\usepackage[|\meta{options}|]{geometry}| 来代替 \cs{geometry}。
+%
+% \medskip
+% |\newgeometry{|\meta{options}|}| 更改文档中间的(mid-document)页面布局。
+% \cs{newgeometry}\ 与 \cs{geometry}\ 几乎相似，除了 \cs{newgeometry}\ 禁用了
+% 前言中 \cs{usepackage}\ 和 \cs{geometry}\ 指定的所有选项，并跳过(skips)与
+% 纸张尺寸相关的选项(papersize-related options)。\cs{restoregeometry}\ 恢复前言中指定的页面布局。
+% 此命令没有参数。详见第~\ref{sec:midchange}~节。
+%
+% \medskip
+% |\savegeometry{|\meta{name}|}| 将页面尺寸(page dimensions)保存为 \meta{name}，
+% 您可以将此命令放在其中。|\loadgeometry{|\meta{name}|}| 加载保存为 \meta{name}\ 的页面尺寸。
+% 有关详细信息，请参阅第~\ref{sec:midchange}~节。
+%
+% \subsection[可选参数]{\heiti 可选参数}
+%
+% \Gm\ 宏包采用 \textsf{keyval}\ 接口“\meta{key}=\meta{value}”，该接口可以用作 \cs{usepackage}、
+% \cs{geometry}\ 和 \cs{newgeometry}\ 的可选参数。
+%
+% 该参数包含一个逗号分隔的(comma-separated) \textsf{keyval}\ 选项列表，其基本规则如下：
+% \begin{itemize}\setlength{\itemsep}{-.5\parsep}
+% \item 允许多行，但不允许空行。
+% \item 单词之间的空格将被忽略。
+% \item 选项基本上与顺序无关(order-independent)。(有一些例外情况，详见第~\ref{sec:optionorder}~节。)
+% \end{itemize}
+%  例如：
+% \begin{quote}
+% |\usepackage[ a5paper ,  hmargin = { 3cm,|\\
+% |                .8in } , height|\\
+% |         =  10in ]{geometry}|
+% \end{quote}
+% 相当于：
+% \begin{quote}
+%   |\usepackage[height=10in,a5paper,hmargin={3cm,0.8in}]{geometry}|
+% \end{quote}
+% 某些选项允许有子列表(sub-list)，例如 |{3cm,0.8in}|。请注意，子列表中的值顺序很重要。
+% 上述设置也等同于以下设置：
+% \begin{quote}
+%   |\usepackage{geometry}|\\
+%   |\geometry{height=10in,a5paper,hmargin={3cm,0.8in}}|
+% \end{quote}
+% 或
+% \begin{quote}
+%   |\usepackage[a5paper]{geometry}|\\
+%   |\geometry{hmargin={3cm,0.8in},height=8in}|\\
+%   |\geometry{height=10in}|.
+% \end{quote}
+% 因此，多次使用 \cs{geometry}\ 命令只是用来定义附加的选项(appends options)。
+%
+% \Gm\ 支持 \textsl{calc}\ 宏包\ \footnote{CTAN:~\texttt{macros/latex/required/tools}}。
+% 例如：
+% \begin{quote}
+%   |\usepackage{calc}|\\
+%   |\usepackage[textheight=20\baselineskip+10pt]{geometry}|
+% \end{quote}
+%
+% \subsection[选项类型]{\heiti 选项类型}
+% \Gm\ 的选项分为四种类型：
+%
+% \begin{enumerate}\itemsep=0pt
+% \item \textbf{布尔型(Boolean type)}
+%
+%    采用布尔值(|true| 或 |false|)。如果没有赋值，则默认设置为 |true|。
+%    \begin{quote}
+%       \meta{key}|=true|\OR|false|.\\
+%       \meta{key}\ 如果没有赋值则相当于：\meta{key}|=true|。
+%    \end{quote}
+%    {\kaiti 例如：}|verbose=true|, |includehead|,
+%    |twoside=false|.\\
+%    纸张名称(paper name)是例外。首选纸张名称应设置为没有赋值(no values)。
+%    无论给出什么值，它都会被忽略。例如，|a4paper=XXX| 相当于 |a4paper|。
+%
+% \item \textbf{单值型(single-valued type)}
+%
+%    取一个强制值(mandatory value)，即该参数必须赋值。
+%    \begin{quote}
+%    \meta{key}|=|\meta{value}.
+%    \end{quote}
+%    {\kaiti 例如：}|width=7in|, |left=1.25in|,
+%    |footskip=1cm|, |height=.86\paperheight|。
+%
+% \item \textbf{双值型(double-valued type)}
+%
+%    在大括号(braces)中使用一对逗号分隔的值。如果两个值相同，则可以将其缩写为一个值。
+%    \begin{quote}
+%    \meta{key}|=|\argii{value1}{value2}.\\
+%    \meta{key}|=|\meta{value} 等同于
+%              \meta{key}|=|\argii{value}{value}。
+%    \end{quote}
+%    {\kaiti 例如：}|hmargin={1.5in,1in}|, |scale=0.8|,
+%    |body={7in,10in}|.
+%
+% \item \textbf{三值型(triple-valued type)}
+%
+%    在大括号中采用三个逗号分隔的强制值(即必须赋三个值)。
+%    \begin{quote}
+%    \meta{key}|=|\argiii{value1}{value2}{value3}
+%    \end{quote}
+%    每个值都必须是一个尺寸(dimension)或空(null)。当您给出一个空值(empty value)或“|*|”时，
+%    它表示空(null)，并将适当的值留给自动完成机制(auto-completion mechanism)。
+%    您需要指定至少一个尺寸，通常是两个尺寸。您可以将所有的值设置为空(null)，但这毫无意义。\\
+%    {\kaiti 例如：}
+%    |hdivide={2cm,*,1cm}|, |vdivide={3cm,19cm, }|,
+%                   |divide={1in,*,1in}|.
+% \end{enumerate}
+%
+% \clearpage
+% \section{\heiti 详解选项}
+%
+% 本节介绍 \Gm\ 中的所有可用选项。带有匕首(dagger) $^\dagger$ 的选项
+% 不可用作 \cs{newgeometry}\ 的参数(见第~\ref{sec:midchange}~节)。
+%
+% \subsection[纸张尺寸]{\heiti 纸张尺寸}\label{sec:paper}
+%
+% 下面的选项设置纸张/介质(paper/media)的尺寸(size)和方向(orientation)。
+% \begin{Options}
+% \item[\onlypre paper\OR papername] ~\\
+%  按名称指定纸张尺寸。|paper=|\meta{paper-name}。为了方便起见，可以不使用 |paper=| 来
+%  指定纸张名称(paper name)。例如，|a4paper| 等同于 |paper=a4paper|。
+% \item[\onlypre \vtop{
+%  \hbox{a0paper, a1paper, a2paper, a3paper, a4paper, a5paper, a6paper,}
+%  \hbox{b0paper, b1paper, b2paper, b3paper, b4paper, b5paper, b6paper,}
+%  \hbox{c0paper, c1paper, c2paper, c3paper, c4paper, c5paper, c6paper,}
+%  \hbox{b0j, b1j, b2j, b3j, b4j, b5j, b6j,}
+%  \hbox{ansiapaper, ansibpaper, ansicpaper, ansidpaper, ansiepaper,}
+%  \hbox{letterpaper, executivepaper, legalpaper}}]~\\[1ex]
+%    指定纸张名称。值部分(value part)即使有也会被忽略。例如，以下几种纸张具有相同的效果：
+%    |a5paper|、|a5paper=true|、|a5paper=false| 等等。|a[0-6]paper|、|b[0-6]paper|、
+%    |c[0-6]paper| 分别是 ISO A、 B 和 C 系列(series)纸张尺寸。
+%    JIS\ (Japanese Industrial Standards，日本工业标准) A 系列与 ISO A 系列相同，
+%    但 JIS B 系列与 ISO B 系列不同。|b[0-6]j| 应用于 JIS B 系列。
+% \item[\onlypre screen] 特殊纸张尺寸(special paper size)\ (W,H) = (225mm,180mm)。
+%    对于使用个人电脑(Personal Computer，PC)和
+%    视频投影仪(video projector)的演示(presentation)，将“slide”文档类(documentclass)
+%    设置为“|screen,centering|”将非常有用。
+% \item[\onlypre paperwidth] 纸张宽度。|paperwidth=|\meta{length}。
+% \item[\onlypre paperheight] 纸张高度。|paperheight=|\meta{length}。
+% \item[\onlypre papersize] 纸张的宽度和高度。|papersize=|\argii{width}{height}\ \ 或\ \ |papersize=|\meta{length}。
+% \item[\onlypre landscape] 将纸张方向切换为横向模式(landscape mode)。
+% \item[\onlypre portrait] 将纸张方向切换为纵向模式(portrait mode)。这相当于 |landscape=false|。
+% \end{Options}
+%
+% 用于纸张名称(例如 |a4paper|)与方向即 |portrait| (纵向)和 |landscape| (横向)的选项可以
+% 设置为文档类选项(document class options)。例如，您可以设置 |\documentclass[a4paper,landscape]{article}|，
+% 然后在 \Gm\ 中会处理 |a4paper| 和 |landscape|。这也是 |twoside| (双开面)和 |twocolumn| (双栏)的情况
+% (另见第~\ref{sec:dimension}~节)。
+%
+% \subsection[布局尺寸]{\heiti 布局尺寸}
+%
+%  无论纸张尺寸(paper size)如何，都可以使用本节中描述的选项指定布局区域(layout area)。
+%  这些选项将有助于将指定的布局(specified layout)打印到不同尺寸的纸张上。例如，对
+%  于 |a4paper| 和 |layout=a5paper|，宏包使用“A5”布局(layout)来计算“A4”纸张(paper)上的
+%  版口(margins)。布局尺寸(layout size)默认为与纸张(paper)相同。布局尺寸的选项
+%  在 \cs{newgeometry}\ 中可用，因此您可以更改文档中间的(middle)布局尺寸。纸张尺寸本身无法更改。
+%  图~\ref{fig:layoutandpaper}~显示了布局(|layout|)和纸张(|paper|)之间的区别。
+% \begin{Options}
+% \item[layout：] 即布局(layout)，按纸张名称(paper name)指定布局尺寸(layout size)。
+% |layout=|\meta{paper-name}。\Gm\ 中定义的所有纸张名称都可用。详见第~\ref{sec:paper}~节。
+% \item[layoutwidth：] 布局(layout)的宽度。|layoutwidth=|\meta{length}。
+% \item[layoutheight：] 布局(layout)的高度。|layoutheight=|\meta{length}。
+% \item[layoutsize：] 即布局的尺寸(layoutsize)。布局的宽度和高度。|layoutsize=|\argii{width}{height}\ 或 |layoutsize=|\meta{length}。
+% \item[layouthoffset：] 即布局水平偏移量(layouthoffset)，指定距纸张左边缘(left edge)的水平偏移量(horizontal offset)。|layouthoffset=|\meta{length}。
+% \item[layoutvoffset：] 即布局垂直偏移量(layoutvoffset)，指定距纸张上边缘(top edge)的垂直偏移量(vertical offset)。|layoutvoffset=|\meta{length}。
+% \item[layoutoffset：] 同时指定水平偏移量和垂直偏移量。|layoutoffset=|\argii{hoffset}{voffset}\ 或\ |layoutsize=|\meta{length}。
+% \end{Options}
+%
+% \vspace{1em}
+%
+% \begin{figure}[H]
+%  \centering\small
+%  {\unitlength=.6pt
+%  \begin{picture}(450,250)(0,-10)
+%  \put(20,1){\makebox(168,12)[r]{\gpart{paper}\ {\scriptsize (\gpart{纸张})}}}
+%  \put(20,0){\framebox(170,230){}}
+%  \put(21,40){\dashbox{3}(140,189){}}
+%  \put(21,26){\makebox(140,12)[r]{\gpart{layout}\ {\scriptsize (\gpart{布局})}}}
+%  \put(40,51){\makebox(100,10){\gpart{foot}\ {\tiny (\gpart{页脚})}}}
+%  \put(40,50){\line(1,0){100}}
+%  \put(40,65){\framebox(100,125){\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put(40,200){\framebox(100,10){\gpart{head}\ {\tiny (\gpart{页眉})}}}
+%  \put(20,245){\makebox(140,20){|layoutwidth|}}
+%  \put(20,230){\makebox(140,20){\scriptsize |(布局宽度)|}}
+%  \put(40,240){\vector(-1,0){20}}
+%  \put(140,240){\vector(1,0){20}}
+%  \put(10,145){\vector(0,1){85}}
+%  \put(15,125){\makebox(0,20)[r]{|layoutheight|}}
+%  \put(8,110){\makebox(0,20)[r]{\scriptsize |(布局高度)|}}
+%  \put(10,125){\vector(0,-1){85}}
+%  \put(280,1){\makebox(168,12)[r]{\gpart{paper}\ {\scriptsize (\gpart{纸张})}}}
+%  \put(280,0){\framebox(170,230){}}
+%  \put(293,35){\dashbox{3}(140,189){}}
+%  \put(293,21){\makebox(140,12)[r]{\gpart{layout}\ {\scriptsize (\gpart{布局})}}}
+%  \put(312,46){\makebox(100,10){\gpart{foot}\ {\tiny (\gpart{页脚})}}}
+%  \put(312,45){\line(1,0){100}}
+%  \put(312,60){\framebox(100,125){\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put(312,195){\framebox(100,10){\gpart{head}\ {\tiny (\gpart{页眉})}}}
+%  \put(235,245){\makebox(80,20)[l]{|layouthoffset|}}
+%  \put(235,230){\makebox(80,20)[l]{\scriptsize |(布局水平偏移量)|}}
+%  \put(260,210){\vector(1,0){20}}
+%  \put(308,210){\vector(-1,0){15}}
+%  \put(260,210){\line(-1,2){10}}
+%  \put(345,245){\makebox(100,20){|layoutvoffset|}}
+%  \put(350,230){\makebox(100,20){\scriptsize |(布局垂直偏移量)|}}
+%  \put(350,250){\vector(0,-1){20}}
+%  \put(350,209){\vector(0,1){15}}
+%  \end{picture}}
+%  \caption[layout and paper]{%
+%  \begin{minipage}[t]{.7\textwidth}\raggedright\small
+%  与布局尺寸(layout size)相关的尺寸。\\
+%  {\kaiti 请注意：布局尺寸默认为与纸张尺寸( paper size)相同，
+%  因此在大多数情况下不必明确指定布局相关选项(layout-related options)。}
+%  \end{minipage}}
+%  \label{fig:layoutandpaper}
+% \end{figure}
+%
+% \subsection[正文尺寸]{\heiti 正文尺寸}\label{sec:body}
+%
+% 本节介绍了设定 \gpart{total body}\ \ (版心、可打印区)尺寸的选项。
+%
+% \begin{Options}
+% \item[hscale]
+%    版心(\gpart{total body})宽度与纸张宽度(\cs{paperwidth})之比。|hscale=|\meta{h-scale}，
+%    例如，|hscale=0.8| 等同于 |width=0.8|\cs{paperwidth}。(默认为0.7)
+% \item[vscale]
+%    版心(\gpart{total body})高度与纸张高度(\cs{paperheight})之比，例如，|vscale=|\meta{v-scale}。(默认为0.7)。
+%    |vscale=0.9| 等同于 |height=0.9|\cs{paperheight}。
+% \item[scale] 版心(\gpart{total body})与纸张的比例。|scale=|\argii{h-scale}{v-scale}\ 或\ |scale=|\meta{scale}。(默认为0.7)。
+% \item[width\OR totalwidth] ~\\
+%    版心(\gpart{total body})的宽度。|width=|\meta{length}\ 或\ |totalwidth=|\meta{length}。
+%    该尺寸默认为 |textwidth| (正文宽度)，但如果 |includemp| 设置为 |true|，则 |width| $\ge$ |textwidth|，
+%    因为 |width| (版心宽度)包含了旁注(marginal notes)的宽度。如果同时指定了 |textwidth| (正文宽度) 和 |width|  (版心宽度)，
+%    则 |textwidth| (正文宽度)的值优先于 |width| (版心宽度)的值。
+% \item[height\OR totalheight] ~\\
+%    版心(\gpart{total body})的高度，默认情况下包含了页眉(header)和页脚(footer)。
+%    如果设置了 |includehead| 或 |includefoot|，则 |height| (版心高度)包含了页眉或页脚以及 |textheight|(正文高度)。
+%    |height=|\meta{length}\ 或\ |totalheight=|\meta{length}。如果同时指定了 |textheight| (正文高度)和 |height| (版心高度)，
+%    则 |height| (版心高度)将被忽略。
+% \item[total] 版心(\gpart{total body})的宽度和高度。|total=|\argii{width}{height}\ 或\ |total=|\meta{length}。
+% \item[textwidth] 指定 \cs{textwidth}\ (正文宽度)，即 \gpart{body}\ (正文、文本区域)的宽度。|textwidth=|\meta{length}。
+% \item[textheight] 指定 \cs{textheight}\ (正文高度)，即 \gpart{body}\ (正文、文本区域)的高度。|textheight=|\meta{length}。
+% \item[text\OR body] 同时指定页面正文(body)的 \cs{textwidth}\ (正文宽度)和 \cs{textheight}\ (正文高度)。
+%    |body=|\argii{width}{height}\ \ 或\ \ |text=|\meta{length}。
+% \item[lines] 允许用户通过行数(number of lines)来指定 \cs{textheight}\ (正文高度)。|lines|=\meta{integer}。
+% \item[includehead] 将页面的页眉(head)，即 \cs{headheight}\ (页眉高度)和 \cs{headsep}\ (页眉底与正文顶的间距)
+%    都包含进了 \gpart{total body}\ (版心、可打印区)。默认设置为 |false|。作用和 |ignorehead| 的作用相反。
+%    参见图~\ref{fig:includes}~和图~\ref{fig:modes}。
+% \item[includefoot] 将页面的页脚(foot)，即 \cs{footskip}\ (正文底与页脚底的间距)包含进
+%    了 \gpart{total body}\ (版心、可打印区)，作用和 |ignorefoot| 的作用相反。
+%    默认情况下为 |false|。参见图~\ref{fig:includes}~和图~\ref{fig:modes}。
+% \item[includeheadfoot]~\\
+%    将 |includehead| 和 |includefoot| 设置为 |true|，作用与 |ignoreheadfoot| 的作用相反。
+%    参见图~\ref{fig:includes}~和图~\ref{fig:modes}。
+% \item[includemp] 在计算水平参数(horizontal calculation)时，将旁注(margin notes)，
+%    即 \cs{marginparwidth}\ (旁注宽度)和 \cs{marginparsep}\ (旁注与正文的间距)均包含
+%    在 \gpart{body}\ (正文)中。
+% \item[includeall] 将 |includeheadfoot| 和 |includemp| 均设置为 |true|。见图~\ref{fig:modes}。
+% \item[ignorehead] 在确定垂直布局(vertical layout)时，忽略页眉(head)，即 |headheight| (页眉高度)
+%    和 |headsep| (页眉底与正文顶的间距)，但不改变这些长度。它等同于 |includehead=false|。
+%    默认设置为 |true|。另请参考 |includehead|。
+% \item[ignorefoot] 在确定垂直布局(vertical layout)时，忽略页脚(foot)，
+%    即 |footskip| (正文底与页脚底的间距)，但不改变这个长度。默认设置为 |true|。
+%    另请参考 |includefoot|。
+% \item[ignoreheadfoot]~\\ 将|ignorehead| 和 |ignorefoot| 均设置为 |true|。
+%    另请参见 |includeheadfoot|。
+% \item[ignoremp]
+%    在确定水平版口(horizontal margins)时忽略旁注(marginal notes)(默认为 |true|)。
+%    如果旁注超出页面(page)，则 |verbose=true| 时将显示警告消息。另请参见 |includemp| 和图~\ref{fig:modes}。
+% \item[ignoreall]
+%    将 |ignoreheadfoot| 和 |ignoremp| 均设置为 |true|。另请参见 |includeall|。
+% \item[heightrounded]~\\
+%    该选项使得 \cs{textheight}\ (正文高度)成为 \textit{n}\ 倍(\textit{n}\ 为整数)
+%    的 \cs{baselineskip}\ 加上 \cs{topskip}\ (页眉顶与正文顶的间距)，以避免在某些情况下
+%    出现“underfull vbox (未满 vbox)”。例如，如果 \cs{textheight}\ 为486pt，
+%    而 \cs{baselineskip}\ 为12pt，\cs{topskip}\ 为10pt，则：
+%    \begin{quote}
+%      $(39\times12\textrm{pt}+10\textrm{pt}=)\: 478\textrm{pt}
+%       < 486\textrm{pt} <
+%      490\textrm{pt} \:(=40\times12\textrm{pt}+10\textrm{pt})$,
+%    \end{quote}
+%    因此，\cs{textheight}\ 四舍五入为 490pt。在默认情况下 |heightrounded=false|。
+% \end{Options}
+%
+% 图~\ref{fig:modes}~显示了不同布局模式(layout modes)的各种布局。页眉和页脚的尺寸
+% 可以通过 |nohead| 或 |nofoot| 模型控制，该模型将每个长度直接设置为 0pt。
+% 另一方面，前缀为“|ignore| (忽略)”的选项{\kaiti 不会}更改相应的原始尺寸(native dimensions)。
+%
+% \vspace{1em}
+%
+% \begin{figure}[H]
+%  \centering\small
+%  {\unitlength=.65pt
+%  \begin{picture}(460,525)(0,0)
+%  \put( 20,310){\framebox(120,170){}}
+%  \put( 20,507){\makebox(120,0)[bl]%
+%  {\textbf{(a)}\ \ |includeheadfoot|}}
+%  \put( 20,460){\line(1,0){120}}\put( 20,450){\line(1,0){120}}
+%  \put( 20,330){\line(1,0){120}}
+%  \put( 20,485){\makebox(120,0)[br]{\gpart{total body}\ {\scriptsize (\gpart{版心})}}}
+%  \put( 20,335){\makebox(120,0)[bc]{|textwidth| {\tiny |(正文的宽度)|}}}
+%  \put(143,470){\makebox(0,0)[l]{|headheight|{\tiny |(页眉高)|}}}
+%  \put(143,450){\makebox(0,0)[l]{|headsep|}}
+%  \put(143,439){\makebox(0,0)[l]{\tiny |(页眉底与正文顶的间距)|}}
+%  \put(143,390){\makebox(0,0)[l]{|textheight|}}
+%  \put(143,380){\makebox(0,0)[l]{{\tiny |(正文的高度)|}}}
+%  \put(143,320){\makebox(0,0)[l]{|footskip|}}
+%  \put(143,309){\makebox(0,0)[l]{\tiny |(正文底与页脚底的间距)|}}
+%  \put( 10,461){\makebox(120,20)[bc]{\gpart{head}\ {\scriptsize (\gpart{页眉})}}}
+%  \put( 10,320){\makebox(120,140)[c]{\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put( 10,311){\makebox(120,10)[c]{\gpart{foot}\ {\scriptsize (\gpart{页脚})}}}
+%  \put(250,310){\framebox(120,170){}}
+%  \put(250,507){\makebox(120,0)[bl]%
+%  {\textbf{(b)}\ \ |includeall|}}
+%  \put(250,460){\line(1,0){95}}\put(250,450){\line(1,0){95}}
+%  \put(250,330){\line(1,0){95}}\put(345,330){\line(0,1){120}}
+%  \put(350,330){\line(0,1){120}}\put(350,450){\line(1,0){20}}
+%  \put(350,330){\line(1,0){20}}
+%  \put(250,485){\makebox(120,0)[br]{\gpart{total body}\ {\scriptsize (\gpart{版心})}}}
+%  \put(250,461){\makebox(95,20)[bc]{\gpart{head}\ {\scriptsize (\gpart{页眉})}}}
+%  \put(250,320){\makebox(95,140)[c]{\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put(385,390){\makebox(95,0)[cl]%
+%  {\gpart{\shortstack[l]{marginal note}}\ {\scriptsize (\gpart{旁注})}}}
+%  \put(250,311){\makebox(95,10)[c]{\gpart{foot}\ {\scriptsize (\gpart{页脚})}}}
+%  \put(250,335){\makebox(95,0)[bc]{|textwidth|{\tiny |(正文宽)|}}}
+%  \multiput(360, 390)(4,0){6}{\line(1,0){2}}
+%  \multiput(348,333)(0,-4){12}{\line(0,1){2}}
+%  \multiput(360,333)(0,-4){8}{\line(0,1){2}}
+%  \put(355,292){\makebox(0,0)[bl]{|marginparwidth| {\tiny |(旁注的宽度)|}}}
+%  \put(345,275){\makebox(0,0)[bl]{|marginparsep| {\tiny |(旁注与正文的间距)|}}}
+%  \put( 20, 40){\framebox(120,170){}}
+%  \put( 20,237){\makebox(120,0)[bl]%
+%  {\textbf{(c)}\ \ |includefoot|}}
+%  \put( 20, 60){\line(1,0){120}}
+%  \put( 20,215){\makebox(120,0)[br]{\gpart{total body}\ {\scriptsize (\gpart{版心})}}}
+%  \put(143,130){\makebox(0,0)[l]{|textheight|}}
+%  \put(143,120){\makebox(0,0)[l]{{\tiny |(正文的高度)|}}}
+%  \put(143, 50){\makebox(0,0)[l]{|footskip|}}
+%  \put(143, 39){\makebox(0,0)[l]{\tiny |(正文底与页脚底的间距)|}}
+%  \put( 20, 50){\makebox(120,160)[c]{\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put( 20, 41){\makebox(120,10)[c]{\gpart{foot}\ {\scriptsize (\gpart{页脚})}}}
+%  \put( 20, 65){\makebox(120,10)[c]{|textwidth| {\tiny |(正文的宽度)|}}}
+%  \put(250, 40){\framebox(120,170){}}
+%  \put(250,237){\makebox(120,0)[bl]%
+%  {\textbf{(d)}\ \ |includefoot,includemp|}}
+%  \put(250, 60){\line(1,0){95}}\put(350, 60){\line(1,0){20}}
+%  \put(250,215){\makebox(120,0)[br]{\gpart{total body}\ {\scriptsize (\gpart{版心})}}}
+%  \put(250, 50){\makebox(95,160)[c]{\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put(385,130){\makebox(95,0)[cl]%
+%  {\gpart{\shortstack[l]{marginal note}}\ {\scriptsize (\gpart{旁注})}}}
+%  \put(250, 41){\makebox(95,10)[c]{\gpart{foot}\ {\scriptsize (\gpart{页脚})}}}
+%  \put(250, 65){\makebox(95,0)[bc]{|textwidth|{\tiny |(正文宽)|}}}
+%  \put(345, 60){\line(0,1){150}}\put(350, 60){\line(0,1){150}}
+%  \multiput(360, 130)(4,0){6}{\line(1,0){2}}
+%  \multiput(348, 63)(0,-4){12}{\line(0,1){2}}
+%  \multiput(360, 63)(0,-4){8}{\line(0,1){2}}
+%  \put(355,22){\makebox(0,0)[bl]{|marginparwidth| {\tiny |(旁注的宽度)|}}}
+%  \put(345, 5){\makebox(0,0)[bl]{|marginparsep| {\tiny |(旁注与正文的间距)|}}}
+%  \end{picture}}
+%  \caption[具有不同布局模式的 \gpart{total body}\ 的布局示例]{%
+%  \begin{minipage}[t]{.8\textwidth}\small
+%    具有不同选项(switches)的 \gpart{total body}\ \ (版心、可打印区)的布局示例。\\
+%    {\kaiti (a) |includeheadfoot|，(b) |includeall|，(c) |includefoot|，(d) |includefoot,includemp|。
+%    如果将 |reversemp| 设置为 |true|，则在每页上都会交换旁注(marginal notes)的位置。
+%    |twoside| 选项交换版口(margins)和旁注在反面页(verso pages)上的位置。请注意，
+%    如果有旁注，不管是有 |ignoremp| 或 |includemp=false|，还是在某些情况下超出了页面的范围，
+%    旁注都会被打印出来。}
+%  \end{minipage}}
+%  \label{fig:modes}
+% \end{figure}
+%
+% \vspace{1em}
+%
+% 以下选项可以使用大括号中的三个逗号分隔的值同时设定正文(body)和版口(margins)。
+%
+% \begin{Options}
+% \item[hdivide]
+%   水平方向的参数(left,width,right)。|hdivide=|\argiii{left margin}{width}{right margin}。
+%   请注意，不应指定所有三个参数。使用此选项的最佳方法是指定三个参数中的两个，
+%   并将剩下的一个设置为 null (nothing)或“|*|”。例如，当您设置 |hdivide={2cm,15cm, }| 时，
+%   页面右边缘的(right-side edge of page)版口会被自动设置成 |paperwidth-2cm-15cm|。
+% \item[vdivide]
+%   垂直方向的参数(top,height,bottom)。\\ |vdivide=|\argiii{top margin}{height}{bottom margin}。
+% \item[divide]
+%   |divide=|\vargiii{$A$}{$B$}{$C$}\ 被解释为 |hdivide=|\vargiii{$A$}{$B$}{$C$}\ 和\ |vdivide=|\vargiii{$A$}{$B$}{$C$}。
+% \end{Options}
+%
+% \subsection[版口尺寸]{\heiti 版口尺寸}\label{sec:margin}
+%
+% 下面列出了指定版口尺寸(size of the margins)的选项：
+%
+% \begin{Options}
+% \item[left\OR lmargin\OR inner]~\\
+%    \gpart{total body}\ (版心、可打印区)的订口(left margin)(对于单开面[oneside])或
+%    里口(inner margin)(对于双开面[twoside])。换言之，也就是纸张左(内)边缘与
+%    版心(\gpart{total body})最左边之间的距离。|left=|\meta{length}。|inner| 没有特殊的含义，
+%    只是 |left| 和 |lmargin| 的别名。
+% \item[right\OR rmargin\OR outer]~\\
+%    \gpart{total body}\ (版心、可打印区)的切口(right)或外口(outer margin)。|right=|\meta{length}。
+% \item[top\OR tmargin]
+%    页面的天头(top margin)。|top=|\meta{length}。请注意，此选项与原始尺寸(native dimension)\ \cs{topmargin}\ 无关。
+% \item[bottom\OR bmargin]~\\
+%    页面的地脚(bottom margin)。|bottom=|\meta{length}。
+% \item[hmargin] 订口(left margin)和切口(right margin)。|hmargin=|\argii{left margin}{right margin}\ 或 |hmargin=|\meta{length}。
+% \item[vmargin]
+%   天头(top margin)和地脚(bottom margin)。|vmargin=|\argii{top margin}{bottom margin} 或 |vmargin=|\meta{length}。
+% \item[margin]
+%   |margin=|\vargii{$A$}{$B$}\ 等同于 |hmargin=|\vargii{$A$}{$B$}\ 和 |vmargin=|\vargii{$A$}{$B$}。|margin=|$A$ 自动展开为 |hmargin=|$A$ 和 |vmargin=|$A$。
+% \item[hmarginratio]
+%    |left| (inner) 与 |right| (outer)即订口(里口)与切口(外口)的水平版口比例(horizontal margin ratio)。
+%    应使用冒号分隔的两个值指定 \meta{ratio}\ 的值。每个值都应该是小于 100 的正整数，
+%    以防止算术溢出(arithmetic overflow)，例如，|2:3| 而不是 |1:1.5|。
+%    默认比例为单开面 |1:1|，双开面 |2:3|。
+% \item[vmarginratio]
+%    |top| 与 |bottom| 即天头与地脚的水平版口比例(vertical margin ratio)。默认比例为 |2:3|。
+% \item[marginratio\OR ratio]~\\
+%   水平版口和垂直版口的比例。|marginratio=|\argii{horizontal ratio}{vertical ratio}\ 或 |marginratio=|\meta{ratio}。
+% \item[hcentering]
+%   设置水平方向自动居中(auto-centering)，相当于 |hmarginratio=1:1|。单开面默认设置为 |true|。另请参见 |hmarginratio|。
+% \item[vcentering]
+%   设置垂直方向自动居中，相当于 |vmarginratio=1:1|。默认值为 |false|。另请参见 |vmarginratio|。
+% \item[centering]
+%   设置自动居中，相当于 |marginratio=1:1|。另请参见 |marginratio|。默认值为 |false|。另请参见 |marginratio|。
+% \item[twoside]
+%   切换到双开面模式(twoside mode)，这时订口(left margins)和切口(right margins)的设置会翻页互换(swapped on verso pages)。
+%   该选项设置 \cs{@twoside}\ 和 \cs{@mparswitch}\ 的切换。另请参见 |asymmetric|。
+% \item[asymmetric]
+%   实现了一种双开面布局(twosided layout)，在这种布局中，订口和切口不会因翻页而互换位置
+%   (通过将 \cs{oddsidemargin}\ 设置为 \cs{evensidemargin} |+| |bindingoffset|)，
+%   并且旁注(marginal notes)始终保持在同一侧。此选项可用作双开面选项(twoside option)的替代方案。
+%   另请参见 |twoside|。
+% \item[bindingoffset]~\\
+%   从页面的左手侧(lefthand-side of the page)删除指定的空白(对于单开面)，或从内侧删除指定的空白(对于双开面)。
+%   |bindingoffset=|\meta{length}。如果页面通过压装装订(press binding)(胶粘、缝合、扒钉\ldots)，
+%   这很有用。见图~\ref{fig:bindingoffset}。
+% \item[hdivide] 参见第~\ref{sec:body}~节中的说明。
+% \item[vdivide] 参见第~\ref{sec:body}~节中的说明。
+% \item[divide] 参见第~\ref{sec:body}~节中的说明。
+%
+% \vspace{1em}
+%
+% \end{Options}
+% \begin{figure}[H]
+%  \centering\small
+%  {\unitlength=.65pt
+%  \begin{picture}(500,270)(0,0)
+%  \put(20,0){\framebox(170,230){}}
+%  \put(20,265){\makebox(80,20)[l]{\textbf{a)}\ \ \ 单开面(oneside)的每页或}}
+%  \put(20,245){\makebox(80,20)[l]{\hspace{3.5ex}双开面(twoside)的奇数页}}
+%  \put(110,227){\makebox(80,20)[r]{\gpart{paper}\ {\scriptsize (\gpart{纸张})}}}
+%  \put(55,36){\framebox(110,170)[tc]{\gpart{total body}}}
+%  \put(55,21){\makebox(110,170)[tc]{\scriptsize (\gpart{版心、可打印区})}}
+%  \multiput(38,0)(0,7){33}{\line(0,1){4}}
+%  \put(38,100){\vector(1,0){17}}\put(55,100){\vector(-1,0){17}}
+%  \put(60,95){\makebox(80,10)[l]{|left| {\scriptsize |(订口)|}}}
+%  \put(60,80){\makebox(80,10)[l]{(|inner|,{\scriptsize |里口|})}}
+%  \put(165,100){\vector(1,0){25}}\put(190,100){\vector(-1,0){25}}
+%  \put(195,95){\makebox(80,10)[l]{|right|{\scriptsize |(切口)|}}}
+%  \put(195,80){\makebox(80,10)[l]{(|outer|,{\scriptsize |外口|})}}
+%  \put(20,16){\vector(1,0){18}}
+%  \put(45,10){\makebox(80,10)[bl]{|bindingoffset|{\tiny |(装订偏移量)|}}}
+%  \put(280,265){\makebox(80,20)[l]{\textbf{b)}\ \ \ 双开面(twoside)的}}
+%  \put(280,245){\makebox(80,20)[l]{\hspace{3.5ex}偶数页(back, 背面)}}
+%  \put(280,0){\framebox(170,230){}}
+%  \put(370,227){\makebox(80,20)[r]{\gpart{paper}\ {\scriptsize (\gpart{纸张})}}}
+%  \put(305,36){\framebox(110,170)[tc]{\gpart{total body}}}
+%  \put(305,21){\makebox(110,170)[tc]{\scriptsize (\gpart{版心、可打印区})}}
+%  \multiput(432,0)(0,7){33}{\line(0,1){4}}
+%  \put(280,100){\vector(1,0){25}}\put(305,100){\vector(-1,0){25}}
+%  \put(310,110){\makebox(80,10)[l]{\scriptsize|(外口)|}}
+%  \put(310,95){\makebox(80,10)[l]{|outer|}}
+%  \put(310,80){\makebox(80,10)[l]{(|right|)}}
+%  \put(310,65){\makebox(80,10)[l]{\scriptsize|(切口)|}}
+%  \put(415,100){\vector(1,0){17}}\put(432,100){\vector(-1,0){17}}
+%  \put(373,110){\makebox(80,10)[l]{\scriptsize|(里口)|}}
+%  \put(373,95){\makebox(80,10)[l]{|inner|}}
+%  \put(373,80){\makebox(80,10)[l]{(|left|)}}
+%  \put(373,65){\makebox(80,10)[l]{\scriptsize|(订口)|}}
+%  \put(450,16){\vector(-1,0){18}}
+%  \put(289,10){\makebox(80,10)[bl]{{\tiny |(装订偏移量)|}|bindingoffset|}}
+%  \end{picture}}
+%  \vspace{1em}
+%  \caption[\texttt{bindingoffset} option]{%
+%   \begin{minipage}[t]{.8\textwidth}\raggedright\small
+%   |bindingoffset| (装订偏移量)选项将指定的长度添加到订口(里口，inner margin)。\\ {\kaiti 注意：
+%   |twoside| (双开面)选项在偶数页(even pages)会交换水平版口(horizontal margins)和
+%   旁注(marginal notes)(连同 |bindingoffset|)的位置(参见 \textbf{b)})。
+%   但是 |asymmetric| (不对称)这个选项不会交换版口和旁注的位置，但仍然会交换 |bindingoffset| 的位置。}
+%   \end{minipage}}
+%  \label{fig:bindingoffset}
+% \end{figure}
+%
+% \subsection[原始尺寸]{\heiti 原始尺寸}\label{sec:dimension}
+%
+% 下面的选项会覆盖 \LaTeX\ 的原始尺寸(native dimensions)来改变(switches for)
+% 页面布局(page layout)(请参见图~\ref{fig:layout}~中的右侧部分)。
+%
+% \begin{Options}
+% \item[headheight\OR head]~\\
+%    修改 \cs{headheight}，即页眉的高度(height of header)。|headheight=|\meta{length}\ 或 |head=|\meta{length}。
+% \item[headsep]
+%    修改 \cs{headsep}，即页眉底和正文(body)顶的间距。|headsep=|\meta{length}。
+% \item[footskip\OR foot]~\\
+%    修改 \cs{footskip}，即正文最后一行文本的基线(baseline)与页脚基线的间距[译者注：正文底与页脚底的间距]。
+%    |footskip=|\meta{length}\ 或 |foot=|\meta{length}。
+% \item[nohead]
+%    消除(eliminates)页眉(head)，这等同于 \cs{headheight}|=0pt| 和 \cs{headsep}|=0pt|。
+% \item[nofoot] eliminates spaces for the foot of the page, which is
+%    equivalent to \cs{footskip}|=0pt|.
+%    消除(eliminates)页脚(foot)，这等同于 \cs{footskip}|=0pt|。
+% \item[noheadfoot]
+%    等同于 |nohead| 和 |nofoot|，这意味着将 \cs{headheight}、\cs{headsep}\ 和 \cs{footskip}\ 都设置为 |0pt|。
+% \item[footnotesep]
+%    更改 \cs{skip}\cs{footins}，即正文文本底部(bottom of text body)和脚注文本顶部(top of footnote text)之间的间距。
+% \item[marginparwidth\OR marginpar]~\\
+%    更改 \cs{marginparwidth}，即旁注(marginal notes)的宽度。|marginparwidth=|\meta{length}。
+% \item[marginparsep]
+%    修改 \cs{marginparsep}，即旁注(marginal notes)与正文(body)的间距。|marginparsep=|\meta{length}。
+% \item[nomarginpar]
+%    将旁注的空间(spaces for marginal notes)缩小为 0pt，这等同于 \cs{marginparwidth}|=0pt| 和 \cs{marginparsep}|=0pt|。
+% \item[columnsep]
+%    修改 \cs{columnsep}，即在双栏模式(|twocolumn| mode)中两栏的间距。
+% \item[hoffset]  修改 \cs{hoffset}，即水平偏移量(horizontal offset)。|hoffset=|\meta{length}。
+% \item[voffset]  修改 \cs{voffset}，即垂直偏移量(vertical offset)。|voffset=|\meta{length}。
+% \item[offset] 水平偏移量(horizontal offset)和垂直偏移量(vertical offset)。\\
+%    |offset=|\argii{hoffset}{voffset}\ 或 |offset=|\meta{length}.
+% \item[twocolumn]
+%   使用 \cs{@twocolumntrue}\ 设置双栏模式(|twocolumn| mode)。|twocolumn=false| 表示
+%   具有 \cs{@twocolumnfalse}\ 的单栏模式(|onecolumn| mode)。您可以指定 |onecolumn| (默认为 |true|)，
+%   而不是 |twocolumn=false|。
+% \item[onecolumn]
+%   和 |twocolumn=false| 作用相同。另一方面，|onecolumn=false| 和 |twocolumn| 作用相同。
+% \item[twoside]
+%   同时设置 \cs{@twosidetrue}\ 和 \cs{@mparswitchtrue}。见第~\ref{sec:margin}~节。
+% \item[textwidth] 直接设置 \cs{textwidth}，即正文宽度。见第~\ref{sec:body}~节。
+% \item[textheight] 直接设置 \cs{textheight}，即正文高度。见第~\ref{sec:body}~节。
+% \item[reversemp\OR reversemarginpar]~\\
+%   使用 \cs{@reversemargintrue}\ 使旁注(marginal notes)显示在左(内)版口即订口(里口)位置。
+%   该选项不会更改 |includemp| 模式(|includemp| mode)。默认设置为 |false|。
+% \end{Options}
+%
+% \subsection[驱动程序]{\heiti 驱动程序}\label{sec:drivers}
+%
+% 该宏包支持的驱动程序(drivers)有：|dvips|、|dvipdfm|、|pdftex|、|luatex|、|xetex| 和 |vtex|。
+% 您可以通过设置 |dvipdfm| 来使用 \textsf{dvipdfmx}\ 和 \textsf{xdvipdfmx}，
+% |dvipdfmx| 和 |xdvipdfmx| 是\ |dvipdfm|\ 选项的两个别名当然也是受支持的。
+% 您还可以通过设置 |pdftex| 来使用 \textsf{pdflatex}，设置 |vtex| 来使用 V\TeX{}\ 环境。
+% 驱动程序选项是专用的(exclusive)。驱动程序可以通过 |driver=|\meta{driver name}\ 来设置，
+% 也可以通过像 |pdftex| 这样的驱动程序的名称来直接设置。\Gm\ 宏包默认支持这些驱动程序。
+% 因此，在大多数情况下您无需设置驱动程序。但是，如果要使用 |dvipdfm|，则应显式指定(specify it explicitly)它。
+%
+% \begin{Options}
+% \item[\onlypre driver]
+% 用 |driver=|\meta{driver name}\ 来指定驱动程序(driver)。|dvips|、|dvipdfm|、|pdftex|、
+% |luatex|、|vtex|、|xetex|、|auto| 和 |none| 均可用作驱动程序的名称(driver name)。
+% 上述名称 |auto| 和 |none| 必须通过 |driver=| 来指定，剩余的其它名称都可以不通过 |driver=| 来直接指定。
+% |driver=auto| 让系统自动决定(auto-detection)当前使用的驱动程序，无论之前的设置是什么。
+% |driver=none| 禁用自动决定(auto-detection)并设置为无驱动程序(no driver)，
+% 从而不让系统自动决定使用的驱动程序，当您希望让其他宏包不在当前的驱动程序设定(driver setting)
+% 下工作时，这可能很有用。例如，如果要将 \textsf{crop}\ 宏包与 \Gm\ 一起使用，
+% 应在 \textsf{crop}\ 宏包之前调用 |\usepackage[driver=none]{geometry}|。
+% \item[\onlypre dvips]
+%     使用 \cs{special}\ 宏(macro)在 dvi 输出(dvi output)中写入纸张尺寸(paper size)。
+%     例如，如果您使用 \textsl{dvips}\ 作为 DVI 转 PS 驱动程序(DVI-to-PS driver)，
+%     通过调用 |\geometry{a3paper,landscape}| 在 A3 纸张上横向(landscape orientation)
+%     打印一个文档，则不需要在 \textsl{dvips}\ 中设置“|-t a3 -t landscape|”这个选项。
+% \item[\onlypre dvipdfm]
+%      除了水平方向校正(landscape correction)外，它的工作方式与 |dvips| 类似。
+%      使用 \textsf{dvipdfmx}\ 和 \textsf{xdvipdfmx}\ 来处理 dvi 输出(dvi output)时，可以设置此选项。
+% \item[\onlypre pdftex]
+%      在内部自动设置 \cs{pdfpagewidth}\ 和 \cs{pdfpageheight}。
+% \item[\onlypre luatex]
+%      在内部自动设置 \cs{pagewidth}\ 和 \cs{pageheight}。
+% \item[\onlypre xetex]
+%     与 |pdftex| 相同，只是忽略了 \XeLaTeX{}\ 中未定义的 |\pdf{h,v}origin|。
+%     在版本5中引入了此选项。请注意在 \TeX{} Live\ 中已不再需要“geometry.cfg”，
+%     在 \TeX{} Live\ 中禁用自动检测例程(auto-detection routine)和设置 |pdftex|，
+%     但即使未删除它也不会产生问题。如果您想使用在 \XeTeX{}\ 中 dvipdfm 的一些特殊功能，
+%     除了使用 |xetex|，也可以在 \XeLaTeX{}\ 中使用 |dvipdfm| 选项。
+% \item[\onlypre vtex]
+%     在 V\TeX 中设置 \cs{mediawidth}\ 和 \cs{mediaheight}\ 的值。选择此驱动程序(显式或自动)后，
+%     \Gm\ 将自动检测(auto-detect) V\TeX 中选择的输出模式(output mode)(DVI、PDF 或 PS)，
+%     并对其进行适当设置。
+% \end{Options}
+% 如果显式驱动程序设置(explicit driver setting)与正在使用的排版程序(typesetting program)不匹配，
+% 将选择默认驱动程序 |dvips|。
+%
+% \subsection[其他选项]{\heiti 其他选项}
+%
+%  这里介绍了其他有用的选项。
+%
+% \begin{Options}
+% \item[\onlypre verbose]
+%   在终端(terminal)上显示参数结果(parameter results)。|verbose=false| (默认值)
+%   仍然将它们放入日志文件(log file)中。
+% \item[\onlypre reset]
+%   设置回布局尺寸(layout dimensions)并切换到加载 \Gm\ 宏包之前的设置。
+%   |geometry.cfg| 中给出的选项也被清除。请注意，这不能使用 |truedimen| 重置 |pass| 和 |mag|。
+%   |reset=false| 无效，并且无法取消先前的 |reset|(|=true|)(如果有)。例如，当您输入：
+%   \begin{quote}
+%     |\documentclass[landscape]{article}|\\
+%     |\usepackage[twoside,reset,left=2cm]{geometry}|
+%   \end{quote}
+%   在 |geometry.cfg| 使用 |\ExecuteOptions{scale=0.9}|，那么结果是，
+%   |landscape| 和 |left=2cm| 仍然有效，而 |scale=0.9| 和 |twoside| 则无效。
+% \item[\onlypre mag]
+%   设置放大倍数(magnification value)\ \cs{mag}，并根据放大倍数自动修改 \cs{hoffset}\ 和 \cs{voffset}。
+%   |mag=|\meta{value}。注意，\meta{value}\ 应该是一个整数值，大小通常为 1000。例如，
+%   在 |a4paper| 中设置 |mag=1414|，会提供了一个放大的打印(enlarged print)以适合 |a3paper|，|a3paper| 就
+%   是$1.414$(=$\sqrt{2}$)倍的 |a4paper|。字体放大(font enlargement)需要额外的磁盘空间。
+%   {\kaiti 请注意，在任何其他具有“true”尺寸设置之前设置 |mag|，例如 |1.5truein|、|2truecm| 等。}
+%   另请参见 |truedimen| 选项。
+% \item[\onlypre truedimen]
+%   将所有内部声明的尺寸值(internal explicit dimension values)更改为 \textit{true}\ 尺寸，
+%   例如，将 |1in| 更改为 |1truein|。通常，此选项将与 |mag| 选项一起使用。请注意，
+%   这对于外部指定的尺寸(externally specified dimensions)无效。例如，
+%   当您设置“\texttt{mag=1440, margin=10pt, truedimen}”时，版口(margins)不是“true”
+%   而是放大的(magnified)。如果要设置精确的版口，
+%   则应设置为“\texttt{mag=1440, margin=10truept, truedimen}”。
+% \item[\onlypre pass]
+%   让所有除 |verbose| 和 |showframe| 之外的 geometry 选项和计算结果(calculations)无效。
+%   它与顺序无关，可用于检查文档类(documentclass)、其他包宏、不用 \Gm\ 的手动设置等的
+%   的页面布局(page layout)。
+% \item[\onlypre showframe]
+%   显示文本区域(text area)和页面(page)等的可见框架(visible frames)，以及第一页中的
+%   页眉线(lines for the head)和页脚线(lines for the foot)。
+% \item[\onlypre showcrop]
+%   在用户指定的布局区域(layout area)的每个角落(corner)打印裁剪标记(crop marks)。
+% \end{Options}
+%
+% \clearpage
+%
+% \section{\heiti 进程选项}\label{sec:process}
+%
+% \subsection[加载顺序]{\heiti 加载顺序}\label{sec:loadorder}
+%
+% \Gm\ 将会首先加载 \TeX{}\ 能够找到的 |geometry.cfg| 文件。例如，在 |geometry.cfg| 中，
+% 您可以写入 |\ExecuteOptions{a4paper}|，以将 A4 纸张指定为默认纸张(default paper)。
+% 基本上，您可以把 \Gm\ 中定义的所有选项和 |\ExecuteOptions{}| 一起使用。
+%
+% 在文档前言中，参数的加载顺序如下：
+% \begin{enumerate}
+%  \item |geometry.cfg|，如果存在。
+%  \item 使用 |\documentclass[|\meta{options}|]{...}| 指定的选项。
+%  \item 使用 |\usepackage[|\meta{options}|]{geometry}| 指定的选项。
+%  \item
+%  使用 |\geometry{|\meta{options}|}| 指定的选项，可以被多次调用。\\
+%  (|reset| 选项将取消 |\usepackage{geometry}| 或 |\geometry| 中给出的指定选项。)
+% \end{enumerate}
+%
+% \subsection[选项顺序]{\heiti 选项顺序}\label{sec:optionorder}
+%
+%  \Gm\ 选项的规则(specification)与顺序无关(order-independent)，
+%  后来的选项会覆盖之前的或者相同的设置，例如：
+% \begin{center}
+% |[left=2cm, right=3cm]| 等同于 |[right=3cm, left=2cm]|.
+% \end{center}
+% 多次调用的选项将覆盖以前的设置。例如：
+% \begin{center}
+%  |[verbose=true, verbose=false]| 结果为 |verbose=false|.
+% \end{center}
+% |[hmargin={3cm,2cm}, left=1cm]| 与 |hmargin={1cm,2cm}| 相同，
+% 其中 left (或 inner)片口被 |left=1cm| 覆盖。
+%
+% |reset| 和 |mag| 是两个例外。|reset| 选项将使它之前所有的 geometry 选项(|pass| 除外)均失效。
+% 如果您设置了：
+% \begin{quote}
+% |\documentclass[landscape]{article}|\\
+% |\usepackage[margin=1cm,twoside]{geometry}|\\
+% |\geometry{a5paper, reset, left=2cm}|
+% \end{quote}
+% 然后 |margin=1cm|、|twoside| 和 |a5paper| 均失效，最终的效果等于：
+% \begin{quote}
+% |\documentclass[landscape]{article}|\\
+% |\usepackage[left=2cm]{geometry}|
+% \end{quote}
+%
+% |mag| 选项应设置在具有“true”长度的任何其他设置之前，例如 |left=1.5truecm|、|width=5truein| 等。
+% 可以在调用此宏包之前最早(primitive)设置 |\mag|。
+%
+% \subsection[优先级别]{\heiti 优先级别}\label{sec:priority}
+%
+% 有几种方法可以设置正文(\gpart{body})的尺寸(dimensions)：|scale| (比例)、|total| (总计)、
+% |text| (文本)和 |lines| (行数)。\Gm\ 宏包为更具体的规范(more concrete specification)
+% 提供了更高的优先级别(higher priority)。这是 \gpart{body}\ 的优先规则(priority rule)：
+% \[\begin{array}{c}
+% \textrm{优先级(priority)：}\qquad\textrm{低(low)}\quad
+%    \longrightarrow\quad\textrm{高(high)}\\[1em]
+% \left\{\begin{array}{l}|hscale|\ {\scriptsize |(版心与纸张的宽度比)|}\\|vscale|\  {\scriptsize |(版心与纸张的高度比)|}\\|scale|\  {\scriptsize |(版心与纸张的比例)|}
+%        \end{array}\right\} <
+% \left\{\begin{array}{l}|width|\  {\scriptsize |(版心的宽度)|}\\|height|\  {\scriptsize |(版心的高度)|}\\|total|\  {\scriptsize |(版心的宽和高)|}
+%        \end{array}\right\} <
+% \left\{\begin{array}{l}|textwidth|\  {\scriptsize |(正文的宽度)|}\\|textheight|\  {\scriptsize |(正文的高度)|}
+%         \\|text|\ {\scriptsize |(正文的宽和高)|}\end{array}\right\} < |lines|\ {\scriptsize |(行数)|}
+% \end{array}\]
+% 例如：
+% \begin{quote}
+%  |\usepackage[hscale=0.8, textwidth=7in, width=18cm]{geometry}|\ \ 的排版效果与
+% \end{quote}
+% |\usepackage[textwidth=7in]{geometry}|\ \ 的排版效果相同。\\[20pt] 另一个例子：
+% \begin{quote}
+%  |\usepackage[lines=30, scale=0.8, text=7in]{geometry}|\ \ 的排版效果是
+% \end{quote}
+% \texttt{[lines=30, textwidth=7in]}。
+%
+% \subsection[默认设置]{\heiti 默认设置}\label{sec:defaults}
+%
+% 本节总结了稍后描述的自动完成(auto-completion)的默认设置(default settings)。
+%
+% 垂直版口比例(vertical margin ratio)的默认值为 $2/3$，即：
+% \begin{equation}
+%  |top|\ {\scriptsize |(天头)|} : |bottom|\ {\scriptsize |(地脚)|}  = 2 : 3 \qquad\textit{default}\ {\footnotesize |(默认值)|}
+% \end{equation}
+% 水平版口比例(horizontal margin ratio)的默认值取决于文档是单开面的(onesided)还是双开面的(twosided)：
+% \begin{equation}
+%  |left|\;(|inner|) : |right|\;(|outer|)
+%       = \left\{ \begin{array}{ll}
+%              1 : 1 \qquad {\small |(单开面的默认值)|}\\
+%              2 : 3 \qquad {\small |(双开面的默认值)|}
+%         \end{array}\right.
+% \end{equation}
+% 显然，对于单开面的文档，水平版口比例(horizontal margin ratio)默认是“居中(centering)”的。
+%
+% \Gm\ 宏包对于单开面文档(\textit{onesided} documents)具有以下默认设置：
+% \begin{itemize}\setlength{\itemsep}{-.5\parsep}
+%   \item |scale=0.7|，即：正文(\gpart{body})是纸张(\gpart{paper})的$0.7$倍。
+%   \item |marginratio={1:1, 2:3}|，即：水平版口比例是 1:1，垂直版口比例是 2:3。
+%   \item |ignoreall|，即：在计算正文(\gpart{body})尺寸时，不包括页眉、页脚及旁注(marginal notes)。
+% \end{itemize}
+% 对于带有 |twoside| 选项的双开面文档(\textit{twosided} document)，默认设置与单开面相同，
+% 只是水平版口比例(horizontal margin ratio)也设置为 |2:3|。
+%
+% 其他选项(additional options)将覆盖以前指定的尺寸(dimensions)。
+%
+% \subsection[自动完成]{\heiti 自动完成} \label{sec:rules}
+%
+% 图~\ref{fig:specrule}~示意性地显示了存在多少定义模式(specification patterns)以及
+% 如何解决定义的模糊性(ambiguity of the specifications)。每个轴表示了明确地
+% 给正文(body)和版口(margins)定义长度的次数。\Ss($m$,$b$) 代表一种定义(specification)，
+% 它用一组数字 $(\gpart{margin},\gpart{body})=(m,b)$ 来表示。
+%
+% 例如，定义 |width=14cm,left=3cm| 被归到 \Ss(1,1) 类中，这是一个完整的定义(adequate specification)。
+% 如果您加上 |right=4cm|，它将被归到 \Ss(2,1) 类中，也就会产生指定过多(overspecified)的情况。
+% 如果只给出 |width=14cm|，则被归到 \Ss(0,1) 类中，也就是未完全指定(underspecified)。
+%
+% \Gm\ 宏包具有自动完成机制(auto-completion mechanism)，在该机制中，
+% 如果布局参数(layout parameters)未完全指定(underspecified)或指定过多(overspecified)，
+% \Gm\ 将使用默认值和其他关系来解决歧义(ambiguity)。以下是定义(specifications)和
+% 完成(completion)规则：
+% \vspace{-1em}
+% \begin{figure}[H]
+%  \centering
+%  {\unitlength=1pt
+%  \begin{picture}(400,150)(40,0)
+%  \put(1,49){\makebox(90,49)[r]{\large 0}}
+%  \put(1,1){\makebox(70,99)[r]{\gpart{正文} \large (\gpart{body})}}
+%  \put(1,1){\makebox(90,49)[r]{\large 1}}
+%  \put(100,100){\makebox(99,20){\large 0}}
+%  \put(100,50){\framebox(99,49){}}
+%  \put(100,80){\makebox(99,15){\Ss(0,0)}}
+%  \put(100,50){\makebox(99,49){{\scriptsize 使用} |scale|}}
+%  {\linethickness{1pt}%
+%  \put(150,35){\line(0,1){30}}
+%  \put(150,35){\line(-1,3){4}}
+%  \put(150,35){\line(1,3){4}}}
+%  \put(100,0){\framebox(99,49){}}
+%  \put(100,2){\makebox(99,15){\Ss(0,1)}}
+%  \put(100,0){\makebox(99,49){{\scriptsize 使用} |marginratio|}}
+%  \put(200,120){\makebox(99,12){\gpart{版口} \large (\gpart{margin})}}
+%  \put(200,100){\makebox(99,20){\large 1}}
+%  \put(200,50){\framebox(99,49){{\scriptsize 使用} |scale|}}
+%  \put(200,55){\makebox(89,10)[r]{\scriptsize\shortstack[l]{\tiny 如果指定了\\\tiny 比例(|ratio|)}}}
+%  \put(200,2){\makebox(99,15){\Ss(1,1)}}
+%  {\linethickness{1pt}%
+%  \put(250,35){\line(0,1){30}}
+%  \put(250,35){\line(-1,3){4}}
+%  \put(250,35){\line(1,3){4}}}
+%  {\linethickness{1pt}%
+%  \put(225,25){\line(-1,0){35}}
+%  \put(225,25){\line(-3,-1){12}}
+%  \put(225,25){\line(-3,1){12}}}
+%  \put(200,80){\makebox(99,15){\Ss(1,0)}}
+%  \put(200,0){\framebox(99,49){\textcolor{red}{\ \ \ \ \ \ \ \ \ \ \ \footnotesize 可以求解(\textit{solvable})}}}
+%  \put(300,100){\makebox(99,20){\large 2}}
+%  \put(300,80){\makebox(99,15){\Ss(2,0)}}
+%  \put(300,50){\framebox(99,49){\textcolor{red}{\ \ \ \ \ \footnotesize 可以求解(\textit{solvable})}}}
+%  \put(300,0){\framebox(99,49){forget |body|}}
+%  \put(300,2){\makebox(99,15){\Ss(2,1)}}
+%  {\linethickness{1pt}%
+%  \multiput(290,65)(5,0){6}{\line(1,0){3}}
+%  \put(320,65){\line(-3,-1){12}}
+%  \put(320,65){\line(-3,1){12}}}
+%  {\linethickness{1pt}%
+%  \put(350,65){\line(0,-1){30}}
+%  \put(350,65){\line(-1,-3){4}}
+%  \put(350,65){\line(1,-3){4}}}
+%  \end{picture}}
+%  \caption[Specifications and completion rules]{%
+%  \begin{minipage}[t]{.7\textwidth}\raggedright\small
+%  定义(specifications)\ \ \Ss(0,0) 到 \Ss(2,1)和完成规则(箭头)。\\
+%  {\kaiti 列号(column numbers)和行号(row numbers)分别表示版口(margin)和正文(body)的明确指定(explicitly specified)长度(lengths)的次数。
+%  \Ss($m$,$b$) 代表一种定义(specification)，它用一组数字 $(\gpart{margin},\gpart{body})=(m,b)$ 来表示。}
+%  \end{minipage}}
+%  \label{fig:specrule}
+% \end{figure}
+%
+% \begin{Spec}
+% \item[\Ss(0,0)]
+% 未指定任何内容。\Gm\ 宏包将正文(\gpart{body})设置为默认 |scale| ($=0.7$)。例如，
+% |width| 设置为 $|0.7|\times|layoutwidth|$。请注意，默认情况下，
+% |layoutwidth| 和 |layoutheight| 将分别等于 |\paperwidth| 和 |\paperheight|。
+% 因此 \Ss(0,0) 变为 \Ss(0,1)。参见 \Ss(0,1)。\\[3pt]
+% {\footnotesize 译者注：|scale| 为正文(\gpart{body})和纸张(\gpart{paper})的比例；|width| 为版心宽度；|height| 为版心高度；
+% |layoutwidth| \\[-5pt] \hspace{3.6em} 为布局宽度；|layoutheight| 为布局高度；|\paperwidth| 为纸张宽度；
+% |\paperheight| 为纸张高度。}
+% \bigskip
+%
+% \item[\Ss(0,1)]
+% 指定正文(\gpart{body})，例如 |width=7in|、|lines=20|、|body={20cm,24cm}|、|scale=0.9| 等等。
+% 然后，\Gm\ 使用版口比例(margin ratio)设置版口。如果未指定版口比例，则使用默认值。
+% 垂直版口比例(default vertical margin ratio)默认值的定义为：
+% \begin{equation}
+%  |top|\ {\scriptsize |(天头)|} : |bottom|\ {\scriptsize |(地脚)|}  = 2 : 3 \qquad\textit{default}\ {\footnotesize |(默认值)|}
+% \end{equation}
+% 水平版口比例(horizontal margin ratio)的默认值取决于文档是单开面的(onesided)还是双开面的(twosided)：
+% \begin{equation}
+%  |left|\;(|inner|) : |right|\;(|outer|)
+%       = \left\{ \begin{array}{ll}
+%              1 : 1 \qquad {\small |(单开面的默认值)|}\\
+%              2 : 3 \qquad {\small |(双开面的默认值)|}
+%         \end{array}\right.
+% \end{equation}
+% 例如，如果在 A4 纸上指定 |height=22cm|，\Gm\ 将按如下方式计算天头(|top|)：
+% \begin{equation}
+%   \begin{array}{ll}
+%   |top| &= ( |layoutheight| - |height| ) \times 2/5 \\
+%         &= (29.7-22)\times2/5 = 3.08\textrm{(cm)}
+%   \end{array}
+% \end{equation}
+% 因此，已经确定了天头(|top| margin)和正文高度(body |height|)，
+% 垂直版口定义(specification for the vertical)将变为 \Ss(1,1)，所有参数都可以求解(solved)。
+% \bigskip
+%
+% \item[\Ss(1,0)]
+% 只指定了一个版口(margin)，例如 |bottom=2cm|、|left=1in|、|top=3cm| 等等。
+%
+% \begin{itemize}
+% \item
+% \textbf{如果{\kaiti 没有}指定版口比例(margin ratio)}：\Gm\ 将使用默认 |scale| ($=0.7$) 来设置正文(\gpart{body})。
+% 例如，如果指定了 |top=2.4cm|，则 \Gm\ 设置：
+% \begin{center}
+%     $|height|= |0.7|\times|layoutheight|$
+%            ~~($=|0.7\paperheight|$ by default),
+% \end{center}
+% 然后 \Ss(1,0) 变为 \Ss(1,1)，其中地脚(|bottom|)用 $|layoutheight|-(|height|+|top|)$ 来计算，
+% 如果布局尺寸(layout size)等于纸张尺寸(paper size)，则在 A4 纸上的结果为 6.51cm。
+% \medskip
+% \item
+% \textbf{如果指定了版口比例(margin ratio)}：例如 |hmarginratio={1:2}|, |vratio={3:4}| 等等，
+% 则 \Gm\ 将使用指定的版口比例设置其他版口。例如，如果指定了一组选项“|top=2.4cm,vratio={3:4}|”，
+% 则 \Gm\ 将地脚(|bottom|)设置为 3.2cm：
+% \begin{center}
+%     $|bottom|= |top|/3\times4 = 3.2\textrm{cm}$
+% \end{center}
+% 因此 \Ss(1,0) 变为 \Ss(2,0)。
+% \end{itemize}
+%
+% 请注意，版本 4 或更早版本通过版口比例(margin ratio)来设置其它版口(margin)。因此，
+% 在版本5中，使用相同的定义(specification)，排版结果将与版本4中的结果不同。例如，
+% 如果只指定了 |top=2.4cm|，在版本4或更早版本中会得到 |bottom=2.4cm| 的结果，
+% 但在版本5中将得到 |bottom=6.51cm| 的结果。
+% \bigskip
+%
+% \item[\Ss(2,1)]
+%  正文(\gpart{body})和两个版口(\gpart{margins})都已指定，例如 |vdivide={1in,8in,1.5in}|，
+%  “|left=3cm,width=13cm,right=4cm|”等等。由于 \Gm\ 在尺寸指定过多(dimensions are overspecified)
+%  时基本上优先考虑版口(\gpart{margins})，所以 \Gm\ 会忽略(forgets)并重置(resets)正文(\gpart{body})。
+%  例如，如果您指定了
+% \begin{center}
+%    |\usepackage[a4paper,left=3cm,width=13cm,right=4cm]{geometry}|，
+% \end{center}
+% 则 |width| 将被重置为默认值14厘米，因为 A4纸的宽度是21厘米。
+% \end{Spec}
+%
+% \clearpage
+% \section{\heiti 在文档中间改变布局}\label{sec:midchange}
+%
+% 版本 5 提供了新的命令 \cs{newgeometry\{$\cdots$\}}\ 和 \cs{restoregeometry}，
+% 这两个命令允许您更改文档中间的页面尺寸(page dimensions)。与前言中的 \cs{geometry}\ 不同，
+% \cs{newgeometry}\ 仅在 |\begin{document}| 之后才可用，它重置(resets)了所有指定的选项，
+% 但以下与纸张尺寸相关的选项(papersize-related options)除外：|landscape|、|portrait| 和
+% 纸张大小选项(如 |papersize|、|paper=a4paper| 等)，这些选项不能用 \cs{newgeometry}\ 更改。
+%
+% \cs{restoregeometry}\ 命令将会恢复(restores)在前言中(|\begin{document}| 之前)
+% 用 |\usepackage{geometry}| 和 \cs{geometry}\ 定义的页面布局(page layout)。
+%
+% 请注意，\cs{newgeometry}\ 和 \cs{restoregeometry}\ 都在调用它们的位置插入 |\clearpage|。
+%
+% 以下是更改文档中间(mid-document)布局的示例。|hmargin=3cm|\ (|left| 和 |right| 版口为 |3cm|)
+% 指定的布局 L1 更改为布局L2\ (|left=3cm|, |right=1cm|,|bottom=0.1cm|)。
+% 使用 \cs{restoregeometry}\ 恢复为布局 L1。
+%
+% \vspace{2em}
+% \begin{center}
+% \begin{minipage}{.8\textwidth}
+% |\usepackage[hmargin=3cm]{geometry}|\\
+% |\begin{document}|\\
+%  \medskip
+%  \hspace{1cm}\fbox{Layout L1}\\
+% \medskip
+% |\newgeometry{left=3cm,right=1cm,bottom=0.1cm}|\\
+% \medskip
+%  \hspace{1cm}\fbox{Layout L2 (新的)}\\
+% \medskip
+% |\restoregeometry|\\
+% \medskip
+%  \hspace{1cm}\fbox{Layout L1 (已恢复的)}\\
+% \medskip
+% |\newgeometry{margin=1cm,includefoot}|\\
+% \medskip
+%  \hspace{1cm}\fbox{Layout L3 (新的)}\\
+% \medskip
+% |\end{document}|
+% \end{minipage}%
+% \end{center}
+% \vspace{2em}
+% \begin{center}
+%  \centering\small
+%  {\unitlength=.8pt
+%  \begin{picture}(450,180)(0,0)
+%  \put(0,165){\makebox(95,12){现存的(saved)}}
+%  \put(15,135){\framebox(65,10){\gpart{head}\ {\scriptsize (\gpart{页眉})}}}
+%  \put(15,60){\framebox(65,70){\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put(15,45){\makebox(65,12){\gpart{foot}\ {\scriptsize (\gpart{页脚})}}}
+%  \put(15,45){\line(1,0){65}}
+%  \put(0,20){\framebox(95,140){}}
+%  \put(0,0){\makebox(95,20){L1}}
+%  \put(104,90){\circle*{4}}
+%  \put(110,90){\circle*{4}}
+%  \put(116,90){\circle*{4}}
+%  \put(125,165){\makebox(95,12){\cs{newgeometry}}}
+%  \put(140,135){\framebox(71,10){\gpart{head}\ {\scriptsize (\gpart{页眉})}}}
+%  \put(140,33){\framebox(71,97){\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put(140,21){\makebox(71,12){\gpart{foot}\ {\scriptsize (\gpart{页脚})}}}
+%  \put(125,20){\framebox(95,140){}}
+%  \put(125,0){\makebox(95,20){L2 (新的)}}
+%  \put(229,90){\circle*{4}}
+%  \put(235,90){\circle*{4}}
+%  \put(241,90){\circle*{4}}
+%  \put(250,165){\makebox(95,12){\cs{restoregeometry}}}
+%  \put(265,135){\framebox(65,10){\gpart{head}\ {\scriptsize (\gpart{页眉})}}}
+%  \put(265,60){\framebox(65,70){\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put(265,45){\makebox(65,12){\gpart{foot}\ {\scriptsize (\gpart{页脚})}}}
+%  \put(265,45){\line(1,0){65}}
+%  \put(250,20){\framebox(95,140){}}
+%  \put(250,0){\makebox(95,20){L1 (已恢复的)}}
+%  \put(354,90){\circle*{4}}
+%  \put(360,90){\circle*{4}}
+%  \put(366,90){\circle*{4}}
+%  \put(375,165){\makebox(95,12){\cs{newgeometry}}}
+%  \put(383,41){\framebox(80,111){\gpart{body}\ {\scriptsize (\gpart{正文})}}}
+%  \put(383,29){\makebox(80,12){\gpart{foot}\ {\scriptsize (\gpart{页脚})}}}
+%  \put(383,29){\line(1,0){80}}
+%  \put(375,20){\framebox(95,140){}}
+%  \put(375,0){\makebox(95,20){L3 (新的)}}
+%  \end{picture}}
+% \end{center}
+%
+% \clearpage
+% 如果您想在文档中重复使用(reuse)更多不同的布局，
+% 一组命令 |\savegeometry{|\meta{name}|}| 和 |\loadgeometry{|\meta{name}|}| 非常方便。例如：
+% \begin{center}
+\begin{verbatim}
+     \usepackage[hmargin=3cm]{geometry}
+     \begin{document}
+           L1
+     \newgeometry{left=3cm,right=1cm,bottom=0.1cm}
+     \savegeometry{L2}
+           L2 (new, saved)
+     \restoregeometry
+           L1 (restored)
+     \newgeometry{margin=1cm,includefoot}
+           L3 (new)
+     \loadgeometry{L2}
+           L2 (loaded)
+     \end{document}
+\end{verbatim}
+% \end{center}
+%
+% \clearpage
+% \section{\heiti 示例}
+%
+% \begin{enumerate}
+% \item
+% 文本区(text area)位于纸张中心的单开面页面布局(onesided page layout)。
+% 以下示例具有相同的排版结果，因为默认情况下，单开面的水平版口比例(horizontal margin ratio)设置为 |1:1|。
+% \begin{itemize}
+%   \item |centering|
+%   \item |marginratio=1:1|
+%   \item |vcentering|
+% \end{itemize}
+%
+% \item 装订内侧偏移量(inside offset for binding)设置为 |1cm| 的双开面页面布局(twosided page layout)。
+% \begin{itemize}
+%   \item |twoside, bindingoffset=1cm|
+% \end{itemize}
+% 在这种情况下，|textwidth| (正文宽度)比默认的双开面文档短 $0.7\times|1cm|$ ($=|0.7cm|$)，
+% 因为默认的正文(\gpart{body})宽度设置为 |scale=0.7|，
+% 这意味着 $|width|=|0.7|\times|layoutwidth|\ $(默认为$=|0.7\paperwidth|$)。
+%
+% \item
+% 一种布局，版口 |left| (订口)、|right| (切口)、|top| (天头)分别为 |3cm|、|2cm|、|2.5in|，|textheight| (正文高度)为 40 行(lines)，
+% 页眉和页脚包含在版心(\gpart{total body})中。下面的两个示例具有相同的排版结果。
+% \begin{itemize}
+%   \item |left=3cm, right=2cm, lines=40, top=2.5in, includeheadfoot|
+%   \item |hmargin={3cm,2cm}, tmargin=2.5in, lines=40, includeheadfoot|
+% \end{itemize}
+%
+% \item
+%  版心(\gpart{total body})高度为 |10in|，地脚(|bottom|)为 |2cm|，|width| (版心宽度)为默认值的布局。
+%  将自动计算天头(|top|)。下面的每个解决方案都会产生相同的页面布局(page layout)。
+% \begin{itemize}
+%     \item |vdivide={*, 10in, 2cm}|
+%     \item |bmargin=2cm, height=10in|
+%     \item |bottom=2cm, textheight=10in|
+% \end{itemize}
+% 注意，页眉(\gpart{head})和页脚(\gpart{foot})的尺寸不包含在版心(\gpart{total body})高度(|height|)内。
+% 额外的 |includefoot| 使 \cs{footskip}\ (正文底与页脚底的间距)包含在 |totalheight| (版心高度)中。因此，在以下两种情况中，
+% 前一种布局中的 |textheight| (正文高度)比后一种布局(精确到10in)短 \cs{footskip}。换句话说，
+% 在这种情况下，当 |includefoot=true| 时，|height| = |textheight| + |footskip|。
+% \begin{itemize}
+%     \item |bmargin=2cm, height=10in, includefoot|
+%     \item |bottom=2cm, textheight=10in, includefoot|
+% \end{itemize}
+%\item
+% \glen{textwidth}\ (正文宽度)和 \glen{textheight}\ (正文高度)占 \gpart{paper}\ (纸张)的90\%，
+% 且 \gpart{body}\ (正文)居中的布局。只要没有从默认值修改为 |layoutwidth| (布局宽度)
+% 和 |layoutheight| (布局高度)，下面的每个解决方案都会产生相同的页面布局。
+% \begin{itemize}
+%   \item |scale=0.9, centering|
+%   \item |text={.9\paperwidth,.9\paperheight}, ratio=1:1|
+%   \item |width=.9\paperwidth, vmargin=.05\paperheight, marginratio=1:1|
+%   \item |hdivide={*,0.9\paperwidth,*}, vdivide={*,0.9\paperheight,*}|
+%   (as for onesided documents)
+%   \item |margin={0.05\paperwidth,0.05\paperheight}|
+% \end{itemize}
+% 您可以添加 |heightrounded| 四舍五入，以避免出现像下面这的“underfull vbox warning (未满 vbox 警告)”：
+% \begin{quote}\small
+%  |Underfull \vbox (badness 10000) has occurred while \output is active|.\\
+%  {\scriptsize |译：当 \output 处于活动状态时，\vbox (坏值 10000)未满。|}
+% \end{quote}
+% 关于 |heightrounded| 的详细描述请参阅第~\ref{sec:body}~节。
+%
+% \item
+% 旁注(marginal notes)的宽度设置为 |3cm| 并且包含在 \gpart{total body}\ (版心)宽度内的一种布局。
+% 下面的两个解决方案排版效果相同。
+% \begin{itemize}
+%   \item |marginparwidth=3cm, includemp|
+%   \item |marginpar=3cm, ignoremp=false|
+% \end{itemize}
+%
+% \item
+% 一种布局，其中 \gpart{body}\ (正文)占据整个A5纸张，A5纸张为横向(landscape)。
+% 下面的两个解决方案排版效果相同。
+% \begin{itemize}
+%   \item |a5paper, landscape, scale=1.0|
+%   \item |landscape=TRUE, paper=a5paper, margin=0pt|
+% \end{itemize}
+%
+% \item  一个屏幕尺寸的布局(screen size layout)，它适合于个人电脑(PC)和视频投影仪(video projector)演示。
+\begin{verbatim}
+   \documentclass{slide}
+   \usepackage[screen,margin=0.8in]{geometry}
+    ...
+   \begin{slide}
+      ...
+   \end{slide}
+\end{verbatim}
+% \item 字体(fonts)和空格(spaces)都从A4放大到A3的布局。在下面的例子中，得到的纸张尺寸是A3。
+% \begin{itemize}
+%     \item |a4paper, mag=1414|.
+% \end{itemize}
+% 如果您想使用两倍大的字体(two times bigger fonts)，但不改变纸张尺寸(paper size)，则可以键入：
+% \begin{itemize}
+%   \item |letterpaper, mag=2000, truedimen|.
+% \end{itemize}
+%  您可以添加 |dvips| 选项，这对于通过 |dviout| 或 |xdvi| 以适当的纸张尺寸预览它非常有用。
+%
+% \item  在加载 \Gm\ 之前，更改第一页的布局并将其他页面保留为默认布局。
+% 使用 |pass| 选项、|\newgeometry| 和| \restoregeometry|。
+\begin{verbatim}
+   \documentclass{book}
+   \usepackage[pass]{geometry}
+      % 'pass' 忽略宏包布局(package layout)，因此，原始的'book'布局被存储在这里。
+   \begin{document}
+   \newgeometry{margin=1cm} % 更改第一页的尺寸。
+      Page 1
+   \restoregeometry  % 恢复原来的'book'布局。
+      Page 2 and more
+   \end{document}
+\end{verbatim}
+%
+% \item 一个复杂的页面布局。
+\begin{verbatim}
+  \usepackage[a5paper, landscape, twocolumn, twoside,
+      left=2cm, hmarginratio=2:1, includemp, marginparwidth=43pt,
+      bottom=1cm, foot=.7cm, includefoot, textheight=11cm, heightrounded,
+      columnsep=1cm, dvips,  verbose]{geometry}
+\end{verbatim}
+% 试着自己排版并检查排版效果。|:-)|
+% \end{enumerate}
+%
+% \clearpage
+% \section{\heiti 已知的问题}
+% \begin{itemize}
+%  \item 在 |mag| $\neq 1000$ 和 |truedimen| 的情况下，以冗余模式(verbose mode)显示
+%  的 |paperwidth| (纸张宽度)和 |paperheight| (纸张高度)与生成的 PDF 的实际尺寸不同。
+%  无论如何，PDF 本身是正确的。
+%
+%  \item 在 |mag| $\neq 1000$，{\kaiti 无}|truedimen| 和 \textsf{hyperref}\ 的情况下，
+%  \textsf{hyperref}\ 应在 \Gm\ 之前加载。否则，生成的 PDF 尺寸将出错。
+%
+%  \item 在 \textsf{crop}\ 宏包和 |mag| $\neq 1000$ 的情况下，
+%  \textsf{crop}\ 宏包的 |center| 选项不起作用。
+%
+% \end{itemize}
+%
+%
+% \clearpage
+% \section{\heiti 致谢}
+%  感谢许多好心人提出的有益建议和意见，这些好心人(按字母或姓氏的先后顺序排列)包括：
+%  \vspace{1em}
+%
+% \begin{center}
+%  \begin{tabular*}{0.7\linewidth}{@{\hspace{40pt}}rl}
+%  \hlinew{1.2pt}
+%  {\Heiti 人名} &  {\Heiti 中译名}  \\ \hlinew{0.7pt}
+%  Jean-Bernard Addor & 让·伯纳德·阿多尔 \\
+%  Frank Bennett & 弗兰克·贝内特 \\
+%  Alexis Dimitriadis & 亚历克西斯·迪米特里亚迪斯 \\
+%  Friedrich Flender & 弗里德里希·弗伦德 \\
+%  Adrian Heathcote & 阿德里安·希斯科特 \\
+%  Stephan Hennig & 斯蒂芬·亨尼格 \\
+%  Morten H\o{}gholm & 莫滕·霍霍姆 \\
+%  Jonathan Kew & 乔纳森·邱 \\
+%  James Kilfiger & 詹姆斯·基尔费格 \\
+%  Yusuke Kuroki & 黑木愈介 \\
+%  Jean-Marc Lasgouttes & 让·马克·拉斯高茨 \\
+%  Wlodzimierz Macewicz & 沃齐米日·麦克维奇 \\
+%  Frank Mittelbach & 弗兰克·米特尔巴赫 \\
+%  Eckhard Neber & 埃克哈德·奈伯 \\
+%  Rolf Niepraschk & 罗尔夫·尼普拉施克 \\
+%  Hans Fr.~Nordhaug &  汉斯·弗罗斯特·诺德豪格 \\
+%  Heiko Oberdiek & 海科·奥伯迪克 \\
+%  Keith Reckdahl &  基思·雷克达尔 \\
+%  Peter Riocreux &  彼得·里奥克鲁克斯 \\
+%  Will Robertson & 威尔·罗伯逊 \\
+%  Pablo Rodriguez &  巴勃罗·罗德里格斯 \\
+%  Nico Schl\"{o}emer & 尼科·施洛默 \\
+%  Perry C.~Stearns &  佩里·C·斯特恩斯 \\
+%  Frank Stengel &  弗兰克·斯坦格尔 \\
+%  Plamen Tanovski &  普拉门·塔诺夫斯基 \\
+%  Petr Uher &  皮特·乌赫尔 \\
+%  Piet van Oostrum &  彼得·范·奥斯特罗姆 \\
+%  Vladimir Volovich &  弗拉基米尔·沃洛维奇 \\
+%  Michael Vulis &  迈克尔·武利斯 \\
+%  \hlinew{1.2pt}
+% \end{tabular*}
+\end{center}
+% \StopEventually{%
+% }
+%
+% \newgeometry{hmargin={4.2cm,1.5cm},vmargin={1cm,1cm},
+%              includeheadfoot, marginpar=3.8cm}
+%
+% \clearpage
+% \section{\heiti 实现}
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+%    此宏包需要以下宏包：\textsf{keyval}、\textsf{ifvtex}。
+%    \begin{macrocode}
+\RequirePackage{keyval}%
+\RequirePackage{ifvtex}%
+%    \end{macrocode}
+%
+%    此处声明了内部开关(internal switches)。
+%    \begin{macrocode}
+\newif\ifGm@verbose
+\newif\ifGm@landscape
+\newif\ifGm@swap@papersize
+\newif\ifGm@includehead
+\newif\ifGm@includefoot
+\newif\ifGm@includemp
+\newif\ifGm@hbody
+\newif\ifGm@vbody
+\newif\ifGm@heightrounded
+\newif\ifGm@showframe
+\newif\ifGm@showcrop
+\newif\ifGm@pass
+\newif\ifGm@resetpaper
+\newif\ifGm@layout
+\newif\ifGm@newgm
+%    \end{macrocode}
+%    \begin{macro}{\Gm@cnth}
+%    \begin{macro}{\Gm@cntv}
+%    水平(horizontal)和垂直(vertical)分区模式(partitioning patterns)的计数器(counters)。
+%    \begin{macrocode}
+\newcount\Gm@cnth
+\newcount\Gm@cntv
+%    \end{macrocode}
+%    \end{macro}\end{macro}
+%    \begin{macro}{\c@Gm@tempcnt}
+%    计数器(counter)用于设置带有 \textsf{calc}\ 的数字(number)。
+%    \begin{macrocode}
+\newcount\c@Gm@tempcnt
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@bindingoffset}
+%    订口(inner margin，里口)的装订偏移量(binding offset)。
+%    \begin{macrocode}
+\newdimen\Gm@bindingoffset
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@wd@mp}
+%    \begin{macro}{\Gm@odd@mp}
+%    \begin{macro}{\Gm@even@mp}
+%    |includemp| 模式中 \cs{textwidth} (正文宽度)、\cs{oddsidemargin}\ 和 \cs{evensidemargin}\ 的校正\\ 长度(correction lengths)。
+%    \begin{macrocode}
+\newdimen\Gm@wd@mp
+\newdimen\Gm@odd@mp
+\newdimen\Gm@even@mp
+%    \end{macrocode}
+%    \end{macro}\end{macro}\end{macro}
+%    \begin{macro}{\Gm@layoutwidth}
+%    \begin{macro}{\Gm@layoutheight}
+%    \begin{macro}{\Gm@layouthoffset}
+%    \begin{macro}{\Gm@layoutvoffset}
+%    布局区域(layout area)的尺寸。
+%    \begin{macrocode}
+\newdimen\Gm@layoutwidth
+\newdimen\Gm@layoutheight
+\newdimen\Gm@layouthoffset
+\newdimen\Gm@layoutvoffset
+%    \end{macrocode}
+%    \end{macro}\end{macro}\end{macro}\end{macro}
+%    \begin{macro}{\Gm@dimlist}
+%    可以存储 \LaTeX{}\ 原始尺寸(native dimensions)的令牌(token)。
+%    \begin{macrocode}
+\newtoks\Gm@dimlist
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@warning}
+%    用于打印警告消息(warning messages)的宏。
+%    \begin{macrocode}
+\def\Gm@warning#1{\PackageWarningNoLine{geometry}{#1}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\ifGm@preamble}
+%    宏(macro)只有在前言中指定为 |\usepackage| 的选项(option)和/或 |\geometry| 的参数(argument)时，
+%    才执行作为参数给出的选项。否则，宏将打印警告消息(warning message)并忽略选项设置(option setting)。
+%    \begin{macrocode}
+\def\ifGm@preamble#1{%
+  \ifGm@newgm
+   \Gm@warning{`#1': not available in `\string\newgeometry'; skipped}%
+  \else
+    \expandafter\@firstofone
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@Dhratio}
+%    \begin{macro}{\Gm@Dhratiotwo}
+%    \begin{macro}{\Gm@Dvratio}
+%    定义了水平和垂直版口比例(\textsl{marginalratio})的默认值。\cs{Gm@Dhratiotwo}\ 表示
+%    双开面页面布局(twoside page layout)的水平版口比例(horizontal \textsl{marginratio})的默认值，
+%    并且在反面页(verso pages)上交换订口(left margins，里口)和切口(right margins，外口)，
+%    这是由 |twoside| 设置的。
+%    \begin{macrocode}
+\def\Gm@Dhratio{1:1}% = left:right default for oneside
+\def\Gm@Dhratiotwo{2:3}% = inner:outer default for twoside.
+\def\Gm@Dvratio{2:3}% = top:bottom default
+%    \end{macrocode}
+%    \end{macro}\end{macro}\end{macro}
+%    \begin{macro}{\Gm@Dhscale}
+%    \begin{macro}{\Gm@Dvscale}
+%    水平和垂直 \textsl{scale}\ 的默认值定义为 $0.7$。
+%    \begin{macrocode}
+\def\Gm@Dhscale{0.7}%
+\def\Gm@Dvscale{0.7}%
+%    \end{macrocode}
+%    \end{macro}\end{macro}
+%    \begin{macro}{\Gm@dvips}%
+%    \begin{macro}{\Gm@dvipdfm}%
+%    \begin{macro}{\Gm@pdftex}%
+%    \begin{macro}{\Gm@luatex}%
+%    \begin{macro}{\Gm@xetex}%
+%    \begin{macro}{\Gm@vtex}%
+%    驱动程序的名称(driver names)。
+%    \begin{macrocode}
+\def\Gm@dvips{dvips}%
+\def\Gm@dvipdfm{dvipdfm}%
+\def\Gm@pdftex{pdftex}%
+\def\Gm@luatex{luatex}%
+\def\Gm@xetex{xetex}%
+\def\Gm@vtex{vtex}%
+%    \end{macrocode}
+%    \end{macro}\end{macro}\end{macro}\end{macro}\end{macro}\end{macro}
+%    \begin{macro}{\Gm@true}%
+%    \begin{macro}{\Gm@false}%
+%    用于 |true| 和 |false| 的宏(macros)。
+%    \begin{macrocode}
+\def\Gm@true{true}%
+\def\Gm@false{false}%
+%    \end{macrocode}
+%    \end{macro}\end{macro}
+%    \begin{macro}{\Gm@orgpw}
+%    \begin{macro}{\Gm@orgph}
+%    这些宏保持原始(original)纸张(媒体)尺寸不变。
+%    \begin{macrocode}
+\edef\Gm@orgpw{\the\paperwidth}%
+\edef\Gm@orgph{\the\paperheight}%
+%    \end{macrocode}
+%    \end{macro}\end{macro}
+%    \begin{macro}{\Gm@savelength}
+%    该宏将指定的长度(length)保存到 |\Gm@restore|。
+%    \begin{macrocode}
+\def\Gm@savelength#1{%
+  \g@addto@macro\Gm@restore{\expandafter\noexpand\expandafter\csname
+  #1\endcsname\expandafter=\expandafter\the\csname #1\endcsname\relax}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@saveboolean}
+%    该宏将指定的布尔值(boolean)保存到 |\Gm@restore|。
+%    \begin{macrocode}
+\def\Gm@saveboolean#1{%
+  \csname if#1\endcsname
+    \g@addto@macro\Gm@restore{\expandafter\noexpand\csname #1true\endcsname}%
+  \else
+    \g@addto@macro\Gm@restore{\expandafter\noexpand\csname #1false\endcsname}%
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@restore}
+%    |\Gm@restore| 宏的初始化。
+%    \begin{macrocode}
+\def\Gm@restore{}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@save}
+%    宏的定义(definition of the macro)保存实际长度的(real lengths)\ \ \LaTeX\ 选项。
+%    \begin{macrocode}
+\def\Gm@save{%
+  \Gm@savelength{paperwidth}%
+  \Gm@savelength{paperheight}%
+  \Gm@savelength{textwidth}%
+  \Gm@savelength{textheight}%
+  \Gm@savelength{evensidemargin}%
+  \Gm@savelength{oddsidemargin}%
+  \Gm@savelength{topmargin}%
+  \Gm@savelength{headheight}%
+  \Gm@savelength{headsep}%
+  \Gm@savelength{topskip}%
+  \Gm@savelength{footskip}%
+  \Gm@savelength{baselineskip}%
+  \Gm@savelength{marginparwidth}%
+  \Gm@savelength{marginparsep}%
+  \Gm@savelength{columnsep}%
+  \Gm@savelength{hoffset}%
+  \Gm@savelength{voffset}
+  \Gm@savelength{Gm@layoutwidth}%
+  \Gm@savelength{Gm@layoutheight}%
+  \Gm@savelength{Gm@layouthoffset}%
+  \Gm@savelength{Gm@layoutvoffset}%
+  \Gm@saveboolean{@twocolumn}%
+  \Gm@saveboolean{@twoside}%
+  \Gm@saveboolean{@mparswitch}%
+  \Gm@saveboolean{@reversemargin}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@initnewgm}
+%    宏初始化 |\newgeometry| 中的布局的参数。
+%    \begin{macrocode}
+\def\Gm@initnewgm{%
+  \Gm@passfalse
+  \Gm@swap@papersizefalse
+  \Gm@dimlist={}
+  \Gm@hbodyfalse
+  \Gm@vbodyfalse
+  \Gm@heightroundedfalse
+  \Gm@includeheadfalse
+  \Gm@includefootfalse
+  \Gm@includempfalse
+  \let\Gm@width\@undefined
+  \let\Gm@height\@undefined
+  \let\Gm@textwidth\@undefined
+  \let\Gm@textheight\@undefined
+  \let\Gm@lines\@undefined
+  \let\Gm@hscale\@undefined
+  \let\Gm@vscale\@undefined
+  \let\Gm@hmarginratio\@undefined
+  \let\Gm@vmarginratio\@undefined
+  \let\Gm@lmargin\@undefined
+  \let\Gm@rmargin\@undefined
+  \let\Gm@tmargin\@undefined
+  \let\Gm@bmargin\@undefined
+  \Gm@layoutfalse
+  \Gm@layouthoffset\z@
+  \Gm@layoutvoffset\z@
+  \Gm@bindingoffset\z@}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@initall}
+%    一旦加载该宏，就会调用此初始化(initialization)。一旦指定了 |reset| 选项，也会立即调用该初始化。
+%    \begin{macrocode}
+\def\Gm@initall{%
+  \let\Gm@driver\@empty
+  \let\Gm@truedimen\@empty
+  \let\Gm@paper\@undefined
+  \Gm@resetpaperfalse
+  \Gm@landscapefalse
+  \Gm@verbosefalse
+  \Gm@showframefalse
+  \Gm@showcropfalse
+  \Gm@newgmfalse
+  \Gm@initnewgm}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@setdriver}
+%    该宏将设置指定的驱动程序(driver)。
+%    \begin{macrocode}
+\def\Gm@setdriver#1{%
+  \expandafter\let\expandafter\Gm@driver\csname Gm@#1\endcsname}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@unsetdriver}
+%    如果已经设置了指定的驱动程序(driver)，则该宏将取消该驱动程序的设置。
+%    \begin{macrocode}
+\def\Gm@unsetdriver#1{%
+  \expandafter\ifx\csname Gm@#1\endcsname\Gm@driver\let\Gm@driver\@empty\fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@setbool}
+%    \begin{macro}{\Gm@setboolrev}
+%    该宏用于布尔选项的处理(boolean option processing)。
+%    \begin{macrocode}
+\def\Gm@setbool{\@dblarg\Gm@@setbool}%
+\def\Gm@setboolrev{\@dblarg\Gm@@setboolrev}%
+\def\Gm@@setbool[#1]#2#3{\Gm@doif{#1}{#3}{\csname Gm@#2\Gm@bool\endcsname}}%
+\def\Gm@@setboolrev[#1]#2#3{\Gm@doifelse{#1}{#3}%
+  {\csname Gm@#2\Gm@false\endcsname}{\csname Gm@#2\Gm@true\endcsname}}%
+%    \end{macrocode}
+%    \end{macro}\end{macro}
+%    \begin{macro}{\Gm@doif}
+%    \begin{macro}{\Gm@doifelse}
+%    \cs{Gm@doif}\ 使用选项 |#1| 的布尔值 |#2| 执行(excutes)第三个参数 |#3|。
+%    如果布尔选项 |#1| 的值 |#2| 为 |true|，则 \cs{Gm@doifelse}\ 执行第三个参数 |#3|，
+%    如果布尔选项 |#1| 的值 |#2| 为 |false|，则 \cs{Gm@doifelse}\ 执行第四个参数 |#4|。
+%    \begin{macrocode}
+\def\Gm@doif#1#2#3{%
+  \lowercase{\def\Gm@bool{#2}}%
+  \ifx\Gm@bool\@empty
+    \let\Gm@bool\Gm@true
+  \fi
+  \ifx\Gm@bool\Gm@true
+  \else
+    \ifx\Gm@bool\Gm@false
+    \else
+      \let\Gm@bool\relax
+    \fi
+  \fi
+  \ifx\Gm@bool\relax
+    \Gm@warning{`#1' should be set to `true' or `false'}%
+  \else
+    #3
+  \fi}%
+\def\Gm@doifelse#1#2#3#4{%
+  \Gm@doif{#1}{#2}{\ifx\Gm@bool\Gm@true #3\else #4\fi}}%
+%    \end{macrocode}
+%    \end{macro}\end{macro}
+%    \begin{macro}{\Gm@reverse}
+%    宏反转布尔值(reverses a bool value)。
+%    \begin{macrocode}
+\def\Gm@reverse#1{%
+  \csname ifGm@#1\endcsname
+  \csname Gm@#1false\endcsname\else\csname Gm@#1true\endcsname\fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@defbylen}
+%    \begin{macro}{\Gm@defbycnt}
+%    宏 \cs{Gm@defbylen}\ 和 \cs{Gm@defbycnt}\ 分别通过长度(length)和计数器(counter)
+%    与 \textsf{calc}\ 宏包定义 \cs{Gm@xxxx}\ 变量(variables)。
+%    \begin{macrocode}
+\def\Gm@defbylen#1#2{%
+  \begingroup\setlength\@tempdima{#2}%
+  \expandafter\xdef\csname Gm@#1\endcsname{\the\@tempdima}\endgroup}%
+\def\Gm@defbycnt#1#2{%
+  \begingroup\setcounter{Gm@tempcnt}{#2}%
+  \expandafter\xdef\csname Gm@#1\endcsname{\the\value{Gm@tempcnt}}\endgroup}%
+%    \end{macrocode}
+%    \end{macro}\end{macro}
+%    \begin{macro}{\Gm@set@ratio}
+%    该宏解析(parses)指定版口比例(marginal ratios)的选项的值，
+%    该版口比例在 \cs{Gm@setbyratio}\ 宏中使用。
+%    \begin{macrocode}
+\def\Gm@sep@ratio#1:#2{\@tempcnta=#1\@tempcntb=#2}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@setbyratio}
+%    该宏确定由 |#4| 计算 |#3|$\times a / b$ 指定的尺寸，其中 $a$ 和 $b$ 由具有 $a:b$ 值的 \cs{Gm@mratio}\ 给出。
+%    如果括号中的 |#1| 是 |b|，则 $a$ 和 $b$ 将被交换。第二个参数 |h| 或 |v| 表示
+%    水平(horizontal)或垂直(vertical)，在这个宏中不使用。
+%    \begin{macrocode}
+\def\Gm@setbyratio[#1]#2#3#4{% determine #4 by ratio
+  \expandafter\Gm@sep@ratio\Gm@mratio\relax
+  \if#1b
+    \edef\@@tempa{\the\@tempcnta}%
+    \@tempcnta=\@tempcntb
+    \@tempcntb=\@@tempa\relax
+  \fi
+  \expandafter\setlength\expandafter\@tempdimb\expandafter
+    {\csname Gm@#3\endcsname}%
+  \ifnum\@tempcntb>\z@
+    \multiply\@tempdimb\@tempcnta
+    \divide\@tempdimb\@tempcntb
+  \fi
+  \expandafter\edef\csname Gm@#4\endcsname{\the\@tempdimb}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@detiv}
+%    此宏从 |#1|(\glen{layoutwidth}\ 或 \glen{layoutheight})、|#2| 和 |#3| 中确定第四个长度(|#4|)。
+%    它在 \cs{Gm@detall}\ 宏中使用。
+%    \begin{macrocode}
+\def\Gm@detiv#1#2#3#4{% determine #4.
+  \expandafter\setlength\expandafter\@tempdima\expandafter
+    {\csname Gm@layout#1\endcsname}%
+  \expandafter\setlength\expandafter\@tempdimb\expandafter
+    {\csname Gm@#2\endcsname}%
+  \addtolength\@tempdima{-\@tempdimb}%
+  \expandafter\setlength\expandafter\@tempdimb\expandafter
+    {\csname Gm@#3\endcsname}%
+  \addtolength\@tempdima{-\@tempdimb}%
+  \ifdim\@tempdima<\z@
+    \Gm@warning{`#4' results in NEGATIVE (\the\@tempdima).%
+    ^^J\@spaces `#2' or `#3' should be shortened in length}%
+  \fi
+  \expandafter\edef\csname Gm@#4\endcsname{\the\@tempdima}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@detiiandiii}
+%    此宏使用第一个参数(|#1|)从 |#1| 确定 |#2| 和 |#3|。第一个参数可以是 |width| 或 |height|，
+%    它可以扩展为纸张的尺寸和正文的尺寸。它用于 \cs{Gm@detall}\ 宏。
+%    \begin{macrocode}
+\def\Gm@detiiandiii#1#2#3{% determine #2 and #3.
+  \expandafter\setlength\expandafter\@tempdima\expandafter
+    {\csname Gm@layout#1\endcsname}%
+  \expandafter\setlength\expandafter\@tempdimb\expandafter
+    {\csname Gm@#1\endcsname}%
+  \addtolength\@tempdima{-\@tempdimb}%
+  \ifdim\@tempdima<\z@
+    \Gm@warning{`#2' and `#3' result in NEGATIVE (\the\@tempdima).%
+                  ^^J\@spaces `#1' should be shortened in length}%
+  \fi
+  \ifx\Gm@mratio\@undefined
+    \expandafter\Gm@sep@ratio\Gm@Dmratio\relax
+  \else
+    \expandafter\Gm@sep@ratio\Gm@mratio\relax
+    \ifnum\@tempcntb>\z@\else
+      \Gm@warning{margin ratio a:b should be non-zero; default used}%
+      \expandafter\Gm@sep@ratio\Gm@Dmratio\relax
+    \fi
+  \fi
+  \@tempdimb=\@tempdima
+  \advance\@tempcntb\@tempcnta
+  \divide\@tempdima\@tempcntb
+  \multiply\@tempdima\@tempcnta
+  \advance\@tempdimb-\@tempdima
+  \expandafter\edef\csname Gm@#2\endcsname{\the\@tempdima}%
+  \expandafter\edef\csname Gm@#3\endcsname{\the\@tempdimb}}%
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\Gm@detall}
+%    此宏确定每个方向(each direction)的分区(partition)。第一个参数(|#1|)应该是 |h| 或 |v|，
+%    第二个参数(|#2|)应该是 |width| 或 |height|，第三个参数(|#3|)应该是 |lmargin| 或 |top|，
+%    最后一个参数 (|#4|)应该是 |rmargin| 或 |bottom|。
+%    \begin{macrocode}
+\def\Gm@detall#1#2#3#4{%
+  \@tempcnta\z@
+  \if#1h
+    \let\Gm@mratio\Gm@hmarginratio
+    \edef\Gm@Dmratio{\if@twoside\Gm@Dhratiotwo\else\Gm@Dhratio\fi}%
+  \else
+    \let\Gm@mratio\Gm@vmarginratio
+    \edef\Gm@Dmratio{\Gm@Dvratio}%
+  \fi
+%    \end{macrocode}
+%    \cs{@tempcnta}\ 被视为一个三位二进制值(three-digit binary value)，顶部(top)、
+%    中间(middle)和底部(bottom)分别表示为用户指定的 |left|(|top|)、|width|(|height|)和 |right|(|bottom|) 版口(margins)。
+%    \begin{macrocode}
+  \if#1h
+    \ifx\Gm@lmargin\@undefined\else\advance\@tempcnta4\relax\fi
+    \ifGm@hbody\advance\@tempcnta2\relax\fi
+    \ifx\Gm@rmargin\@undefined\else\advance\@tempcnta1\relax\fi
+    \Gm@cnth\@tempcnta
+  \else
+    \ifx\Gm@tmargin\@undefined\else\advance\@tempcnta4\relax\fi
+    \ifGm@vbody\advance\@tempcnta2\relax\fi
+    \ifx\Gm@bmargin\@undefined\else\advance\@tempcnta1\relax\fi
+    \Gm@cntv\@tempcnta
+  \fi
+%    \end{macrocode}
+%    如果值为 |000| (=0)，且没有任何固定值(fixed)(默认)：
+%    \begin{macrocode}
+  \ifcase\@tempcnta
+    \if#1h
+      \Gm@defbylen{width}{\Gm@Dhscale\Gm@layoutwidth}%
+    \else
+      \Gm@defbylen{height}{\Gm@Dvscale\Gm@layoutheight}%
+    \fi
+    \Gm@detiiandiii{#2}{#3}{#4}%
+%    \end{macrocode}
+%    如果值为 |001| (=1)，且有固定值 |right|(|bottom|)：
+%    \begin{macrocode}
+  \or
+    \ifx\Gm@mratio\@undefined
+      \if#1h
+        \Gm@defbylen{width}{\Gm@Dhscale\Gm@layoutwidth}%
+      \else
+        \Gm@defbylen{height}{\Gm@Dvscale\Gm@layoutheight}%
+      \fi
+      \setlength\@tempdimc{\@nameuse{Gm@#4}}%
+      \Gm@detiiandiii{#2}{#3}{#4}%
+      \expandafter\let\csname Gm@#2\endcsname\@undefined
+      \Gm@defbylen{#4}{\@tempdimc}%
+    \else
+      \Gm@setbyratio[f]{#1}{#4}{#3}%
+    \fi
+    \Gm@detiv{#2}{#3}{#4}{#2}%
+%    \end{macrocode}
+%    如果值为 |010| (=2)，且有固定值 |width|(|height|)：
+%    \begin{macrocode}
+  \or\Gm@detiiandiii{#2}{#3}{#4}%
+%    \end{macrocode}
+%    如果值为 |011| (=3)，且有固定值 |width|(|height|) 和 |right|(|bottom|)：
+%    \begin{macrocode}
+  \or\Gm@detiv{#2}{#2}{#4}{#3}%
+%    \end{macrocode}
+%    如果值为 |100| (=4)，且有固定值 |left|(|top|)：
+%    \begin{macrocode}
+  \or
+    \ifx\Gm@mratio\@undefined
+      \if#1h
+        \Gm@defbylen{width}{\Gm@Dhscale\Gm@layoutwidth}%
+      \else
+        \Gm@defbylen{height}{\Gm@Dvscale\Gm@layoutheight}%
+      \fi
+      \setlength\@tempdimc{\@nameuse{Gm@#3}}%
+      \Gm@detiiandiii{#2}{#4}{#3}%
+      \expandafter\let\csname Gm@#2\endcsname\@undefined
+      \Gm@defbylen{#3}{\@tempdimc}%
+    \else
+      \Gm@setbyratio[b]{#1}{#3}{#4}%
+    \fi
+    \Gm@detiv{#2}{#3}{#4}{#2}%
+%    \end{macrocode}
+%    如果值为 |101| (=5)，且有固定值 |left|(|top|) 和 |right|(|bottom|)：
+%    \begin{macrocode}
+  \or\Gm@detiv{#2}{#3}{#4}{#2}%
+%    \end{macrocode}
+%    如果值为 |110| (=6)，且有固定值 |left|(|top|) 和 |width|(|height|)：
+%    \begin{macrocode}
+  \or\Gm@detiv{#2}{#2}{#3}{#4}%
+%    \end{macrocode}
+%    如果值为 |111| (=7)，且所有值均固定(fixed)，尽管它被过度确定(over-specified)：
+%    \begin{macrocode}
+  \or\Gm@warning{Over-specification in `#1'-direction.%
+                  ^^J\@spaces `#2' (\@nameuse{Gm@#2}) is ignored}%
+    \Gm@detiv{#2}{#3}{#4}{#2}%
+  \else\fi}%
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\Gm@clean}
+%    用于设置未指定尺寸的(unspecified dimensions)宏为 \cs{@undefined}。
+%    这是由 \cs{geometry}\ 宏使用的。
+%    \begin{macrocode}
+\def\Gm@clean{%
+  \ifnum\Gm@cnth<4\let\Gm@lmargin\@undefined\fi
+  \ifodd\Gm@cnth\else\let\Gm@rmargin\@undefined\fi
+  \ifnum\Gm@cntv<4\let\Gm@tmargin\@undefined\fi
+  \ifodd\Gm@cntv\else\let\Gm@bmargin\@undefined\fi
+  \ifGm@hbody\else
+    \let\Gm@hscale\@undefined
+    \let\Gm@width\@undefined
+    \let\Gm@textwidth\@undefined
+  \fi
+  \ifGm@vbody\else
+    \let\Gm@vscale\@undefined
+    \let\Gm@height\@undefined
+    \let\Gm@textheight\@undefined
+  \fi
+  }%
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\Gm@parse@divide}
+%    宏解析 (|h|,|v|)|divide| 选项。
+%    \begin{macrocode}
+\def\Gm@parse@divide#1#2#3#4{%
+  \def\Gm@star{*}%
+  \@tempcnta\z@
+  \@for\Gm@tmp:=#1\do{%
+    \expandafter\KV@@sp@def\expandafter\Gm@frag\expandafter{\Gm@tmp}%
+    \edef\Gm@value{\Gm@frag}%
+    \ifcase\@tempcnta\relax\edef\Gm@key{#2}%
+      \or\edef\Gm@key{#3}%
+      \else\edef\Gm@key{#4}%
+    \fi
+    \@nameuse{Gm@set\Gm@key false}%
+    \ifx\empty\Gm@value\else
+    \ifx\Gm@star\Gm@value\else
+      \setkeys{Gm}{\Gm@key=\Gm@value}%
+    \fi\fi
+    \advance\@tempcnta\@ne}%
+  \let\Gm@star\relax}%
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\Gm@branch}
+%    该宏将一个值分割为相同的两个值。
+%    \begin{macrocode}
+\def\Gm@branch#1#2#3{%
+  \@tempcnta\z@
+  \@for\Gm@tmp:=#1\do{%
+    \KV@@sp@def\Gm@frag{\Gm@tmp}%
+    \edef\Gm@value{\Gm@frag}%
+    \ifcase\@tempcnta\relax% cnta == 0
+      \setkeys{Gm}{#2=\Gm@value}%
+    \or% cnta == 1
+      \setkeys{Gm}{#3=\Gm@value}%
+    \else\fi
+    \advance\@tempcnta\@ne}%
+  \ifnum\@tempcnta=\@ne
+    \setkeys{Gm}{#3=\Gm@value}%
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\Gm@magtooffset}
+%    此宏用于按 \cs{mag}\ 调整偏移量(offsets)。
+%    \begin{macrocode}
+\def\Gm@magtooffset{%
+  \@tempdima=\mag\Gm@truedimen sp%
+  \@tempdimb=1\Gm@truedimen in%
+  \divide\@tempdimb\@tempdima
+  \multiply\@tempdimb\@m
+  \addtolength{\hoffset}{1\Gm@truedimen in}%
+  \addtolength{\voffset}{1\Gm@truedimen in}%
+  \addtolength{\hoffset}{-\the\@tempdimb}%
+  \addtolength{\voffset}{-\the\@tempdimb}}%
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\Gm@setlength}
+%    此宏存储 \LaTeX{}\ 原始尺寸(native dimensions)，这些尺寸将在以后存储(stored)和设置(afterwards)。
+%    \begin{macrocode}
+\def\Gm@setlength#1#2{%
+  \let\Gm@len=\relax\let\Gm@td=\relax
+  \edef\addtolist{\noexpand\Gm@dimlist=%
+  {\the\Gm@dimlist \Gm@len{#1}{#2}}}\addtolist}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@expandlengths}
+%    这个宏处理 \cs{Gm@dimlist}。
+%    \begin{macrocode}
+\def\Gm@expandlengths{%
+  \def\Gm@td{\Gm@truedimen}%
+  \def\Gm@len##1##2{\setlength{##1}{##2}}%
+  \the\Gm@dimlist}%
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\Gm@setsize}
+%    该宏使用 \cs{Gm@setlength}\ 宏设置 |paperwidth| (纸张宽度)和 |paperheight| (纸张高度)。
+%    \begin{macrocode}
+\def\Gm@setsize#1(#2,#3)#4{%
+  \let\Gm@td\relax
+  \expandafter\Gm@setlength\csname #1width\endcsname{#2\Gm@td #4}%
+  \expandafter\Gm@setlength\csname #1height\endcsname{#3\Gm@td #4}%
+  \ifGm@landscape\Gm@swap@papersizetrue\else\Gm@swap@papersizefalse\fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@setpaper@ifpre}
+%    宏将更改纸张尺寸(paper size)。
+%    \begin{macrocode}
+\def\Gm@setpaper@ifpre#1{%
+  \ifGm@preamble{#1}{\def\Gm@paper{#1}\@nameuse{Gm@#1}{paper}}}%
+%    \end{macrocode}
+%    \end{macro}
+%    此处定义了各种纸张尺寸。
+%    \begin{macrocode}
+\@namedef{Gm@a0paper}#1{\Gm@setsize{#1}(841,1189){mm}}% ISO A0
+\@namedef{Gm@a1paper}#1{\Gm@setsize{#1}(594,841){mm}}% ISO A1
+\@namedef{Gm@a2paper}#1{\Gm@setsize{#1}(420,594){mm}}% ISO A2
+\@namedef{Gm@a3paper}#1{\Gm@setsize{#1}(297,420){mm}}% ISO A3
+\@namedef{Gm@a4paper}#1{\Gm@setsize{#1}(210,297){mm}}% ISO A4
+\@namedef{Gm@a5paper}#1{\Gm@setsize{#1}(148,210){mm}}% ISO A5
+\@namedef{Gm@a6paper}#1{\Gm@setsize{#1}(105,148){mm}}% ISO A6
+\@namedef{Gm@b0paper}#1{\Gm@setsize{#1}(1000,1414){mm}}% ISO B0
+\@namedef{Gm@b1paper}#1{\Gm@setsize{#1}(707,1000){mm}}% ISO B1
+\@namedef{Gm@b2paper}#1{\Gm@setsize{#1}(500,707){mm}}% ISO B2
+\@namedef{Gm@b3paper}#1{\Gm@setsize{#1}(353,500){mm}}% ISO B3
+\@namedef{Gm@b4paper}#1{\Gm@setsize{#1}(250,353){mm}}% ISO B4
+\@namedef{Gm@b5paper}#1{\Gm@setsize{#1}(176,250){mm}}% ISO B5
+\@namedef{Gm@b6paper}#1{\Gm@setsize{#1}(125,176){mm}}% ISO B6
+\@namedef{Gm@c0paper}#1{\Gm@setsize{#1}(917,1297){mm}}% ISO C0
+\@namedef{Gm@c1paper}#1{\Gm@setsize{#1}(648,917){mm}}% ISO C1
+\@namedef{Gm@c2paper}#1{\Gm@setsize{#1}(458,648){mm}}% ISO C2
+\@namedef{Gm@c3paper}#1{\Gm@setsize{#1}(324,458){mm}}% ISO C3
+\@namedef{Gm@c4paper}#1{\Gm@setsize{#1}(229,324){mm}}% ISO C4
+\@namedef{Gm@c5paper}#1{\Gm@setsize{#1}(162,229){mm}}% ISO C5
+\@namedef{Gm@c6paper}#1{\Gm@setsize{#1}(114,162){mm}}% ISO C6
+\@namedef{Gm@b0j}#1{\Gm@setsize{#1}(1030,1456){mm}}% JIS B0
+\@namedef{Gm@b1j}#1{\Gm@setsize{#1}(728,1030){mm}}% JIS B1
+\@namedef{Gm@b2j}#1{\Gm@setsize{#1}(515,728){mm}}% JIS B2
+\@namedef{Gm@b3j}#1{\Gm@setsize{#1}(364,515){mm}}% JIS B3
+\@namedef{Gm@b4j}#1{\Gm@setsize{#1}(257,364){mm}}% JIS B4
+\@namedef{Gm@b5j}#1{\Gm@setsize{#1}(182,257){mm}}% JIS B5
+\@namedef{Gm@b6j}#1{\Gm@setsize{#1}(128,182){mm}}% JIS B6
+\@namedef{Gm@ansiapaper}#1{\Gm@setsize{#1}(8.5,11){in}}%
+\@namedef{Gm@ansibpaper}#1{\Gm@setsize{#1}(11,17){in}}%
+\@namedef{Gm@ansicpaper}#1{\Gm@setsize{#1}(17,22){in}}%
+\@namedef{Gm@ansidpaper}#1{\Gm@setsize{#1}(22,34){in}}%
+\@namedef{Gm@ansiepaper}#1{\Gm@setsize{#1}(34,44){in}}%
+\@namedef{Gm@letterpaper}#1{\Gm@setsize{#1}(8.5,11){in}}%
+\@namedef{Gm@legalpaper}#1{\Gm@setsize{#1}(8.5,14){in}}%
+\@namedef{Gm@executivepaper}#1{\Gm@setsize{#1}(7.25,10.5){in}}%
+\@namedef{Gm@screen}#1{\Gm@setsize{#1}(225,180){mm}}%
+%    \end{macrocode}
+%
+%  \begin{key}{Gm}{paper}
+%    |paper| 以纸张名称(paper name)作为其值。
+%    \begin{macrocode}
+\define@key{Gm}{paper}{\setkeys{Gm}{#1}}%
+\let\KV@Gm@papername\KV@Gm@paper
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{a[0-6]paper}
+%  \begin{key}{Gm}{b[0-6]paper}
+%  \begin{key}{Gm}{b[0-6]j}
+%  \begin{key}{Gm}{ansi[a-e]paper}
+%  \begin{key}{Gm}{letterpaper}
+%  \begin{key}{Gm}{legalpaper}
+%  \begin{key}{Gm}{executivepaper}
+%  \begin{key}{Gm}{screen}
+%    以下是可用的纸张名称(paper name)。
+%    \begin{macrocode}
+\define@key{Gm}{a0paper}[true]{\Gm@setpaper@ifpre{a0paper}}%
+\define@key{Gm}{a1paper}[true]{\Gm@setpaper@ifpre{a1paper}}%
+\define@key{Gm}{a2paper}[true]{\Gm@setpaper@ifpre{a2paper}}%
+\define@key{Gm}{a3paper}[true]{\Gm@setpaper@ifpre{a3paper}}%
+\define@key{Gm}{a4paper}[true]{\Gm@setpaper@ifpre{a4paper}}%
+\define@key{Gm}{a5paper}[true]{\Gm@setpaper@ifpre{a5paper}}%
+\define@key{Gm}{a6paper}[true]{\Gm@setpaper@ifpre{a6paper}}%
+\define@key{Gm}{b0paper}[true]{\Gm@setpaper@ifpre{b0paper}}%
+\define@key{Gm}{b1paper}[true]{\Gm@setpaper@ifpre{b1paper}}%
+\define@key{Gm}{b2paper}[true]{\Gm@setpaper@ifpre{b2paper}}%
+\define@key{Gm}{b3paper}[true]{\Gm@setpaper@ifpre{b3paper}}%
+\define@key{Gm}{b4paper}[true]{\Gm@setpaper@ifpre{b4paper}}%
+\define@key{Gm}{b5paper}[true]{\Gm@setpaper@ifpre{b5paper}}%
+\define@key{Gm}{b6paper}[true]{\Gm@setpaper@ifpre{b6paper}}%
+\define@key{Gm}{c0paper}[true]{\Gm@setpaper@ifpre{c0paper}}%
+\define@key{Gm}{c1paper}[true]{\Gm@setpaper@ifpre{c1paper}}%
+\define@key{Gm}{c2paper}[true]{\Gm@setpaper@ifpre{c2paper}}%
+\define@key{Gm}{c3paper}[true]{\Gm@setpaper@ifpre{c3paper}}%
+\define@key{Gm}{c4paper}[true]{\Gm@setpaper@ifpre{c4paper}}%
+\define@key{Gm}{c5paper}[true]{\Gm@setpaper@ifpre{c5paper}}%
+\define@key{Gm}{c6paper}[true]{\Gm@setpaper@ifpre{c6paper}}%
+\define@key{Gm}{b0j}[true]{\Gm@setpaper@ifpre{b0j}}%
+\define@key{Gm}{b1j}[true]{\Gm@setpaper@ifpre{b1j}}%
+\define@key{Gm}{b2j}[true]{\Gm@setpaper@ifpre{b2j}}%
+\define@key{Gm}{b3j}[true]{\Gm@setpaper@ifpre{b3j}}%
+\define@key{Gm}{b4j}[true]{\Gm@setpaper@ifpre{b4j}}%
+\define@key{Gm}{b5j}[true]{\Gm@setpaper@ifpre{b5j}}%
+\define@key{Gm}{b6j}[true]{\Gm@setpaper@ifpre{b6j}}%
+\define@key{Gm}{ansiapaper}[true]{\Gm@setpaper@ifpre{ansiapaper}}%安西亚纸
+\define@key{Gm}{ansibpaper}[true]{\Gm@setpaper@ifpre{ansibpaper}}%
+\define@key{Gm}{ansicpaper}[true]{\Gm@setpaper@ifpre{ansicpaper}}%
+\define@key{Gm}{ansidpaper}[true]{\Gm@setpaper@ifpre{ansidpaper}}%
+\define@key{Gm}{ansiepaper}[true]{\Gm@setpaper@ifpre{ansiepaper}}%
+\define@key{Gm}{letterpaper}[true]{\Gm@setpaper@ifpre{letterpaper}}%信纸
+\define@key{Gm}{legalpaper}[true]{\Gm@setpaper@ifpre{legalpaper}}%
+\define@key{Gm}{executivepaper}[true]{\Gm@setpaper@ifpre{executivepaper}}%
+\define@key{Gm}{screen}[true]{\Gm@setpaper@ifpre{screen}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}\end{key}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{paperwidth}
+%  \begin{key}{Gm}{paperheight}
+%  \begin{key}{Gm}{papersize}
+%    也可以直接指定纸张尺寸。
+%    \begin{macrocode}
+\define@key{Gm}{paperwidth}{\ifGm@preamble{paperwidth}{%
+  \def\Gm@paper{custom}\Gm@setlength\paperwidth{#1}}}%
+\define@key{Gm}{paperheight}{\ifGm@preamble{paperheight}{%
+  \def\Gm@paper{custom}\Gm@setlength\paperheight{#1}}}%
+\define@key{Gm}{papersize}{\ifGm@preamble{papersize}{%
+  \def\Gm@paper{custom}\Gm@branch{#1}{paperwidth}{paperheight}}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{layout}
+%  \begin{key}{Gm}{layoutwidth}
+%  \begin{key}{Gm}{layoutheight}
+%  \begin{key}{Gm}{layoutsize}
+%    也可以直接指定布局尺寸(layout size)。
+%    \begin{macrocode}
+\define@key{Gm}{layout}{\Gm@layouttrue\@nameuse{Gm@#1}{Gm@layout}}%
+\let\KV@Gm@layoutname\KV@Gm@layout
+\define@key{Gm}{layoutwidth}{\Gm@layouttrue\Gm@setlength\Gm@layoutwidth{#1}}%
+\define@key{Gm}{layoutheight}{\Gm@layouttrue\Gm@setlength\Gm@layoutheight{#1}}%
+\define@key{Gm}{layoutsize}{\Gm@branch{#1}{layoutwidth}{layoutheight}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{landscape}
+%  \begin{key}{Gm}{portrait}
+%    设置纸张方向(orientation)。
+%    \begin{macrocode}
+\define@key{Gm}{landscape}[true]{\ifGm@preamble{landscape}{%
+  \Gm@doifelse{landscape}{#1}%
+  {\ifGm@landscape\else\Gm@landscapetrue\Gm@reverse{swap@papersize}\fi}%
+  {\ifGm@landscape\Gm@landscapefalse\Gm@reverse{swap@papersize}\fi}}}%
+\define@key{Gm}{portrait}[true]{\ifGm@preamble{portrait}{%
+  \Gm@doifelse{portrait}{#1}%
+  {\ifGm@landscape\Gm@landscapefalse\Gm@reverse{swap@papersize}\fi}%
+  {\ifGm@landscape\else\Gm@landscapetrue\Gm@reverse{swap@papersize}\fi}}}%
+%    \end{macrocode}
+%  \end{key}\end{key}
+%  \begin{key}{Gm}{hscale}
+%  \begin{key}{Gm}{vscale}
+%  \begin{key}{Gm}{scale}
+%    这些选项可以确定正文(\gpart{total body})的长度，给出与纸张尺寸(paper size)的比例(\textit{scale(s)})。
+%    \begin{macrocode}
+\define@key{Gm}{hscale}{\Gm@hbodytrue\edef\Gm@hscale{#1}}%
+\define@key{Gm}{vscale}{\Gm@vbodytrue\edef\Gm@vscale{#1}}%
+\define@key{Gm}{scale}{\Gm@branch{#1}{hscale}{vscale}}%
+%    \end{macrocode}
+%  \clearpage
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{width}
+%  \begin{key}{Gm}{height}
+%  \begin{key}{Gm}{total}
+%  \begin{key}{Gm}{totalwidth}
+%  \begin{key}{Gm}{totalheight}
+%    这些选项给出了正文(\gpart{total body})的具体尺寸。
+%    |totalwidth| 和 |totalheight| 分别是 |width| 和 |height|的别名。
+%    \begin{macrocode}
+\define@key{Gm}{width}{\Gm@hbodytrue\Gm@defbylen{width}{#1}}%
+\define@key{Gm}{height}{\Gm@vbodytrue\Gm@defbylen{height}{#1}}%
+\define@key{Gm}{total}{\Gm@branch{#1}{width}{height}}%
+\let\KV@Gm@totalwidth\KV@Gm@width
+\let\KV@Gm@totalheight\KV@Gm@height
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{textwidth}
+%  \begin{key}{Gm}{textheight}
+%  \begin{key}{Gm}{text}
+%  \begin{key}{Gm}{body}
+%    这些选项直接设置尺寸 \cs{textwidth}\ 和 \cs{textheight}。|body| 是 |text| 的别名。
+%    \begin{macrocode}
+\define@key{Gm}{textwidth}{\Gm@hbodytrue\Gm@defbylen{textwidth}{#1}}%
+\define@key{Gm}{textheight}{\Gm@vbodytrue\Gm@defbylen{textheight}{#1}}%
+\define@key{Gm}{text}{\Gm@branch{#1}{textwidth}{textheight}}%
+\let\KV@Gm@body\KV@Gm@text
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{lines}
+%    该选项用行数(number of lines)设置 \cs{textheight}。
+%    \begin{macrocode}
+\define@key{Gm}{lines}{\Gm@vbodytrue\Gm@defbycnt{lines}{#1}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{includehead}
+%  \begin{key}{Gm}{includefoot}
+%  \begin{key}{Gm}{includeheadfoot}
+%  \begin{key}{Gm}{includemp}
+%  \begin{key}{Gm}{includeall}
+%    这些选项将相应的尺寸(corresponding dimensions)作为正文(\gpart{body})的一部分。
+%    \begin{macrocode}
+\define@key{Gm}{includehead}[true]{\Gm@setbool{includehead}{#1}}%
+\define@key{Gm}{includefoot}[true]{\Gm@setbool{includefoot}{#1}}%
+\define@key{Gm}{includeheadfoot}[true]{\Gm@doifelse{includeheadfoot}{#1}%
+  {\Gm@includeheadtrue\Gm@includefoottrue}%
+  {\Gm@includeheadfalse\Gm@includefootfalse}}%
+\define@key{Gm}{includemp}[true]{\Gm@setbool{includemp}{#1}}%
+\define@key{Gm}{includeall}[true]{\Gm@doifelse{includeall}{#1}%
+  {\Gm@includeheadtrue\Gm@includefoottrue\Gm@includemptrue}%
+  {\Gm@includeheadfalse\Gm@includefootfalse\Gm@includempfalse}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{ignorehead}
+%  \begin{key}{Gm}{ignorefoot}
+%  \begin{key}{Gm}{ignoreheadfoot}
+%  \begin{key}{Gm}{ignoremp}
+%  \begin{key}{Gm}{ignoreall}
+%  这些选项在确定 \gpart{body}\ 时不包含 \gpart{head}、\gpart{foot}\ 和 \gpart{marginpars}。
+%    \begin{macrocode}
+\define@key{Gm}{ignorehead}[true]{%
+  \Gm@setboolrev[ignorehead]{includehead}{#1}}%
+\define@key{Gm}{ignorefoot}[true]{%
+  \Gm@setboolrev[ignorefoot]{includefoot}{#1}}%
+\define@key{Gm}{ignoreheadfoot}[true]{\Gm@doifelse{ignoreheadfoot}{#1}%
+  {\Gm@includeheadfalse\Gm@includefootfalse}%
+  {\Gm@includeheadtrue\Gm@includefoottrue}}%
+\define@key{Gm}{ignoremp}[true]{%
+  \Gm@setboolrev[ignoremp]{includemp}{#1}}%
+\define@key{Gm}{ignoreall}[true]{\Gm@doifelse{ignoreall}{#1}%
+  {\Gm@includeheadfalse\Gm@includefootfalse\Gm@includempfalse}%
+  {\Gm@includeheadtrue\Gm@includefoottrue\Gm@includemptrue}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{heightrounded}
+%    该选项将 \cs{textheight}\ 四舍五入为 \cs{baselineskip}\ 的n倍加上 \cs{topskip}。
+%    \begin{macrocode}
+\define@key{Gm}{heightrounded}[true]{\Gm@setbool{heightrounded}{#1}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{hdivide}
+%  \begin{key}{Gm}{vdivide}
+%  \begin{key}{Gm}{divide}
+%    这些选项对于指定纸张每个方向的分区(partitioning)非常有用。
+%    \begin{macrocode}
+\define@key{Gm}{hdivide}{\Gm@parse@divide{#1}{lmargin}{width}{rmargin}}%
+\define@key{Gm}{vdivide}{\Gm@parse@divide{#1}{tmargin}{height}{bmargin}}%
+\define@key{Gm}{divide}{\Gm@parse@divide{#1}{lmargin}{width}{rmargin}%
+  \Gm@parse@divide{#1}{tmargin}{height}{bmargin}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%
+%  \begin{key}{Gm}{lmargin}
+%  \begin{key}{Gm}{rmargin}
+%  \begin{key}{Gm}{tmargin}
+%  \begin{key}{Gm}{bmargin}
+%  \begin{key}{Gm}{left}
+%  \begin{key}{Gm}{inner}
+%  \begin{key}{Gm}{innermargin}
+%  \begin{key}{Gm}{right}
+%  \begin{key}{Gm}{outer}
+%  \begin{key}{Gm}{outermargin}
+%  \begin{key}{Gm}{top}
+%  \begin{key}{Gm}{bottom}
+%    这些选项设置版口(\gpart{margins})。|left|、|inner|、|innermargin| 是 |lmargin| 的别名。
+%    |right|、|outer|、|outermargin| 是 |rmargin| 的别名。
+%    |top| 和 |bottom| 分别是 |tmargin| 和 |bmargin| 的别名。
+%    \begin{macrocode}
+\define@key{Gm}{lmargin}{\Gm@defbylen{lmargin}{#1}}%
+\define@key{Gm}{rmargin}{\Gm@defbylen{rmargin}{#1}}%
+\let\KV@Gm@left\KV@Gm@lmargin
+\let\KV@Gm@inner\KV@Gm@lmargin
+\let\KV@Gm@innermargin\KV@Gm@lmargin
+\let\KV@Gm@right\KV@Gm@rmargin
+\let\KV@Gm@outer\KV@Gm@rmargin
+\let\KV@Gm@outermargin\KV@Gm@rmargin
+\define@key{Gm}{tmargin}{\Gm@defbylen{tmargin}{#1}}%
+\define@key{Gm}{bmargin}{\Gm@defbylen{bmargin}{#1}}%
+\let\KV@Gm@top\KV@Gm@tmargin
+\let\KV@Gm@bottom\KV@Gm@bmargin
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}\end{key}
+%  \end{key}\end{key}\end{key}\end{key}\end{key}
+%  \end{key}\end{key}
+%  \begin{key}{Gm}{hmargin}
+%  \begin{key}{Gm}{vmargin}
+%  \begin{key}{Gm}{margin}
+%  这些选项是设置版口(\gpart{margins})的简写(shorthands)。
+%    \begin{macrocode}
+\define@key{Gm}{hmargin}{\Gm@branch{#1}{lmargin}{rmargin}}%
+\define@key{Gm}{vmargin}{\Gm@branch{#1}{tmargin}{bmargin}}%
+\define@key{Gm}{margin}{\Gm@branch{#1}{lmargin}{tmargin}%
+  \Gm@branch{#1}{rmargin}{bmargin}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{hmarginratio}
+%  \begin{key}{Gm}{vmarginratio}
+%  \begin{key}{Gm}{marginratio}
+%  \begin{key}{Gm}{hratio}
+%  \begin{key}{Gm}{vratio}
+%  \begin{key}{Gm}{ratio}
+%  这些选项用于指定版口比例(margin ratios)。
+%    \begin{macrocode}
+\define@key{Gm}{hmarginratio}{\edef\Gm@hmarginratio{#1}}%
+\define@key{Gm}{vmarginratio}{\edef\Gm@vmarginratio{#1}}%
+\define@key{Gm}{marginratio}{\Gm@branch{#1}{hmarginratio}{vmarginratio}}%
+\let\KV@Gm@hratio\KV@Gm@hmarginratio
+\let\KV@Gm@vratio\KV@Gm@vmarginratio
+\let\KV@Gm@ratio\KV@Gm@marginratio
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{hcentering}
+%  \begin{key}{Gm}{vcentering}
+%  \begin{key}{Gm}{centering}
+%    居中放置正文(\gpart{body})的有用简写(shorthands)。
+%    \begin{macrocode}
+\define@key{Gm}{hcentering}[true]{\Gm@doifelse{hcentering}{#1}%
+  {\def\Gm@hmarginratio{1:1}}{}}%
+\define@key{Gm}{vcentering}[true]{\Gm@doifelse{vcentering}{#1}%
+  {\def\Gm@vmarginratio{1:1}}{}}%
+\define@key{Gm}{centering}[true]{\Gm@doifelse{centering}{#1}%
+  {\def\Gm@hmarginratio{1:1}\def\Gm@vmarginratio{1:1}}{}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{twoside}
+%    如果 |twoside=true|，则 \cs{@twoside}\ 和 \cs{@mparswitch}\ 设置为 |true|。
+%    \begin{macrocode}
+\define@key{Gm}{twoside}[true]{\Gm@doifelse{twoside}{#1}%
+  {\@twosidetrue\@mparswitchtrue}{\@twosidefalse\@mparswitchfalse}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{asymmetric}
+%    |asymmetric| 设置 \cs{@mparswitchfalse}\ 和 \cs{@twosidetrue}。|asymmetric=false| 无效。
+%    \begin{macrocode}
+\define@key{Gm}{asymmetric}[true]{\Gm@doifelse{asymmetric}{#1}%
+  {\@twosidetrue\@mparswitchfalse}{}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{bindingoffset}
+%    该宏将指定的空间(specified space)添加到里口(inner margin，订口)。
+%    \begin{macrocode}
+\define@key{Gm}{bindingoffset}{\Gm@setlength\Gm@bindingoffset{#1}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{headheight}
+%  \begin{key}{Gm}{headsep}
+%  \begin{key}{Gm}{footskip}
+%  \begin{key}{Gm}{head}
+%  \begin{key}{Gm}{foot}
+%    直接设置 \gpart{head}\ 和/或 \gpart{foot}\ 的尺寸。
+%    \begin{macrocode}
+\define@key{Gm}{headheight}{\Gm@setlength\headheight{#1}}%
+\define@key{Gm}{headsep}{\Gm@setlength\headsep{#1}}%
+\define@key{Gm}{footskip}{\Gm@setlength\footskip{#1}}%
+\let\KV@Gm@head\KV@Gm@headheight
+\let\KV@Gm@foot\KV@Gm@footskip
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{nohead}
+%  \begin{key}{Gm}{nofoot}
+%  \begin{key}{Gm}{noheadfoot}
+%    它们是将 \gpart{head}\ 和/或 \gpart{foot}\ 设为 |0pt| 的缩写。
+%    \begin{macrocode}
+\define@key{Gm}{nohead}[true]{\Gm@doifelse{nohead}{#1}%
+  {\Gm@setlength\headheight\z@\Gm@setlength\headsep\z@}{}}%
+\define@key{Gm}{nofoot}[true]{\Gm@doifelse{nofoot}{#1}%
+  {\Gm@setlength\footskip\z@}{}}%
+\define@key{Gm}{noheadfoot}[true]{\Gm@doifelse{noheadfoot}{#1}%
+  {\Gm@setlength\headheight\z@\Gm@setlength\headsep
+  \z@\Gm@setlength\footskip\z@}{}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{footnotesep}
+%    该选项直接设置原始尺寸(native dimension)\ \ \cs{footnotesep}。
+%    \begin{macrocode}
+\define@key{Gm}{footnotesep}{\Gm@setlength{\skip\footins}{#1}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{marginparwidth}
+%  \begin{key}{Gm}{marginpar}
+%  \begin{key}{Gm}{marginparsep}
+%   它们直接设置原始尺寸(native dimension)\ \ \cs{marginparwidth}\ 和 \cs{marginparsep}。
+%    \begin{macrocode}
+\define@key{Gm}{marginparwidth}{\Gm@setlength\marginparwidth{#1}}%
+\let\KV@Gm@marginpar\KV@Gm@marginparwidth
+\define@key{Gm}{marginparsep}{\Gm@setlength\marginparsep{#1}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{nomarginpar}
+%   该宏是 \cs{marginparwidth}|=0pt| 和 \cs{marginparsep}|=0pt| 的缩写。
+%    \begin{macrocode}
+\define@key{Gm}{nomarginpar}[true]{\Gm@doifelse{nomarginpar}{#1}%
+  {\Gm@setlength\marginparwidth\z@\Gm@setlength\marginparsep\z@}{}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{columnsep}
+%    该选项设置原始尺寸(native dimension)\ \ \cs{columnsep}。
+%    \begin{macrocode}
+\define@key{Gm}{columnsep}{\Gm@setlength\columnsep{#1}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{hoffset}
+%  \begin{key}{Gm}{voffset}
+%  \begin{key}{Gm}{offset}
+%    前两个选项设置原始尺寸(native dimension)\ \ \cs{hoffset}\ 和 \cs{voffset}。
+%    |offset| 可以将两者设置为相同的值。
+%    \begin{macrocode}
+\define@key{Gm}{hoffset}{\Gm@setlength\hoffset{#1}}%
+\define@key{Gm}{voffset}{\Gm@setlength\voffset{#1}}%
+\define@key{Gm}{offset}{\Gm@branch{#1}{hoffset}{voffset}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{layouthoffset}
+%  \begin{key}{Gm}{layoutvoffset}
+%  \begin{key}{Gm}{layoutoffset}
+%    \begin{macrocode}
+\define@key{Gm}{layouthoffset}{\Gm@setlength\Gm@layouthoffset{#1}}%
+\define@key{Gm}{layoutvoffset}{\Gm@setlength\Gm@layoutvoffset{#1}}%
+\define@key{Gm}{layoutoffset}{\Gm@branch{#1}{layouthoffset}{layoutvoffset}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{twocolumn}
+%    该选项设置 \cs{twocolumn}\ 开关(switch)。
+%    \begin{macrocode}
+\define@key{Gm}{twocolumn}[true]{%
+  \Gm@doif{twocolumn}{#1}{\csname @twocolumn\Gm@bool\endcsname}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{onecolumn}
+%    此选项与 |twocolumn| 选项的效果相反。
+%    \begin{macrocode}
+\define@key{Gm}{onecolumn}[true]{%
+  \Gm@doifelse{onecolumn}{#1}{\@twocolumnfalse}{\@twocolumntrue}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{reversemp}
+%  \begin{key}{Gm}{reversemarginpar}
+%    这两个选项都设置了 \cs{reversemargin}\ (反向版口)。
+%    \begin{macrocode}
+\define@key{Gm}{reversemp}[true]{%
+  \Gm@doif{reversemp}{#1}{\csname @reversemargin\Gm@bool\endcsname}}%
+\define@key{Gm}{reversemarginpar}[true]{%
+  \Gm@doif{reversemarginpar}{#1}{\csname @reversemargin\Gm@bool\endcsname}}%
+%    \end{macrocode}
+%  \end{key}\end{key}
+%  \begin{key}{Gm}{dviver}
+%    \begin{macrocode}
+\define@key{Gm}{driver}{\ifGm@preamble{driver}{%
+  \edef\@@tempa{#1}\edef\@@auto{auto}\edef\@@none{none}%
+  \ifx\@@tempa\@empty\let\Gm@driver\relax\else
+  \ifx\@@tempa\@@none\let\Gm@driver\relax\else
+  \ifx\@@tempa\@@auto\let\Gm@driver\@empty\else
+  \setkeys{Gm}{#1}\fi\fi\fi\let\@@auto\relax\let\@@none\relax}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{dvips}
+%  \begin{key}{Gm}{dvipdfm}\begin{key}{Gm}{dvipdfmx}\begin{key}{Gm}{xdvipdfmx}
+%  \begin{key}{Gm}{pdftex}
+%  \begin{key}{Gm}{luatex}
+%  \begin{key}{Gm}{xetex}
+%  \begin{key}{Gm}{vtex}
+%   \Gm\ 宏包支持 |dvips|、|dvipdfm|、|pdflatex|、|luatex| 和 |vtex|。|dvipdfm| 工
+%   作方式和 |dvips| 相同。
+%    \begin{macrocode}
+\define@key{Gm}{dvips}[true]{\ifGm@preamble{dvips}{%
+  \Gm@doifelse{dvips}{#1}{\Gm@setdriver{dvips}}{\Gm@unsetdriver{dvips}}}}%
+\define@key{Gm}{dvipdfm}[true]{\ifGm@preamble{dvipdfm}{%
+  \Gm@doifelse{dvipdfm}{#1}{\Gm@setdriver{dvipdfm}}{\Gm@unsetdriver{dvipdfm}}}}%
+\define@key{Gm}{dvipdfmx}[true]{\ifGm@preamble{dvipdfm}{%
+  \Gm@doifelse{dvipdfm}{#1}{\Gm@setdriver{dvipdfm}}{\Gm@unsetdriver{dvipdfm}}}}%
+\define@key{Gm}{xdvipdfmx}[true]{\ifGm@preamble{dvipdfm}{%
+  \Gm@doifelse{dvipdfm}{#1}{\Gm@setdriver{dvipdfm}}{\Gm@unsetdriver{dvipdfm}}}}%
+\define@key{Gm}{pdftex}[true]{\ifGm@preamble{pdftex}{%
+  \Gm@doifelse{pdftex}{#1}{\Gm@setdriver{pdftex}}{\Gm@unsetdriver{pdftex}}}}%
+\define@key{Gm}{luatex}[true]{\ifGm@preamble{luatex}{%
+  \Gm@doifelse{luatex}{#1}{\Gm@setdriver{luatex}}{\Gm@unsetdriver{luatex}}}}%
+\define@key{Gm}{xetex}[true]{\ifGm@preamble{xetex}{%
+  \Gm@doifelse{xetex}{#1}{\Gm@setdriver{xetex}}{\Gm@unsetdriver{xetex}}}}%
+\define@key{Gm}{vtex}[true]{\ifGm@preamble{vtex}{%
+  \Gm@doifelse{vtex}{#1}{\Gm@setdriver{vtex}}{\Gm@unsetdriver{vtex}}}}%
+%    \end{macrocode}
+%  \end{key}\end{key}\end{key}\end{key}\end{key}\end{key}\end{key}\end{key}
+%  \begin{key}{Gm}{verbose}
+%    冗余模式(verbose mode)。
+%    \begin{macrocode}
+\define@key{Gm}{verbose}[true]{\ifGm@preamble{verbose}{\Gm@setbool{verbose}{#1}}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{reset}
+%    该选项取消了 |reset| 之前指定的所有选项(除外 |pass|)。除了无法重置带有 |truedimen| 的 |mag| ($\neq1000$)。
+%    \begin{macrocode}
+\define@key{Gm}{reset}[true]{\ifGm@preamble{reset}{%
+  \Gm@doifelse{reset}{#1}{\Gm@restore@org\Gm@initall
+  \ProcessOptionsKV[c]{Gm}\Gm@setdefaultpaper}{}}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{resetpaper}
+%    如果 |resetpaper| 设置为 |true|，则丢弃宏包装中重新定义的纸张尺寸，并恢复原始纸张尺寸。
+%    此选项对于使用普通(normal)打印机(printers)和纸张(papers)打印非标准尺寸
+%    的(nonstandard sized)文件可能很有用。
+%    \begin{macrocode}
+\define@key{Gm}{resetpaper}[true]{\ifGm@preamble{resetpaper}{%
+  \Gm@setbool{resetpaper}{#1}}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{mag}
+%    |mag| 在指定时立即展开，所以当 |reset| 被设置为 |truedimen| 时 |reset| 不能重置 |mag|。
+%    \begin{macrocode}
+\define@key{Gm}{mag}{\ifGm@preamble{mag}{\mag=#1}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{truedimen}
+%    如果 |truedimen| 设置为 |true|，则所有内部显式尺寸(internal explicit dimensions)
+%    都将更改为 \textit{true}\ 尺寸，例如，|1in| 更改为 |1truein|。
+%    \begin{macrocode}
+\define@key{Gm}{truedimen}[true]{\ifGm@preamble{truedimen}{%
+  \Gm@doifelse{truedimen}{#1}{\let\Gm@truedimen\Gm@true}%
+  {\let\Gm@truedimen\@empty}}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{pass}
+%    该选项使指定的所有选项无效，但冗余开关(verbose switch)除外。
+%    \begin{macrocode}
+\define@key{Gm}{pass}[true]{\ifGm@preamble{pass}{\Gm@setbool{pass}{#1}}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{showframe}
+%    |Showframe| 选项打印页面框架(page frames)，以帮助您了解最终的布局(resulting layout)是什么样的。
+%    \begin{macrocode}
+\define@key{Gm}{showframe}[true]{\Gm@setbool{showframe}{#1}}%
+%    \end{macrocode}
+%  \end{key}
+%  \begin{key}{Gm}{showcrop}
+%    |showcrop| 选项在布局区域(layout area)的每个角落打印裁剪标记(crop marks)。
+%    \begin{macrocode}
+\define@key{Gm}{showcrop}[true]{\Gm@setbool{showcrop}{#1}}%
+%    \end{macrocode}
+%  \end{key}
+%    \begin{macro}{\Gm@setdefaultpaper}
+%    该宏存储纸张尺寸(paper dimensions)。此宏应在 |\ProcessOptionsKV[c]{Gm}| 之后被调用。
+%    如果在 |\documentclass| 中指定了 |landscape| 选项，该类(class)将立即交换纸张尺寸。
+%    \begin{macrocode}
+\def\Gm@setdefaultpaper{%
+  \ifx\Gm@paper\@undefined
+    \Gm@setsize{paper}(\strip@pt\paperwidth,\strip@pt\paperheight){pt}%
+    \Gm@setsize{Gm@layout}(\strip@pt\paperwidth,\strip@pt\paperheight){pt}%
+    \Gm@swap@papersizefalse
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@adjustpaper}
+%    该宏检查纸张宽度/纸张高度(paperwidth/paperwidthheight)是否大于0pt，这在 \cs{Gm@process}\ 中使用。
+%    当纸张方向(paper orientation)被 |landscape| 和 |portrait| 选项更改时，可以交换纸张尺寸。
+%    \begin{macrocode}
+\def\Gm@adjustpaper{%
+  \ifdim\paperwidth>\p@\else
+    \PackageError{geometry}{%
+    \string\paperwidth\space(\the\paperwidth) too short}{%
+    Set a paper type (e.g., `a4paper').}%
+  \fi
+  \ifdim\paperheight>\p@\else
+    \PackageError{geometry}{%
+    \string\paperheight\space(\the\paperheight) too short}{%
+    Set a paper type (e.g., `a4paper').}%
+  \fi
+  \ifGm@swap@papersize
+    \setlength\@tempdima{\paperwidth}%
+    \setlength\paperwidth{\paperheight}%
+    \setlength\paperheight{\@tempdima}%
+  \fi
+  \ifGm@layout\else
+    \setlength\Gm@layoutwidth{\paperwidth}%
+    \setlength\Gm@layoutheight{\paperheight}%
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@checkmp}
+%    宏检查 |marginpars| 是否超出页面。
+%    \begin{macrocode}
+\def\Gm@checkmp{%
+  \ifGm@includemp\else
+    \@tempcnta\z@\@tempcntb\@ne
+    \if@twocolumn
+      \@tempcnta\@ne
+    \else
+      \if@reversemargin
+        \@tempcnta\@ne\@tempcntb\z@
+      \fi
+    \fi
+    \@tempdima\marginparwidth
+    \advance\@tempdima\marginparsep
+    \ifnum\@tempcnta=\@ne
+      \@tempdimc\@tempdima
+      \setlength\@tempdimb{\Gm@lmargin}%
+      \advance\@tempdimc-\@tempdimb
+      \ifdim\@tempdimc>\z@
+        \Gm@warning{The marginal notes overrun the paper edge.^^J
+        \@spaces Add \the\@tempdimc\space and more to the left margin}%
+      \fi
+    \fi
+    \ifnum\@tempcntb=\@ne
+      \@tempdimc\@tempdima
+      \setlength\@tempdimb{\Gm@rmargin}%
+      \advance\@tempdimc-\@tempdimb
+      \ifdim\@tempdimc>\z@
+        \Gm@warning{The marginal notes overrun the paper.^^J
+        \@spaces Add \the\@tempdimc\space and more to the right margin}%
+      \fi
+    \fi
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@adjustmp}
+%    当设置 |includemp| 时，该宏设置 marginpar 校正(correction)，这在 \cs{Gm@process}\ 中使用。
+%    在此处设置变量 \cs{Gm@wd@mp}、\cs{Gm@odd@mp}\ 和 \cs{Gm@even@mp}。
+%    请注意 \cs{Gm@even@mp}\ 只能用于双开面布局(twoside layout)。
+%    \begin{macrocode}
+\def\Gm@adjustmp{%
+  \ifGm@includemp
+    \@tempdimb\marginparwidth
+    \advance\@tempdimb\marginparsep
+    \Gm@wd@mp\@tempdimb
+    \Gm@odd@mp\z@
+    \Gm@even@mp\z@
+    \if@twocolumn
+      \Gm@wd@mp2\@tempdimb
+      \Gm@odd@mp\@tempdimb
+      \Gm@even@mp\@tempdimb
+    \else
+      \if@reversemargin
+        \Gm@odd@mp\@tempdimb
+        \if@mparswitch\else
+          \Gm@even@mp\@tempdimb
+        \fi
+      \else
+        \if@mparswitch
+          \Gm@even@mp\@tempdimb
+        \fi
+      \fi
+    \fi
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@adjustbody}
+%    如果用户指定了 \gpart{body}\ 的水平尺寸(horizontal dimension)，则在这里正确设置 \cs{Gm@width}。
+%    \begin{macrocode}
+\def\Gm@adjustbody{
+  \ifGm@hbody
+    \ifx\Gm@width\@undefined
+      \ifx\Gm@hscale\@undefined
+        \Gm@defbylen{width}{\Gm@Dhscale\Gm@layoutwidth}%
+      \else
+        \Gm@defbylen{width}{\Gm@hscale\Gm@layoutwidth}%
+      \fi
+    \fi
+    \ifx\Gm@textwidth\@undefined\else
+      \setlength\@tempdima{\Gm@textwidth}%
+      \ifGm@includemp
+        \advance\@tempdima\Gm@wd@mp
+      \fi
+      \edef\Gm@width{\the\@tempdima}%
+    \fi
+  \fi
+%    \end{macrocode}
+%    如果用户指定了 \gpart{body}\ 的垂直尺寸(vertical dimension)，则在这里正确设置 \cs{Gm@height}。
+%    \begin{macrocode}
+  \ifGm@vbody
+    \ifx\Gm@height\@undefined
+      \ifx\Gm@vscale\@undefined
+        \Gm@defbylen{height}{\Gm@Dvscale\Gm@layoutheight}%
+      \else
+        \Gm@defbylen{height}{\Gm@vscale\Gm@layoutheight}%
+      \fi
+    \fi
+    \ifx\Gm@lines\@undefined\else
+%    \end{macrocode}
+%    必须调整 \cs{topskip}，以便公式“$\cs{textheight} = (lines - 1) \times \cs{baselineskip} + \cs{topskip}$”
+%    即使用户指定了较大的字体尺寸，也是正确的。如果 \cs{topskip}\ 小于 \cs{ht}\cs{strutbox}，
+%    则将 \cs{topskip}\ 设置为 \cs{ht}\cs{strutbox}。
+%    \begin{macrocode}
+      \ifdim\topskip<\ht\strutbox
+        \setlength\@tempdima{\topskip}%
+        \setlength\topskip{\ht\strutbox}%
+        \Gm@warning{\noexpand\topskip was changed from \the\@tempdima\space
+        to \the\topskip}%
+      \fi
+      \setlength\@tempdima{\baselineskip}%
+      \multiply\@tempdima\Gm@lines
+      \addtolength\@tempdima{\topskip}%
+      \addtolength\@tempdima{-\baselineskip}%
+      \edef\Gm@textheight{\the\@tempdima}%
+    \fi
+    \ifx\Gm@textheight\@undefined\else
+      \setlength\@tempdima{\Gm@textheight}%
+      \ifGm@includehead
+        \addtolength\@tempdima{\headheight}%
+        \addtolength\@tempdima{\headsep}%
+      \fi
+      \ifGm@includefoot
+        \addtolength\@tempdima{\footskip}%
+      \fi
+      \edef\Gm@height{\the\@tempdima}%
+    \fi
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@process}
+%    定义了处理指定尺寸(processing the specified dimensions)的主要宏(main macro)。
+%    \begin{macrocode}
+\def\Gm@process{%
+%    \end{macrocode}
+%    如果设置了 |pass|，则恢复原始尺寸(original dimensions)和开关(switches)，并在此结束过程(process)。
+%    \begin{macrocode}
+  \ifGm@pass
+    \Gm@restore@org
+  \else
+    \Gm@@process
+  \fi}%
+%    \end{macrocode}
+%    主处理宏(main processing macro)。
+%    \begin{macrocode}
+\def\Gm@@process{%
+  \Gm@expandlengths
+  \Gm@adjustpaper
+  \addtolength\Gm@layoutwidth{-\Gm@bindingoffset}%
+  \Gm@adjustmp
+  \Gm@adjustbody
+  \Gm@detall{h}{width}{lmargin}{rmargin}%
+  \Gm@detall{v}{height}{tmargin}{bmargin}%
+%    \end{macrocode}
+%    根据自动完成计算(auto-completion calculation)的结果正确设置实际尺寸(real dimensions)。
+%    \begin{macrocode}
+  \setlength\textwidth{\Gm@width}%
+  \setlength\textheight{\Gm@height}%
+  \setlength\topmargin{\Gm@tmargin}%
+  \setlength\oddsidemargin{\Gm@lmargin}%
+  \addtolength\oddsidemargin{-1\Gm@truedimen in}%
+%    \end{macrocode}
+%    如果 |includemp| 设置为 |true|，则调整 \cs{textwidth}\ 和 \cs{oddsidemargin}。
+%    \begin{macrocode}
+  \ifGm@includemp
+    \advance\textwidth-\Gm@wd@mp
+    \advance\oddsidemargin\Gm@odd@mp
+  \fi
+%    \end{macrocode}
+%    确定 \cs{evensidemargin}。在双开面页面布局(twoside page layout)中，
+%    使用外口(right margin)的值 \cs{Gm@rmargin}。如果包含了旁注宽度(marginal note width)，
+%    则应用 \cs{Gm@even@mp}\ 校正 \cs{evensidemargin}。
+%    \begin{macrocode}
+  \if@mparswitch
+    \setlength\evensidemargin{\Gm@rmargin}%
+    \addtolength\evensidemargin{-1\Gm@truedimen in}%
+    \ifGm@includemp
+      \advance\evensidemargin\Gm@even@mp
+    \fi
+  \else
+    \evensidemargin\oddsidemargin
+  \fi
+%    \end{macrocode}
+%    \cs{oddsidemargin}\ 的装订偏移量校正(bindingoffset correction)。
+%    \begin{macrocode}
+  \advance\oddsidemargin\Gm@bindingoffset
+  \addtolength\topmargin{-1\Gm@truedimen in}%
+%    \end{macrocode}
+%    如果版心(\gpart{total body}，可打印区)包含了页眉，将从 \cs{textheight}\ 中删
+%    除 \cs{headheight}\ 和 \cs{headsep}，否则从 \cs{topmargin}\ 中删除。
+%    \begin{macrocode}
+  \ifGm@includehead
+    \addtolength\textheight{-\headheight}%
+    \addtolength\textheight{-\headsep}%
+  \else
+    \addtolength\topmargin{-\headheight}%
+    \addtolength\topmargin{-\headsep}%
+  \fi
+%    \end{macrocode}
+%    如果版心(\gpart{total body}，可打印区)包含了页脚，则会从 \cs{textheight}\ 中删除 \cs{footskip}。
+%    \begin{macrocode}
+  \ifGm@includefoot
+    \addtolength\textheight{-\footskip}%
+  \fi
+%    \end{macrocode}
+%    如果设置了 |heightrounded|，\cs{textheight}\ 将四舍五入。
+%    \begin{macrocode}
+  \ifGm@heightrounded
+    \setlength\@tempdima{\textheight}%
+    \addtolength\@tempdima{-\topskip}%
+    \@tempcnta\@tempdima
+    \@tempcntb\baselineskip
+    \divide\@tempcnta\@tempcntb
+    \setlength\@tempdimb{\baselineskip}%
+    \multiply\@tempdimb\@tempcnta
+    \advance\@tempdima-\@tempdimb
+    \multiply\@tempdima\tw@
+    \ifdim\@tempdima>\baselineskip
+      \addtolength\@tempdimb{\baselineskip}%
+    \fi
+    \addtolength\@tempdimb{\topskip}%
+    \textheight\@tempdimb
+  \fi
+%    \end{macrocode}
+%    通过添加 \cs{Gm@bindingoffset}\ 来设回原来的纸张宽度(paper width)。
+%    \begin{macrocode}
+  \advance\oddsidemargin\Gm@layouthoffset%
+  \advance\evensidemargin\Gm@layouthoffset%
+  \advance\topmargin\Gm@layoutvoffset%
+  \addtolength\Gm@layoutwidth{\Gm@bindingoffset}%
+  }% end of \Gm@@process
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\Gm@detectdriver}
+%    该宏检查排版环境(typeset environment)，并在必要时更改驱动程序选项(driver option)。
+%    为了使引擎检测(engine detection)更加健壮，
+%    该宏用 \textsf{ifpdf}、\textsf{ifvtex}\ 和 \textsf{ifxetex}\ 宏包重写。
+%    \begin{macrocode}
+\def\Gm@detectdriver{%
+%    \end{macrocode}
+%    如果未明确指定(specified explicitly)驱动程序选项(driver option)，
+%    则驱动程序自动检测(driver auto-detection)将起作用(works)。
+%    \begin{macrocode}
+  \ifx\Gm@driver\@empty
+    \typeout{*geometry* driver: auto-detecting}%
+%    \end{macrocode}
+%    \cs{ifpdf}\ 是在“oberdiek”捆绑包(bundle)中的 \textsf{ifpdf}\ 宏包中定义的。
+%    \begin{macrocode}
+    \ifpdf
+      \ifx\pdfextension\@undefined
+        \Gm@setdriver{pdftex}%
+      \else
+        \Gm@setdriver{luatex}%
+      \fi
+    \else
+      \Gm@setdriver{dvips}%
+    \fi
+%    \end{macrocode}
+%    \cs{ifvtex}\ 是在“oberdiek”捆绑包(bundle)中的 \textsf{ifvtex}\ 宏包中定义的。
+%    \begin{macrocode}
+    \ifvtex
+      \Gm@setdriver{vtex}%
+    \fi
+%    \end{macrocode}
+%    \cs{ifxetex}\ 在 Will Robertson (威尔·罗伯逊)编写的 \textsf{ifxetex}\ 宏包中定义的。
+%    \begin{macrocode}
+    \ifxetex
+      \Gm@setdriver{xetex}
+    \fi
+%    \end{macrocode}
+%    当用户设置驱动程序选项(driver option)时，检查其是否有效。
+%    \begin{macrocode}
+  \else
+    \ifx\Gm@driver\Gm@xetex %%
+      \ifxetex\else
+        \Gm@warning{Wrong driver setting: `xetex'; trying `pdftex' driver}%
+        \Gm@setdriver{pdftex}
+      \fi
+    \fi
+    \ifx\Gm@driver\Gm@vtex
+      \ifvtex\else
+        \Gm@warning{Wrong driver setting: `vtex'; trying `dvips' driver}%
+        \Gm@setdriver{dvips}%
+      \fi
+    \fi
+  \fi
+  \ifx\Gm@driver\relax
+    \typeout{*geometry* detected driver: <none>}%
+  \else
+    \typeout{*geometry* detected driver: \Gm@driver}%
+  \fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@showparams}
+%    如果 |verbose| 为 |true|，则将结果参数(resulted parammeters)和尺寸(dimensions)打
+%    印到 STDOUT。将 |\Gm@width| 和 |\Gm@height| 展开以获得实际尺寸(real size)。
+%    \begin{macrocode}
+\def\Gm@showparams#1{%
+  \ifGm@verbose\expandafter\typeout\else\expandafter\wlog\fi
+  {\Gm@logcontent{#1}}}%
+\def\Gm@showdim#1{* \string#1=\the#1^^J}%
+\def\Gm@showbool#1{\@nameuse{ifGm@#1}#1\space\fi}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@logcontent}
+%    geometry 参数的内容和页面布局的原始尺寸(native dimensions)。
+%    \begin{macrocode}
+\def\Gm@logcontent#1{%
+  *geometry* verbose mode - [ #1 ] result:^^J%
+  \ifGm@pass * pass: disregarded the geometry package!^^J%
+  \else
+  * driver: \if\Gm@driver<none>\else\Gm@driver\fi^^J%
+  * paper: \ifx\Gm@paper\@undefined<default>\else\Gm@paper\fi^^J%
+  * layout: \ifGm@layout<custom>\else<same size as paper>\fi^^J%
+  \ifGm@layout
+  * layout(width,height): (\the\Gm@layoutwidth,\the\Gm@layoutheight)^^J%
+  \fi
+  * layoutoffset:(h,v)=(\the\Gm@layouthoffset,\the\Gm@layoutvoffset)^^J%
+  \@ifundefined{Gm@lines}{}{* lines: \Gm@lines^^J}%
+  \@ifundefined{Gm@hmarginratio}{}{* hratio: \Gm@hmarginratio^^J}%
+  \@ifundefined{Gm@vmarginratio}{}{* vratio: \Gm@vmarginratio^^J}%
+  \ifdim\Gm@bindingoffset=\z@\else
+  * bindingoffset: \the\Gm@bindingoffset^^J\fi
+  * modes: %
+   \Gm@showbool{landscape}%
+   \Gm@showbool{includehead}%
+   \Gm@showbool{includefoot}%
+   \Gm@showbool{includemp}%
+   \if@twoside twoside\space\fi%
+   \if@mparswitch\else\if@twoside asymmetric\space\fi\fi%
+   \Gm@showbool{heightrounded}%
+   \ifx\Gm@truedimen\@empty\else truedimen\space\fi%
+   \Gm@showbool{showframe}%
+   \Gm@showbool{showcrop}%
+  ^^J%
+  * h-part:(L,W,R)=(\Gm@lmargin, \Gm@width, \Gm@rmargin)^^J%
+  * v-part:(T,H,B)=(\Gm@tmargin, \Gm@height, \Gm@bmargin)^^J%
+  \fi
+  \Gm@showdim{\paperwidth}%
+  \Gm@showdim{\paperheight}%
+  \Gm@showdim{\textwidth}%
+  \Gm@showdim{\textheight}%
+  \Gm@showdim{\oddsidemargin}%
+  \Gm@showdim{\evensidemargin}%
+  \Gm@showdim{\topmargin}%
+  \Gm@showdim{\headheight}%
+  \Gm@showdim{\headsep}%
+  \Gm@showdim{\topskip}%
+  \Gm@showdim{\footskip}%
+  \Gm@showdim{\marginparwidth}%
+  \Gm@showdim{\marginparsep}%
+  \Gm@showdim{\columnsep}%
+  * \string\skip\string\footins=\the\skip\footins^^J%
+  \Gm@showdim{\hoffset}%
+  \Gm@showdim{\voffset}%
+  \Gm@showdim{\mag}%
+  * \string\@twocolumn\if@twocolumn true\else false\fi^^J%
+  * \string\@twoside\if@twoside true\else false\fi^^J%
+  * \string\@mparswitch\if@mparswitch true\else false\fi^^J%
+  * \string\@reversemargin\if@reversemargin true\else false\fi^^J%
+  * (1in=72.27pt=25.4mm, 1cm=28.453pt)^^J}%
+%    \end{macrocode}
+%    \end{macro}
+%
+%    用于页面框架(page frames)和裁剪标记(cropmarks)的宏。
+%    \begin{macrocode}
+\def\Gm@cropmark(#1,#2,#3,#4){%
+  \begin{picture}(0,0)
+    \setlength\unitlength{1truemm}%
+    \linethickness{0.25pt}%
+    \put(#3,0){\line(#1,0){17}}%
+    \put(0,#4){\line(0,#2){17}}%
+  \end{picture}}%
+\providecommand*\vb@xt@{\vbox to}%
+\def\Gm@vrule{\vrule width 0.2pt height\textheight depth\z@}%
+\def\Gm@hrule{\hrule height 0.2pt depth\z@ width\textwidth}%
+\def\Gm@hruled{\hrule height\z@ depth0.2pt width\textwidth}%
+\newcommand*{\Gm@vrules@mpi}{%
+  \hb@xt@\@tempdima{\llap{\Gm@vrule}\ignorespaces
+  \hskip \textwidth\Gm@vrule\hskip \marginparsep
+  \llap{\Gm@vrule}\hfil\Gm@vrule}}%
+\newcommand*{\Gm@vrules@mpii}{%
+  \hb@xt@\@tempdima{\hskip-\marginparwidth\hskip-\marginparsep
+  \llap{\Gm@vrule}\ignorespaces
+  \hskip \marginparwidth\rlap{\Gm@vrule}\hskip \marginparsep
+  \llap{\Gm@vrule}\hskip\textwidth\rlap{\Gm@vrule}\hss}}%
+\newcommand*{\Gm@pageframes}{%
+  \vb@xt@\z@{%
+   \ifGm@showcrop
+    \vb@xt@\z@{\vskip-1\Gm@truedimen in\vskip\Gm@layoutvoffset%
+     \hb@xt@\z@{\hskip-1\Gm@truedimen in\hskip\Gm@layouthoffset%
+      \vb@xt@\Gm@layoutheight{%
+       \let\protect\relax
+       \hb@xt@\Gm@layoutwidth{\Gm@cropmark(-1,1,-3,3)\hfil\Gm@cropmark(1,1,3,3)}%
+       \vfil
+       \hb@xt@\Gm@layoutwidth{\Gm@cropmark(-1,-1,-3,-3)\hfil\Gm@cropmark(1,-1,3,-3)}}%
+     \hss}%
+    \vss}%
+   \fi%
+   \ifGm@showframe
+    \if@twoside
+     \ifodd\count\z@
+       \let\@themargin\oddsidemargin
+     \else
+       \let\@themargin\evensidemargin
+     \fi
+    \fi
+    \moveright\@themargin%
+    \vb@xt@\z@{%
+     \vskip\topmargin\vb@xt@\z@{\vss\Gm@hrule}%
+     \vskip\headheight\vb@xt@\z@{\vss\Gm@hruled}%
+     \vskip\headsep\vb@xt@\z@{\vss\Gm@hrule}%
+     \@tempdima\textwidth
+     \advance\@tempdima by \marginparsep
+     \advance\@tempdima by \marginparwidth
+     \if@mparswitch
+      \ifodd\count\z@
+       \Gm@vrules@mpi
+      \else
+       \Gm@vrules@mpii
+      \fi
+     \else
+      \Gm@vrules@mpi
+     \fi
+     \vb@xt@\z@{\vss\Gm@hrule}%
+     \vskip\footskip\vb@xt@\z@{\vss\Gm@hruled}%
+     \vss}%
+    \fi%
+  }}%
+%    \end{macrocode}
+%
+%    \begin{macro}{\ProcessOptionsKV}
+%    此宏可以使用“key=value”方案处理类和包选项。默认情况下，只有类选项(class options)
+%    使用可选参数(optional argument)“|c|”进行处理，包选项(package options)使用“|p|”进行处理，
+%    默认情况下两者都使用。
+%    \begin{macrocode}
+\def\ProcessOptionsKV{\@ifnextchar[%]
+  {\@ProcessOptionsKV}{\@ProcessOptionsKV[]}}%
+\def\@ProcessOptionsKV[#1]#2{%
+  \let\@tempa\@empty
+  \@tempcnta\z@
+  \if#1p\@tempcnta\@ne\else\if#1c\@tempcnta\tw@\fi\fi
+  \ifodd\@tempcnta
+   \edef\@tempa{\@ptionlist{\@currname.\@currext}}%
+  \else
+    \@for\CurrentOption:=\@classoptionslist\do{%
+      \@ifundefined{KV@#2@\CurrentOption}%
+      {}{\edef\@tempa{\@tempa,\CurrentOption,}}}%
+    \ifnum\@tempcnta=\z@
+      \edef\@tempa{\@tempa,\@ptionlist{\@currname.\@currext}}%
+    \fi
+  \fi
+  \edef\@tempa{\noexpand\setkeys{#2}{\@tempa}}%
+  \@tempa
+  \AtEndOfPackage{\let\@unprocessedoptions\relax}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macrocode}
+\def\Gm@setkeys{\setkeys{Gm}}%
+%    \end{macrocode}
+%    \begin{macro}{\Gm@processconf}
+%    将 \cs{ExecuteOptions}\ 替换为 \cs{Gm@setkey}，以便可以将“\meta{key}=\meta{value}”作为参数处理。
+%    \begin{macrocode}
+\def\Gm@processconfig{%
+  \let\Gm@origExecuteOptions\ExecuteOptions
+  \let\ExecuteOptions\Gm@setkeys
+  \InputIfFileExists{geometry.cfg}{}{}
+  \let\ExecuteOptions\Gm@origExecuteOptions}%
+%    \end{macrocode}
+%    \end{macro}
+%
+%  加载 \Gm\ 之前的原始页面布局(original page layout)保存在此处。
+%  |\Gm@restore@org| 在此处定义为 |reset| 选项。
+%    \begin{macrocode}
+\Gm@save
+\edef\Gm@restore@org{\Gm@restore}%
+\Gm@initall
+%    \end{macrocode}
+%    处理配置文件(config file)。
+%    \begin{macrocode}
+\Gm@processconfig
+%    \end{macrocode}
+%    在此处处理 \cs{documentclass}\ 的可选参数。
+%    \begin{macrocode}
+\ProcessOptionsKV[c]{Gm}%
+%    \end{macrocode}
+%    存储类(class)默认给定的纸张尺寸。
+%    \begin{macrocode}
+\Gm@setdefaultpaper
+%    \end{macrocode}
+%    在此处处理 \cs{usepackage}\ 的可选参数。
+%    \begin{macrocode}
+\ProcessOptionsKV[p]{Gm}%
+%    \end{macrocode}
+%    处理布局尺寸(layout dimensions)的实际设置(actual settings)和计算(calculation)。
+%    \begin{macrocode}
+\Gm@process
+%    \end{macrocode}
+%
+%    \begin{macro}{\AtBeginDocument}
+%   |verbose|、|showframe|和驱动程序(drivers)的进程(processes)将添加到 |\AtBeginDocument| 中。
+%   |\Gm@restore@org| 在这里被重新定义，其纸张尺寸在前言中指定，以便 |\newgeometry| 使用。
+%   这应该在使用 |\mag| 放大(magnifying)纸张尺寸之前完成，
+%   因为更改纸张尺寸会影响布局计算(layout calculation)。
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \Gm@savelength{paperwidth}%
+  \Gm@savelength{paperheight}%
+  \edef\Gm@restore@org{\Gm@restore}%
+%    \end{macrocode}
+%    如果 |resetpaper|，则使用原始纸张尺寸(original paper size)。
+%    \begin{macrocode}
+  \ifGm@resetpaper
+    \edef\Gm@pw{\Gm@orgpw}%
+    \edef\Gm@ph{\Gm@orgph}%
+  \else
+    \edef\Gm@pw{\the\paperwidth}%
+    \edef\Gm@ph{\the\paperheight}%
+  \fi
+%    \end{macrocode}
+%    如果未设置 |pass|，将根据指定的 |mag| 乘以纸张尺寸。
+%    \begin{macrocode}
+  \ifGm@pass\else
+    \ifnum\mag=\@m\else
+      \Gm@magtooffset
+      \divide\paperwidth\@m
+      \multiply\paperwidth\the\mag
+      \divide\paperheight\@m
+      \multiply\paperheight\the\mag
+    \fi
+  \fi
+%    \end{macrocode}
+%    检查驱动程序选项(driver options)。
+%    \begin{macrocode}
+  \Gm@detectdriver
+%    \end{macrocode}
+%    如果定义了 |xetex| 和 |\pdfpagewidth|，则将设置 |\pdfpagewidth| 和 |\pdfpageheight|。
+%    \begin{macrocode}
+  \ifx\Gm@driver\Gm@xetex
+    \@ifundefined{pdfpagewidth}{}{%
+      \setlength\pdfpagewidth{\Gm@pw}%
+      \setlength\pdfpageheight{\Gm@ph}}%
+    \ifnum\mag=\@m\else
+      \ifx\Gm@truedimen\Gm@true
+        \setlength\paperwidth{\Gm@pw}%
+        \setlength\paperheight{\Gm@ph}%
+      \fi
+    \fi
+  \fi
+%    \end{macrocode}
+%    如果 |pdftex| 设置为 |true|，则 pdf 命令(pdf-commands)设置正确。为避免 |pdftex| 放大问题，
+%    将 \cs{pdfhorigin}\ 和 \cs{pdfvorigin}\ 调整为 \cs{mag}。
+%    \begin{macrocode}
+  \ifx\Gm@driver\Gm@pdftex
+    \@ifundefined{pdfpagewidth}{}{%
+      \setlength\pdfpagewidth{\Gm@pw}%
+      \setlength\pdfpageheight{\Gm@ph}}%
+    \ifnum\mag=\@m\else
+      \@tempdima=\mag sp%
+      \@ifundefined{pdfhorigin}{}{%
+        \divide\pdfhorigin\@tempdima
+        \multiply\pdfhorigin\@m
+        \divide\pdfvorigin\@tempdima
+        \multiply\pdfvorigin\@m}%
+      \ifx\Gm@truedimen\Gm@true
+        \setlength\paperwidth{\Gm@pw}%
+        \setlength\paperheight{\Gm@ph}%
+      \fi
+    \fi
+  \fi
+%    \end{macrocode}
+%    如果将 |luatex| 设置为 |true|，则 pdf 命令(pdf-commands)将正确设置。为避免 |luatex| 放大问题，
+%    将 \cs{horigin}\ 和 \cs{vorigin}\ 调整为 \cs{mag}。
+%    \begin{macrocode}
+  \ifx\Gm@driver\Gm@luatex
+    \setlength\pagewidth{\Gm@pw}%
+    \setlength\pageheight{\Gm@ph}%
+    \ifnum\mag=\@m\else
+      \@tempdima=\mag sp
+        \edef\Gm@horigin{\pdfvariable horigin}%
+        \edef\Gm@vorigin{\pdfvariable vorigin}%
+        \divide\Gm@horigin\@tempdima
+        \multiply\Gm@horigin\@m
+        \divide\Gm@vorigin\@tempdima
+        \multiply\Gm@vorigin\@m
+      \ifx\Gm@truedimen\Gm@true
+        \setlength\paperwidth{\Gm@pw}%
+        \setlength\paperheight{\Gm@ph}%
+      \fi
+    \fi
+  \fi
+%    \end{macrocode}
+%    对于 V\TeX{}\ 环境，此处设置 V\TeX{}\ 变量。
+%    \begin{macrocode}
+  \ifx\Gm@driver\Gm@vtex
+    \@ifundefined{mediawidth}{}{%
+      \mediawidth=\paperwidth
+      \mediaheight=\paperheight}%
+    \ifvtexdvi
+      \AtBeginDvi{\special{papersize=\the\paperwidth,\the\paperheight}}%
+    \fi
+  \fi
+%    \end{macrocode}
+%    如果指定了 |dvips| 或 |dvipdfm|，则纸张尺寸(paper size)将使用 \cs{special}\ 嵌入 dvi 文件中。
+%    对于 dvips，添加了横向校正(landscape correction)，因为 dvips 转换的横向文档(landscape document)
+%    在 PostScript 查看器(viewers)中是颠倒的。
+%    \begin{macrocode}
+  \ifx\Gm@driver\Gm@dvips
+    \AtBeginDvi{\special{papersize=\the\paperwidth,\the\paperheight}}%
+    \ifx\Gm@driver\Gm@dvips\ifGm@landscape
+      \AtBeginDvi{\special{! /landplus90 true store}}%
+    \fi\fi
+%    \end{macrocode}
+%    如果指定了 |dvipdfm|，并且加载了“oberdiek”捆绑包(bundle)中的 \textsf{atbegshi}\ 宏包，
+%    则使用 \cs{AtBeginShipoutFirst}\ 而不是 \cs{AtBeginDvi}，以
+%    与 \textsf{hyperref}\ 和 |dvipdfm| 程序兼容。
+%    \begin{macrocode}
+  \else\ifx\Gm@driver\Gm@dvipdfm
+    \ifcase\ifx\AtBeginShipoutFirst\relax\@ne\else
+        \ifx\AtBeginShipoutFirst\@undefined\@ne\else\z@\fi\fi
+      \AtBeginShipoutFirst{\special{papersize=\the\paperwidth,\the\paperheight}}%
+    \or
+      \AtBeginDvi{\special{papersize=\the\paperwidth,\the\paperheight}}%
+    \fi
+  \fi\fi
+%    \end{macrocode}
+%    当 |showframe=true| 时，每页上的页面框架(page frames)被发送出去(shipped out)；
+%    当 |showcrop=true| 时，每页上的裁切标记(cropmarks)被发送出去(shipped out)。
+%    \textsf{atbegshi}\ 宏包用于重载(overloading) |\shipout|。
+%    【译者注：这句翻译可能有误，这句的原文是：
+%    Page frames are shipped out when |showframe=true|, cropmarks for |showcrop=true|
+%    on each page. The \textsf{atbegshi} package is used for overloading |\shipout|.】
+%    \begin{macrocode}
+  \@tempswafalse
+  \ifGm@showframe
+    \@tempswatrue
+  \else\ifGm@showcrop
+    \@tempswatrue
+  \fi\fi
+  \if@tempswa
+    \RequirePackage{atbegshi}%
+      \AtBeginShipout{\setbox\AtBeginShipoutBox=\vbox{%
+        \baselineskip\z@skip\lineskip\z@skip\lineskiplimit\z@
+        \Gm@pageframes\box\AtBeginShipoutBox}}%
+  \fi
+%    \end{macrocode}
+%    \cs{restoregeometry}\ 的布局尺寸(layout dimensions)保存在 \cs{AtBeginDocument}\ 的末尾。
+%    \begin{macrocode}
+  \Gm@save
+  \edef\Gm@restore@pkg{\Gm@restore}%
+%    \end{macrocode}
+%    该宏包检查 |marginpars| 是否超出页面(overrun the page)，如果是 |verbose|，除非是 |pass|。
+%    \begin{macrocode}
+  \ifGm@verbose\ifGm@pass\else\Gm@checkmp\fi\fi
+%    \end{macrocode}
+%   |\Gm@showparams| 将生成的参数(resulting parameters)和尺寸(dimensions)放入日志文件(log file)。
+%   通过 |verbose|，它们也会显示在终端(terminal)上。
+%    \begin{macrocode}
+  \Gm@showparams{preamble}%
+%    \end{macrocode}
+%   以下几行释放了(free)不再需要的内存。
+%    \begin{macrocode}
+  \let\Gm@pw\relax
+  \let\Gm@ph\relax
+  }% end of \AtBeginDocument
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\geometry}
+%    可以在前言中(在 |\begin{document}| 之前)多次调用\cs{geometry}。
+%    \begin{macrocode}
+\newcommand{\geometry}[1]{%
+  \Gm@clean
+  \setkeys{Gm}{#1}%
+  \Gm@process}%
+\@onlypreamble\geometry
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\Gm@changelayout}
+%   可以从 |\newgeometry|、|\restoregeometry| 和 |\loadgeometry| 调用该宏，它会更改文档中间的布局。
+%    \begin{macrocode}
+\DeclareRobustCommand\Gm@changelayout{%
+  \setlength{\@colht}{\textheight}
+  \setlength{\@colroom}{\textheight}%
+  \setlength{\vsize}{\textheight}
+  \setlength{\columnwidth}{\textwidth}%
+  \if@twocolumn%
+    \advance\columnwidth-\columnsep
+    \divide\columnwidth\tw@%
+    \@firstcolumntrue%
+  \fi%
+  \setlength{\hsize}{\columnwidth}%
+  \setlength{\linewidth}{\hsize}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\newgeometry}
+%    更改布局的 |\newgeometry| 宏只能在文档中使用。它将重置前言中指定的选项，
+%    但纸张尺寸选项和 |\mag| 除外。
+%    \begin{macrocode}
+\newcommand{\newgeometry}[1]{%
+  \clearpage
+  \Gm@restore@org
+  \Gm@initnewgm
+  \Gm@newgmtrue
+  \setkeys{Gm}{#1}%
+  \Gm@newgmfalse
+  \Gm@process
+  \ifnum\mag=\@m\else\Gm@magtooffset\fi
+  \Gm@changelayout
+  \Gm@showparams{newgeometry}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\restoregeometry}
+%    该宏将恢复(restores)前言中指定的结果布局(resulting layout)，即 |\begin{document}| 之
+%    后的第一页布局(first-page layout)。
+%    \begin{macrocode}
+\newcommand{\restoregeometry}{%
+  \clearpage
+  \Gm@restore@pkg
+  \Gm@changelayout}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\savegeometry}
+%    宏使用参数指定的名称保存布局。可以使用 |\loadgeometry{|\meta{name}|}| 加载保存的布局。
+%    \begin{macrocode}
+\newcommand*{\savegeometry}[1]{%
+  \Gm@save
+  \expandafter\edef\csname Gm@restore@@#1\endcsname{\Gm@restore}}%
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\loadgeometry}
+%    该宏加载使用 |\savegeometry{|\meta{name}|}| 保存的布局。如果找不到该名称(name)，
+%    该宏将对其发出警告，对布局不做任何操作。
+%    \begin{macrocode}
+\newcommand*{\loadgeometry}[1]{%
+  \clearpage
+  \@ifundefined{Gm@restore@@#1}{%
+    \PackageError{geometry}{%
+    \string\loadgeometry : name `#1' undefined}{%
+    The name `#1' should be predefined with \string\savegeometry}%
+  }{\@nameuse{Gm@restore@@#1}%
+  \Gm@changelayout}}%
+%</package>
+%    \end{macrocode}
+%    \end{macro}
+%
+% \clearpage
+% \section{\heiti 配置文件}
+%    在 |geometry.cfg| 配置文件中，可以使用 \cs{ExecuteOptions}\ 设置站点(site)或用户默认设置。
+%    \begin{macrocode}
+%<*config>
+%<<SAVE_INTACT
+%  取消注释(uncomment)并编辑下面的行以设置默认选项。
+%\ExecuteOptions{a4paper}
+
+%SAVE_INTACT
+%</config>
+%    \end{macrocode}
+%
+% \clearpage
+% \section{\heiti 示例文件}
+%    下面是 \Gm\ 宏包的示例文件：
+%    \begin{macrocode}
+%<*samples>
+%<<SAVE_INTACT
+\documentclass[12pt]{article}% 默认使用信纸(letterpaper)
+% \documentclass[12pt,a4paper]{article}% 用于 A4 纸
+%---------------------------------------------------------------
+% 编辑和取消注释(uncomment)下面的设置之一
+%---------------------------------------------------------------
+% \usepackage{geometry}
+% \usepackage[centering]{geometry}
+% \usepackage[width=10cm,vscale=.7]{geometry}
+% \usepackage[margin=1cm, papersize={12cm,19cm}, resetpaper]{geometry}
+% \usepackage[margin=1cm,includeheadfoot]{geometry}
+\usepackage[margin=1cm,includeheadfoot,includemp]{geometry}
+% \usepackage[margin=1cm,bindingoffset=1cm,twoside]{geometry}
+% \usepackage[hmarginratio=2:1, vmargin=2cm]{geometry}
+% \usepackage[hscale=0.5,twoside]{geometry}
+% \usepackage[hscale=0.5,asymmetric]{geometry}
+% \usepackage[hscale=0.5,heightrounded]{geometry}
+% \usepackage[left=1cm,right=4cm,top=2cm,includefoot]{geometry}
+% \usepackage[lines=20,left=2cm,right=6cm,top=2cm,twoside]{geometry}
+% \usepackage[width=15cm, marginparwidth=3cm, includemp]{geometry}
+% \usepackage[hdivide={1cm,,2cm}, vdivide={3cm,8in,}, nohead]{geometry}
+% \usepackage[headsep=20pt, head=40pt,foot=20pt,includeheadfoot]{geometry}
+% \usepackage[text={6in,8in}, top=2cm, left=2cm]{geometry}
+% \usepackage[centering,includemp,twoside,landscape]{geometry}
+% \usepackage[mag=1414,margin=2cm]{geometry}
+% \usepackage[mag=1414,margin=2truecm,truedimen]{geometry}
+% \usepackage[a5paper, landscape, twocolumn, twoside,
+%    left=2cm, hmarginratio=2:1, includemp, marginparwidth=43pt,
+%    bottom=1cm, foot=.7cm, includefoot, textheight=11cm, heightrounded,
+%    columnsep=1cm,verbose]{geometry}
+%---------------------------------------------------------------
+% 无需更改以下内容
+%---------------------------------------------------------------
+\geometry{verbose,showframe}% the options appended.
+\usepackage{lipsum}% for dummy text of 150 paragraphs
+\newcommand\mynote{\marginpar[\raggedright
+A sample margin note in the left side.]%
+{\raggedright A sample margin note.}}%
+\newcommand\myfootnote{\footnote{This is a sample footnote text.}}
+\begin{document}
+\lipsum[1-2]\mynote\lipsum[3-4]\mynote
+\lipsum[5-11]\mynote\lipsum[12]\myfootnote
+\lipsum[13-22]\mynote\lipsum[23-32]
+\end{document}
+%SAVE_INTACT
+%</samples>
+%    \end{macrocode}
+%
+% \Finale
+%
+\endinput
