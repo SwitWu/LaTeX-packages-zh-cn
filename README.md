@@ -29,7 +29,7 @@
 +  [`fntguide`](https://www.latexstudio.net/index/details/index/mid/2926.html)(Finished)
 +  `fontspec`
 +  `footmisc`
-+  [`geometry`](https://www.latexstudio.net/index/details/index/mid/3118.html)
++  [`geometry`](https://www.latexstudio.net/index/details/index/mid/3118.html)(Finished)
 +  `graphicx`
 +  `hyperref`
 +  `layout`
