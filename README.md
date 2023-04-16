@@ -31,7 +31,7 @@
 +  `footmisc`
 +  [`geometry`](https://www.latexstudio.net/index/details/index/mid/3118.html)(Finished)
 +  `graphicx`
-+  `hyperref`
++  [`hyperref`](https://www.latexstudio.net/index/details/index/mid/3423.html)(Finished)
 +  `layout`
 +  `listings`
 +  `mathtools`
