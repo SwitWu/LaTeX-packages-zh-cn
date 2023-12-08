@@ -21,8 +21,10 @@
 +  `booktabs`
 +  `caption`
 +  [`clsguide`](https://github.com/CTeX-org/ctex-doc/tree/master/clsguide-zh-cn)(Finished)
++  [`DocStrip`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/docstrip-zh-cn)
 +  [`encguide`](https://www.latexstudio.net/index/details/index/mid/2911.html)(Finished)
 +  `enumitem`
++  [`etoolbox`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/etoolbox-zh-cn)
 +  [`expl3`](https://www.latexstudio.net/index/details/index/mid/2988.html)(Finished)
 +  [`fancyhdr`](https://www.latexstudio.net/index/details/index/mid/3086.html)(Finished)
 +  `fancyvrb`
@@ -46,9 +48,16 @@
 +  [`tlmgr`](https://github.com/syvshc/tlmgr-intro-zh-cn)(Finished)
 +  `unicode-math`
 +  `xcolor`
++  [`xparse`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/xparse-zh-cn)
 
 ## Contributors
 
-[Huang Xuhua](https://www.latexstudio.net/index/lists/barsearch/author/23813.html), [Xiang Yu](https://github.com/yuxtech), 行者, [syvshc](https://github.com/syvshc), [hushidong](https://github.com/hushidong), 
-[CTeX-org](https://github.com/CTeX-org), [registor](https://github.com/registor),
-[sikowhjw](https://github.com/sikouhjw)
++ [Huang Xuhua](https://www.latexstudio.net/index/lists/barsearch/author/23813.html)
++ [Xiang Yu](https://github.com/yuxtech)
++ 行者
++ [syvshc](https://github.com/syvshc)
++ [hushidong](https://github.com/hushidong)
++ [CTeX-org](https://github.com/CTeX-org)
++ [registor](https://github.com/registor)
++ [sikowhjw](https://github.com/sikouhjw)
++ [Rocky Zhang](https://github.com/rockyzhz)
