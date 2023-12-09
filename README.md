@@ -32,10 +32,10 @@
 
 + [Huang Xuhua](https://www.latexstudio.net/index/lists/barsearch/author/23813.html)
 + [Xiang Yu](https://github.com/yuxtech)
-+ 行者
++ [行者](https://www.latexstudio.net/index/lists/barsearch/author/7146.html)
 + [syvshc](https://github.com/syvshc)
 + [hushidong](https://github.com/hushidong)
 + [CTeX-org](https://github.com/CTeX-org)
 + [registor](https://github.com/registor)
-+ [sikowhjw](https://github.com/sikouhjw)
++ [sikouhjw](https://github.com/sikouhjw)
 + [Rocky Zhang](https://github.com/rockyzhz)
