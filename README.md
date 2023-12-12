@@ -14,6 +14,7 @@
 |[`biblatex`](https://github.com/hushidong/biblatex-zh-cn)|参考文献工具|
 |[`bookmark`](https://www.latexstudio.net/index/details/index/mid/2912.html)|书签|
 |[`clsguide`](https://github.com/CTeX-org/ctex-doc/tree/master/clsguide-zh-cn)|介绍如何自定义 cls 与 sty|
+|[`doc`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/doc-zh-cn)|文学编程|
 |[`DocStrip`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/docstrip-zh-cn)|文学编程（另外可以参看我的博客文章 [LaTeX 文学编程](https://switwu.github.io/2023-02-20-latex-literate-programming/))|
 |[`encguide`](https://www.latexstudio.net/index/details/index/mid/2911.html)|字体编码|
 |[`etoolbox`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/etoolbox-zh-cn)|编程工具，面向类与宏包作者|
