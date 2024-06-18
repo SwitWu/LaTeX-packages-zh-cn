@@ -16,7 +16,7 @@
 |[`clsguide`](https://github.com/CTeX-org/ctex-doc/tree/master/clsguide-zh-cn) (old version)|介绍如何自定义 cls 与 sty|
 |[`clsguide`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/clsguide-current-zh-cn) (new version)|同上|
 |[`doc`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/doc-zh-cn)|文学编程|
-|[`DocStrip`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/docstrip-zh-cn)|文学编程（另外可以参看我的博客文章 [LaTeX 文学编程](https://switwu.github.io/2023-02-20-latex-literate-programming/))|
+|[`DocStrip`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/docstrip-zh-cn)|文学编程 (另外可以参看我的博客文章 [LaTeX 文学编程](https://switwu.github.io/2023-02-20-latex-literate-programming/))|
 |[`encguide`](https://www.latexstudio.net/index/details/index/mid/2911.html)|字体编码|
 |[`etoolbox`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/etoolbox-zh-cn)|编程工具，面向类与宏包作者|
 |[`expl3`](https://www.latexstudio.net/index/details/index/mid/2988.html)|简要介绍 LaTeX3|
@@ -25,7 +25,7 @@
 |[`geometry`](https://www.latexstudio.net/index/details/index/mid/3118.html)|配置页面几何参数|
 |[`hyperref`](https://www.latexstudio.net/index/details/index/mid/3423.html)|超链接|
 |[`nicematrix`](https://gitee.com/zhangsming818/nicematrixmanualzh/)|矩阵增强版|
-|[`tabularray`](https://www.latexstudio.net/index/details/index/mid/1776.html)|表格增强版|
+|[`tabularray`](https://gitee.com/nwafu_nan/tabularray-doc-zh-cn)|表格增强版|
 |[`TikZ-PGF`](https://tikz.dev) (HTML Version)|矢量绘图|
 |[`tkz-euclide`](https://github.com/registor/tkz-euclide-doc-zh-cn)|绘制平面图|
 |[`tocloft`](https://www.latexstudio.net/index/details/index/mid/1547.html)|定制目录|
