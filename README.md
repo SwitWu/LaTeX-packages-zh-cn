@@ -27,9 +27,10 @@
 |[`nicematrix`](https://gitee.com/zhangsming818/nicematrixmanualzh/)|矩阵增强版|
 |[`tabularray`](https://gitee.com/nwafu_nan/tabularray-doc-zh-cn)|表格增强版|
 |[`TikZ-PGF`](https://tikz.dev) (HTML Version)|矢量绘图|
+|[`tkz-elements`](https://github.com/SwitWu/tkz-elements-doc-zh-cn)|借助 Lua 的面向对象编程范式定义几何对象|
 |[`tkz-euclide`](https://github.com/registor/tkz-euclide-doc-zh-cn)|绘制平面图|
 |[`tocloft`](https://www.latexstudio.net/index/details/index/mid/1547.html)|定制目录|
-|[`tlmgr`](https://github.com/syvshc/tlmgr-intro-zh-cn)|TeXLive 包管理器|
+|[`tlmgr`](https://github.com/syvshc/tlmgr-intro-zh-cn)|TeX Live 包管理器|
 |[`xparse`](https://github.com/rockyzhz/latexdoc-chinese-translation/tree/main/xparse-zh-cn)|LaTeX3 用户接口|
 
 ### Contributors
